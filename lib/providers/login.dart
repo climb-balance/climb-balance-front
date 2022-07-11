@@ -20,18 +20,23 @@ class AuthNotifier extends StateNotifier<AuthType> {
 
   void updateToken({required String token, required String type}) {
     state = AuthType(token: token, type: type);
-    storeToken(token: token, type: type);
+    storeStoredToken(token: token, type: type);
+  }
+
+  void clearToken() {
+    state = AuthType();
+    clearStoredToken();
   }
 
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
-  void load() {
+  void loadTokenFromStorage() {
     getStoredToken().then((value) {
       debugPrint(value['token']);
       updateToken(token: value['token'] ?? '', type: value['type'] ?? '');
     });
   }
 
-  Future<void> naverLogin() async {
+  Future<bool> naverLogin() async {
     NaverLoginResult res = await FlutterNaverLogin.logIn();
     if (res.status == NaverLoginStatus.error) {
       throw Exception('네이버 소셜 로그인 오류 ${res.errorMessage}.');
@@ -39,11 +44,13 @@ class AuthNotifier extends StateNotifier<AuthType> {
     NaverAccessToken token = await FlutterNaverLogin.currentAccessToken;
     updateToken(token: token.accessToken, type: 'naver');
     debugPrint(token.accessToken);
+    // 여기서 서버로 요청 보내서 만약 가입으로 가야하면
+    return true;
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthType>((ref) {
   AuthNotifier notifier = AuthNotifier();
-  notifier.load();
+  notifier.loadTokenFromStorage();
   return notifier;
 });

@@ -1,5 +1,6 @@
+import 'package:climb_balance/ui/pages/login.dart';
+import 'package:climb_balance/ui/pages/test.dart';
 import 'package:flutter/material.dart';
-import 'package:climb_balance/register/login.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
@@ -28,17 +29,13 @@ class MyApp extends StatelessWidget {
 class MyRoute extends StatelessWidget {
   MyRoute({Key? key}) : super(key: key);
   final _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('dasd'),
-      ),
-      body: Navigator(
-        key: _navigatorKey,
-        initialRoute: '/login',
-        onGenerateRoute: _onGenerateRoute,
-      ),
+    return Navigator(
+      key: _navigatorKey,
+      initialRoute: '/login',
+      onGenerateRoute: _onGenerateRoute,
     );
   }
 
@@ -46,7 +43,10 @@ class MyRoute extends StatelessWidget {
     late Widget page;
     switch (settings.name) {
       case '/login':
-        page = NaverLogin();
+        page = Login();
+        break;
+      case '/main':
+        page = Test();
         break;
       default:
         page = Container();

@@ -7,8 +7,15 @@ Future<Map<String, String>> getStoredToken() async {
   return {'token': token, 'type': type};
 }
 
-Future<void> storeToken({token, type}) async {
+Future<void> storeStoredToken(
+    {required String token, required String type}) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('token', token);
   await prefs.setString('socialType', type);
+}
+
+Future<void> clearStoredToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', '');
+  await prefs.setString('socialType', '');
 }
