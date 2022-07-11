@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_naver_login/flutter_naver_login.dart';
+import 'package:climb_balance/register/login.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,75 +17,46 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (_) => MyRoute(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  late String email;
-  late String accessToken;
-  late String tokenType;
-  Future<void> naverLogin() async {
-    NaverLoginResult res = await FlutterNaverLogin.logIn();
-    NaverAccessToken token = await FlutterNaverLogin.currentAccessToken;
-    setState(() {
-      email = res.account.email;
-      accessToken = token.accessToken;
-      tokenType = token.tokenType;
-    });
-    debugPrint(email);
-  }
-
-  Future<void> naverLogout() async {
-    NaverLoginResult res = await FlutterNaverLogin.logOut();
-    setState(() {
-      email = '';
-      accessToken = '';
-      tokenType = '';
-    });
-    debugPrint(email);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class MyRoute extends StatelessWidget {
+  MyRoute({Key? key}) : super(key: key);
+  final _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('naver'),
+        title: Text('dasd'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                naverLogin();
-              },
-              child: Text('naver login'),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: TextButton(
-                onPressed: () {
-                  naverLogout();
-                },
-                child: Text('naver logout'),
-              ),
-            )
-          ],
-        ),
+      body: Navigator(
+        key: _navigatorKey,
+        initialRoute: '/login',
+        onGenerateRoute: _onGenerateRoute,
       ),
+    );
+  }
+
+  Route _onGenerateRoute(RouteSettings settings) {
+    late Widget page;
+    switch (settings.name) {
+      case '/login':
+        page = NaverLogin();
+        break;
+      default:
+        page = Container();
+        break;
+    }
+    return MaterialPageRoute<dynamic>(
+      builder: (context) {
+        return page;
+      },
+      settings: settings,
     );
   }
 }
