@@ -1,4 +1,4 @@
-import 'package:climb_balance/providers/auth.dart';
+import 'package:climb_balance/providers/token.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -48,7 +48,7 @@ class NaverLoginState extends ConsumerState<NaverLogin> {
           ),
           onPressed: () {
             ref
-                .read(authProvider.notifier)
+                .read(tokenProvider.notifier)
                 .naverLogin()
                 .then((isRegistered) => {
                       // for test

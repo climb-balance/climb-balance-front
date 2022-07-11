@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AuthType {
+class TokenType {
   String token;
   String type;
 
-  AuthType({this.token = '', this.type = ''});
+  TokenType({this.token = '', this.type = ''});
 
   void clear() {
     token = '';
@@ -15,16 +15,16 @@ class AuthType {
   }
 }
 
-class AuthNotifier extends StateNotifier<AuthType> {
-  AuthNotifier() : super(AuthType());
+class TokenNotifier extends StateNotifier<TokenType> {
+  TokenNotifier() : super(TokenType());
 
   void updateToken({required String token, required String type}) {
-    state = AuthType(token: token, type: type);
+    state = TokenType(token: token, type: type);
     storeStoredToken(token: token, type: type);
   }
 
   void clearToken() {
-    state = AuthType();
+    state = TokenType();
     clearStoredToken();
   }
 
@@ -49,8 +49,8 @@ class AuthNotifier extends StateNotifier<AuthType> {
   }
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, AuthType>((ref) {
-  AuthNotifier notifier = AuthNotifier();
+final tokenProvider = StateNotifierProvider<TokenNotifier, TokenType>((ref) {
+  TokenNotifier notifier = TokenNotifier();
   notifier.loadTokenFromStorage();
   return notifier;
 });

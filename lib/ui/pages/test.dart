@@ -1,4 +1,4 @@
-import 'package:climb_balance/providers/auth.dart';
+import 'package:climb_balance/providers/token.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,7 +12,7 @@ class Test extends ConsumerWidget {
         child: ElevatedButton(
           child: Text('logout'),
           onPressed: () {
-            ref.read(authProvider.notifier).clearToken();
+            ref.read(tokenProvider.notifier).clearToken();
             Navigator.popAndPushNamed(context, '/login');
           },
         ),

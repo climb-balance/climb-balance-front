@@ -34,7 +34,7 @@ class MyRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Navigator(
       key: _navigatorKey,
-      initialRoute: '/login',
+      initialRoute: '/auth',
       onGenerateRoute: _onGenerateRoute,
     );
   }
