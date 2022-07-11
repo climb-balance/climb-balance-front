@@ -1,4 +1,4 @@
-import 'package:climb_balance/providers/login.dart';
+import 'package:climb_balance/providers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
