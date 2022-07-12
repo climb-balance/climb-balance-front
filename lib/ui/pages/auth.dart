@@ -11,19 +11,14 @@ class Auth extends ConsumerStatefulWidget {
 
 class AuthState extends ConsumerState<Auth> {
   bool toRegisterd = false;
-  late final bool needLogin;
 
   @override
   void initState() {
-    needLogin = ref.read(tokenProvider.notifier).isEmpty();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!needLogin) {
-      Navigator.popAndPushNamed(context, '/main');
-    }
     return Scaffold(
       body: Center(
         child: Column(
@@ -65,7 +60,7 @@ class NaverLogin extends ConsumerWidget {
                   Navigator.popAndPushNamed(context, '/register')
                 }
               else
-                {Navigator.popAndPushNamed(context, '/main')}
+                {Navigator.popAndPushNamed(context, '/home')}
             });
       },
       child: SizedBox(

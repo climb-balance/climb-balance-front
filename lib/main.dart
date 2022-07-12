@@ -1,6 +1,7 @@
+import 'package:climb_balance/providers/token.dart';
 import 'package:climb_balance/ui/pages/auth.dart';
-import 'package:climb_balance/ui/pages/login.dart';
-import 'package:climb_balance/ui/pages/test.dart';
+import 'package:climb_balance/ui/pages/home.dart';
+import 'package:climb_balance/ui/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,15 +28,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyRoute extends StatelessWidget {
+class MyRoute extends ConsumerWidget {
   MyRoute({Key? key}) : super(key: key);
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Navigator(
       key: _navigatorKey,
-      initialRoute: '/auth',
+      initialRoute:
+          ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
       onGenerateRoute: _onGenerateRoute,
     );
   }
@@ -46,11 +48,11 @@ class MyRoute extends StatelessWidget {
       case '/auth':
         page = Auth();
         break;
-      case '/login':
-        page = Login();
+      case '/auth/register':
+        page = Register();
         break;
-      case '/main':
-        page = Test();
+      case '/home':
+        page = Home();
         break;
       default:
         page = Container();

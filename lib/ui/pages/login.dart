@@ -36,7 +36,7 @@ class NaverLoginState extends ConsumerState<NaverLogin> {
   @override
   Widget build(BuildContext context) {
     if (!needLogin) {
-      Navigator.popAndPushNamed(context, '/main');
+      Navigator.popAndPushNamed(context, '/home');
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -60,10 +60,10 @@ class NaverLoginState extends ConsumerState<NaverLogin> {
                       if (toRegisted)
                         {
                           // to main
-                          Navigator.popAndPushNamed(context, '/main')
+                          Navigator.popAndPushNamed(context, '/home')
                         }
                       else
-                        {Navigator.popAndPushNamed(context, '/register')}
+                        {Navigator.pushNamed(context, '/register')}
                     });
           },
           child: SizedBox(
