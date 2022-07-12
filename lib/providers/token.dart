@@ -18,6 +18,10 @@ class TokenType {
 class TokenNotifier extends StateNotifier<TokenType> {
   TokenNotifier() : super(TokenType());
 
+  bool isEmpty() {
+    return state.token == '';
+  }
+
   void updateToken({required String token, required String type}) {
     state = TokenType(token: token, type: type);
     storeStoredToken(token: token, type: type);

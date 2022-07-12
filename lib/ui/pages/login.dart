@@ -24,15 +24,20 @@ class NaverLogin extends ConsumerStatefulWidget {
 
 class NaverLoginState extends ConsumerState<NaverLogin> {
   late bool toRegisted;
+  late bool needLogin;
 
   @override
   void initState() {
     toRegisted = false;
+    needLogin = ref.read(tokenProvider.notifier).isEmpty();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!needLogin) {
+      Navigator.popAndPushNamed(context, '/main');
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

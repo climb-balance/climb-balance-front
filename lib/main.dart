@@ -1,3 +1,4 @@
+import 'package:climb_balance/ui/pages/auth.dart';
 import 'package:climb_balance/ui/pages/login.dart';
 import 'package:climb_balance/ui/pages/test.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,9 @@ class MyRoute extends StatelessWidget {
   Route _onGenerateRoute(RouteSettings settings) {
     late Widget page;
     switch (settings.name) {
+      case '/auth':
+        page = Auth();
+        break;
       case '/login':
         page = Login();
         break;
