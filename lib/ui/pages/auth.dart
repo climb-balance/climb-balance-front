@@ -1,4 +1,4 @@
-import 'package:climb_balance/providers/async_status.dart';
+import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:climb_balance/utils/webView.dart';
 import 'package:flutter/material.dart';
@@ -21,21 +21,19 @@ class AuthState extends ConsumerState<Auth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() => {toRegisterd = !toRegisterd});
-              },
-              child: Text('to register : $toRegisterd'),
-            ),
-            NaverLogin(toRegisterd: toRegisterd),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() => {toRegisterd = !toRegisterd});
+            },
+            child: Text('to register : $toRegisterd'),
+          ),
+          NaverLogin(toRegisterd: toRegisterd),
+        ],
       ),
     );
   }

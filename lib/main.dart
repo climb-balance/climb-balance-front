@@ -1,4 +1,4 @@
-import 'package:climb_balance/providers/async_status.dart';
+import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:climb_balance/ui/pages/auth.dart';
 import 'package:climb_balance/ui/pages/home.dart';
