@@ -1,6 +1,7 @@
 import 'package:climb_balance/providers/token.dart';
+import 'package:climb_balance/utils/webView.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Auth extends ConsumerStatefulWidget {
   const Auth({Key? key}) : super(key: key);
@@ -52,16 +53,14 @@ class NaverLogin extends ConsumerWidget {
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
       onPressed: () {
-        ref.read(tokenProvider.notifier).naverLogin().then((isRegistered) => {
-              // for test
-              if (toRegisterd)
-                {
-                  // to main
-                  Navigator.popAndPushNamed(context, '/register')
-                }
-              else
-                {Navigator.popAndPushNamed(context, '/home')}
-            });
+        ref.read(tokenProvider.notifier).naverLogin().then((html) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NaverWebView(html: html),
+            ),
+          );
+        });
       },
       child: SizedBox(
         width: 150,
