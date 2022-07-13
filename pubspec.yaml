@@ -39,6 +39,8 @@ dependencies:
   http: #<latest_version>
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.0.0-dev.9
+  webview_flutter: #<latest_version>
+  numberpicker:
 dev_dependencies:
   flutter_test:
     sdk: flutter
