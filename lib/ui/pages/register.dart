@@ -12,18 +12,30 @@ class Register extends ConsumerStatefulWidget {
 }
 
 class RegisterState extends ConsumerState with SingleTickerProviderStateMixin {
+  static const registerTabs = [HeightInfo(), WeightInfo()];
+  late TabController _tabController;
+
   @override
   void initState() {
+    _tabController = TabController(length: registerTabs.length, vsync: this);
     super.initState();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final model = ref.watch(registerProvider);
+    final curPage =
+        ref.watch(registerProvider.select((value) => value.curPage));
+    _tabController.animateTo(curPage);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${model.curPage + 1} / 5',
+          '${curPage + 1} / ${registerTabs.length}',
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         centerTitle: true,
@@ -35,40 +47,19 @@ class RegisterState extends ConsumerState with SingleTickerProviderStateMixin {
             color: Theme.of(context).primaryColorDark,
           ),
           onPressed: () {
+            if (curPage == 0) Navigator.pop(context);
             ref.read(registerProvider.notifier).lastPage();
           },
         ),
       ),
       body: SafeArea(
         minimum: EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: Navigator(
-          initialRoute: '/',
-          onGenerateRoute: _onGenerateRoute,
+        child: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: _tabController,
+          children: registerTabs,
         ),
       ),
-    );
-  }
-
-  Route _onGenerateRoute(RouteSettings settings) {
-    late Widget page;
-    final int curPage =
-        ref.watch(registerProvider.select((state) => state.curPage));
-    switch (curPage) {
-      case 0:
-        page = HeightInfo();
-        break;
-      case 1:
-        page = WeightInfo();
-        break;
-      default:
-        page = Container();
-        break;
-    }
-    return MaterialPageRoute<dynamic>(
-      builder: (context) {
-        return page;
-      },
-      settings: settings,
     );
   }
 }
@@ -112,9 +103,6 @@ class HeightInfoState extends ConsumerState {
           ),
           FullSizeBtn(
             onPressed: () {
-              // debugPrint(ref
-              //     .watch(registerProvider.select((state) => state.curPage))
-              //     .toString());
               ref.read(registerProvider.notifier).updateHeight(height);
               ref.read(registerProvider.notifier).nextPage();
             },
@@ -131,7 +119,7 @@ class WeightInfo extends ConsumerStatefulWidget {
   const WeightInfo({Key? key}) : super(key: key);
 
   @override
-  HeightInfoState createState() => HeightInfoState();
+  WeightInfoState createState() => WeightInfoState();
 }
 
 class WeightInfoState extends ConsumerState {
@@ -139,7 +127,6 @@ class WeightInfoState extends ConsumerState {
 
   @override
   Widget build(BuildContext context) {
-    //debugPrint(height.toString());
     final theme = Theme.of(context);
     return Center(
       child: Column(
