@@ -1,6 +1,5 @@
 import 'package:climb_balance/services/api.dart';
 import 'package:climb_balance/utils/token.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TokenType {
@@ -33,7 +32,6 @@ class TokenNotifier extends StateNotifier<TokenType> {
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
   void loadTokenFromStorage() {
     getStoredToken().then((value) {
-      debugPrint(value['token']);
       updateToken(token: value['token'] ?? '');
     });
   }

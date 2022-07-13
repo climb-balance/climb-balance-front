@@ -21,7 +21,7 @@ Future<String> getLoginHtml() async {
       .timeout(const Duration(
         seconds: 1,
       ))
-      .catchError((err) => errorHandler(err, SERVER_INFO.NAVER_PATH));
+      .catchError((err) => throw errorHandler(err, SERVER_INFO.NAVER_PATH));
   return res.body;
 }
 

@@ -1,3 +1,4 @@
+import 'package:climb_balance/providers/async_status.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:climb_balance/utils/webView.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,11 @@ class NaverLogin extends ConsumerWidget {
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
       onPressed: () {
-        ref.read(tokenProvider.notifier).naverLogin().then((html) {
+        ref.read(asyncStatusProvider.notifier).toggleLoading();
+        ref.read(tokenProvider.notifier).naverLogin().catchError((err) {
+          ref.read(asyncStatusProvider.notifier).toggleLoading();
+        }).then((html) {
+          ref.read(asyncStatusProvider.notifier).toggleLoading();
           Navigator.push(
             context,
             MaterialPageRoute(
