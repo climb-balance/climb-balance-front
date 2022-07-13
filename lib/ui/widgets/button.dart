@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FullSizeBtn extends StatelessWidget {
-  final Function onPressed;
+  final void Function() onPressed;
   final String text;
   final int type;
+
   const FullSizeBtn(
       {Key? key, required this.onPressed, required this.text, this.type = 0})
       : super(key: key);
@@ -12,7 +13,7 @@ class FullSizeBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ButtonStyle(
           backgroundColor: type == 1
               ? MaterialStateProperty.all(Colors.grey)

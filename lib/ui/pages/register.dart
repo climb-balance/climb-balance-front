@@ -15,17 +15,15 @@ class RegisterState extends ConsumerState with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    ref.read(registerProvider.notifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    final page = ref.watch(registerProvider.select((state) => state.curPage));
-    debugPrint(page.toString());
+    final model = ref.watch(registerProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${page + 1} / 5',
+          '${model.curPage + 1} / 5',
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         centerTitle: true,
@@ -44,6 +42,7 @@ class RegisterState extends ConsumerState with SingleTickerProviderStateMixin {
       body: SafeArea(
         minimum: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Navigator(
+          initialRoute: '/',
           onGenerateRoute: _onGenerateRoute,
         ),
       ),
@@ -52,7 +51,9 @@ class RegisterState extends ConsumerState with SingleTickerProviderStateMixin {
 
   Route _onGenerateRoute(RouteSettings settings) {
     late Widget page;
-    switch (ref.watch(registerProvider.select((state) => state.curPage))) {
+    final int curPage =
+        ref.watch(registerProvider.select((state) => state.curPage));
+    switch (curPage) {
       case 0:
         page = HeightInfo();
         break;
@@ -111,13 +112,11 @@ class HeightInfoState extends ConsumerState {
           ),
           FullSizeBtn(
             onPressed: () {
-              debugPrint('adsasdad');
-              debugPrint(ref
-                  .watch(registerProvider.select((state) => state.curPage))
-                  .toString());
-              final regiRef = ref.read(registerProvider.notifier);
-              regiRef.updateHeight(height);
-              regiRef.nextPage();
+              // debugPrint(ref
+              //     .watch(registerProvider.select((state) => state.curPage))
+              //     .toString());
+              ref.read(registerProvider.notifier).updateHeight(height);
+              ref.read(registerProvider.notifier).nextPage();
             },
             text: '완료',
           ),

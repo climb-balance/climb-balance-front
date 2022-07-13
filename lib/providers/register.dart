@@ -4,32 +4,53 @@ class RegisterType {
   int height;
   int weight;
   bool sex;
-  int curPage = 0;
+  int curPage;
 
-  RegisterType({this.height = 165, this.weight = 60, this.sex = true});
+  RegisterType(
+      {this.height = 165, this.weight = 60, this.sex = true, this.curPage = 0});
 }
 
 class RegisterNotifier extends StateNotifier<RegisterType> {
   RegisterNotifier() : super(RegisterType());
 
   void updateHeight(int value) {
-    state.height = value;
+    state = RegisterType(
+        height: value,
+        weight: state.weight,
+        sex: state.sex,
+        curPage: state.curPage);
   }
 
   void updateWeight(int value) {
-    state.weight = value;
+    state = RegisterType(
+        height: state.height,
+        weight: value,
+        sex: state.sex,
+        curPage: state.curPage);
   }
 
   void updateSex(bool value) {
-    state.sex = value;
+    state = RegisterType(
+        height: state.height,
+        weight: state.weight,
+        sex: value,
+        curPage: state.curPage);
   }
 
   void nextPage() {
-    state.curPage = (state.curPage + 1) % 2;
+    state = RegisterType(
+        height: state.height,
+        weight: state.weight,
+        sex: state.sex,
+        curPage: (state.curPage + 1) % 2);
   }
 
   void lastPage() {
-    state.curPage = (state.curPage - 1) % 2;
+    state = RegisterType(
+        height: state.height,
+        weight: state.weight,
+        sex: state.sex,
+        curPage: (state.curPage - 1) % 2);
   }
 }
 
