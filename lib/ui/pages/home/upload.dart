@@ -32,7 +32,6 @@ class UploadState extends ConsumerState {
           ),
         ),
       ),
-      bottomNavigationBar: BotNavigationBar(currentIdx: 1),
     );
   }
 }

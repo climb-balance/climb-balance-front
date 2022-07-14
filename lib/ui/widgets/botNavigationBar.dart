@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-class BotNavigationBar extends StatelessWidget {
-  final int currentIdx;
-  static const paths = ['/', '/upload', '/account'];
+class BotNavigationBar extends StatefulWidget {
+  final GlobalKey<NavigatorState> navKey;
 
-  const BotNavigationBar({Key? key, this.currentIdx = 0}) : super(key: key);
+  const BotNavigationBar({Key? key, required this.navKey}) : super(key: key);
+
+  @override
+  State<BotNavigationBar> createState() => _BotNavigationBarState();
+}
+
+class _BotNavigationBarState extends State<BotNavigationBar> {
+  static const paths = ['/', '/upload', '/account'];
+  int currentIdx = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +28,9 @@ class BotNavigationBar extends StatelessWidget {
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    Navigator.pushReplacementNamed(context, paths[index]);
+    widget.navKey.currentState?.pushReplacementNamed(paths[index]);
+    setState(() {
+      currentIdx = index;
+    });
   }
 }

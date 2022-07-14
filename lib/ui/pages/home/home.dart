@@ -32,7 +32,6 @@ class HomeState extends ConsumerState {
           ),
         ),
       ),
-      bottomNavigationBar: BotNavigationBar(currentIdx: 0),
     );
   }
 }

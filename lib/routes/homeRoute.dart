@@ -1,4 +1,5 @@
 import 'package:climb_balance/ui/pages/home/account.dart';
+import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import '../ui/pages/home/home.dart';
 import '../ui/pages/home/upload.dart';
@@ -12,13 +13,17 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  static const paths = ['/', '/upload', '/account'];
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: _navigatorKey,
-      initialRoute: '/',
-      onGenerateRoute: homeRoute,
+    return Scaffold(
+      body: Navigator(
+        key: _navigatorKey,
+        initialRoute: '/',
+        onGenerateRoute: homeRoute,
+      ),
+      bottomNavigationBar: BotNavigationBar(navKey: _navigatorKey),
     );
   }
 }
