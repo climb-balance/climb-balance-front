@@ -1,4 +1,7 @@
+import 'package:climb_balance/ui/pages/home/account.dart';
 import 'package:flutter/material.dart';
+import '../ui/pages/home/home.dart';
+import '../ui/pages/home/upload.dart';
 
 class HomeRoute extends StatefulWidget {
   const HomeRoute({Key? key}) : super(key: key);
@@ -24,6 +27,15 @@ Route homeRoute(RouteSettings settings) {
   late Widget page;
   debugPrint('home:${settings.name}');
   switch (settings.name) {
+    case '/':
+      page = Home();
+      break;
+    case '/upload':
+      page = Upload();
+      break;
+    case '/account':
+      page = Account();
+      break;
     default:
       page = Container();
       break;
