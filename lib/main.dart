@@ -1,8 +1,7 @@
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/token.dart';
-import 'package:climb_balance/ui/pages/auth.dart';
+import 'package:climb_balance/routes/authRoute.dart';
 import 'package:climb_balance/ui/pages/home.dart';
-import 'package:climb_balance/ui/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,10 +66,7 @@ class MyRoute extends ConsumerWidget {
     debugPrint(settings.name);
     switch (settings.name) {
       case '/auth':
-        page = Auth();
-        break;
-      case '/auth/register':
-        page = Register();
+        page = AuthRoute();
         break;
       case '/home':
         page = Home();

@@ -1,4 +1,4 @@
-import 'package:climb_balance/services/api.dart';
+import 'package:climb_balance/providers/api.dart';
 import 'package:climb_balance/utils/token.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +13,9 @@ class TokenType {
 }
 
 class TokenNotifier extends StateNotifier<TokenType> {
-  TokenNotifier() : super(TokenType());
+  final ref;
+
+  TokenNotifier({required this.ref}) : super(TokenType());
 
   bool isEmpty() {
     return state.token == '';
@@ -35,16 +37,10 @@ class TokenNotifier extends StateNotifier<TokenType> {
       updateToken(token: value['token'] ?? '');
     });
   }
-
-  Future<String> naverLogin() async {
-    String html = await getLoginHtml();
-    // 여기서 서버로 요청 보내서 만약 가입으로 가야하면
-    return html;
-  }
 }
 
 final tokenProvider = StateNotifierProvider<TokenNotifier, TokenType>((ref) {
-  TokenNotifier notifier = TokenNotifier();
+  TokenNotifier notifier = TokenNotifier(ref: ref);
   notifier.loadTokenFromStorage();
   return notifier;
 });

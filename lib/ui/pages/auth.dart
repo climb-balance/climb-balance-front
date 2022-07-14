@@ -1,4 +1,4 @@
-import 'package:climb_balance/providers/asyncStatus.dart';
+import 'package:climb_balance/providers/api.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:climb_balance/utils/webView.dart';
 import 'package:flutter/material.dart';
@@ -21,19 +21,21 @@ class AuthState extends ConsumerState<Auth> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              setState(() => {toRegisterd = !toRegisterd});
-            },
-            child: Text('to register : $toRegisterd'),
-          ),
-          NaverLogin(toRegisterd: toRegisterd),
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() => {toRegisterd = !toRegisterd});
+              },
+              child: Text('to register : $toRegisterd'),
+            ),
+            NaverLogin(toRegisterd: toRegisterd),
+          ],
+        ),
       ),
     );
   }
@@ -42,7 +44,21 @@ class AuthState extends ConsumerState<Auth> {
 class NaverLogin extends ConsumerWidget {
   final bool toRegisterd;
 
-  const NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
+  NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
+
+  void onPress(BuildContext context, WidgetRef ref) async {
+    await ref.read(serverProiver).getLoginHtml().catchError((err) {
+      debugPrint(err.toString());
+    }).then((html) async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NaverWebView(html: html),
+        ),
+      ).then((res) => Navigator.popAndPushNamed(
+          context, toRegisterd ? '/register' : '/home'));
+    });
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,20 +67,7 @@ class NaverLogin extends ConsumerWidget {
         backgroundColor:
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
-      onPressed: () {
-        ref.read(asyncStatusProvider.notifier).toggleLoading();
-        ref.read(tokenProvider.notifier).naverLogin().catchError((err) {
-          ref.read(asyncStatusProvider.notifier).toggleLoading();
-        }).then((html) {
-          ref.read(asyncStatusProvider.notifier).toggleLoading();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NaverWebView(html: html),
-            ),
-          );
-        });
-      },
+      onPressed: () => {onPress(context, ref)},
       child: SizedBox(
         width: 150,
         child: Row(
