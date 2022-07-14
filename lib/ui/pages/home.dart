@@ -1,6 +1,7 @@
 import 'package:climb_balance/providers/token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,12 +17,17 @@ class HomeState extends ConsumerState {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          child: const Text('logout'),
-          onPressed: () {
-            ref.read(tokenProvider.notifier).clearToken();
-            Navigator.popAndPushNamed(context, '/auth');
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('logout'),
+              onPressed: () {
+                ref.read(tokenProvider.notifier).clearToken();
+                Navigator.popAndPushNamed(context, '/auth');
+              },
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
