@@ -46,17 +46,18 @@ class NaverLogin extends ConsumerWidget {
 
   NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
 
-  void onPress(BuildContext context, WidgetRef ref) async {
-    await ref.read(serverProiver).getLoginHtml().catchError((err) {
-      debugPrint(err.toString());
-    }).then((html) async {
+  void onNaverLogin(BuildContext context, WidgetRef ref) async {
+    await ref.read(serverProiver).getLoginHtml().then((html) async {
       await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NaverWebView(html: html),
         ),
-      ).then((res) => Navigator.popAndPushNamed(
-          context, toRegisterd ? '/register' : '/home'));
+      ).then((res) => toRegisterd
+          ? Navigator.pushNamed(context, '/register')
+          : Navigator.popAndPushNamed(context, '/home'));
+    }).catchError((err) {
+      Navigator.pushNamed(context, '/home');
     });
   }
 
@@ -67,7 +68,7 @@ class NaverLogin extends ConsumerWidget {
         backgroundColor:
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
-      onPressed: () => {onPress(context, ref)},
+      onPressed: () => {onNaverLogin(context, ref)},
       child: SizedBox(
         width: 150,
         child: Row(
