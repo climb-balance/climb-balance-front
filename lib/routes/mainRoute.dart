@@ -1,7 +1,7 @@
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:climb_balance/routes/authRoute.dart';
-import 'package:climb_balance/ui/pages/home.dart';
+import 'package:climb_balance/ui/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
