@@ -6,10 +6,10 @@ class AuthRoute extends StatefulWidget {
   const AuthRoute({Key? key}) : super(key: key);
 
   @override
-  State<AuthRoute> createState() => _AuthState();
+  State<AuthRoute> createState() => _AuthRouteState();
 }
 
-class _AuthState extends State<AuthRoute> {
+class _AuthRouteState extends State<AuthRoute> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -17,29 +17,28 @@ class _AuthState extends State<AuthRoute> {
     return Navigator(
       key: _navigatorKey,
       initialRoute: '/',
-      onGenerateRoute: _onGenerateRoute,
+      onGenerateRoute: authRoute,
     );
   }
+}
 
-  Route _onGenerateRoute(RouteSettings settings) {
-    late Widget page;
-    debugPrint(settings.name);
-    switch (settings.name) {
-      case '/':
-        page = Auth();
-        break;
-      case '/register':
-        page = Register();
-        break;
-      default:
-        page = Container();
-        break;
-    }
-    return MaterialPageRoute<dynamic>(
-      builder: (context) {
-        return page;
-      },
-      settings: settings,
-    );
+Route authRoute(RouteSettings settings) {
+  late Widget page;
+  switch (settings.name) {
+    case '/':
+      page = Auth();
+      break;
+    case '/register':
+      page = Register();
+      break;
+    default:
+      page = Container();
+      break;
   }
+  return MaterialPageRoute<dynamic>(
+    builder: (context) {
+      return page;
+    },
+    settings: settings,
+  );
 }
