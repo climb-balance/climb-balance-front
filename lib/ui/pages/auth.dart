@@ -1,4 +1,7 @@
+import 'package:climb_balance/providers/api.dart';
 import 'package:climb_balance/providers/token.dart';
+import 'package:climb_balance/routes/authRoute.dart';
+import 'package:climb_balance/routes/mainRoute.dart';
 import 'package:climb_balance/utils/webView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +46,26 @@ class AuthState extends ConsumerState<Auth> {
 class NaverLogin extends ConsumerWidget {
   final bool toRegisterd;
 
-  const NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
+  NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
+
+  void onNaverLogin(BuildContext context, WidgetRef ref) async {
+    await ref.read(serverProiver).getLoginHtml().then((html) async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NaverWebView(html: html),
+        ),
+      ).then((res) => toRegisterd
+          ? Navigator.pushNamed(context, '/register')
+          : Navigator.popAndPushNamed(context, '/home'));
+    }).catchError((err) {
+      debugPrint(Navigator.of(context).toString());
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          "/home",
+          (route) =>
+              route.isCurrent && route.settings.name == "/home" ? false : true);
+    });
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,16 +74,7 @@ class NaverLogin extends ConsumerWidget {
         backgroundColor:
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
-      onPressed: () {
-        ref.read(tokenProvider.notifier).naverLogin().then((html) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NaverWebView(html: html),
-            ),
-          );
-        });
-      },
+      onPressed: () => {onNaverLogin(context, ref)},
       child: SizedBox(
         width: 150,
         child: Row(

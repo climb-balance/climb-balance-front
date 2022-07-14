@@ -43,7 +43,7 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
               ref
                   .read(tokenProvider.notifier)
                   .updateToken(token: html.split('\\\"')[5]);
-              Navigator.popAndPushNamed(context, '/auth/register');
+              Navigator.pop(context, 'success');
             });
           }
         },
