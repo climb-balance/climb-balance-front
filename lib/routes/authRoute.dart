@@ -24,6 +24,7 @@ class _AuthRouteState extends State<AuthRoute> {
 
 Route authRoute(RouteSettings settings) {
   late Widget page;
+  debugPrint('auth:${settings.name}');
   switch (settings.name) {
     case '/':
       page = Auth();

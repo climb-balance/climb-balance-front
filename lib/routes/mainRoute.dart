@@ -33,7 +33,7 @@ class MainRoute extends ConsumerWidget {
     return Navigator(
       key: _navigatorKey,
       initialRoute:
-          ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
+          '/home', //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
       onGenerateRoute: mainRoute,
     );
   }
