@@ -41,6 +41,7 @@ dependencies:
   webview_flutter: #<latest_version>
   numberpicker:
   image_picker:
+  video_player:
 dev_dependencies:
   flutter_test:
     sdk: flutter
