@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// https://rntlqvnf.github.io/programming/flutter-navigation-without-context/
 class MainRouteNotifier extends StateNotifier<GlobalKey<NavigatorState>> {
   final ref;
 
