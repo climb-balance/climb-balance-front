@@ -13,7 +13,6 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  static const paths = ['/', '/upload', '/account'];
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +32,23 @@ Route homeRoute(RouteSettings settings) {
   debugPrint('home:${settings.name}');
   switch (settings.name) {
     case '/':
-      page = Home();
-      break;
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => Home(),
+      );
     case '/upload':
-      page = Upload();
-      break;
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => Upload(),
+      );
     case '/account':
-      page = Account();
-      break;
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => Account(),
+      );
     default:
       page = Container();
       break;
