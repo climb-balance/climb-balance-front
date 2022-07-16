@@ -1,4 +1,5 @@
 import 'package:climb_balance/providers/asyncStatus.dart';
+import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/routes/authRoute.dart';
 import 'package:climb_balance/routes/homeRoute.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class MainRoute extends ConsumerWidget {
         Navigator.of(context).pop();
       }
     });
+    ref.read(mainRouteProvider.notifier).updateNavigator(_navigatorKey);
     return Navigator(
       key: _navigatorKey,
       initialRoute:

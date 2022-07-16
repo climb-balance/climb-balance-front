@@ -1,3 +1,4 @@
+import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,7 @@ class HomeState extends ConsumerState {
                 child: const Text('logout'),
                 onPressed: () {
                   ref.read(tokenProvider.notifier).clearToken();
-                  Navigator.popAndPushNamed(context, '/auth');
+                  ref.read(mainRouteProvider.notifier).toAuth();
                 },
               ),
             ],
