@@ -77,14 +77,14 @@ class _VideoPopupState extends State<VideoPopup> {
   }
 }
 
-class Upload extends ConsumerStatefulWidget {
-  const Upload({Key? key}) : super(key: key);
+class GetVideo extends ConsumerStatefulWidget {
+  const GetVideo({Key? key}) : super(key: key);
 
   @override
-  UploadState createState() => UploadState();
+  GetVideoState createState() => GetVideoState();
 }
 
-class UploadState extends ConsumerState {
+class GetVideoState extends ConsumerState {
   final ImagePicker _picker = ImagePicker();
 
   void _getVideoFromGallery(context) async {

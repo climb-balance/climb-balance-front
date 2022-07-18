@@ -10,7 +10,7 @@ class BotNavigationBar extends StatefulWidget {
 }
 
 class _BotNavigationBarState extends State<BotNavigationBar> {
-  static const paths = ['/', '/upload', '/account'];
+  static const paths = ['/', '/video/get', '/account'];
   int currentIdx = 0;
 
   @override

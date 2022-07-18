@@ -2,7 +2,7 @@ import 'package:climb_balance/ui/pages/home/account.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import '../ui/pages/home/home.dart';
-import '../ui/pages/home/upload.dart';
+import '../ui/pages/home/getVideo.dart';
 
 class HomeRoute extends StatefulWidget {
   const HomeRoute({Key? key}) : super(key: key);
@@ -37,11 +37,11 @@ Route homeRoute(RouteSettings settings) {
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
         pageBuilder: (_, __, ___) => Home(),
       );
-    case '/upload':
+    case '/video/get':
       return PageRouteBuilder(
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
-        pageBuilder: (_, __, ___) => Upload(),
+        pageBuilder: (_, __, ___) => GetVideo(),
       );
     case '/account':
       return PageRouteBuilder(
