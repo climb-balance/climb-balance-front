@@ -2,6 +2,7 @@ import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/providers/token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -24,13 +25,15 @@ class HomeState extends ConsumerState {
                 child: const Text('logout'),
                 onPressed: () {
                   ref.read(tokenProvider.notifier).clearToken();
-                  ref.read(mainRouteProvider.notifier).toAuth();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/auth', (route) => false);
                 },
               ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: BotNavigationBar(currentIdx: 0),
     );
   }
 }

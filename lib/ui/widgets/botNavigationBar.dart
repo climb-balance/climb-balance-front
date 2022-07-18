@@ -2,22 +2,18 @@ import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BotNavigationBar extends ConsumerStatefulWidget {
-  const BotNavigationBar({Key? key}) : super(key: key);
+class BotNavigationBar extends ConsumerWidget {
+  final int currentIdx;
+
+  const BotNavigationBar({Key? key, required this.currentIdx})
+      : super(key: key);
+  static const paths = ['/home', '/home/video/get', '/home/account'];
 
   @override
-  BotNavigationBarState createState() => BotNavigationBarState();
-}
-
-class BotNavigationBarState extends ConsumerState {
-  static const paths = ['/', '/video/get', '/account'];
-  int currentIdx = 0;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return BottomNavigationBar(
       currentIndex: currentIdx,
-      onTap: (index) => {_onItemTapped(index, context)},
+      onTap: (index) => {_onItemTapped(index, context, ref)},
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
         BottomNavigationBarItem(icon: Icon(Icons.add_a_photo), label: 'add'),
@@ -27,13 +23,10 @@ class BotNavigationBarState extends ConsumerState {
     );
   }
 
-  void _onItemTapped(int index, BuildContext context) {
+  void _onItemTapped(int index, BuildContext context, WidgetRef ref) {
     ref
         .read(mainRouteProvider)
         .currentState
-        ?.pushReplacementNamed(paths[index]);
-    setState(() {
-      currentIdx = index;
-    });
+        ?.pushNamedAndRemoveUntil(paths[index], (route) => false);
   }
 }

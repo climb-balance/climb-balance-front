@@ -1,9 +1,12 @@
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/routes/authRoute.dart';
-import 'package:climb_balance/routes/homeRoute.dart';
+import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:climb_balance/ui/pages/home/account.dart';
+import '../ui/pages/home/home.dart';
+import '../ui/pages/home/getVideo.dart';
 
 class MainRoute extends ConsumerWidget {
   MainRoute({Key? key}) : super(key: key);
@@ -48,8 +51,23 @@ Route mainRoute(RouteSettings settings) {
       page = AuthRoute();
       break;
     case '/home':
-      page = HomeRoute();
-      break;
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => Home(),
+      );
+    case '/home/video/get':
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => GetVideo(),
+      );
+    case '/home/account':
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => Account(),
+      );
     default:
       page = Container();
       break;
