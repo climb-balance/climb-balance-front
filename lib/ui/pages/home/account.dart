@@ -32,7 +32,7 @@ class AccountState extends ConsumerState {
           ),
         ),
       ),
-      bottomNavigationBar: BotNavigationBar(currentIdx: 2),
+      bottomNavigationBar: BotNavigationBar(currentIdx: 4),
     );
   }
 }

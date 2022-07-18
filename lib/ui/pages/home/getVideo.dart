@@ -1,81 +1,11 @@
 import 'dart:io';
-
+import 'package:climb_balance/ui/pages/home/editVideo.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-class VideoPopup extends StatefulWidget {
-  XFile file;
-
-  VideoPopup({Key? key, required this.file}) : super(key: key);
-
-  @override
-  State<VideoPopup> createState() => _VideoPopupState();
-}
-
-class _VideoPopupState extends State<VideoPopup> {
-  late VideoPlayerController _controller;
-  late Future<void> _initializeVideoPlayerFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.file(File(widget.file.path))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
-    _initializeVideoPlayerFuture = _controller.initialize();
-    _controller.setLooping(true);
-  }
-
-  @override
-  dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          FutureBuilder(
-            future: _initializeVideoPlayerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                // If the VideoPlayerController has finished initialization, use
-                // the data it provides to limit the aspect ratio of the video.
-                return AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  // Use the VideoPlayer widget to display the video.
-                  child: VideoPlayer(_controller),
-                );
-              } else {
-                // If the VideoPlayerController is still initializing, show a
-                // loading spinner.
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: _controller.value.isPlaying ? Text('멈춤') : Text("재생"),
-          )
-        ],
-      ),
-    );
-  }
-}
+import '../../widgets/botNavigationBar.dart';
 
 class GetVideo extends ConsumerStatefulWidget {
   const GetVideo({Key? key}) : super(key: key);
@@ -93,8 +23,15 @@ class GetVideoState extends ConsumerState {
     if (image == null) {
       return;
     }
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => VideoPopup(file: image)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EditVideo(
+          video: File(image.path),
+        ),
+      ),
+    );
   }
 
   void _getVideoFromCamera() async {
@@ -129,6 +66,9 @@ class GetVideoState extends ConsumerState {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BotNavigationBar(
+        currentIdx: 2,
       ),
     );
   }

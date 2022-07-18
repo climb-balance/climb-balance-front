@@ -41,9 +41,23 @@ class BotNavigationBar extends StatelessWidget {
 
   void _onItemTapped(int index, BuildContext context) {
     if (index == 2) {
-      showModalBottomSheet(context: context, builder: (context) => Text('as'));
+      showModalBottomSheet(context: context, builder: (context) => PickVideo());
     } else
       Navigator.pushNamedAndRemoveUntil(
           context, paths[index], (route) => false);
+  }
+}
+
+class PickVideo extends StatelessWidget {
+  const PickVideo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        Container(child: Text('직접 촬영하기')),
+        Container(child: Text('갤러리에서 선택하기'))
+      ],
+    );
   }
 }
