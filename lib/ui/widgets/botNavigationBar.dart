@@ -1,7 +1,5 @@
 import 'package:climb_balance/configs/routeConfig.dart';
-import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BotNavigationBar extends StatelessWidget {
   final int currentIdx;
@@ -19,6 +17,7 @@ class BotNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       currentIndex: currentIdx,
       showSelectedLabels: false,
       showUnselectedLabels: false,
@@ -26,12 +25,14 @@ class BotNavigationBar extends StatelessWidget {
       onTap: (index) => {_onItemTapped(index, context)},
       items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+        BottomNavigationBarItem(icon: Icon(Icons.people), label: 'community'),
         BottomNavigationBarItem(
             icon: Icon(
               Icons.add_box_rounded,
               color: Theme.of(context).errorColor,
             ),
             label: ''),
+        BottomNavigationBarItem(icon: Icon(Icons.book), label: 'diary'),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_circle), label: 'account')
       ],
@@ -39,6 +40,10 @@ class BotNavigationBar extends StatelessWidget {
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, paths[index], (route) => false);
+    if (index == 2) {
+      showModalBottomSheet(context: context, builder: (context) => Text('as'));
+    } else
+      Navigator.pushNamedAndRemoveUntil(
+          context, paths[index], (route) => false);
   }
 }
