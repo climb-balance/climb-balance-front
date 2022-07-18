@@ -1,15 +1,15 @@
+import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BotNavigationBar extends StatefulWidget {
-  final GlobalKey<NavigatorState> navKey;
-
-  const BotNavigationBar({Key? key, required this.navKey}) : super(key: key);
+class BotNavigationBar extends ConsumerStatefulWidget {
+  const BotNavigationBar({Key? key}) : super(key: key);
 
   @override
-  State<BotNavigationBar> createState() => _BotNavigationBarState();
+  BotNavigationBarState createState() => BotNavigationBarState();
 }
 
-class _BotNavigationBarState extends State<BotNavigationBar> {
+class BotNavigationBarState extends ConsumerState {
   static const paths = ['/', '/video/get', '/account'];
   int currentIdx = 0;
 
@@ -28,7 +28,10 @@ class _BotNavigationBarState extends State<BotNavigationBar> {
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    widget.navKey.currentState?.pushReplacementNamed(paths[index]);
+    ref
+        .read(mainRouteProvider)
+        .currentState
+        ?.pushReplacementNamed(paths[index]);
     setState(() {
       currentIdx = index;
     });
