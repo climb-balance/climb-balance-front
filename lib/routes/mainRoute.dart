@@ -1,3 +1,4 @@
+import 'package:climb_balance/configs/routeConfig.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/routes/authRoute.dart';
@@ -33,7 +34,7 @@ class MainRoute extends ConsumerWidget {
         Navigator.of(context).pop();
       }
     });
-    ref.read(mainRouteProvider.notifier).updateNavigator(_navigatorKey);
+    //ref.read(mainRouteProvider.notifier).updateNavigator(_navigatorKey);
     return Navigator(
       key: _navigatorKey,
       initialRoute:
@@ -50,19 +51,19 @@ Route mainRoute(RouteSettings settings) {
     case '/auth':
       page = AuthRoute();
       break;
-    case '/home':
+    case HOME_PAGE_PATH:
       return PageRouteBuilder(
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
         pageBuilder: (_, __, ___) => Home(),
       );
-    case '/home/video/get':
+    case COMMUNITY_PAGE_PATH:
       return PageRouteBuilder(
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
         pageBuilder: (_, __, ___) => GetVideo(),
       );
-    case '/home/account':
+    case ACCOUNT_PAGE_PATH:
       return PageRouteBuilder(
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
