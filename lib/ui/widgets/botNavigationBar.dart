@@ -1,4 +1,5 @@
 import 'package:climb_balance/configs/routeConfig.dart';
+import 'package:climb_balance/ui/pages/home/getVideo.dart';
 import 'package:flutter/material.dart';
 
 class BotNavigationBar extends StatelessWidget {
@@ -54,9 +55,34 @@ class PickVideo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       children: [
-        Container(child: Text('직접 촬영하기')),
-        Container(child: Text('갤러리에서 선택하기'))
+        Container(
+          height: 60,
+          child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetVideo(
+                              isCam: true,
+                            )));
+              },
+              child: Text('직접 촬영하기')),
+        ),
+        Container(
+          height: 60,
+          child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetVideo(
+                              isCam: false,
+                            )));
+              },
+              child: Text('갤러리에서 선택하기')),
+        )
       ],
     );
   }
