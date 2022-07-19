@@ -60,28 +60,34 @@ class PickVideo extends StatelessWidget {
         Container(
           height: 60,
           child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GetVideo(
-                              isCam: true,
-                            )));
-              },
-              child: Text('직접 촬영하기')),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GetVideo(
+                    isCam: true,
+                  ),
+                ),
+              );
+            },
+            child: Text('직접 촬영하기'),
+          ),
         ),
         Container(
           height: 60,
           child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GetVideo(
-                              isCam: false,
-                            )));
-              },
-              child: Text('갤러리에서 선택하기')),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GetVideo(
+                    isCam: false,
+                  ),
+                ),
+              );
+            },
+            child: Text('갤러리에서 선택하기'),
+          ),
         )
       ],
     );

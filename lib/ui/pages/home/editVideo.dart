@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreview extends StatefulWidget {
@@ -15,21 +14,28 @@ class VideoPreview extends StatefulWidget {
 class _VideoPreviewState extends State<VideoPreview> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
+  Duration _startValue = Duration.zero;
+  late Duration _endValue;
 
   @override
   void initState() {
     super.initState();
-
-    // Create and store the VideoPlayerController. The VideoPlayerController
-    // offers several different constructors to play videos from assets, files,
-    // or the internet.
     _controller = VideoPlayerController.file(widget.video);
-
-    // Initialize the controller and store the Future for later use.
     _initializeVideoPlayerFuture = _controller.initialize();
 
-    // Use the controller to loop the video.
+    _controller.addListener(handle_loopback);
     _controller.setLooping(true);
+    _controller.play();
+  }
+
+  void handle_loopback() {
+    debugPrint('============');
+    debugPrint(_controller.value.position.toString());
+    debugPrint(_startValue.toString());
+    debugPrint(_endValue.toString());
+    if (_controller.value.position >= _endValue) {
+      _controller.seekTo(_startValue);
+    }
   }
 
   @override
@@ -42,25 +48,59 @@ class _VideoPreviewState extends State<VideoPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initializeVideoPlayerFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          // If the VideoPlayerController has finished initialization, use
-          // the data it provides to limit the aspect ratio of the video.
-          return AspectRatio(
-            aspectRatio: 1,
-            // Use the VideoPlayer widget to display the video.
-            child: VideoPlayer(_controller),
-          );
-        } else {
-          // If the VideoPlayerController is still initializing, show a
-          // loading spinner.
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text('dddd')),
+      body: Column(
+        children: [
+          FutureBuilder(
+            future: _initializeVideoPlayerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                _endValue = _controller.value.duration;
+                // If the VideoPlayerController has finished initialization, use
+                // the data it provides to limit the aspect ratio of the video.
+                return FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
+                    child: VideoPlayer(_controller),
+                  ),
+                );
+              } else {
+                // If the VideoPlayerController is still initializing, show a
+                // loading spinner.
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          SafeArea(
+            minimum: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Column(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      if (_startValue < _endValue - Duration(seconds: 1))
+                        setState(() {
+                          _startValue =
+                              _startValue + Duration(milliseconds: 250);
+                        });
+                    },
+                    icon: Icon(Icons.arrow_right_rounded)),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _endValue = _endValue - Duration(milliseconds: 250);
+                      });
+                    },
+                    icon: Icon(Icons.arrow_left_rounded))
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -35,11 +35,17 @@ class MainRoute extends ConsumerWidget {
       }
     });
     //ref.read(mainRouteProvider.notifier).updateNavigator(_navigatorKey);
-    return Navigator(
-      key: _navigatorKey,
-      initialRoute:
-          '/home', //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
-      onGenerateRoute: mainRoute,
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+        return Future(() => true);
+      },
+      child: Navigator(
+        key: _navigatorKey,
+        initialRoute: '/home',
+        //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
+        onGenerateRoute: mainRoute,
+      ),
     );
   }
 }
