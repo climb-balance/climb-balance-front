@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:climb_balance/ui/pages/home/account.dart';
 import '../ui/pages/home/home.dart';
-import '../ui/pages/home/getVideo.dart';
 
 class MainRoute extends ConsumerWidget {
   MainRoute({Key? key}) : super(key: key);
@@ -38,7 +37,7 @@ class MainRoute extends ConsumerWidget {
     return WillPopScope(
       onWillPop: () {
         Navigator.pop(context);
-        return Future(() => true);
+        return Future(() => false);
       },
       child: Navigator(
         key: _navigatorKey,
@@ -62,12 +61,6 @@ Route mainRoute(RouteSettings settings) {
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
         pageBuilder: (_, __, ___) => Home(),
-      );
-    case COMMUNITY_PAGE_PATH:
-      return PageRouteBuilder(
-        settings: settings,
-        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
-        pageBuilder: (_, __, ___) => GetVideo(),
       );
     case ACCOUNT_PAGE_PATH:
       return PageRouteBuilder(

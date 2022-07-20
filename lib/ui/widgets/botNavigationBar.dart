@@ -1,6 +1,8 @@
 import 'package:climb_balance/configs/routeConfig.dart';
-import 'package:climb_balance/ui/pages/home/getVideo.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:climb_balance/ui/pages/home/editVideo.dart';
+import 'package:image_picker/image_picker.dart';
 
 class BotNavigationBar extends StatelessWidget {
   final int currentIdx;
@@ -49,8 +51,34 @@ class BotNavigationBar extends StatelessWidget {
   }
 }
 
-class PickVideo extends StatelessWidget {
+class PickVideo extends StatefulWidget {
   const PickVideo({Key? key}) : super(key: key);
+
+  @override
+  State<PickVideo> createState() => _PickVideoState();
+}
+
+class _PickVideoState extends State<PickVideo> {
+  final ImagePicker _picker = ImagePicker();
+
+  void handlePick({required bool isCam}) async {
+    final XFile? image = isCam
+        ? await _picker.pickVideo(source: ImageSource.camera)
+        : await _picker.pickVideo(source: ImageSource.gallery);
+    debugPrint(image?.path);
+    if (image == null) {
+      return;
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EditVideo(
+          video: File(image.path),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +89,7 @@ class PickVideo extends StatelessWidget {
           height: 60,
           child: TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GetVideo(
-                    isCam: true,
-                  ),
-                ),
-              );
+              handlePick(isCam: true);
             },
             child: Text('직접 촬영하기'),
           ),
@@ -77,14 +98,7 @@ class PickVideo extends StatelessWidget {
           height: 60,
           child: TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GetVideo(
-                    isCam: false,
-                  ),
-                ),
-              );
+              handlePick(isCam: false);
             },
             child: Text('갤러리에서 선택하기'),
           ),
