@@ -20,10 +20,10 @@ class GetVideoState extends State<GetVideo> {
   @override
   void initState() {
     super.initState();
-    _getVideoFromSource(context);
+    getVideoFromSource(context);
   }
 
-  void _getVideoFromSource(context) async {
+  void getVideoFromSource(context) async {
     final XFile? image = widget.isCam
         ? await _picker.pickVideo(source: ImageSource.camera)
         : await _picker.pickVideo(source: ImageSource.gallery);

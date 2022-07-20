@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'package:climb_balance/ui/widgets/video_trimmer/trimEditor.dart';
+import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../widgets/video_trimmer/videoViewer.dart';
 
 class VideoPreview extends StatefulWidget {
   final File video;
@@ -12,37 +16,25 @@ class VideoPreview extends StatefulWidget {
 }
 
 class _VideoPreviewState extends State<VideoPreview> {
-  late VideoPlayerController _controller;
-  late Future<void> _initializeVideoPlayerFuture;
-  Duration _startValue = Duration.zero;
-  late Duration _endValue;
+  Trimmer trimmer = Trimmer();
+  bool trimmerLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(widget.video);
-    _initializeVideoPlayerFuture = _controller.initialize();
-
-    _controller.addListener(handle_loopback);
-    _controller.setLooping(true);
-    _controller.play();
-  }
-
-  void handle_loopback() {
-    debugPrint('============');
-    debugPrint(_controller.value.position.toString());
-    debugPrint(_startValue.toString());
-    debugPrint(_endValue.toString());
-    if (_controller.value.position >= _endValue) {
-      _controller.seekTo(_startValue);
-    }
+    // https://github.com/sbis04/video_trimmer/issues/146
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      trimmer.loadVideo(videoFile: widget.video);
+      setState(() {
+        trimmerLoaded = true;
+      });
+    });
   }
 
   @override
   void dispose() {
     // Ensure disposing of the VideoPlayerController to free up resources.
-    _controller.dispose();
-
+    trimmer.dispose();
     super.dispose();
   }
 
@@ -52,50 +44,26 @@ class _VideoPreviewState extends State<VideoPreview> {
       appBar: AppBar(title: Text('dddd')),
       body: Column(
         children: [
-          FutureBuilder(
-            future: _initializeVideoPlayerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                _endValue = _controller.value.duration;
-                // If the VideoPlayerController has finished initialization, use
-                // the data it provides to limit the aspect ratio of the video.
-                return FittedBox(
-                  fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                    child: VideoPlayer(_controller),
-                  ),
-                );
-              } else {
-                // If the VideoPlayerController is still initializing, show a
-                // loading spinner.
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: VideoViewer(
+              trimmer: trimmer,
+            ),
           ),
           SafeArea(
-            minimum: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            minimum: EdgeInsets.fromLTRB(40, 0, 40, 0),
             child: Column(
               children: [
-                IconButton(
-                    onPressed: () {
-                      if (_startValue < _endValue - Duration(seconds: 1))
-                        setState(() {
-                          _startValue =
-                              _startValue + Duration(milliseconds: 250);
-                        });
-                    },
-                    icon: Icon(Icons.arrow_right_rounded)),
-                IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _endValue = _endValue - Duration(milliseconds: 250);
-                      });
-                    },
-                    icon: Icon(Icons.arrow_left_rounded))
+                Visibility(
+                  child: TrimEditor(
+                    trimmer: trimmer,
+                    maxVideoLength: const Duration(minutes: 2),
+                    viewerWidth: MediaQuery.of(context).size.width - 80,
+                    thumbnailQuality: 25,
+                  ),
+                  visible: trimmerLoaded,
+                ),
               ],
             ),
           ),

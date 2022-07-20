@@ -39,9 +39,10 @@ dependencies:
   http: #<latest_version>
   flutter_riverpod: ^2.0.0-dev.9
   webview_flutter: #<latest_version>
-  numberpicker:
-  image_picker:
-  video_player:
+  numberpicker: #<latest_version>
+  image_picker: #<latest_version>
+  video_player: #<latest_version>
+  video_thumbnail: #<latest_version>
 dev_dependencies:
   flutter_test:
     sdk: flutter
