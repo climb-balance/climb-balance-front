@@ -35,9 +35,8 @@ class MainRoute extends ConsumerWidget {
     });
     //ref.read(mainRouteProvider.notifier).updateNavigator(_navigatorKey);
     return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context);
-        return Future(() => false);
+      onWillPop: () async {
+        return !await _navigatorKey.currentState!.maybePop();
       },
       child: Navigator(
         key: _navigatorKey,
