@@ -5,7 +5,7 @@ import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/bottomProgressBar.dart';
+import '../../widgets/bottomStepBar.dart';
 
 const Map<String, int> difficultyData = {
   '빨강': 0,
@@ -160,7 +160,7 @@ class _TagVideoState extends ConsumerState<TagVideo> {
           ),
         ],
       ),
-      bottomSheet: BottomProgressBar(
+      bottomSheet: BottomStepBar(
         handleNext: handelTagNext,
       ),
     );

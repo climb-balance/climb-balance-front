@@ -23,6 +23,7 @@ class UploadType {
 
 class UploadNotifier extends StateNotifier<UploadType> {
   final ref;
+
   // TODO state 불변으로 만들어야함!!!!!
   UploadNotifier({required this.ref}) : super(UploadType(date: DateTime.now()));
 
@@ -47,6 +48,7 @@ class UploadNotifier extends StateNotifier<UploadType> {
 
   Future<bool> upload() {
     // TODO upload
+    state.file?.lengthSync();
     return Future(() => true);
   }
 }

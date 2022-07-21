@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class BottomProgressBar extends StatelessWidget {
+class BottomStepBar extends StatelessWidget {
   final void Function() handleNext;
   final String next;
 
-  BottomProgressBar({Key? key, required this.handleNext, this.next = "다음"})
+  BottomStepBar({Key? key, required this.handleNext, this.next = "다음"})
       : super(key: key);
 
   @override

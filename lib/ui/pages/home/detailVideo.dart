@@ -5,7 +5,7 @@ import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/bottomProgressBar.dart';
+import '../../widgets/bottomStepBar.dart';
 
 class DetailVideo extends ConsumerStatefulWidget {
   Trimmer trimmer;
@@ -78,7 +78,7 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
           ),
         ],
       ),
-      bottomSheet: BottomProgressBar(
+      bottomSheet: BottomStepBar(
         handleNext: handelDetailNext,
         next: '업로드',
       ),
