@@ -1,30 +1,47 @@
 import 'dart:io';
+import 'package:climb_balance/providers/upload.dart';
+import 'package:climb_balance/ui/pages/home/tagVideo.dart';
 import 'package:climb_balance/ui/widgets/video_trimmer/trimEditor.dart';
 import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/video_trimmer/videoViewer.dart';
+import '../../widgets/video_trimmer/trimVideoViewer.dart';
 
-class VideoPreview extends StatefulWidget {
-  final File video;
-
-  const VideoPreview({Key? key, required this.video}) : super(key: key);
+class VideoPreview extends ConsumerStatefulWidget {
+  const VideoPreview({Key? key}) : super(key: key);
 
   @override
-  State<VideoPreview> createState() => _VideoPreviewState();
+  VideoPreviewState createState() => VideoPreviewState();
 }
 
-class _VideoPreviewState extends State<VideoPreview> {
+class VideoPreviewState extends ConsumerState<VideoPreview> {
   Trimmer trimmer = Trimmer();
   bool trimmerLoaded = false;
+  double _start = 0, _end = 0;
+
+  void handleNext() {
+    final prov = ref.read(uploadProvider);
+    prov.start = _start;
+    prov.end = _end;
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => TagVideo()));
+  }
 
   @override
   void initState() {
     super.initState();
     // https://github.com/sbis04/video_trimmer/issues/146
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      trimmer.loadVideo(videoFile: widget.video);
+      final video = ref.watch(
+        uploadProvider.select((value) => value.file),
+      );
+      if (video == null) {
+        return;
+      }
+      trimmer.loadVideo(
+        videoFile: video,
+      );
       setState(() {
         trimmerLoaded = true;
       });
@@ -41,7 +58,16 @@ class _VideoPreviewState extends State<VideoPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('dddd')),
+      appBar: AppBar(
+        title: Text(
+          '영상 자르기',
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        leading: Container(),
+        elevation: 0,
+      ),
       body: Column(
         children: [
           SizedBox(
@@ -56,16 +82,57 @@ class _VideoPreviewState extends State<VideoPreview> {
             child: Column(
               children: [
                 Visibility(
+                  visible: trimmerLoaded,
                   child: TrimEditor(
                     trimmer: trimmer,
                     maxVideoLength: const Duration(minutes: 2),
                     viewerWidth: MediaQuery.of(context).size.width - 80,
                     thumbnailQuality: 25,
+                    onChangeStart: (value) {
+                      setState(() {
+                        _start = value;
+                      });
+                    },
+                    onChangeEnd: (value) {
+                      setState(() {
+                        _end = value;
+                      });
+                    },
                   ),
-                  visible: trimmerLoaded,
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+      bottomSheet: BottomProgressBar(
+        handleNext: handleNext,
+      ),
+    );
+  }
+}
+
+class BottomProgressBar extends StatelessWidget {
+  final Function handleNext;
+
+  BottomProgressBar({Key? key, required this.handleNext}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('이전'),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('다음'),
           ),
         ],
       ),
@@ -74,9 +141,7 @@ class _VideoPreviewState extends State<VideoPreview> {
 }
 
 class EditVideo extends StatefulWidget {
-  final File video;
-
-  const EditVideo({Key? key, required this.video}) : super(key: key);
+  const EditVideo({Key? key}) : super(key: key);
 
   @override
   State<EditVideo> createState() => _EditVideoState();
@@ -85,8 +150,6 @@ class EditVideo extends StatefulWidget {
 class _EditVideoState extends State<EditVideo> {
   @override
   Widget build(BuildContext context) {
-    return VideoPreview(
-      video: widget.video,
-    );
+    return VideoPreview();
   }
 }

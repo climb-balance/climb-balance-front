@@ -1,4 +1,5 @@
-import 'package:climb_balance/utils/token.dart';
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UploadType {
@@ -7,6 +8,7 @@ class UploadType {
   bool success;
   DateTime date;
   String detail;
+  File? file;
 
   UploadType({
     this.start = -1,
@@ -23,6 +25,10 @@ class UploadNotifier extends StateNotifier<UploadType> {
   final ref;
 
   UploadNotifier({required this.ref}) : super(UploadType(date: DateTime.now()));
+
+  void setFile({required File file}) {
+    state.file = file;
+  }
 }
 
 final uploadProvider = StateNotifierProvider<UploadNotifier, UploadType>((ref) {

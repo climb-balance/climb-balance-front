@@ -1,6 +1,9 @@
-import 'package:climb_balance/configs/routeConfig.dart';
-import 'package:flutter/material.dart';
 import 'dart:io';
+
+import 'package:climb_balance/configs/routeConfig.dart';
+import 'package:climb_balance/providers/upload.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:climb_balance/ui/pages/home/editVideo.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -51,33 +54,36 @@ class BotNavigationBar extends StatelessWidget {
   }
 }
 
-class PickVideo extends StatefulWidget {
+class PickVideo extends ConsumerStatefulWidget {
   const PickVideo({Key? key}) : super(key: key);
 
   @override
-  State<PickVideo> createState() => _PickVideoState();
+  ConsumerState<PickVideo> createState() => PickVideoState();
 }
 
-class _PickVideoState extends State<PickVideo> {
+class PickVideoState extends ConsumerState<PickVideo> {
   final ImagePicker _picker = ImagePicker();
 
-  void handlePick({required bool isCam}) async {
-    final XFile? image = isCam
+  Future<XFile?> pickFile({required bool isCam}) async {
+    return isCam
         ? await _picker.pickVideo(source: ImageSource.camera)
         : await _picker.pickVideo(source: ImageSource.gallery);
-    debugPrint(image?.path);
-    if (image == null) {
-      return;
-    }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (context) => EditVideo(
-          video: File(image.path),
+  }
+
+  void handlePick({required bool isCam}) {
+    pickFile(isCam: isCam).then((image) {
+      if (image == null) {
+        return;
+      }
+      ref.read(uploadProvider.notifier).setFile(file: File(image.path));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => EditVideo(),
         ),
-      ),
-    );
+      );
+    });
   }
 
   @override
