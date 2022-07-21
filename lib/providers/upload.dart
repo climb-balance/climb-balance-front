@@ -29,6 +29,17 @@ class UploadNotifier extends StateNotifier<UploadType> {
   void setFile({required File file}) {
     state.file = file;
   }
+
+  void setTags(
+      {required int location,
+      required int difficulty,
+      required bool success,
+      required DateTime date}) {
+    state.location = location;
+    state.difficulty = difficulty;
+    state.success = success;
+    state.date = date;
+  }
 }
 
 final uploadProvider = StateNotifierProvider<UploadNotifier, UploadType>((ref) {
