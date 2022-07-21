@@ -6,6 +6,7 @@ import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../widgets/bottomProgressBar.dart';
 import '../../widgets/video_trimmer/trimVideoViewer.dart';
 
 class VideoPreview extends ConsumerStatefulWidget {
@@ -24,8 +25,14 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
     final prov = ref.read(uploadProvider);
     prov.start = _start;
     prov.end = _end;
-    Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => TagVideo()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => TagVideo(
+          trimmer: trimmer,
+        ),
+      ),
+    );
   }
 
   @override
@@ -73,7 +80,7 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            child: VideoViewer(
+            child: TrimVideoViewer(
               trimmer: trimmer,
             ),
           ),
@@ -107,34 +114,6 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
       ),
       bottomSheet: BottomProgressBar(
         handleNext: handleNext,
-      ),
-    );
-  }
-}
-
-class BottomProgressBar extends StatelessWidget {
-  final Function handleNext;
-
-  BottomProgressBar({Key? key, required this.handleNext}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('이전'),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text('다음'),
-          ),
-        ],
       ),
     );
   }
