@@ -1,4 +1,5 @@
 import 'package:climb_balance/providers/upload.dart';
+import 'package:climb_balance/ui/pages/home/detailVideo.dart';
 import 'package:climb_balance/ui/widgets/video_trimmer/trimVideoViewer.dart';
 import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,11 @@ class _TagVideoState extends ConsumerState<TagVideo> {
           date: date,
         );
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Container()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailVideo(trimmer: widget.trimmer),
+      ),
+    );
   }
 
   @override

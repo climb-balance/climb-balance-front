@@ -23,7 +23,7 @@ class UploadType {
 
 class UploadNotifier extends StateNotifier<UploadType> {
   final ref;
-
+  // TODO state 불변으로 만들어야함!!!!!
   UploadNotifier({required this.ref}) : super(UploadType(date: DateTime.now()));
 
   void setFile({required File file}) {
@@ -39,6 +39,15 @@ class UploadNotifier extends StateNotifier<UploadType> {
     state.difficulty = difficulty;
     state.success = success;
     state.date = date;
+  }
+
+  void setDetail({required String detail}) {
+    state.detail = detail;
+  }
+
+  Future<bool> upload() {
+    // TODO upload
+    return Future(() => true);
   }
 }
 
