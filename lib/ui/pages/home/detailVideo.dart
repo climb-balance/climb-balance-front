@@ -27,7 +27,7 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
     ref.read(asyncStatusProvider.notifier).toggleLoading();
     notifier.upload().then((result) {
       ref.read(asyncStatusProvider.notifier).toggleLoading();
-      Navigator.popUntil(context, ModalRoute.withName('/home'));
+      Navigator.popUntil(context, ModalRoute.withName('/'));
     }).catchError((err) {
       ref.read(asyncStatusProvider.notifier).toggleLoading();
     });

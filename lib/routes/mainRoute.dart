@@ -1,8 +1,6 @@
 import 'package:climb_balance/configs/routeConfig.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
-import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/routes/authRoute.dart';
-import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:climb_balance/ui/pages/home/account.dart';
@@ -40,7 +38,7 @@ class MainRoute extends ConsumerWidget {
       },
       child: Navigator(
         key: _navigatorKey,
-        initialRoute: '/home',
+        initialRoute: HOME_PAGE_PATH,
         //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
         onGenerateRoute: mainRoute,
       ),
