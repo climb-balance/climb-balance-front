@@ -3,7 +3,7 @@ import 'package:video_player/video_player.dart';
 
 import 'trimmer.dart';
 
-class VideoViewer extends StatefulWidget {
+class TrimVideoViewer extends StatefulWidget {
   /// The Trimmer instance controlling the data.
   final Trimmer trimmer;
 
@@ -35,7 +35,7 @@ class VideoViewer extends StatefulWidget {
   /// * [padding] for specifying a padding around the video viewer
   /// area. By default it is set to `EdgeInsets.all(0.0)`.
   ///
-  const VideoViewer({
+  const TrimVideoViewer({
     Key? key,
     required this.trimmer,
     this.borderColor = Colors.transparent,
@@ -44,10 +44,10 @@ class VideoViewer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _VideoViewerState createState() => _VideoViewerState();
+  _TrimVideoViewerState createState() => _TrimVideoViewerState();
 }
 
-class _VideoViewerState extends State<VideoViewer> {
+class _TrimVideoViewerState extends State<TrimVideoViewer> {
   /// Quick access to VideoPlayerController, only not null after [TrimmerEvent.initialized]
   /// has been emitted.
   VideoPlayerController? get videoPlayerController =>
