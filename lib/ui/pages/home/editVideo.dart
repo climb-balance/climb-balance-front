@@ -91,6 +91,9 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
                 Visibility(
                   visible: trimmerLoaded,
                   child: TrimEditor(
+                    circlePaintColor: Theme.of(context).colorScheme.tertiary,
+                    borderPaintColor: Theme.of(context).colorScheme.tertiary,
+                    durationTextStyle: Theme.of(context).textTheme.bodyText2!,
                     trimmer: trimmer,
                     maxVideoLength: const Duration(minutes: 2),
                     viewerWidth: MediaQuery.of(context).size.width - 80,

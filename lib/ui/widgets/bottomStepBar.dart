@@ -19,6 +19,10 @@ class BottomStepBar extends StatelessWidget {
               Navigator.pop(context);
             },
             child: Text('이전'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.secondary),
+            ),
           ),
           ElevatedButton(
             onPressed: handleNext,
