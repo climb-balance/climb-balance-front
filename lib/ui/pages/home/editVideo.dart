@@ -28,15 +28,19 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
     super.initState();
     // https://github.com/sbis04/video_trimmer/issues/146
 
+    _loadVideo();
+  }
+
+  void _loadVideo() {
     trimmer.loadVideo(
       videoFile: widget.video,
     );
   }
 
   void handleNext() {
-    final prov = ref.read(uploadProvider);
-    prov.start = _start;
-    prov.end = _end;
+    ref
+        .read(uploadProvider.notifier)
+        .setTrim(startPos: trimmer.videoStartPos, endPos: trimmer.videoEndPos);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -51,9 +55,9 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '영상 자르기',
-          style: TextStyle(color: Colors.black),
+          style: Theme.of(context).textTheme.headline5,
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -80,17 +84,10 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
                   trimmer: trimmer,
                   maxVideoLength: const Duration(minutes: 2),
                   viewerWidth: MediaQuery.of(context).size.width - 80,
-                  thumbnailQuality: 25,
-                  onChangeStart: (value) {
-                    setState(() {
-                      _start = value / 1000;
-                    });
-                  },
-                  onChangeEnd: (value) {
-                    setState(() {
-                      _end = value / 1000;
-                    });
-                  },
+                  thumbnailQuality: 15,
+                  onChangeEnd: (value) {},
+                  onChangeStart: (value) {},
+                  onChangePlaybackState: (value) {},
                 ),
               ],
             ),
