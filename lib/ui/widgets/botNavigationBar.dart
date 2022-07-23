@@ -83,7 +83,7 @@ class PickVideoState extends ConsumerState<PickVideo> {
         context,
         MaterialPageRoute(
           fullscreenDialog: true,
-          builder: (context) => const EditVideo(),
+          builder: (context) => EditVideo(video: File(image.path)),
         ),
       );
     });

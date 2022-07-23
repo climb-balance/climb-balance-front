@@ -447,7 +447,7 @@ packages:
       name: video_player_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.0.12"
   video_thumbnail:
     dependency: "direct main"
     description:
@@ -455,6 +455,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.2"
+  video_trimmer:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: a54eba483222a67a32eacd5825ba4f3a5f0987a6
+      url: "https://github.com/bluejoyq/video_trimmer.git"
+    source: git
+    version: "1.0.0"
   webview_flutter:
     dependency: "direct main"
     description:
@@ -468,7 +477,7 @@ packages:
       name: webview_flutter_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.14"
+    version: "2.9.2"
   webview_flutter_platform_interface:
     dependency: transitive
     description:

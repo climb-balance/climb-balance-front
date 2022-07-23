@@ -1,7 +1,5 @@
-import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/providers/upload.dart';
-import 'package:climb_balance/ui/widgets/video_trimmer/trimVideoViewer.dart';
-import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
+import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,7 +59,7 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            child: TrimVideoViewer(
+            child: VideoViewer(
               trimmer: widget.trimmer,
             ),
           ),

@@ -1,8 +1,7 @@
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/upload.dart';
 import 'package:climb_balance/ui/pages/home/detailVideo.dart';
-import 'package:climb_balance/ui/widgets/video_trimmer/trimVideoViewer.dart';
-import 'package:climb_balance/ui/widgets/video_trimmer/trimmer.dart';
+import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,7 +46,7 @@ class _TagVideoState extends ConsumerState<TagVideo> {
     DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: date,
-        firstDate: DateTime(2018),
+        firstDate: DateTime(2010),
         lastDate: DateTime.now());
     if (newDate == null) return;
     setState(() {
@@ -88,7 +87,7 @@ class _TagVideoState extends ConsumerState<TagVideo> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            child: TrimVideoViewer(
+            child: VideoViewer(
               trimmer: widget.trimmer,
             ),
           ),
