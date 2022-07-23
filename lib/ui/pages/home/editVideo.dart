@@ -57,15 +57,17 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
 
   @override
   void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
+    debugPrint('디스포즈되었ㄷ가.');
     trimmer.dispose();
     ref.refresh(uploadProvider);
+    debugPrint('디스포즈되었ㄷ가.');
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: UniqueKey(),
       appBar: AppBar(
         title: Text(
           '영상 자르기',
