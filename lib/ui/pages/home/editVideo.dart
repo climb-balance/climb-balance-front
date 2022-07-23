@@ -9,14 +9,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/bottomStepBar.dart';
 import '../../widgets/video_trimmer/trimVideoViewer.dart';
 
-class VideoPreview extends ConsumerStatefulWidget {
-  const VideoPreview({Key? key}) : super(key: key);
+class EditVideo extends ConsumerStatefulWidget {
+  const EditVideo({Key? key}) : super(key: key);
 
   @override
   VideoPreviewState createState() => VideoPreviewState();
 }
 
-class VideoPreviewState extends ConsumerState<VideoPreview> {
+class VideoPreviewState extends ConsumerState<EditVideo> {
   Trimmer trimmer = Trimmer();
   bool trimmerLoaded = false;
   double _start = 0, _end = 0;
@@ -25,14 +25,14 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
   void initState() {
     super.initState();
     // https://github.com/sbis04/video_trimmer/issues/146
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final video = ref.watch(
         uploadProvider.select((value) => value.file),
       );
       if (video == null) {
         return;
       }
-      trimmer.loadVideo(
+      await trimmer.loadVideo(
         videoFile: video,
       );
       setState(() {
@@ -56,15 +56,6 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
   }
 
   @override
-  void dispose() {
-    debugPrint('디스포즈되었ㄷ가.');
-    trimmer.dispose();
-    ref.refresh(uploadProvider);
-    debugPrint('디스포즈되었ㄷ가.');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: UniqueKey(),
@@ -80,11 +71,14 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
       ),
       body: Column(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: TrimVideoViewer(
-              trimmer: trimmer,
+          Visibility(
+            visible: trimmerLoaded,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              child: TrimVideoViewer(
+                trimmer: trimmer,
+              ),
             ),
           ),
           SafeArea(
@@ -123,18 +117,13 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
       ),
     );
   }
-}
-
-class EditVideo extends StatefulWidget {
-  const EditVideo({Key? key}) : super(key: key);
 
   @override
-  State<EditVideo> createState() => _EditVideoState();
-}
-
-class _EditVideoState extends State<EditVideo> {
-  @override
-  Widget build(BuildContext context) {
-    return VideoPreview();
+  void dispose() {
+    super.dispose();
+    debugPrint('디스포즈되었ㄷ가.');
+    trimmer.dispose();
+    ref.refresh(uploadProvider);
+    debugPrint('디스포즈되었ㄷ가.');
   }
 }

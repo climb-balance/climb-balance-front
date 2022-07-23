@@ -55,12 +55,12 @@ class _TrimVideoViewerState extends State<TrimVideoViewer> {
 
   @override
   void initState() {
+    debugPrint('이게 두번');
     widget.trimmer.eventStream.listen((event) {
       if (event == TrimmerEvent.initialized) {
         //The video has been initialized, now we can load stuff
+
         setState(() {});
-        videoPlayerController?.play();
-        videoPlayerController?.setLooping(true);
       }
     });
     super.initState();
