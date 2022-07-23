@@ -1,8 +1,7 @@
-import 'package:climb_balance/providers/token.dart';
+import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Account extends ConsumerStatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -14,20 +13,29 @@ class Account extends ConsumerStatefulWidget {
 class AccountState extends ConsumerState {
   @override
   Widget build(BuildContext context) {
+    Settings settings = ref.watch(settingsProvider);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('설정'),
+      ),
       body: SafeArea(
         minimum: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: [
-              ElevatedButton(
-                child: const Text('logout'),
-                onPressed: () {
-                  ref.read(tokenProvider.notifier).clearToken();
-                  Navigator.popAndPushNamed(context, '/auth');
-                },
-              ),
+              Row(
+                children: [
+                  Text('DarkMode'),
+                  Switch(
+                    value: settings.darkMode,
+                    onChanged: (bool value) {
+                      ref
+                          .read(settingsProvider.notifier)
+                          .updateSetting(darkMode: value);
+                    },
+                  ),
+                ],
+              )
             ],
           ),
         ),

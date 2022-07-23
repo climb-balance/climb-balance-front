@@ -5,7 +5,7 @@ import 'package:climb_balance/ui/pages/diary/diary.dart';
 import 'package:climb_balance/ui/pages/testPage/testPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/ui/pages/home/account.dart';
+import 'package:climb_balance/ui/pages/account/account.dart';
 import '../ui/pages/home/home.dart';
 
 class MainRoute extends ConsumerWidget {
