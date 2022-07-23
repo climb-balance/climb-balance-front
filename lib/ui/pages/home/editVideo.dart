@@ -59,6 +59,7 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
   void dispose() {
     // Ensure disposing of the VideoPlayerController to free up resources.
     trimmer.dispose();
+    ref.refresh(uploadProvider);
     super.dispose();
   }
 

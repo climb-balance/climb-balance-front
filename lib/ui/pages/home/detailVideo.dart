@@ -25,6 +25,7 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
     final notifier = ref.read(uploadProvider.notifier);
     notifier.setDetail(detail: detail);
     notifier.upload().then((res) {
+      ref.refresh(uploadProvider);
       Navigator.popUntil(context, ModalRoute.withName('/'));
     }).catchError((err) {
       showDialog(

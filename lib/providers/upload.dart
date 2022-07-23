@@ -99,8 +99,7 @@ class UploadNotifier extends StateNotifier<UploadType> {
   }
 }
 
-final uploadProvider =
-    StateNotifierProvider.autoDispose<UploadNotifier, UploadType>((ref) {
+final uploadProvider = StateNotifierProvider<UploadNotifier, UploadType>((ref) {
   UploadNotifier notifier = UploadNotifier(ref: ref);
   return notifier;
 });
