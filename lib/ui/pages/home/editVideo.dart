@@ -21,20 +21,6 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
   bool trimmerLoaded = false;
   double _start = 0, _end = 0;
 
-  void handleNext() {
-    final prov = ref.read(uploadProvider);
-    prov.start = _start;
-    prov.end = _end;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => TagVideo(
-          trimmer: trimmer,
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -53,6 +39,20 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
         trimmerLoaded = true;
       });
     });
+  }
+
+  void handleNext() {
+    final prov = ref.read(uploadProvider);
+    prov.start = _start;
+    prov.end = _end;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => TagVideo(
+          trimmer: trimmer,
+        ),
+      ),
+    );
   }
 
   @override
@@ -100,12 +100,12 @@ class VideoPreviewState extends ConsumerState<VideoPreview> {
                     thumbnailQuality: 25,
                     onChangeStart: (value) {
                       setState(() {
-                        _start = value;
+                        _start = value / 1000;
                       });
                     },
                     onChangeEnd: (value) {
                       setState(() {
-                        _end = value;
+                        _end = value / 1000;
                       });
                     },
                   ),

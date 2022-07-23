@@ -1,7 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/providers/asyncStatus.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+
+import 'api.dart';
 
 class UploadType {
   double start, end;
@@ -21,6 +27,16 @@ class UploadType {
     this.detail = '',
     required this.date,
   });
+
+  UploadType.clone(UploadType uploadType)
+      : this(
+            start: uploadType.start,
+            end: uploadType.end,
+            location: uploadType.location,
+            difficulty: uploadType.difficulty,
+            success: uploadType.success,
+            detail: uploadType.detail,
+            date: uploadType.date);
 }
 
 class UploadNotifier extends StateNotifier<UploadType> {
@@ -52,10 +68,23 @@ class UploadNotifier extends StateNotifier<UploadType> {
     state.detail = detail;
   }
 
-  Future<bool> upload() {
-    // TODO upload
-    state.file?.lengthSync();
-    return Future(() => true);
+  void toggleSuccess() {}
+
+  Future<bool> upload() async {
+    ref.read(asyncStatusProvider.notifier).toggleLoading();
+    Uri uri = Uri.parse('http://169.254.240.38:3000/story/1/video');
+    final req = http.MultipartRequest('POST', uri);
+    final mulitpartfile =
+        await http.MultipartFile.fromPath('file', state.file!.path);
+
+    req.files.add(mulitpartfile);
+    final res = await req.send();
+    ref.read(asyncStatusProvider.notifier).toggleLoading();
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      throw UnimplementedError;
+    }
   }
 }
 

@@ -21,15 +21,18 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
 
   // TODO 상태 유지
 
-  void handelDetailNext() {
+  void handleUpload() {
     final notifier = ref.read(uploadProvider.notifier);
     notifier.setDetail(detail: detail);
-    ref.read(asyncStatusProvider.notifier).toggleLoading();
-    notifier.upload().then((result) {
-      ref.read(asyncStatusProvider.notifier).toggleLoading();
+    notifier.upload().then((res) {
       Navigator.popUntil(context, ModalRoute.withName('/'));
     }).catchError((err) {
-      ref.read(asyncStatusProvider.notifier).toggleLoading();
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text('호에에엥'),
+        ),
+      );
     });
   }
 
@@ -79,7 +82,7 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
         ],
       ),
       bottomSheet: BottomStepBar(
-        handleNext: handelDetailNext,
+        handleNext: handleUpload,
         next: '업로드',
       ),
     );
