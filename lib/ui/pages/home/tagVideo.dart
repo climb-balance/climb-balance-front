@@ -1,3 +1,4 @@
+import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/upload.dart';
 import 'package:climb_balance/ui/pages/home/detailVideo.dart';
 import 'package:climb_balance/ui/widgets/video_trimmer/trimVideoViewer.dart';
@@ -6,20 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widgets/bottomStepBar.dart';
-
-const Map<String, int> difficultyData = {
-  '빨강': 0,
-  '파랑': 2,
-  '초록': 3,
-  '검정': 4,
-};
-
-const Map<String, int> locationData = {
-  '강남 클라이밍파크': 0,
-  '신논현 더클라이밍': 1,
-  '수원 클라임바운스': 2,
-  '이천 클라임바운스': 3,
-};
 
 class TagVideo extends ConsumerStatefulWidget {
   Trimmer trimmer;
@@ -31,12 +18,31 @@ class TagVideo extends ConsumerStatefulWidget {
 }
 
 class _TagVideoState extends ConsumerState<TagVideo> {
-  String difficultyDropValue = '빨강';
-  String locationDropValue = '강남 클라이밍파크';
-  bool success = false;
-  DateTime date = DateTime.now();
+  late Difficulty difficulty;
+  late Location location;
+  late bool success;
+  late DateTime date;
 
-  // TODO 상태 유지
+  @override
+  void initState() {
+    UploadType state = ref.read(uploadProvider.notifier).getState();
+    difficulty = state.difficulty;
+    location = state.location;
+    success = state.success;
+    date = state.date;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ref.read(uploadProvider.notifier).setTags(
+        difficulty: difficulty,
+        location: location,
+        success: success,
+        date: date);
+    super.dispose();
+  }
+
   void handleDatePick() async {
     DateTime? newDate = await showDatePicker(
         context: context,
@@ -51,8 +57,8 @@ class _TagVideoState extends ConsumerState<TagVideo> {
 
   void handelTagNext() {
     ref.read(uploadProvider.notifier).setTags(
-          location: locationData[locationDropValue] ?? 0,
-          difficulty: difficultyData[difficultyDropValue] ?? 0,
+          location: location,
+          difficulty: difficulty,
           success: success,
           date: date,
         );
@@ -90,48 +96,6 @@ class _TagVideoState extends ConsumerState<TagVideo> {
             minimum: const EdgeInsets.fromLTRB(40, 0, 40, 0),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Text('난이도:'),
-                    DropdownButton<String>(
-                      value: difficultyDropValue,
-                      icon: Icon(Icons.arrow_drop_down),
-                      items: difficultyData.keys
-                          .map<DropdownMenuItem<String>>(
-                              (String value) => DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  ))
-                          .toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          difficultyDropValue = newValue!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('클라이밍장:'),
-                    DropdownButton<String>(
-                      value: locationDropValue,
-                      icon: Icon(Icons.arrow_drop_down),
-                      items: locationData.keys
-                          .map<DropdownMenuItem<String>>(
-                              (String value) => DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  ))
-                          .toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          locationDropValue = newValue!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
                 Row(
                   children: [
                     Text('실패/성공:'),

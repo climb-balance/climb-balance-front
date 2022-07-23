@@ -1,13 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-
-import 'api.dart';
 
 class UploadType {
   double start, end;
@@ -50,7 +46,9 @@ class UploadNotifier extends StateNotifier<UploadType> {
             date: DateTime.now()));
 
   void setFile({required File file}) {
-    state.file = file;
+    UploadType newState = state;
+    newState.file = file;
+    state = newState;
   }
 
   void setTags(
@@ -58,14 +56,22 @@ class UploadNotifier extends StateNotifier<UploadType> {
       required Difficulty difficulty,
       required bool success,
       required DateTime date}) {
-    state.location = location;
-    state.difficulty = difficulty;
-    state.success = success;
-    state.date = date;
+    UploadType newState = state;
+    newState.location = location;
+    newState.difficulty = difficulty;
+    newState.success = success;
+    newState.date = date;
+    state = newState;
+  }
+
+  UploadType getState() {
+    return state;
   }
 
   void setDetail({required String detail}) {
-    state.detail = detail;
+    UploadType newState = state;
+    newState.detail = detail;
+    state = newState;
   }
 
   void toggleSuccess() {}
@@ -75,7 +81,12 @@ class UploadNotifier extends StateNotifier<UploadType> {
     Uri uri = Uri.parse('http://169.254.240.38:3000/story/1/video');
     final req = http.MultipartRequest('POST', uri);
     final mulitpartfile =
-        await http.MultipartFile.fromPath('file', state.file!.path);
+        await http.MultipartFile.fromPath('file', state.file!.path)
+            .timeout(const Duration(seconds: 2))
+            .onError((error, stackTrace) {
+      ref.read(asyncStatusProvider.notifier).toggleLoading();
+      throw error!;
+    });
 
     req.files.add(mulitpartfile);
     final res = await req.send();
@@ -88,7 +99,8 @@ class UploadNotifier extends StateNotifier<UploadType> {
   }
 }
 
-final uploadProvider = StateNotifierProvider<UploadNotifier, UploadType>((ref) {
+final uploadProvider =
+    StateNotifierProvider.autoDispose<UploadNotifier, UploadType>((ref) {
   UploadNotifier notifier = UploadNotifier(ref: ref);
   return notifier;
 });
