@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'button.dart';
+
 class BottomStepBar extends StatelessWidget {
   final void Function() handleNext;
   final String next;
@@ -10,23 +12,25 @@ class BottomStepBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('이전'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.secondary),
+          Expanded(
+            child: CustomBtn(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              type: BtnType.secondary,
+              child: const Text('이전'),
             ),
           ),
-          ElevatedButton(
-            onPressed: handleNext,
-            child: Text(next),
+          Expanded(
+            child: CustomBtn(
+              onPressed: handleNext,
+              type: BtnType.primary,
+              child: Text(next),
+            ),
           ),
         ],
       ),

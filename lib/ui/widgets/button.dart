@@ -28,3 +28,38 @@ class FullSizeBtn extends StatelessWidget {
     );
   }
 }
+
+enum BtnType { primary, secondary, tertiary }
+
+class CustomBtn extends StatelessWidget {
+  final void Function() onPressed;
+  final Widget child;
+  final BtnType type;
+
+  const CustomBtn(
+      {Key? key,
+      required this.onPressed,
+      required this.child,
+      this.type = BtnType.primary})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 50,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+            backgroundColor: type == BtnType.primary
+                ? MaterialStateProperty.all(theme.colorScheme.primary)
+                : MaterialStateProperty.all(theme.colorScheme.secondary),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
