@@ -21,7 +21,6 @@ class EditVideo extends ConsumerStatefulWidget {
 
 class VideoPreviewState extends ConsumerState<EditVideo> {
   Trimmer trimmer = Trimmer();
-  double _start = 0, _end = 0;
 
   @override
   void initState() {
@@ -80,6 +79,7 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
                 TrimEditor(
                   circlePaintColor: Theme.of(context).colorScheme.tertiary,
                   borderPaintColor: Theme.of(context).colorScheme.tertiary,
+                  scrubberPaintColor: Theme.of(context).colorScheme.tertiary,
                   durationTextStyle: Theme.of(context).textTheme.bodyText2!,
                   trimmer: trimmer,
                   maxVideoLength: const Duration(minutes: 2),

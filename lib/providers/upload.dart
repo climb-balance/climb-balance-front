@@ -74,11 +74,16 @@ class UploadNotifier extends StateNotifier<UploadType> {
     state = newState;
   }
 
-  void toggleSuccess() {}
+  void setTrim({required double startPos, required double endPos}) {
+    UploadType newState = state;
+    newState.start = startPos;
+    newState.end = endPos;
+    state = newState;
+  }
 
   Future<bool> upload() async {
     ref.read(asyncStatusProvider.notifier).toggleLoading();
-    Uri uri = Uri.parse('http://169.254.240.38:3000/story/1/video');
+    Uri uri = Uri.parse('http://192.168.107.189:3000/story/1/video');
     final req = http.MultipartRequest('POST', uri);
     final mulitpartfile =
         await http.MultipartFile.fromPath('file', state.file!.path)
@@ -91,7 +96,7 @@ class UploadNotifier extends StateNotifier<UploadType> {
     req.files.add(mulitpartfile);
     final res = await req.send();
     ref.read(asyncStatusProvider.notifier).toggleLoading();
-    if (res.statusCode == 200) {
+    if (res.statusCode < 300) {
       return true;
     } else {
       throw UnimplementedError;
