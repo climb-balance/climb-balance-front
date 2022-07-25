@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import '../../widgets/safearea.dart';
+
 class Register extends ConsumerStatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -52,8 +54,7 @@ class RegisterState extends ConsumerState with SingleTickerProviderStateMixin {
           },
         ),
       ),
-      body: SafeArea(
-        minimum: EdgeInsets.fromLTRB(20, 0, 20, 0),
+      body: MySafeArea(
         child: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           controller: _tabController,

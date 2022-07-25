@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:climb_balance/providers/upload.dart';
 import 'package:climb_balance/ui/pages/home/tagVideo.dart';
+import 'package:climb_balance/ui/widgets/safearea.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,8 +63,7 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
               trimmer: trimmer,
             ),
           ),
-          SafeArea(
-            minimum: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+          MySafeArea(
             child: Column(
               children: [
                 TrimEditor(

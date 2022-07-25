@@ -35,11 +35,12 @@ class CustomBtn extends StatelessWidget {
   final void Function() onPressed;
   final Widget child;
   final BtnType type;
-
+  final double height;
   const CustomBtn(
       {Key? key,
       required this.onPressed,
       required this.child,
+      this.height = 40,
       this.type = BtnType.primary})
       : super(key: key);
 
@@ -49,7 +50,7 @@ class CustomBtn extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
-        height: 50,
+        height: height,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
