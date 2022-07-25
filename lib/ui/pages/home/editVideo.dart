@@ -53,16 +53,6 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '영상 자르기',
-          style: Theme.of(context).textTheme.headline5,
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        leading: Container(),
-        elevation: 0,
-      ),
       body: Column(
         children: [
           SizedBox(
@@ -79,8 +69,9 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
                 TrimEditor(
                   circlePaintColor: Theme.of(context).colorScheme.tertiary,
                   borderPaintColor: Theme.of(context).colorScheme.tertiary,
-                  scrubberPaintColor: Theme.of(context).colorScheme.tertiary,
+                  scrubberPaintColor: Theme.of(context).colorScheme.primary,
                   durationTextStyle: Theme.of(context).textTheme.bodyText2!,
+                  scrubberWidth: 5,
                   trimmer: trimmer,
                   maxVideoLength: const Duration(minutes: 2),
                   viewerWidth: MediaQuery.of(context).size.width - 80,
@@ -94,7 +85,7 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
           ),
         ],
       ),
-      bottomSheet: BottomStepBar(
+      bottomNavigationBar: BottomStepBar(
         handleNext: handleNext,
       ),
     );

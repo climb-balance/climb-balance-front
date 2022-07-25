@@ -123,7 +123,7 @@ class _TagVideoState extends ConsumerState<TagVideo> {
           ),
         ],
       ),
-      bottomSheet: BottomStepBar(
+      bottomNavigationBar: BottomStepBar(
         handleNext: handelTagNext,
       ),
     );

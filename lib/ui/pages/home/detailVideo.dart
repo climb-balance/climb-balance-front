@@ -44,43 +44,37 @@ class _DetailVideoState extends ConsumerState<DetailVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '태그 달기',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        leading: Container(),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: VideoViewer(
-              trimmer: widget.trimmer,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              child: VideoViewer(
+                trimmer: widget.trimmer,
+              ),
             ),
-          ),
-          SafeArea(
-            minimum: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-            child: Column(
-              children: [
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: '내용을 적어주세요',
+            SafeArea(
+              minimum: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '내용을 적어주세요',
+                    ),
+                    onChanged: handleDetailChange,
                   ),
-                  onChanged: handleDetailChange,
-                )
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      bottomSheet: BottomStepBar(
+      bottomNavigationBar: BottomStepBar(
         handleNext: handleUpload,
         next: '업로드',
       ),
