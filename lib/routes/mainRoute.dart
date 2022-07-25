@@ -1,6 +1,7 @@
 import 'package:climb_balance/configs/routeConfig.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/routes/authRoute.dart';
+import 'package:climb_balance/ui/pages/community/community.dart';
 import 'package:climb_balance/ui/pages/diary/diary.dart';
 import 'package:climb_balance/ui/pages/testPage/testPage.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,12 @@ Route mainRoute(RouteSettings settings) {
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
         pageBuilder: (_, __, ___) => Home(),
+      );
+    case COMMUNITY_PAGE_PATH:
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => Community(),
       );
     case DIARY_PAGE_PATH:
       return PageRouteBuilder(
