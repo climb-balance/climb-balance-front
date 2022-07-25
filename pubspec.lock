@@ -460,7 +460,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: a54eba483222a67a32eacd5825ba4f3a5f0987a6
+      resolved-ref: "5a21fda30698406bec8a7e7dd426b76d043cb68a"
       url: "https://github.com/bluejoyq/video_trimmer.git"
     source: git
     version: "1.0.0"
