@@ -1,7 +1,5 @@
 import 'package:climb_balance/providers/api.dart';
-import 'package:climb_balance/providers/token.dart';
-import 'package:climb_balance/routes/authRoute.dart';
-import 'package:climb_balance/routes/mainRoute.dart';
+import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/utils/webView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,13 +55,9 @@ class NaverLogin extends ConsumerWidget {
         ),
       ).then((res) => toRegisterd
           ? Navigator.pushNamed(context, '/register')
-          : Navigator.popAndPushNamed(context, '/home'));
+          : ref.read(mainRouteProvider.notifier).toMain());
     }).catchError((err) {
-      debugPrint(Navigator.of(context).toString());
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          "/home",
-          (route) =>
-              route.isCurrent && route.settings.name == "/home" ? false : true);
+      ref.read(mainRouteProvider.notifier).toMain();
     });
   }
 

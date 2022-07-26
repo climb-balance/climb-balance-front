@@ -1,5 +1,4 @@
-import 'package:climb_balance/providers/api.dart';
-import 'package:climb_balance/utils/token.dart';
+import 'package:climb_balance/utils/storage/token.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TokenType {

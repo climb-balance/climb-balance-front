@@ -1,5 +1,5 @@
-import 'package:climb_balance/ui/pages/auth.dart';
-import 'package:climb_balance/ui/pages/register.dart';
+import 'package:climb_balance/ui/pages/auth/auth.dart';
+import 'package:climb_balance/ui/pages/auth/register.dart';
 import 'package:flutter/material.dart';
 
 class AuthRoute extends StatefulWidget {

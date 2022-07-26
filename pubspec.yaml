@@ -34,12 +34,18 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  flutter_naver_login: #<latest_version>
-  shared_preferences: #<latest_version>
-  http: #<latest_version>
+  flutter_naver_login: ^1.6.0
+  shared_preferences: ^2.0.15
+  http: ^0.13.4
   flutter_riverpod: ^2.0.0-dev.9
-  webview_flutter: #<latest_version>
-  numberpicker:
+  webview_flutter: ^3.0.4
+  numberpicker: ^2.1.1
+  image_picker: ^0.8.5+3
+  video_player: ^2.4.5
+  video_thumbnail: ^0.5.2
+  video_trimmer:
+    git:
+      url: https://github.com/bluejoyq/video_trimmer.git
 dev_dependencies:
   flutter_test:
     sdk: flutter
