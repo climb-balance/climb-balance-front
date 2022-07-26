@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 
 class UploadType {
   double start, end;
-  Location location;
-  Difficulty difficulty;
+  LocationSelection location;
+  DifficultySelection difficulty;
   bool success;
   DateTime date;
   String detail;
@@ -41,8 +41,8 @@ class UploadNotifier extends StateNotifier<UploadType> {
   // TODO state 불변으로 만들어야함!!!!!
   UploadNotifier({required this.ref})
       : super(UploadType(
-            location: Location(),
-            difficulty: Difficulty(),
+            location: LocationSelection(),
+            difficulty: DifficultySelection(),
             date: DateTime.now()));
 
   void setFile({required File file}) {
@@ -52,8 +52,8 @@ class UploadNotifier extends StateNotifier<UploadType> {
   }
 
   void setTags(
-      {required Location location,
-      required Difficulty difficulty,
+      {required LocationSelection location,
+      required DifficultySelection difficulty,
       required bool success,
       required DateTime date}) {
     UploadType newState = state;

@@ -1,29 +1,29 @@
-class Tag {
+class TagSelection {
   String detail;
   int id;
 
-  Tag({this.detail = "-", this.id = -1});
+  TagSelection({this.detail = "-", this.id = -1});
 
   String getDetail() {
     return detail;
   }
 }
 
-class Location extends Tag {
-  Location({super.detail, super.id});
+class LocationSelection extends TagSelection {
+  LocationSelection({super.detail, super.id});
 }
 
-class Difficulty extends Tag {
-  Difficulty({super.detail, super.id});
+class DifficultySelection extends TagSelection {
+  DifficultySelection({super.detail, super.id});
 }
 
-class Tags {
-  List<Location> locations = [];
-  List<Difficulty> difficulties = [];
+class TagsSelection {
+  List<LocationSelection> locations = [];
+  List<DifficultySelection> difficulties = [];
 
-  void updateTags(
-      {required List<Location> locations,
-      required List<Difficulty> difficulties}) {
+  void updateTagsSelection(
+      {required List<LocationSelection> locations,
+      required List<DifficultySelection> difficulties}) {
     this.locations = locations;
     this.difficulties = difficulties;
   }
