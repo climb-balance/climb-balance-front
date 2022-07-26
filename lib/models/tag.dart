@@ -1,3 +1,15 @@
+class Tag {
+  String location;
+  String difficulty;
+  bool success;
+  DateTime date;
+  Tag(
+      {this.location = '-1',
+      this.difficulty = '-1',
+      this.success = false,
+      required this.date});
+}
+
 class TagSelection {
   String detail;
   int id;
