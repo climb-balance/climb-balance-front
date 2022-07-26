@@ -44,30 +44,48 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('asa'),
+        title: Row(
+          children: [const Icon(Icons.arrow_drop_down)],
+        ),
+        elevation: 1,
       ),
       body: Center(
         child: Column(
           children: [
-            CircleAvatar(
-              radius: 50,
-              foregroundImage: NetworkImage(profile.profileImagePath),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        foregroundImage: NetworkImage(profile.profileImagePath),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${profile.nickName}#${profile.uniqueCode}',
+                            style: theme.textTheme.headline6,
+                          ),
+                          Text('계정 등급 : 1')
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                TabBar(
+                  labelPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  controller: _tabController,
+                  tabs: tabItems,
+                  labelColor: theme.colorScheme.primary,
+                  labelStyle: theme.textTheme.bodyText2
+                      ?.copyWith(color: theme.colorScheme.onSurface),
+                ),
+              ],
             ),
-            Text(
-              '${profile.nickName}#${profile.uniqueCode}',
-              style: theme.textTheme.headline5,
-            ),
-            Container(
-              color: theme.colorScheme.primary,
-              child: TabBar(
-                controller: _tabController,
-                tabs: tabItems,
-                labelStyle: theme.textTheme.headline6,
-              ),
-            ),
-            MySafeArea(
-              child: Container(),
-            )
+            Container(),
           ],
         ),
       ),
