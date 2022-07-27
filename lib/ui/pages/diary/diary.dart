@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/tag.dart';
 import '../../widgets/profileInfo.dart';
 import '../../widgets/story.dart';
 
@@ -38,22 +35,6 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
         uniqueCode: 2131,
       );
     });
-  }
-
-  Story getRandomStory() {
-    Random random = Random();
-    return Story(
-        tag: Tag(
-          date: DateTime.now(),
-          location: random.nextInt(3).toString(),
-        ),
-        likes: random.nextInt(100),
-        description: '안녕하세요',
-        comments: random.nextInt(100),
-        aiAvailable: random.nextInt(1) == 1,
-        expertAvailable: random.nextInt(1) == 1,
-        uploadDate: DateTime.now(),
-        thumbnailPath: 'https://i.imgur.com/IAhL4iA.jpeg');
   }
 
   void loadStories() {
@@ -146,7 +127,7 @@ class ClassifiedStory extends StatelessWidget {
     return Column(
       children: [
         Text(stories[0].getDate()),
-        Text(stories[0].tag.location),
+        Text(stories[0].tag.location.toString()),
         GridView.count(
           children: stories.map((story) => StoryPreview(story: story)).toList(),
           crossAxisCount: 3,

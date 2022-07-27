@@ -1,11 +1,12 @@
 class Tag {
-  String location;
-  String difficulty;
+  int location;
+  int difficulty;
   bool success;
   DateTime date;
+
   Tag(
-      {this.location = '-1',
-      this.difficulty = '-1',
+      {this.location = -1,
+      this.difficulty = -1,
       this.success = false,
       required this.date});
 }
