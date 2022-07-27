@@ -1,22 +1,26 @@
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
+import 'package:climb_balance/providers/api.dart';
+import 'package:climb_balance/providers/serverRequest.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../configs/serverConfig.dart';
 import '../../widgets/profileInfo.dart';
 import '../../widgets/story.dart';
 
-class Diary extends StatefulWidget {
+class Diary extends ConsumerStatefulWidget {
   const Diary({Key? key}) : super(key: key);
 
   @override
-  State<Diary> createState() => _DiaryState();
+  ConsumerState<Diary> createState() => _DiaryState();
 }
 
-class _DiaryState extends State<Diary> with TickerProviderStateMixin {
+class _DiaryState extends ConsumerState<Diary> with TickerProviderStateMixin {
   late final UserProfile profile;
   late TabController _tabController;
-  late Map<String, List<Story>> classifiedStories;
+  late Map<String, List<Story>> classifiedStories = {};
 
   @override
   void initState() {
@@ -37,23 +41,12 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
     });
   }
 
-  void loadStories() {
-    List<Story> stories = [];
-    for (int i = 0; i < 100; i++) {
-      stories.add(getRandomStory());
-    }
-    Map<String, List<Story>> classifiedStories = {};
-    for (Story story in stories) {
-      String key = '${story.tag.location}/${story.getDate()}';
-      if (classifiedStories.containsKey(key)) {
-        classifiedStories[key]?.add(story);
-      } else {
-        classifiedStories[key] = [story];
-      }
-    }
-    debugPrint(classifiedStories.keys.toString());
-    setState(() {
-      this.classifiedStories = classifiedStories;
+  void loadStories() async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final body = await ref
+          .read(serverRequestPrivider)
+          .get(ServerUrl + ServerStoryPath);
+      debugPrint(body['stories'].toString());
     });
   }
 
