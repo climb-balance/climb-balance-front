@@ -81,9 +81,10 @@ class _StoryViewState extends State<StoryView> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Column(
-                      children: [Text('a')],
-                    ),
+                    child: Container(),
+                  ),
+                  BottomStoryInfo(
+                    story: widget.story,
                   ),
                   BottomUserProfile(
                     userProfile: genRandomUser(),
@@ -98,7 +99,7 @@ class _StoryViewState extends State<StoryView> {
                     aspectRatio: _videoPlayerController.value.aspectRatio,
                     child: VideoPlayer(_videoPlayerController),
                   )
-                : CircularProgressIndicator(),
+                : const CircularProgressIndicator(),
           ),
         ],
       ),
@@ -109,6 +110,24 @@ class _StoryViewState extends State<StoryView> {
   void dispose() {
     super.dispose();
     _videoPlayerController.dispose();
+  }
+}
+
+class BottomStoryInfo extends StatelessWidget {
+  final Story story;
+
+  const BottomStoryInfo({Key? key, required this.story}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text('${story.tag.location}'),
+        Text('${story.tag.difficulty}'),
+        Text('${story.tag.date}'),
+        Text('${story.tag.success}'),
+      ],
+    );
   }
 }
 
