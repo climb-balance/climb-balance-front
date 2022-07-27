@@ -120,7 +120,7 @@ class ClassifiedStory extends StatelessWidget {
     return Column(
       children: [
         Text(stories[0].getDate()),
-        Text(stories[0].tag.location.toString()),
+        Text(stories[0].tags.location.toString()),
         GridView.count(
           children: stories.map((story) => StoryPreview(story: story)).toList(),
           crossAxisCount: 3,

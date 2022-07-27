@@ -23,7 +23,7 @@ class StoryPreview extends StatelessWidget {
             ),
           );
         },
-        child: Image.network(story.thumbnailPath));
+        child: Image.network(story.thumbnailUrl));
   }
 }
 
@@ -122,10 +122,10 @@ class BottomStoryInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('${story.tag.location}'),
-        Text('${story.tag.difficulty}'),
-        Text('${story.tag.date}'),
-        Text('${story.tag.success}'),
+        Text('${story.tags.location}'),
+        Text('${story.tags.difficulty}'),
+        Text('${story.tags.videoDate}'),
+        Text('${story.tags.success}'),
       ],
     );
   }

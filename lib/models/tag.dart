@@ -1,14 +1,29 @@
-class Tag {
+class Tags {
   int location;
   int difficulty;
   bool success;
-  DateTime date;
+  DateTime videoDate;
 
-  Tag(
+  Tags(
       {this.location = -1,
       this.difficulty = -1,
       this.success = false,
-      required this.date});
+      required this.videoDate});
+
+  Tags.fromJson(Map<String, dynamic> json)
+      : location = json['location'],
+        difficulty = json['difficulty'],
+        success = json['success'],
+        videoDate = json['video_date'];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['location'] = location;
+    data['difficulty'] = difficulty;
+    data['success'] = success;
+    data['video_date'] = videoDate;
+    return data;
+  }
 }
 
 class TagSelection {
