@@ -29,13 +29,17 @@ class Story {
     return '${tags.videoDate.year.toString()}-${tags.videoDate.month.toString()}-${tags.videoDate.day.toString()}';
   }
 
+  String makeKey() {
+    return '${tags.location}/${getDate()}';
+  }
+
   Story.fromJson(Map<String, dynamic> json)
       : tags = (json['tags'] != null ? Tags.fromJson(json['tags']) : null)!,
         likes = json['likes'],
         description = json['description'],
         comments = json['comments'],
         thumbnailUrl = json['thumbnail_url'],
-        uploadDate = json['upload_date'],
+        uploadDate = DateTime.parse(json['upload_date']),
         aiAvailable = json['ai_available'],
         expertAvailable = json['expert_available'],
         uploaderId = json['uploader_id'];

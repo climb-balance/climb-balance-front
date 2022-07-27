@@ -13,8 +13,8 @@ class Tags {
   Tags.fromJson(Map<String, dynamic> json)
       : location = json['location'],
         difficulty = json['difficulty'],
-        success = json['success'],
-        videoDate = json['video_date'];
+        success = json['success'] == 'true',
+        videoDate = DateTime.parse(json['video_date']);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

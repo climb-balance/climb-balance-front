@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/providers/api.dart';
@@ -43,10 +45,20 @@ class _DiaryState extends ConsumerState<Diary> with TickerProviderStateMixin {
 
   void loadStories() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      classifiedStories = <String, List<Story>>{};
       final body = await ref
           .read(serverRequestPrivider)
           .get(ServerUrl + ServerStoryPath);
-      debugPrint(body['stories'].toString());
+      for (final data in body['stories']) {
+        final story = Story.fromJson(data);
+        final String key = story.makeKey();
+        if (classifiedStories.containsKey(key)) {
+          classifiedStories[key]!.add(story);
+        } else {
+          classifiedStories[key] = [story];
+        }
+      }
+      setState(() {});
     });
   }
 
