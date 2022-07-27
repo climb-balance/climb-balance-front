@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
-import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/tag.dart';
 import '../../widgets/profileInfo.dart';
+import '../../widgets/story.dart';
 
 class Diary extends StatefulWidget {
   const Diary({Key? key}) : super(key: key);
@@ -155,16 +155,5 @@ class ClassifiedStory extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class StoryPreview extends StatelessWidget {
-  final Story story;
-
-  const StoryPreview({Key? key, required this.story}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.network(story.thumbnailPath);
   }
 }
