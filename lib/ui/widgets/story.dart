@@ -1,4 +1,6 @@
+import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/ui/theme/mainTheme.dart';
+import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -36,6 +38,13 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   late final VideoPlayerController _videoPlayerController;
+  bool openFeedBack = false;
+
+  void toggleOpenFeedBack() {
+    setState(() {
+      openFeedBack = !openFeedBack;
+    });
+  }
 
   @override
   void initState() {
@@ -46,19 +55,52 @@ class _StoryViewState extends State<StoryView> {
         _videoPlayerController.play();
         setState(() {});
       });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: mainDarkTheme(),
-      child: Center(
-        child: _videoPlayerController.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              )
-            : CircularProgressIndicator(),
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              title: IconButton(
+                icon: Icon(
+                    openFeedBack ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                onPressed: toggleOpenFeedBack,
+              ),
+              centerTitle: true,
+              leading: Container(),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+            body: MySafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [Text('a')],
+                    ),
+                  ),
+                  BottomUserProfile(
+                    userProfile: genRandomUser(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Center(
+            child: _videoPlayerController.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: VideoPlayer(_videoPlayerController),
+                  )
+                : CircularProgressIndicator(),
+          ),
+        ],
       ),
     );
   }
@@ -67,5 +109,39 @@ class _StoryViewState extends State<StoryView> {
   void dispose() {
     super.dispose();
     _videoPlayerController.dispose();
+  }
+}
+
+class BottomUserProfile extends StatelessWidget {
+  final UserProfile userProfile;
+
+  const BottomUserProfile({Key? key, required this.userProfile})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              backgroundImage:
+                  Image.network(userProfile.profileImagePath).image,
+              radius: 20,
+            ),
+            Text(userProfile.nickName),
+            Text('#${userProfile.uniqueCode.toString()}'),
+            const Spacer(),
+            Text(
+              '${userProfile.height.toString()}/${userProfile.weight.toString()}',
+              style: theme.textTheme.bodyText2?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
