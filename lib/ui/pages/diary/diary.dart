@@ -7,6 +7,7 @@ import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/tag.dart';
+import '../../widgets/profileInfo.dart';
 
 class Diary extends StatefulWidget {
   const Diary({Key? key}) : super(key: key);
@@ -19,15 +20,10 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
   late final UserProfile profile;
   late TabController _tabController;
   late Map<String, List<Story>> classifiedStories;
-  static const tabItems = [
-    Text('ALL'),
-    Text('AI'),
-    Text('EXPERT'),
-  ];
 
   @override
   void initState() {
-    _tabController = TabController(length: tabItems.length, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     loadProfileData();
     loadStories();
     super.initState();
@@ -47,7 +43,10 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
   Story getRandomStory() {
     Random random = Random();
     return Story(
-        tag: Tag(date: DateTime.now()),
+        tag: Tag(
+          date: DateTime.now(),
+          location: random.nextInt(3).toString(),
+        ),
         likes: random.nextInt(100),
         description: '안녕하세요',
         comments: random.nextInt(100),
@@ -57,10 +56,6 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
         thumbnailPath: 'https://i.imgur.com/IAhL4iA.jpeg');
   }
 
-  String formatDate(DateTime date) {
-    return '${date.year.toString()}-${date.month.toString()}-${date.day.toString()}';
-  }
-
   void loadStories() {
     List<Story> stories = [];
     for (int i = 0; i < 100; i++) {
@@ -68,13 +63,14 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
     }
     Map<String, List<Story>> classifiedStories = {};
     for (Story story in stories) {
-      String key = '${story.tag.location}/${formatDate(story.tag.date)}';
+      String key = '${story.tag.location}/${story.getDate()}';
       if (classifiedStories.containsKey(key)) {
         classifiedStories[key]?.add(story);
       } else {
         classifiedStories[key] = [story];
       }
     }
+    debugPrint(classifiedStories.keys.toString());
     setState(() {
       this.classifiedStories = classifiedStories;
     });
@@ -84,89 +80,59 @@ class _DiaryState extends State<Diary> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [const Icon(Icons.arrow_drop_down)],
-        ),
-        elevation: 1,
-      ),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            Center(
-              child: Column(
-                children: [
-                  ProfileInfo(
-                    profile: profile,
-                  ),
-                  TabBar(
-                    labelPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    controller: _tabController,
-                    tabs: tabItems,
-                    labelColor: theme.colorScheme.primary,
-                    labelStyle: theme.textTheme.bodyText2
-                        ?.copyWith(color: theme.colorScheme.onSurface),
-                  ),
-                ],
-              ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
+      body: SafeArea(
+        child: ListView(
           children: [
-            Column(
-              children: classifiedStories.values
-                  .map((stories) => ClassifiedStory(stories: stories))
-                  .toList(),
-            ),
-            Column(
-              children: classifiedStories.values
-                  .map((stories) => ClassifiedStory(stories: stories))
-                  .toList(),
-            ),
-            Column(
-              children: classifiedStories.values
-                  .map((stories) => ClassifiedStory(stories: stories))
-                  .toList(),
-            ),
+            ProfileInfo(profile: profile),
+            ...classifiedStories.values
+                .map((stories) => ClassifiedStory(stories: stories))
+                .toList()
           ],
         ),
       ),
-      bottomNavigationBar: const BotNavigationBar(currentIdx: 3),
+      bottomNavigationBar: BotNavigationBar(
+        currentIdx: 3,
+      ),
     );
   }
 }
 
-class ProfileInfo extends StatelessWidget {
-  final UserProfile profile;
+class DelegateTabBar extends SliverPersistentHeaderDelegate {
+  TabController tabController;
+  static const tabItems = [
+    Text('ALL'),
+    Text('AI'),
+    Text('EXPERT'),
+  ];
 
-  const ProfileInfo({Key? key, required this.profile}) : super(key: key);
+  DelegateTabBar({required this.tabController});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 50,
-            foregroundImage: NetworkImage(profile.profileImagePath),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${profile.nickName}#${profile.uniqueCode}',
-                style: theme.textTheme.headline6,
-              ),
-              const Text('계정 등급 : 1')
-            ],
-          )
-        ],
+    return SizedBox(
+      height: 50,
+      child: TabBar(
+        labelPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        controller: tabController,
+        tabs: tabItems,
+        labelColor: theme.colorScheme.primary,
+        labelStyle: theme.textTheme.bodyText2
+            ?.copyWith(color: theme.colorScheme.onSurface),
       ),
     );
+  }
+
+  @override
+  double get maxExtent => 150;
+
+  @override
+  double get minExtent => 200;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
 
@@ -179,11 +145,13 @@ class ClassifiedStory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(stories[0].tag.date.toString()),
+        Text(stories[0].getDate()),
         Text(stories[0].tag.location),
         GridView.count(
-          crossAxisCount: 3,
           children: stories.map((story) => StoryPreview(story: story)).toList(),
+          crossAxisCount: 3,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
         ),
       ],
     );
@@ -197,10 +165,6 @@ class StoryPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: 50,
-      child: Image.network(story.thumbnailPath),
-    );
+    return Image.network(story.thumbnailPath);
   }
 }

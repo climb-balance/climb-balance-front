@@ -20,4 +20,7 @@ class Story {
     required this.uploadDate,
     required this.thumbnailPath,
   });
+  String getDate() {
+    return '${tag.date.year.toString()}-${tag.date.month.toString()}-${tag.date.day.toString()}';
+  }
 }
