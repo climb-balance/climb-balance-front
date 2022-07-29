@@ -10,6 +10,20 @@ import '../../../configs/serverConfig.dart';
 import '../../widgets/profileInfo.dart';
 import '../../widgets/story.dart';
 
+const locations = [
+  '클라임 바운스',
+  '클라임 바운스 이천',
+  '더클라임 양재',
+  '더클라임 홍대',
+  '더클라임 연남',
+  '타잔클라이밍',
+  '클라임 바운스 수원',
+  '클라임 바운스',
+  '클라임 바운스',
+  '클라임 바운스',
+  '클라임 바운스',
+];
+
 enum FilterType { noFilter, aiOnly, expertOnly }
 
 class Diary extends ConsumerStatefulWidget {
@@ -19,16 +33,15 @@ class Diary extends ConsumerStatefulWidget {
   ConsumerState<Diary> createState() => _DiaryState();
 }
 
-class _DiaryState extends ConsumerState<Diary> with TickerProviderStateMixin {
+class _DiaryState extends ConsumerState<Diary> {
   late final UserProfile profile;
-  late TabController _tabController;
+
   late List<Story> stories;
   late Map<String, List<Story>> treatedStories = {};
   FilterType currentFilter = FilterType.noFilter;
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
     loadProfileData();
     loadStories();
     super.initState();
@@ -83,48 +96,59 @@ class _DiaryState extends ConsumerState<Diary> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          children: [
-            ProfileInfo(profile: profile),
-            FilterDropdown(updateFilter: updateFilter),
-            ...treatedStories.values
-                .map((stories) => ClassifiedStory(stories: stories))
-                .toList()
-          ],
+        child: NestedScrollView(
+          headerSliverBuilder: (context, _) {
+            return [
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      ProfileInfo(profile: profile),
+                    ],
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: Builder(
+            builder: (context) => CustomScrollView(
+              slivers: [
+                SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context)),
+                FixedTabBar(
+                  updateFilter: updateFilter,
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    treatedStories.values
+                        .map((stories) => ClassifiedStory(stories: stories))
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
-      bottomNavigationBar: BotNavigationBar(
+      bottomNavigationBar: const BotNavigationBar(
         currentIdx: 3,
       ),
     );
   }
 }
 
-class DelegateTabBar extends SliverPersistentHeaderDelegate {
-  TabController tabController;
-  static const tabItems = [
-    Text('ALL'),
-    Text('AI'),
-    Text('EXPERT'),
-  ];
+class ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
+  UserProfile profile;
 
-  DelegateTabBar({required this.tabController});
+  ProfileHeaderDelegate({required this.profile});
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final theme = Theme.of(context);
-    return SizedBox(
-      height: 50,
-      child: TabBar(
-        labelPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        controller: tabController,
-        tabs: tabItems,
-        labelColor: theme.colorScheme.primary,
-        labelStyle: theme.textTheme.bodyText2
-            ?.copyWith(color: theme.colorScheme.onSurface),
-      ),
-    );
+    return ProfileInfo(profile: profile);
   }
 
   @override
@@ -139,41 +163,52 @@ class DelegateTabBar extends SliverPersistentHeaderDelegate {
   }
 }
 
-class FilterDropdown extends StatefulWidget {
+class FixedTabBar extends StatefulWidget {
   final void Function(FilterType) updateFilter;
 
-  const FilterDropdown({Key? key, required this.updateFilter})
-      : super(key: key);
+  const FixedTabBar({Key? key, required this.updateFilter}) : super(key: key);
 
   @override
-  State<FilterDropdown> createState() => _FilterDropdownState();
+  State<FixedTabBar> createState() => _FixedTabBarState();
 }
 
-class _FilterDropdownState extends State<FilterDropdown> {
-  FilterType currentDropdown = FilterType.noFilter;
-  static const Map<FilterType, String> _filters = {
-    FilterType.noFilter: "필터 없음",
-    FilterType.aiOnly: "ai 영상만",
-    FilterType.expertOnly: "전문가 영상만",
-  };
+class _FixedTabBarState extends State<FixedTabBar>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  static const tabItems = [
+    Text('ALL'),
+    Text('AI'),
+    Text('EXPERT'),
+  ];
+  static const filters = [
+    FilterType.noFilter,
+    FilterType.aiOnly,
+    FilterType.expertOnly,
+  ];
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<FilterType>(
-      value: currentDropdown,
-      items: _filters.keys
-          .map(
-            (key) => DropdownMenuItem<FilterType>(
-              value: key,
-              child: Text(_filters[key]!),
-            ),
-          )
-          .toList(),
-      onChanged: (newValue) {
-        currentDropdown = newValue!;
-        widget.updateFilter(newValue);
-        setState(() {});
-      },
+    final theme = Theme.of(context);
+    return SliverAppBar(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: TabBar(
+          onTap: (idx) {
+            widget.updateFilter(filters[idx]);
+          },
+          controller: _tabController,
+          tabs: tabItems,
+          labelPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          labelColor: theme.colorScheme.primary,
+        ),
+      ),
     );
   }
 }
@@ -190,10 +225,10 @@ class ClassifiedStory extends StatelessWidget {
         Text(stories[0].getDate()),
         Text(stories[0].tags.location.toString()),
         GridView.count(
-          children: stories.map((story) => StoryPreview(story: story)).toList(),
           crossAxisCount: 3,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
+          children: stories.map((story) => StoryPreview(story: story)).toList(),
         ),
       ],
     );
