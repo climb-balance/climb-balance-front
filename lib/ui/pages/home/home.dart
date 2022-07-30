@@ -3,17 +3,49 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:climb_balance/ui/pages/auth/register.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 
-class Home extends ConsumerStatefulWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  HomeState createState() => HomeState();
+  State<Home> createState() => HomeState();
 }
 
-class HomeState extends ConsumerState {
+class HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: const [Icon(Icons.balance), Text('클라임밸런스')],
+        ),
+      ),
+      body: SafeArea(
+        child: Expanded(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onVerticalDragStart: (_) {
+              debugPrint('as');
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Card(child: ImageBanner()),
+                MainStatistics(),
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: const BotNavigationBar(currentIdx: 0),
+    );
+  }
+}
+
+class MainStatistics extends StatelessWidget {
+  const MainStatistics({Key? key}) : super(key: key);
+
   List<int> loadDatas() {
     Random random = Random();
     List<int> result = [];
@@ -26,48 +58,32 @@ class HomeState extends ConsumerState {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: const [Icon(Icons.balance), Text('클라임밸런스')],
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Card(child: ImageBanner()),
-            SizedBox(
-              height: MediaQuery.of(context).size.width / 2 - 30,
-              child: Row(
+    return SizedBox(
+      height: MediaQuery.of(context).size.width / 2 - 30,
+      child: Row(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: HeatMap(
+              datas: loadDatas(),
+            ),
+          ),
+          Expanded(
+            child: Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: HeatMap(
-                      datas: loadDatas(),
-                    ),
-                  ),
-                  Expanded(
-                    child: Card(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('현재까지'),
-                          Text(
-                            '50일',
-                            style: theme.textTheme.headline2,
-                          ),
-                        ],
-                      ),
-                    ),
+                  const Text('현재까지'),
+                  Text(
+                    '50일',
+                    style: theme.textTheme.headline2,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: const BotNavigationBar(currentIdx: 0),
     );
   }
 }
@@ -118,22 +134,23 @@ class _HeatMapSquareState extends State<HeatMapSquare> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: theme.colorScheme.primary.withOpacity(
-            min(1 - (widget.data / HeatMapSquare.maxValue), 1),
+            min((widget.data / HeatMapSquare.maxValue), 1),
           ),
         ),
         child: AnimatedOpacity(
-            opacity: _show ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 1000),
-            child: Center(
-              child: Text(
-                widget.data.toString(),
-              ),
+          opacity: _show ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 1000),
+          child: Center(
+            child: Text(
+              widget.data.toString(),
             ),
-            onEnd: () {
-              setState(() {
-                _show = false;
-              });
-            }),
+          ),
+          onEnd: () {
+            setState(() {
+              _show = false;
+            });
+          },
+        ),
       ),
     );
   }
