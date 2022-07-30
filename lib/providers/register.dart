@@ -1,15 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-class RegisterType {
-  int height;
-  int weight;
-  bool sex;
-  int curPage;
-
-  RegisterType(
-      {this.height = 165, this.weight = 60, this.sex = true, this.curPage = 0});
-}
+import '../models/register.dart';
 
 class RegisterNotifier extends StateNotifier<RegisterType> {
   RegisterNotifier() : super(RegisterType());
