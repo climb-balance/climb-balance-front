@@ -20,16 +20,7 @@ class HomeState extends ConsumerState {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                child: const Text('logout'),
-                onPressed: () {
-                  ref.read(tokenProvider.notifier).clearToken();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/auth', (route) => false);
-                },
-              ),
-            ],
+            children: [],
           ),
         ),
       ),
