@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:climb_balance/providers/upload.dart';
-import 'package:climb_balance/ui/pages/home/tagVideo.dart';
+import 'package:climb_balance/ui/pages/videos/tagVideo.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
 
 import 'package:flutter/material.dart';

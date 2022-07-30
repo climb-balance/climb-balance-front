@@ -1,6 +1,6 @@
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/upload.dart';
-import 'package:climb_balance/ui/pages/home/detailVideo.dart';
+import 'package:climb_balance/ui/pages/videos/detailVideo.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
