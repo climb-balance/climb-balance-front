@@ -22,25 +22,32 @@ class AccountState extends State<Account> {
       body: SafeArea(
         child: Center(
           child: ListView(
-            children: const [
-              SettingCard(
+            children: [
+              const SettingCard(
                 groupName: '기기 설정',
                 children: [
                   DarkModeSetting(),
                 ],
               ),
-              SettingCard(
+              const SettingCard(
                 groupName: '계정 설정',
                 children: [
                   EditAccountSetting(),
                   LogoutSetting(),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(onPressed: () {}, child: const Text("이용 약관")),
+                  TextButton(onPressed: () {}, child: const Text("개인정보 처리방침")),
+                ],
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BotNavigationBar(currentIdx: 4),
+      bottomNavigationBar: const BotNavigationBar(currentIdx: 4),
     );
   }
 }
