@@ -220,17 +220,63 @@ class ClassifiedStory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(stories[0].getDate()),
-        Text(stories[0].tags.location.toString()),
-        GridView.count(
-          crossAxisCount: 3,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          children: stories.map((story) => StoryPreview(story: story)).toList(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Card(
+        child: Column(
+          children: [
+            ClassifiedStoryTags(story: stories[0]),
+            GridView.count(
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children:
+                  stories.map((story) => StoryPreview(story: story)).toList(),
+            ),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class ClassifiedStoryTags extends StatelessWidget {
+  final Story story;
+
+  const ClassifiedStoryTags({Key? key, required this.story}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: theme.colorScheme.outline,
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.date_range),
+                Text(story.getDate()),
+              ],
+            ),
+            Row(
+              children: [
+                const Icon(Icons.location_on),
+                Text(locations[story.tags.location]),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
