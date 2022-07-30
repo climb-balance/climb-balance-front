@@ -1,9 +1,10 @@
 import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:climb_balance/ui/pages/auth/register.dart';
-import 'package:climb_balance/ui/widgets/safearea.dart';
+import 'package:climb_balance/models/story.dart';
+import 'package:climb_balance/ui/widgets/story.dart';
 import 'package:flutter/material.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
+import 'package:flutter/physics.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,23 +23,116 @@ class HomeState extends State<Home> {
         ),
       ),
       body: SafeArea(
-        child: Expanded(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onVerticalDragStart: (_) {
-              debugPrint('as');
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Card(child: ImageBanner()),
-                MainStatistics(),
-              ],
-            ),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: const [
+            Card(child: ImageBanner()),
+            MainStatistics(),
+            // TODO stack으로 옮겨야함.
+            StoryViewDrag(),
+          ],
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(currentIdx: 0),
+    );
+  }
+}
+
+class StoryViewDrag extends StatefulWidget {
+  const StoryViewDrag({Key? key}) : super(key: key);
+
+  @override
+  State<StoryViewDrag> createState() => _StoryViewDragState();
+}
+
+class _StoryViewDragState extends State<StoryViewDrag>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  Alignment _dragAlignment = Alignment.bottomCenter;
+  late Animation<Alignment> _animation;
+
+  void _runAnimation(Offset pixelsPerSecond, Size size) {
+    _animation = _controller.drive(
+      AlignmentTween(
+        begin: _dragAlignment,
+        end: Alignment.bottomCenter,
+      ),
+    );
+    // Calculate the velocity relative to the unit interval, [0,1],
+    // used by the animation controller.
+    final unitsPerSecondY = pixelsPerSecond.dy / size.height;
+    final unitsPerSecond = Offset(0, unitsPerSecondY);
+    final unitVelocity = unitsPerSecond.distance;
+
+    const spring = SpringDescription(
+      mass: 30,
+      stiffness: 1,
+      damping: 1,
+    );
+
+    final simulation = SpringSimulation(spring, 0, 1, -unitVelocity);
+
+    _controller.animateWith(simulation);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+
+    _controller.addListener(() {
+      setState(() {
+        _dragAlignment = _animation.value;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Expanded(
+      child: Align(
+        alignment: _dragAlignment,
+        child: GestureDetector(
+          onVerticalDragDown: (details) {
+            _controller.stop();
+          },
+          onVerticalDragUpdate: (details) {
+            if (details.delta.dy > 0 && _dragAlignment.y >= 1.0) {
+              return;
+            } else if (_dragAlignment.y < 0.3) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => StoryView(
+                    story: getRandomStory(),
+                  ),
+                ),
+              );
+            }
+            setState(() {
+              _dragAlignment += Alignment(
+                0,
+                details.delta.dy / (size.height / 2),
+              );
+            });
+          },
+          onVerticalDragEnd: (details) {
+            _runAnimation(details.velocity.pixelsPerSecond, size);
+          },
+          child: const Icon(
+            Icons.keyboard_double_arrow_up,
+            size: 50,
+          ),
+        ),
+      ),
     );
   }
 }
