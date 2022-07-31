@@ -20,6 +20,9 @@ class StoryPreview extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => StoryView(
               story: story,
+              handleBack: () {
+                Navigator.pop(context);
+              },
             ),
           ),
         );
@@ -34,8 +37,10 @@ class StoryPreview extends StatelessWidget {
 
 class StoryView extends StatefulWidget {
   final Story story;
+  final void Function() handleBack;
 
-  const StoryView({Key? key, required this.story}) : super(key: key);
+  const StoryView({Key? key, required this.story, required this.handleBack})
+      : super(key: key);
 
   @override
   State<StoryView> createState() => _StoryViewState();
@@ -78,7 +83,10 @@ class _StoryViewState extends State<StoryView> {
                 onPressed: toggleOpenFeedBack,
               ),
               centerTitle: true,
-              leading: Container(),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: widget.handleBack,
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),

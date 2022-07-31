@@ -16,16 +16,16 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late PageController _pageController;
   int currentPage = 0;
-  List<Widget> pageItems = [
-    StoryView(
-      story: getRandomStory(),
-    ),
-  ];
+  List<Widget> pageItems = [];
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    pageItems.add(StoryView(
+      story: getRandomStory(),
+      handleBack: handleBack,
+    ));
   }
 
   Widget handlePage(BuildContext context, int idx) {
@@ -34,7 +34,10 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
 
     if (pageItems.length < idx) {
-      pageItems.add(StoryView(story: getRandomStory()));
+      pageItems.add(StoryView(
+        story: getRandomStory(),
+        handleBack: handleBack,
+      ));
     }
     return pageItems[idx - 1];
   }
@@ -46,6 +49,11 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _pageController.animateToPage(_pageController.initialPage,
         curve: Curves.elasticOut, duration: const Duration(milliseconds: 500));
     return false;
+  }
+
+  void handleBack() {
+    _pageController.animateToPage(_pageController.initialPage,
+        curve: Curves.elasticOut, duration: const Duration(milliseconds: 500));
   }
 
   @override
