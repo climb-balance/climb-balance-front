@@ -2,9 +2,11 @@ import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/ui/theme/mainTheme.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../models/story.dart';
+import '../../providers/tags.dart';
 
 class StoryPreview extends StatelessWidget {
   final Story story;
@@ -145,17 +147,19 @@ class _StoryOverlayState extends State<StoryOverlay> {
   }
 }
 
-class BottomStoryInfo extends StatelessWidget {
+class BottomStoryInfo extends ConsumerWidget {
   final Story story;
 
   const BottomStoryInfo({Key? key, required this.story}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final refState = ref.watch(tagsProvider);
+    debugPrint(refState.difficulties.toString());
     return Row(
       children: [
-        Text('${story.tags.location}'),
-        Text('${story.tags.difficulty}'),
+        Text('${refState.difficulties[story.tags.difficulty + 1].name}'),
+        Text('${refState.locations[story.tags.location + 1].name}'),
         Text('${story.getDateString()}'),
         SuccessTag(success: story.tags.success),
       ],

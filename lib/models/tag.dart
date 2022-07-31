@@ -58,14 +58,10 @@ class Difficulty {
   Difficulty({this.id = -1, this.name = '', required this.color});
 }
 
+@immutable
 class TagsSelection {
   List<Location> locations = [];
   List<Difficulty> difficulties = [];
 
-  void updateTagsSelection(
-      {required List<Location> locations,
-      required List<Difficulty> difficulties}) {
-    this.locations = locations;
-    this.difficulties = difficulties;
-  }
+  TagsSelection({this.locations = const [], this.difficulties = const []});
 }
