@@ -165,7 +165,9 @@ class BottomStoryInfo extends ConsumerWidget {
         LocationTag(location: refState.locations[story.tags.difficulty + 1]),
         DifficultyTag(
             difficulty: refState.difficulties[story.tags.location + 1]),
-        Text('${story.getDateString()}'),
+        DateTag(
+          dateString: story.getDateString(),
+        ),
         SuccessTag(success: story.tags.success),
       ],
     );

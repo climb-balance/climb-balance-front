@@ -2,6 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../../models/tag.dart';
 
+class DateTag extends StatelessWidget {
+  final String dateString;
+
+  const DateTag({Key? key, required this.dateString}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Icon(Icons.calendar_today),
+        Text(dateString),
+      ],
+    );
+  }
+}
+
 class LocationTag extends StatelessWidget {
   final Location location;
 
@@ -9,7 +26,13 @@ class LocationTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(location.name);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Icon(Icons.location_on),
+        Text(location.name),
+      ],
+    );
   }
 }
 

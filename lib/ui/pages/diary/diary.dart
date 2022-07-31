@@ -2,6 +2,7 @@ import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
 
 import 'package:climb_balance/providers/serverRequest.dart';
+import 'package:climb_balance/providers/tags.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,20 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/serverConfig.dart';
 import '../../widgets/profileInfo.dart';
 import '../../widgets/story.dart';
-
-const locations = [
-  '클라임 바운스',
-  '클라임 바운스 이천',
-  '더클라임 양재',
-  '더클라임 홍대',
-  '더클라임 연남',
-  '타잔클라이밍',
-  '클라임 바운스 수원',
-  '클라임 바운스',
-  '클라임 바운스',
-  '클라임 바운스',
-  '클라임 바운스',
-];
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 
@@ -240,13 +227,13 @@ class ClassifiedStory extends StatelessWidget {
   }
 }
 
-class ClassifiedStoryTags extends StatelessWidget {
+class ClassifiedStoryTags extends ConsumerWidget {
   final Story story;
 
   const ClassifiedStoryTags({Key? key, required this.story}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
@@ -271,7 +258,10 @@ class ClassifiedStoryTags extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.location_on),
-                Text(locations[story.tags.location]),
+                Text(ref
+                    .watch(tagsProvider)
+                    .locations[story.tags.location]
+                    .name),
               ],
             ),
           ],
