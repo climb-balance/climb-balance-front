@@ -18,8 +18,8 @@ class TagVideo extends ConsumerStatefulWidget {
 }
 
 class _TagVideoState extends ConsumerState<TagVideo> {
-  late DifficultySelection difficulty;
-  late LocationSelection location;
+  late Difficulty difficulty;
+  late Location location;
   late bool success;
   late DateTime date;
 

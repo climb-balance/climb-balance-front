@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Tags {
   int location;
   int difficulty;
@@ -41,21 +43,28 @@ class TagSelection {
   }
 }
 
-class LocationSelection extends TagSelection {
-  LocationSelection({super.detail, super.id});
+class Location {
+  int id;
+  String name;
+
+  Location({this.id = -1, this.name = ''});
 }
 
-class DifficultySelection extends TagSelection {
-  DifficultySelection({super.detail, super.id});
+class Difficulty {
+  int id;
+  String name;
+  Color color;
+
+  Difficulty({this.id = -1, this.name = '', required this.color});
 }
 
 class TagsSelection {
-  List<LocationSelection> locations = [];
-  List<DifficultySelection> difficulties = [];
+  List<Location> locations = [];
+  List<Difficulty> difficulties = [];
 
   void updateTagsSelection(
-      {required List<LocationSelection> locations,
-      required List<DifficultySelection> difficulties}) {
+      {required List<Location> locations,
+      required List<Difficulty> difficulties}) {
     this.locations = locations;
     this.difficulties = difficulties;
   }
