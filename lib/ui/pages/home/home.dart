@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:climb_balance/models/story.dart';
+import 'package:climb_balance/ui/theme/mainTheme.dart';
 import 'package:climb_balance/ui/widgets/story.dart';
 import 'package:flutter/material.dart';
 import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
-import 'package:flutter/physics.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,7 +13,68 @@ class Home extends StatefulWidget {
   State<Home> createState() => HomeState();
 }
 
-class HomeState extends State<Home> {
+class HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  late PageController _pageController;
+  int currentPage = 0;
+  List<Widget> pageItems = [
+    StoryView(
+      story: getRandomStory(),
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  Widget handlePage(BuildContext context, int idx) {
+    if (idx == 0) {
+      return const MainPage();
+    }
+
+    if (pageItems.length < idx) {
+      pageItems.add(StoryView(story: getRandomStory()));
+    }
+    return pageItems[idx - 1];
+  }
+
+  bool handlePop() {
+    if (currentPage == 0) {
+      return true;
+    }
+    _pageController.animateToPage(_pageController.initialPage,
+        curve: Curves.elasticOut, duration: const Duration(milliseconds: 500));
+    return false;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () {
+        return Future(() => handlePop());
+      },
+      child: PageView.custom(
+        onPageChanged: (page) {
+          currentPage = page;
+        },
+        controller: _pageController,
+        scrollDirection: Axis.vertical,
+        childrenDelegate: SliverChildBuilderDelegate(handlePage),
+      ),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,109 +91,19 @@ class HomeState extends State<Home> {
             Card(child: ImageBanner()),
             MainStatistics(),
             // TODO stack으로 옮겨야함.
-            StoryViewDrag(),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Icon(
+                  Icons.keyboard_double_arrow_up,
+                  size: 50,
+                ),
+              ),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(currentIdx: 0),
-    );
-  }
-}
-
-class StoryViewDrag extends StatefulWidget {
-  const StoryViewDrag({Key? key}) : super(key: key);
-
-  @override
-  State<StoryViewDrag> createState() => _StoryViewDragState();
-}
-
-class _StoryViewDragState extends State<StoryViewDrag>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  Alignment _dragAlignment = Alignment.bottomCenter;
-  late Animation<Alignment> _animation;
-
-  void _runAnimation(Offset pixelsPerSecond, Size size) {
-    _animation = _controller.drive(
-      AlignmentTween(
-        begin: _dragAlignment,
-        end: Alignment.bottomCenter,
-      ),
-    );
-    // Calculate the velocity relative to the unit interval, [0,1],
-    // used by the animation controller.
-    final unitsPerSecondY = pixelsPerSecond.dy / size.height;
-    final unitsPerSecond = Offset(0, unitsPerSecondY);
-    final unitVelocity = unitsPerSecond.distance;
-
-    const spring = SpringDescription(
-      mass: 30,
-      stiffness: 1,
-      damping: 1,
-    );
-
-    final simulation = SpringSimulation(spring, 0, 1, -unitVelocity);
-
-    _controller.animateWith(simulation);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-
-    _controller.addListener(() {
-      setState(() {
-        _dragAlignment = _animation.value;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Expanded(
-      child: Align(
-        alignment: _dragAlignment,
-        child: GestureDetector(
-          onVerticalDragDown: (details) {
-            _controller.stop();
-          },
-          onVerticalDragUpdate: (details) {
-            if (details.delta.dy > 0 && _dragAlignment.y >= 1.0) {
-              return;
-            } else if (_dragAlignment.y < 0.3) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => StoryView(
-                    story: getRandomStory(),
-                  ),
-                ),
-              );
-            }
-            setState(() {
-              _dragAlignment += Alignment(
-                0,
-                details.delta.dy / (size.height / 2),
-              );
-            });
-          },
-          onVerticalDragEnd: (details) {
-            _runAnimation(details.velocity.pixelsPerSecond, size);
-          },
-          child: const Icon(
-            Icons.keyboard_double_arrow_up,
-            size: 50,
-          ),
-        ),
-      ),
     );
   }
 }
@@ -167,9 +138,9 @@ class MainStatistics extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('현재까지'),
+                  const Text('연속 5회 클라이밍'),
                   Text(
-                    '50일',
+                    '🔥',
                     style: theme.textTheme.headline2,
                   ),
                 ],
@@ -204,7 +175,7 @@ class HeatMap extends StatelessWidget {
 
 class HeatMapSquare extends StatefulWidget {
   final int data;
-  static const maxValue = 11;
+  static const maxValue = 13;
 
   const HeatMapSquare({Key? key, required this.data}) : super(key: key);
 
@@ -228,7 +199,7 @@ class _HeatMapSquareState extends State<HeatMapSquare> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: theme.colorScheme.primary.withOpacity(
-            min((widget.data / HeatMapSquare.maxValue), 1),
+            min(((widget.data + 1) / HeatMapSquare.maxValue), 1),
           ),
         ),
         child: AnimatedOpacity(
