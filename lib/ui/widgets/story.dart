@@ -1,6 +1,8 @@
+import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/ui/theme/mainTheme.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
+import 'package:climb_balance/ui/widgets/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -157,49 +159,15 @@ class BottomStoryInfo extends ConsumerWidget {
     final refState = ref.watch(tagsProvider);
     debugPrint(refState.difficulties.toString());
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('${refState.difficulties[story.tags.difficulty + 1].name}'),
-        Text('${refState.locations[story.tags.location + 1].name}'),
+        LocationTag(location: refState.locations[story.tags.difficulty + 1]),
+        DifficultyTag(
+            difficulty: refState.difficulties[story.tags.location + 1]),
         Text('${story.getDateString()}'),
         SuccessTag(success: story.tags.success),
       ],
-    );
-  }
-}
-
-class SuccessTag extends StatelessWidget {
-  final bool success;
-
-  const SuccessTag({Key? key, required this.success}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: success
-          ? [
-              Icon(
-                Icons.check,
-                color: theme.colorScheme.primary,
-              ),
-              Text(
-                '성공',
-                style: TextStyle(color: theme.colorScheme.primary),
-              )
-            ]
-          : [
-              Icon(
-                Icons.close,
-                color: theme.colorScheme.tertiary,
-              ),
-              Text(
-                '실패',
-                style: TextStyle(
-                  color: theme.colorScheme.tertiary,
-                ),
-              )
-            ],
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 List<Difficulty> difficultyData = [
-  Difficulty(name: '-', color: Colors.black),
+  Difficulty(name: '난이도 정보 없음', color: Colors.white),
   Difficulty(id: 0, name: '빨강', color: Colors.red),
   Difficulty(id: 2, name: '파랑', color: Colors.blue),
   Difficulty(id: 3, name: '초록', color: Colors.green),
@@ -19,7 +19,7 @@ List<Difficulty> difficultyData = [
 ];
 
 List<Location> locationData = [
-  Location(name: '-'),
+  Location(name: '위치 정보 없음'),
   Location(id: 1, name: '강남 클라이밍파크'),
   Location(id: 2, name: '신논현 더클라이밍'),
   Location(id: 3, name: '수원 클라임바운스'),
