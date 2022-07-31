@@ -47,6 +47,7 @@ dependencies:
   video_trimmer:
     git:
       url: https://github.com/bluejoyq/video_trimmer.git
+  firebase_core: ^1.20.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
