@@ -265,7 +265,7 @@ class ClassifiedStoryTags extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.date_range),
-                Text(story.getDate()),
+                Text(story.getDateString()),
               ],
             ),
             Row(

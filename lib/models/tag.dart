@@ -10,6 +10,10 @@ class Tags {
       this.success = false,
       required this.videoDate});
 
+  String getDateString() {
+    return '${videoDate.year}-${videoDate.month < 10 ? "0" + videoDate.month.toString() : videoDate.month}-${videoDate.day < 10 ? "0" + videoDate.day.toString() : videoDate.day}';
+  }
+
   Tags.fromJson(Map<String, dynamic> json)
       : location = json['location'],
         difficulty = json['difficulty'],

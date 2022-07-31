@@ -48,13 +48,6 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   late final VideoPlayerController _videoPlayerController;
-  bool openFeedBack = false;
-
-  void toggleOpenFeedBack() {
-    setState(() {
-      openFeedBack = !openFeedBack;
-    });
-  }
 
   @override
   void initState() {
@@ -74,38 +67,7 @@ class _StoryViewState extends State<StoryView> {
       data: mainDarkTheme(),
       child: Stack(
         children: [
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              title: IconButton(
-                icon: Icon(
-                    openFeedBack ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-                onPressed: toggleOpenFeedBack,
-              ),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: widget.handleBack,
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
-            body: MySafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(),
-                  ),
-                  BottomStoryInfo(
-                    story: widget.story,
-                  ),
-                  BottomUserProfile(
-                    userProfile: genRandomUser(),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          StoryOverlay(story: widget.story, handleBack: widget.handleBack),
           Center(
             child: _videoPlayerController.value.isInitialized
                 ? AspectRatio(
@@ -126,6 +88,63 @@ class _StoryViewState extends State<StoryView> {
   }
 }
 
+class StoryOverlay extends StatefulWidget {
+  final Story story;
+  final void Function() handleBack;
+
+  const StoryOverlay({Key? key, required this.story, required this.handleBack})
+      : super(key: key);
+
+  @override
+  State<StoryOverlay> createState() => _StoryOverlayState();
+}
+
+class _StoryOverlayState extends State<StoryOverlay> {
+  bool openFeedBack = false;
+
+  void toggleOpenFeedBack() {
+    setState(() {
+      openFeedBack = !openFeedBack;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: IconButton(
+          icon:
+              Icon(openFeedBack ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+          onPressed: toggleOpenFeedBack,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: widget.handleBack,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: MySafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(),
+            ),
+            BottomStoryInfo(
+              story: widget.story,
+            ),
+            BottomUserProfile(
+              userProfile: genRandomUser(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class BottomStoryInfo extends StatelessWidget {
   final Story story;
 
@@ -137,9 +156,46 @@ class BottomStoryInfo extends StatelessWidget {
       children: [
         Text('${story.tags.location}'),
         Text('${story.tags.difficulty}'),
-        Text('${story.tags.videoDate}'),
-        Text('${story.tags.success}'),
+        Text('${story.getDateString()}'),
+        SuccessTag(success: story.tags.success),
       ],
+    );
+  }
+}
+
+class SuccessTag extends StatelessWidget {
+  final bool success;
+
+  const SuccessTag({Key? key, required this.success}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: success
+          ? [
+              Icon(
+                Icons.check,
+                color: theme.colorScheme.primary,
+              ),
+              Text(
+                '성공',
+                style: TextStyle(color: theme.colorScheme.primary),
+              )
+            ]
+          : [
+              Icon(
+                Icons.close,
+                color: theme.colorScheme.tertiary,
+              ),
+              Text(
+                '실패',
+                style: TextStyle(
+                  color: theme.colorScheme.tertiary,
+                ),
+              )
+            ],
     );
   }
 }
@@ -166,9 +222,9 @@ class BottomUserProfile extends StatelessWidget {
             Text('#${userProfile.uniqueCode.toString()}'),
             const Spacer(),
             Text(
-              '${userProfile.height.toString()}/${userProfile.weight.toString()}',
+              '${userProfile.height}cm/${userProfile.weight}kg',
               style: theme.textTheme.bodyText2?.copyWith(
-                color: theme.colorScheme.outline,
+                color: theme.colorScheme.secondary,
               ),
             ),
           ],

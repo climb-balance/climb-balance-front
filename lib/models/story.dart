@@ -25,12 +25,12 @@ class Story {
     required this.uploaderId,
   });
 
-  String getDate() {
-    return '${tags.videoDate.year.toString()}-${tags.videoDate.month.toString()}-${tags.videoDate.day.toString()}';
+  String getDateString() {
+    return tags.getDateString();
   }
 
   String makeKey() {
-    return '${tags.location}/${getDate()}';
+    return '${tags.location}/${getDateString()}';
   }
 
   Story.fromJson(Map<String, dynamic> json)
