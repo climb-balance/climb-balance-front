@@ -56,7 +56,7 @@ class _StoryViewState extends State<StoryView> {
   @override
   void initState() {
     _videoPlayerController = VideoPlayerController.network(
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+        "https://assets.mixkit.co/videos/preview/mixkit-photo-session-of-a-girl-in-the-desert-34405-large.mp4")
       ..initialize().then((_) {
         _videoPlayerController.setLooping(true);
         _videoPlayerController.play();
@@ -67,11 +67,26 @@ class _StoryViewState extends State<StoryView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = const ColorScheme.dark();
     return Theme(
-      data: mainDarkTheme(),
+      data: mainDarkTheme().copyWith(
+        iconTheme: IconThemeData(
+          color: themeColor.onBackground,
+          shadows: [
+            Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+          ],
+        ),
+        textTheme: TextTheme(
+          bodyText2: TextStyle(
+            color: themeColor.onBackground,
+            shadows: [
+              Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+            ],
+          ),
+        ),
+      ),
       child: Stack(
         children: [
-          StoryOverlay(story: widget.story, handleBack: widget.handleBack),
           Center(
             child: _videoPlayerController.value.isInitialized
                 ? AspectRatio(
@@ -80,6 +95,7 @@ class _StoryViewState extends State<StoryView> {
                   )
                 : const CircularProgressIndicator(),
           ),
+          StoryOverlay(story: widget.story, handleBack: widget.handleBack),
         ],
       ),
     );
@@ -131,18 +147,68 @@ class _StoryOverlayState extends State<StoryOverlay> {
         elevation: 0,
       ),
       body: MySafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(),
-            ),
-            BottomStoryInfo(
-              story: widget.story,
-            ),
-            BottomUserProfile(
-              userProfile: genRandomUser(),
-            ),
-          ],
+        child: Container(
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 200,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: const [
+                            Icon(
+                              Icons.thumb_up,
+                              size: 35,
+                            ),
+                            Text('200k'),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Icon(
+                              Icons.comment,
+                              size: 35,
+                            ),
+                            Text('200k'),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Icon(
+                              Icons.share,
+                              size: 35,
+                            ),
+                            Text('공유'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              BottomStoryInfo(
+                story: widget.story,
+              ),
+              BottomUserProfile(
+                userProfile: genRandomUser(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(widget.story.description),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
