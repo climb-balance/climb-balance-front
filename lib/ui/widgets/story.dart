@@ -10,6 +10,13 @@ import 'package:video_player/video_player.dart';
 import '../../models/story.dart';
 import '../../providers/tags.dart';
 
+List<String> testVideos = [
+  'https://assets.mixkit.co/videos/preview/mixkit-mysterious-pale-looking-fashion-woman-at-winter-39878-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
+  'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
+];
+
 class StoryPreview extends StatelessWidget {
   final Story story;
 
@@ -55,13 +62,13 @@ class _StoryViewState extends State<StoryView> {
 
   @override
   void initState() {
-    _videoPlayerController = VideoPlayerController.network(
-        "https://assets.mixkit.co/videos/preview/mixkit-photo-session-of-a-girl-in-the-desert-34405-large.mp4")
-      ..initialize().then((_) {
-        _videoPlayerController.setLooping(true);
-        _videoPlayerController.play();
-        setState(() {});
-      });
+    _videoPlayerController =
+        VideoPlayerController.network(testVideos[widget.story.videoId])
+          ..initialize().then((_) {
+            _videoPlayerController.setLooping(true);
+            _videoPlayerController.play();
+            setState(() {});
+          });
     super.initState();
   }
 
@@ -156,12 +163,19 @@ class _StoryOverlayState extends State<StoryOverlay> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  SizedBox(
+                    height: 100,
+                    child: BottomStoryInfo(
+                      story: widget.story,
+                    ),
+                  ),
                   SizedBox(
                     height: 200,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Column(
                           children: const [
@@ -195,9 +209,6 @@ class _StoryOverlayState extends State<StoryOverlay> {
                   )
                 ],
               ),
-              BottomStoryInfo(
-                story: widget.story,
-              ),
               BottomUserProfile(
                 userProfile: genRandomUser(),
               ),
@@ -223,18 +234,21 @@ class BottomStoryInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final refState = ref.watch(tagsProvider);
-    debugPrint(refState.difficulties.toString());
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    debugPrint(story.tags.difficulty.toString());
+    debugPrint(story.tags.location.toString());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        LocationTag(location: refState.locations[story.tags.difficulty + 1]),
-        DifficultyTag(
-            difficulty: refState.difficulties[story.tags.location + 1]),
+        SuccessTag(success: story.tags.success),
+        if (story.tags.difficulty != -1)
+          DifficultyTag(
+              difficulty: refState.difficulties[story.tags.difficulty + 1]),
         DateTag(
           dateString: story.getDateString(),
         ),
-        SuccessTag(success: story.tags.success),
+        if (story.tags.location != -1)
+          LocationTag(location: refState.locations[story.tags.location + 1]),
       ],
     );
   }
