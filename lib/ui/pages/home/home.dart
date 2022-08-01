@@ -70,6 +70,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
       child: PageView.custom(
         onPageChanged: (page) {
+          debugPrint("이미 넘어갔다.");
           currentPage = page;
         },
         controller: _pageController,

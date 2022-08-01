@@ -25,34 +25,31 @@ class StoryOverlay extends StatefulWidget {
 }
 
 class _StoryOverlayState extends State<StoryOverlay> {
-  bool openFeedBack = false;
-
-  void toggleOpenFeedBack() {
-    setState(() {
-      openFeedBack = !openFeedBack;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: IconButton(
-          icon:
-              Icon(openFeedBack ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-          onPressed: toggleOpenFeedBack,
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: widget.handleBack,
-        ),
+    return GestureDetector(
+      onTapUp: (_) {
+        widget.videoPlayerController.value.isPlaying
+            ? widget.videoPlayerController.pause()
+            : widget.videoPlayerController.play();
+      },
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: MySafeArea(
-        child: Container(
+        appBar: AppBar(
+          title: StoryTagInfo(
+            story: widget.story,
+          ),
+          titleTextStyle: Theme.of(context).textTheme.bodyText2,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: widget.handleBack,
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SafeArea(
+          minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           child: Column(
             children: [
               Expanded(
@@ -66,31 +63,21 @@ class _StoryOverlayState extends State<StoryOverlay> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: 100,
-                      child: BottomStoryInfo(
-                        story: widget.story,
-                      ),
-                    ),
-                    const StoryButtons(),
+                    Text(widget.story.description),
+                    StoryButtons(),
                   ],
                 ),
               ),
               BottomUserProfile(
                 userProfile: genRandomUser(),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(widget.story.description),
-                ],
+                description: widget.story.description,
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ProgressBar(
-        videoPlayerController: widget.videoPlayerController,
+        bottomNavigationBar: ProgressBar(
+          videoPlayerController: widget.videoPlayerController,
+        ),
       ),
     );
   }
@@ -125,14 +112,20 @@ class _ProgressBarState extends State<ProgressBar> {
         progressDuration = 500;
       }
       final value = widget.videoPlayerController.value;
-      befDegree = progressDegree;
-      progressDegree =
-          (value.position.inMilliseconds / value.duration.inMilliseconds);
-      if (befDegree > progressDegree) {
-        progressDegree = 1;
-        progressDuration =
-            (value.duration.inMilliseconds * (1.0 - befDegree)).toInt();
-        Future.delayed(Duration(milliseconds: progressDuration), initProgress);
+      if (!value.isPlaying) {
+        progressDegree =
+            (value.position.inMilliseconds / value.duration.inMilliseconds);
+      } else {
+        befDegree = progressDegree;
+        progressDegree =
+            (value.position.inMilliseconds / value.duration.inMilliseconds);
+        if (befDegree > progressDegree) {
+          progressDegree = 1;
+          progressDuration =
+              (value.duration.inMilliseconds * (1.0 - befDegree)).toInt();
+          Future.delayed(
+              Duration(milliseconds: progressDuration), initProgress);
+        }
       }
       setState(() {});
     });
@@ -169,21 +162,25 @@ class StoryButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () {},
+          child: Column(
             children: const [
               Icon(
                 Icons.thumb_up,
                 size: 35,
               ),
-              Text('200k'),
+              Text('200k')
             ],
           ),
-          Column(
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Column(
             children: const [
               Icon(
                 Icons.comment,
@@ -192,7 +189,10 @@ class StoryButtons extends StatelessWidget {
               Text('200k'),
             ],
           ),
-          Column(
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Column(
             children: const [
               Icon(
                 Icons.share,
@@ -201,16 +201,16 @@ class StoryButtons extends StatelessWidget {
               Text('공유'),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-class BottomStoryInfo extends ConsumerWidget {
+class StoryTagInfo extends ConsumerWidget {
   final Story story;
 
-  const BottomStoryInfo({Key? key, required this.story}) : super(key: key);
+  const StoryTagInfo({Key? key, required this.story}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -219,49 +219,112 @@ class BottomStoryInfo extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        SuccessTag(success: story.tags.success),
-        if (story.tags.difficulty != -1)
-          DifficultyTag(
-              difficulty: refState.difficulties[story.tags.difficulty + 1]),
-        DateTag(
-          dateString: story.getDateString(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            DateTag(
+              dateString: story.getDateString(),
+            ),
+            SuccessTag(success: story.tags.success),
+          ],
         ),
-        if (story.tags.location != -1)
-          LocationTag(location: refState.locations[story.tags.location + 1]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (story.tags.location != -1)
+              LocationTag(
+                  location: refState.locations[story.tags.location + 1]),
+            if (story.tags.difficulty != -1)
+              DifficultyTag(
+                  difficulty: refState.difficulties[story.tags.difficulty + 1]),
+          ],
+        ),
       ],
     );
   }
 }
 
-class BottomUserProfile extends StatelessWidget {
+class BottomUserProfile extends StatefulWidget {
   final UserProfile userProfile;
+  final String description;
 
-  const BottomUserProfile({Key? key, required this.userProfile})
+  const BottomUserProfile(
+      {Key? key, required this.userProfile, required this.description})
       : super(key: key);
+
+  @override
+  State<BottomUserProfile> createState() => _BottomUserProfileState();
+}
+
+class _BottomUserProfileState extends State<BottomUserProfile> {
+  bool openFeedBack = false;
+
+  void toggleOpenFeedBack() {
+    setState(() {
+      openFeedBack = !openFeedBack;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleAvatar(
               backgroundImage:
-                  Image.network(userProfile.profileImagePath).image,
+                  Image.network(widget.userProfile.profileImagePath).image,
               radius: 20,
             ),
-            Text(userProfile.nickName),
-            Text('#${userProfile.uniqueCode.toString()}'),
-            const Spacer(),
-            Text(
-              '${userProfile.height}cm/${userProfile.weight}kg',
-              style: theme.textTheme.bodyText2?.copyWith(
-                color: theme.colorScheme.secondary,
-              ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Text(widget.userProfile.nickName),
+                    Text('#${widget.userProfile.uniqueCode.toString()}'),
+                  ],
+                ),
+                Text(
+                  '${widget.userProfile.height}cm/${widget.userProfile.weight}kg',
+                  style: theme.textTheme.bodyText2?.copyWith(
+                    color: theme.colorScheme.secondary,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
+        Row(
+          children: [
+            TextButton(
+              onPressed: toggleOpenFeedBack,
+              child: openFeedBack
+                  ? Icon(Icons.arrow_left)
+                  : Icon(Icons.arrow_right),
+            ),
+            if (openFeedBack)
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.adb),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.emoji_people),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+          ],
+        )
       ],
     );
   }

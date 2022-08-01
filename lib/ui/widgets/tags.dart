@@ -76,7 +76,7 @@ class SuccessTag extends StatelessWidget {
       children: success
           ? [
               Icon(
-                Icons.check,
+                Icons.star,
                 color: theme.colorScheme.primary,
               ),
               Text(
@@ -86,7 +86,7 @@ class SuccessTag extends StatelessWidget {
             ]
           : [
               Icon(
-                Icons.close,
+                Icons.star_border,
                 color: theme.colorScheme.tertiary,
               ),
               Text(

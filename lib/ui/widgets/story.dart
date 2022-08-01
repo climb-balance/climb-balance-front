@@ -57,6 +57,7 @@ class _StoryViewState extends State<StoryView> {
 
   @override
   void initState() {
+    super.initState();
     _videoPlayerController =
         VideoPlayerController.network(testVideos[widget.story.videoId])
           ..initialize().then((_) {
@@ -64,23 +65,39 @@ class _StoryViewState extends State<StoryView> {
             _videoPlayerController.play();
             setState(() {});
           });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeColor = const ColorScheme.dark();
+    const themeColor = ColorScheme.dark();
+    final mainWhite = themeColor.onBackground;
     return Theme(
       data: mainDarkTheme().copyWith(
         iconTheme: IconThemeData(
-          color: themeColor.onBackground,
+          color: mainWhite,
           shadows: [
             Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
           ],
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(
+              mainWhite,
+            ),
+            textStyle: MaterialStateProperty.all(
+              TextStyle(
+                color: mainWhite,
+                shadows: [
+                  Shadow(
+                      color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+                ],
+              ),
+            ),
+          ),
+        ),
         textTheme: TextTheme(
           bodyText2: TextStyle(
-            color: themeColor.onBackground,
+            color: mainWhite,
             shadows: [
               Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
             ],
@@ -110,6 +127,8 @@ class _StoryViewState extends State<StoryView> {
   @override
   void dispose() {
     super.dispose();
+    debugPrint('드소프즈즞');
     _videoPlayerController.dispose();
+    // TODO ON dispose시 다음으로
   }
 }
