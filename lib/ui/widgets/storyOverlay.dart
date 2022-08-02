@@ -95,7 +95,6 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar> {
   double progressDegree = 0;
-  double befDegree = 0;
   int progressDuration = 500;
 
   void initProgress() {
@@ -108,25 +107,10 @@ class _ProgressBarState extends State<ProgressBar> {
   void initState() {
     super.initState();
     widget.videoPlayerController.addListener(() {
-      if (progressDuration != 500) {
-        progressDuration = 500;
-      }
       final value = widget.videoPlayerController.value;
-      if (!value.isPlaying) {
-        progressDegree =
-            (value.position.inMilliseconds / value.duration.inMilliseconds);
-      } else {
-        befDegree = progressDegree;
-        progressDegree =
-            (value.position.inMilliseconds / value.duration.inMilliseconds);
-        if (befDegree > progressDegree) {
-          progressDegree = 1;
-          progressDuration =
-              (value.duration.inMilliseconds * (1.0 - befDegree)).toInt();
-          Future.delayed(
-              Duration(milliseconds: progressDuration), initProgress);
-        }
-      }
+      progressDegree =
+          (value.position.inMilliseconds / value.duration.inMilliseconds);
+
       setState(() {});
     });
   }
@@ -144,6 +128,7 @@ class _ProgressBarState extends State<ProgressBar> {
         top: 10,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AnimatedContainer(
             height: 2,

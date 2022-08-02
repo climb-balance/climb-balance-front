@@ -127,8 +127,6 @@ class _StoryViewState extends State<StoryView> {
   @override
   void dispose() {
     super.dispose();
-    debugPrint('드소프즈즞');
     _videoPlayerController.dispose();
-    // TODO ON dispose시 다음으로
   }
 }
