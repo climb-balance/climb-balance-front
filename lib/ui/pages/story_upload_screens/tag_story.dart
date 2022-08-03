@@ -1,6 +1,6 @@
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/upload.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/detail_video.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +8,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widgets/bottomStepBar.dart';
 
-class TagVideo extends ConsumerStatefulWidget {
-  Trimmer trimmer;
+class TagStory extends ConsumerStatefulWidget {
+  final Trimmer trimmer;
 
-  TagVideo({Key? key, required this.trimmer}) : super(key: key);
+  const TagStory({Key? key, required this.trimmer}) : super(key: key);
 
   @override
-  ConsumerState<TagVideo> createState() => _TagVideoState();
+  ConsumerState<TagStory> createState() => _TagVideoState();
 }
 
-class _TagVideoState extends ConsumerState<TagVideo> {
+class _TagVideoState extends ConsumerState<TagStory> {
   late Difficulty difficulty;
   late Location location;
   late bool success;
@@ -65,7 +65,7 @@ class _TagVideoState extends ConsumerState<TagVideo> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailVideo(trimmer: widget.trimmer),
+        builder: (context) => WriteDesc(trimmer: widget.trimmer),
       ),
     );
   }

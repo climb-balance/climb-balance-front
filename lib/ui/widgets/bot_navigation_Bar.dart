@@ -4,7 +4,7 @@ import 'package:climb_balance/configs/routeConfig.dart';
 import 'package:climb_balance/providers/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/editVideo.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/edit_video.dart';
 import 'package:image_picker/image_picker.dart';
 
 class BotNavigationBar extends StatelessWidget {

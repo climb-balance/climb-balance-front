@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:climb_balance/providers/upload.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/tag_video.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/tag_story.dart';
 import 'package:climb_balance/ui/widgets/safearea.dart';
 
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class VideoPreviewState extends ConsumerState<EditVideo> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => TagVideo(
+        builder: (BuildContext context) => TagStory(
           trimmer: trimmer,
         ),
       ),
