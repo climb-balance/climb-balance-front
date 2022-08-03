@@ -6,7 +6,7 @@ import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/bottomStepBar.dart';
+import 'bottom_step_bar.dart';
 
 class TagStory extends ConsumerStatefulWidget {
   final Trimmer trimmer;

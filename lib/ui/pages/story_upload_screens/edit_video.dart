@@ -7,7 +7,7 @@ import 'package:climb_balance/ui/widgets/safearea.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/bottomStepBar.dart';
+import 'bottom_step_bar.dart';
 
 import 'package:video_trimmer/video_trimmer.dart';
 

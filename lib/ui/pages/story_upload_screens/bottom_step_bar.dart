@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'button.dart';
+import '../../widgets/button.dart';
 
 class BottomStepBar extends StatelessWidget {
   final void Function() handleNext;
