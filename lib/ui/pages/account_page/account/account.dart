@@ -3,7 +3,7 @@ import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../providers/token.dart';
+import '../../../../providers/token.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);

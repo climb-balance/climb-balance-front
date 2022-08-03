@@ -7,9 +7,9 @@ import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../configs/serverConfig.dart';
-import '../../widgets/profileInfo.dart';
-import '../../widgets/story.dart';
+import '../../../../configs/serverConfig.dart';
+import '../../../widgets/profileInfo.dart';
+import '../../../widgets/story.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 
