@@ -4,7 +4,7 @@ import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/ui/theme/mainTheme.dart';
 import 'package:climb_balance/ui/widgets/story.dart';
 import 'package:flutter/material.dart';
-import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
+import 'package:climb_balance/ui/widgets/bot_navigation_Bar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

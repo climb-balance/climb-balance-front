@@ -1,5 +1,5 @@
 import 'package:climb_balance/providers/settings.dart';
-import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
+import 'package:climb_balance/ui/widgets/bot_navigation_Bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
