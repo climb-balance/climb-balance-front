@@ -1,21 +1,21 @@
 import 'package:climb_balance/providers/upload.dart';
-import 'package:climb_balance/ui/widgets/safearea.dart';
+import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/bottomStepBar.dart';
+import 'bottom_step_bar.dart';
 
-class DetailVideo extends ConsumerStatefulWidget {
-  Trimmer trimmer;
+class WriteDesc extends ConsumerStatefulWidget {
+  final Trimmer trimmer;
 
-  DetailVideo({Key? key, required this.trimmer}) : super(key: key);
+  const WriteDesc({Key? key, required this.trimmer}) : super(key: key);
 
   @override
-  ConsumerState<DetailVideo> createState() => _DetailVideoState();
+  ConsumerState<WriteDesc> createState() => _DetailVideoState();
 }
 
-class _DetailVideoState extends ConsumerState<DetailVideo> {
+class _DetailVideoState extends ConsumerState<WriteDesc> {
   String detail = "";
 
   // TODO 상태 유지

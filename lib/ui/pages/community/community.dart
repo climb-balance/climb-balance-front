@@ -1,4 +1,4 @@
-import 'package:climb_balance/ui/widgets/botNavigationBar.dart';
+import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class Community extends StatelessWidget {

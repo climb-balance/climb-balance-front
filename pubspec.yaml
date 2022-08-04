@@ -43,9 +43,11 @@ dependencies:
   image_picker: ^0.8.5+3
   video_player: ^2.4.5
   video_thumbnail: ^0.5.2
+  carousel_slider:
   video_trimmer:
     git:
       url: https://github.com/bluejoyq/video_trimmer.git
+  firebase_core: ^1.20.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

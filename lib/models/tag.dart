@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Tags {
   int location;
   int difficulty;
@@ -9,6 +11,10 @@ class Tags {
       this.difficulty = -1,
       this.success = false,
       required this.videoDate});
+
+  String getDateString() {
+    return '${videoDate.year}-${videoDate.month < 10 ? "0" + videoDate.month.toString() : videoDate.month}-${videoDate.day < 10 ? "0" + videoDate.day.toString() : videoDate.day}';
+  }
 
   Tags.fromJson(Map<String, dynamic> json)
       : location = json['location'],
@@ -37,22 +43,25 @@ class TagSelection {
   }
 }
 
-class LocationSelection extends TagSelection {
-  LocationSelection({super.detail, super.id});
+class Location {
+  int id;
+  String name;
+
+  Location({this.id = -1, this.name = ''});
 }
 
-class DifficultySelection extends TagSelection {
-  DifficultySelection({super.detail, super.id});
+class Difficulty {
+  int id;
+  String name;
+  Color color;
+
+  Difficulty({this.id = -1, this.name = '', required this.color});
 }
 
+@immutable
 class TagsSelection {
-  List<LocationSelection> locations = [];
-  List<DifficultySelection> difficulties = [];
+  List<Location> locations = [];
+  List<Difficulty> difficulties = [];
 
-  void updateTagsSelection(
-      {required List<LocationSelection> locations,
-      required List<DifficultySelection> difficulties}) {
-    this.locations = locations;
-    this.difficulties = difficulties;
-  }
+  TagsSelection({this.locations = const [], this.difficulties = const []});
 }

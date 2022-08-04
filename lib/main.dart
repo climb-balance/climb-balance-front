@@ -1,6 +1,6 @@
 import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/routes/mainRoute.dart';
-import 'package:climb_balance/ui/theme/mainTheme.dart';
+import 'package:climb_balance/ui/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
