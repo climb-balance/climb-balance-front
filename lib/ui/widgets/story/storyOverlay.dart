@@ -1,5 +1,5 @@
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
-import 'package:climb_balance/ui/widgets/tags.dart';
+import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/tag.dart';
+import '../../../models/tag.dart';
 
 class DateTag extends StatelessWidget {
   final String dateString;

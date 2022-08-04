@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:climb_balance/models/story.dart';
-import 'package:climb_balance/ui/theme/mainTheme.dart';
+import 'package:climb_balance/ui/theme/main_theme.dart';
 import 'package:climb_balance/ui/widgets/story/story.dart';
 import 'package:flutter/material.dart';
-import 'package:climb_balance/ui/widgets/bot_navigation_Bar.dart';
+import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
