@@ -3,7 +3,9 @@ import 'package:climb_balance/ui/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
 ThemeData mainLightTheme() {
-  return ThemeData().copyWith(
+  return ThemeData(
+    brightness: Brightness.light,
+  ).copyWith(
     colorScheme: lightColorScheme,
     extensions: <ThemeExtension<dynamic>>[],
     textTheme: customTextTheme(ThemeData.light().textTheme, lightColorScheme),
@@ -11,7 +13,9 @@ ThemeData mainLightTheme() {
 }
 
 ThemeData mainDarkTheme() {
-  return ThemeData.dark().copyWith(
+  return ThemeData(
+    brightness: Brightness.dark,
+  ).copyWith(
     colorScheme: darkColorScheme,
     extensions: <ThemeExtension<dynamic>>[],
     textTheme: customTextTheme(ThemeData.dark().textTheme, darkColorScheme),
