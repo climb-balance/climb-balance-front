@@ -36,11 +36,13 @@ class _ContinuousStatisticsState extends State<ContinuousStatistics> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('연속 $cont회 클라이밍'),
-            Text(
-              '🔥',
-              style: theme.textTheme.headline2,
+            Text('$cont회', style: theme.textTheme.headline6),
+            Icon(
+              Icons.local_fire_department,
+              color: theme.colorScheme.tertiary.withOpacity(cont / 30),
+              size: 75,
             ),
+            Text('연속 클라이밍'),
           ],
         ),
       ),

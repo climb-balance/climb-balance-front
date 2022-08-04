@@ -129,15 +129,13 @@ class MainStatistics extends StatelessWidget {
     for (int i = 0; i < 30; i++) {
       result.add(random.nextInt(10));
     }
-    return Future.delayed(Duration(seconds: 1), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       return result;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final Future<List<int>> datas = loadDatas();
     return SizedBox(
       height: MediaQuery.of(context).size.width / 2 - 30,
       child: FutureBuilder(
