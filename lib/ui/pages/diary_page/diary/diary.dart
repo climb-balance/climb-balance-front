@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/serverConfig.dart';
 import '../../../widgets/profileInfo.dart';
-import '../../../widgets/story.dart';
+import '../../../widgets/story/story.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 

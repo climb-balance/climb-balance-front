@@ -1,9 +1,9 @@
 import 'package:climb_balance/ui/theme/mainTheme.dart';
-import 'package:climb_balance/ui/widgets/storyOverlay.dart';
+import 'package:climb_balance/ui/widgets/story/storyOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../models/story.dart';
+import '../../../models/story.dart';
 
 List<String> testVideos = [
   'https://assets.mixkit.co/videos/preview/mixkit-mysterious-pale-looking-fashion-woman-at-winter-39878-large.mp4',

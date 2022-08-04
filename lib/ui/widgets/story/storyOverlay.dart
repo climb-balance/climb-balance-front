@@ -1,12 +1,12 @@
-import 'package:climb_balance/ui/widgets/safearea.dart';
+import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:climb_balance/ui/widgets/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../models/story.dart';
-import '../../models/user.dart';
-import '../../providers/tags.dart';
+import '../../../models/story.dart';
+import '../../../models/user.dart';
+import '../../../providers/tags.dart';
 
 class StoryOverlay extends StatefulWidget {
   final VideoPlayerController videoPlayerController;

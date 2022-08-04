@@ -1,7 +1,7 @@
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/upload.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
-import 'package:climb_balance/ui/widgets/safearea.dart';
+import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
