@@ -14,6 +14,10 @@ class TopProfileInfo extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       height: 150,
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        boxShadow: kElevationToShadow[1],
+      ),
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
@@ -22,7 +26,6 @@ class TopProfileInfo extends StatelessWidget {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
                 image: DecorationImage(
                   image: NetworkImage(profile.profileImagePath),
