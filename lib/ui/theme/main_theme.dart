@@ -1,4 +1,4 @@
-import 'package:climb_balance/ui/theme/colorSchema.dart';
+import 'package:climb_balance/ui/theme/color_schema.dart';
 import 'package:flutter/material.dart';
 
 ThemeData mainLightTheme() {

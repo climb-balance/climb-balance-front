@@ -1,10 +1,10 @@
 import 'package:climb_balance/providers/register.dart';
-import 'package:climb_balance/ui/widgets/button.dart';
+import 'package:climb_balance/ui/widgets/commons/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../widgets/safearea.dart';
+import '../../widgets/commons/safe_area.dart';
 
 class Register extends ConsumerStatefulWidget {
   const Register({Key? key}) : super(key: key);

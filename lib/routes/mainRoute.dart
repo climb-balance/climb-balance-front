@@ -2,12 +2,12 @@ import 'package:climb_balance/configs/routeConfig.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/routes/authRoute.dart';
 import 'package:climb_balance/ui/pages/community/community.dart';
-import 'package:climb_balance/ui/pages/diary/diary.dart';
+import 'package:climb_balance/ui/pages/diary_page/diary/diary.dart';
 import 'package:climb_balance/ui/pages/testPage/testPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/ui/pages/account/account.dart';
-import '../ui/pages/home/home.dart';
+import 'package:climb_balance/ui/pages/account_page/account/account.dart';
+import '../ui/pages/home_page/home/home.dart';
 
 class MainRoute extends ConsumerWidget {
   MainRoute({Key? key}) : super(key: key);

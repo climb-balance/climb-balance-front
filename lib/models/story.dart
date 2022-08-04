@@ -12,6 +12,7 @@ class Story {
   int aiAvailable;
   int expertAvailable;
   DateTime uploadDate;
+  int videoId;
 
   Story({
     required this.tags,
@@ -23,14 +24,15 @@ class Story {
     required this.uploadDate,
     required this.thumbnailUrl,
     required this.uploaderId,
+    required this.videoId,
   });
 
-  String getDate() {
-    return '${tags.videoDate.year.toString()}-${tags.videoDate.month.toString()}-${tags.videoDate.day.toString()}';
+  String getDateString() {
+    return tags.getDateString();
   }
 
   String makeKey() {
-    return '${tags.location}/${getDate()}';
+    return '${tags.location}/${getDateString()}';
   }
 
   Story.fromJson(Map<String, dynamic> json)
@@ -42,7 +44,8 @@ class Story {
         uploadDate = DateTime.parse(json['upload_date']),
         aiAvailable = json['ai_available'],
         expertAvailable = json['expert_available'],
-        uploaderId = json['uploader_id'];
+        uploaderId = json['uploader_id'],
+        videoId = json['video_id'] ?? 0;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -54,6 +57,7 @@ class Story {
     data['upload_date'] = uploadDate;
     data['ai_available'] = aiAvailable;
     data['expert_available'] = expertAvailable;
+    data['video_id'] = videoId;
     return data;
   }
 }
@@ -63,7 +67,8 @@ Story getRandomStory() {
   return Story(
     tags: Tags(
       videoDate: DateTime.now(),
-      location: random.nextInt(3),
+      difficulty: random.nextInt(4) - 1,
+      location: random.nextInt(4) - 1,
     ),
     likes: random.nextInt(100),
     description: '안녕하세요',
@@ -73,5 +78,6 @@ Story getRandomStory() {
     uploadDate: DateTime.now(),
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
     uploaderId: 1,
+    videoId: random.nextInt(4),
   );
 }
