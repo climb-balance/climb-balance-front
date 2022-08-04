@@ -35,12 +35,7 @@ class _DiaryState extends ConsumerState<Diary> {
 
   void loadProfileData() {
     setState(() {
-      profile = UserProfile(
-        nickName: '심규진',
-        profileImagePath:
-            'https://images.pexels.com/photos/12616283/pexels-photo-12616283.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        uniqueCode: 2131,
-      );
+      profile = genRandomUser();
     });
   }
 
@@ -123,29 +118,6 @@ class _DiaryState extends ConsumerState<Diary> {
         currentIdx: 3,
       ),
     );
-  }
-}
-
-class ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
-  UserProfile profile;
-
-  ProfileHeaderDelegate({required this.profile});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return TopProfileInfo(profile: profile);
-  }
-
-  @override
-  double get maxExtent => 150;
-
-  @override
-  double get minExtent => 200;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }
 
