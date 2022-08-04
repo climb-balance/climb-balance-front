@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ContinuousStatistics extends StatelessWidget {
-  const ContinuousStatistics({Key? key}) : super(key: key);
+  final List<int> datas;
+
+  const ContinuousStatistics({Key? key, required this.datas}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

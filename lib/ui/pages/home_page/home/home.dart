@@ -123,30 +123,56 @@ class MainPage extends StatelessWidget {
 class MainStatistics extends StatelessWidget {
   const MainStatistics({Key? key}) : super(key: key);
 
-  List<int> loadDatas() {
+  Future<List<int>> loadDatas() async {
     Random random = Random();
     List<int> result = [];
     for (int i = 0; i < 30; i++) {
       result.add(random.nextInt(10));
     }
-    return result;
+    return Future.delayed(Duration(seconds: 1), () {
+      return result;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final Future<List<int>> datas = loadDatas();
     return SizedBox(
       height: MediaQuery.of(context).size.width / 2 - 30,
-      child: Row(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 2,
-            child: HeatMap(
-              datas: loadDatas(),
-            ),
-          ),
-          ContinuousStatistics(),
-        ],
+      child: FutureBuilder(
+        future: loadDatas(),
+        builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
+          if (snapshot.hasData) {
+            return Row(children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: HeatMap(
+                  datas: snapshot.data!,
+                ),
+              ),
+              ContinuousStatistics(
+                datas: snapshot.data!,
+              ),
+            ]);
+          }
+          return Row(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: HeatMap(
+                  datas: List<int>.filled(30, 0),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: HeatMap(
+                  datas: List<int>.filled(30, 0),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
