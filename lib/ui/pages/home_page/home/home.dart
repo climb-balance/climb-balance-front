@@ -143,18 +143,20 @@ class MainStatistics extends StatelessWidget {
       child: FutureBuilder(
         future: loadDatas(),
         builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-          if (snapshot.hasData) {
-            return Row(children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: HeatMap(
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: HeatMap(
+                    datas: snapshot.data!,
+                  ),
+                ),
+                ContinuousStatistics(
                   datas: snapshot.data!,
                 ),
-              ),
-              ContinuousStatistics(
-                datas: snapshot.data!,
-              ),
-            ]);
+              ],
+            );
           }
           return Row(
             children: [

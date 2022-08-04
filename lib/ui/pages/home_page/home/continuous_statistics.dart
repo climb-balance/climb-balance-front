@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
 
-class ContinuousStatistics extends StatelessWidget {
+class ContinuousStatistics extends StatefulWidget {
   final List<int> datas;
 
   const ContinuousStatistics({Key? key, required this.datas}) : super(key: key);
+
+  @override
+  State<ContinuousStatistics> createState() => _ContinuousStatisticsState();
+}
+
+class _ContinuousStatisticsState extends State<ContinuousStatistics> {
+  late final int cont;
+
+  @override
+  void initState() {
+    cont = getCont();
+    super.initState();
+  }
+
+  int getCont() {
+    for (int i = 1; i < widget.datas.length + 1; i++) {
+      if (widget.datas[widget.datas.length - i] > 0) {
+        continue;
+      }
+      return i - 1;
+    }
+    return 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +36,7 @@ class ContinuousStatistics extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('연속 5회 클라이밍'),
+            Text('연속 $cont회 클라이밍'),
             Text(
               '🔥',
               style: theme.textTheme.headline2,
