@@ -1,5 +1,5 @@
 import 'package:climb_balance/ui/theme/main_theme.dart';
-import 'package:climb_balance/ui/widgets/story/storyOverlay.dart';
+import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

@@ -1,6 +1,5 @@
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
-
 import 'package:climb_balance/providers/serverRequest.dart';
 import 'package:climb_balance/providers/tags.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
@@ -8,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/serverConfig.dart';
-import '../../../widgets/profileInfo.dart';
 import '../../../widgets/story/story.dart';
+import '../../../widgets/user_profile_info.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 
@@ -92,7 +91,7 @@ class _DiaryState extends ConsumerState<Diary> {
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      ProfileInfo(profile: profile),
+                      TopProfileInfo(profile: profile),
                     ],
                   ),
                 ),
@@ -135,7 +134,7 @@ class ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return ProfileInfo(profile: profile);
+    return TopProfileInfo(profile: profile);
   }
 
   @override
