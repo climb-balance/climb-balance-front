@@ -1,14 +1,13 @@
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/providers/serverRequest.dart';
-import 'package:climb_balance/providers/tags.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/serverConfig.dart';
-import '../../../widgets/story/story.dart';
 import '../../../widgets/user_profile_info.dart';
+import 'classified_story.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 
@@ -114,7 +113,7 @@ class _DiaryState extends ConsumerState<Diary> {
                 SliverList(
                   delegate: SliverChildListDelegate(
                     treatedStories.values
-                        .map((stories) => ClassifiedStory(stories: stories))
+                        .map((stories) => ClassifiedStories(stories: stories))
                         .toList(),
                   ),
                 ),
@@ -181,77 +180,6 @@ class _FixedTabBarState extends State<FixedTabBar>
           tabs: tabItems,
           labelPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           labelColor: theme.colorScheme.primary,
-        ),
-      ),
-    );
-  }
-}
-
-class ClassifiedStory extends StatelessWidget {
-  final List<Story> stories;
-
-  const ClassifiedStory({Key? key, required this.stories}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: Card(
-        child: Column(
-          children: [
-            ClassifiedStoryTags(story: stories[0]),
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children:
-                  stories.map((story) => StoryPreview(story: story)).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ClassifiedStoryTags extends ConsumerWidget {
-  final Story story;
-
-  const ClassifiedStoryTags({Key? key, required this.story}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 0.5,
-            color: theme.colorScheme.outline,
-          ),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.date_range),
-                Text(story.getDateString()),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(Icons.location_on),
-                Text(ref
-                    .watch(tagsProvider)
-                    .locations[story.tags.location]
-                    .name),
-              ],
-            ),
-          ],
         ),
       ),
     );
