@@ -12,6 +12,14 @@ import '../../../widgets/user_profile_info.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 
+class NoGlowScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class Diary extends ConsumerStatefulWidget {
   const Diary({Key? key}) : super(key: key);
 
@@ -95,6 +103,7 @@ class _DiaryState extends ConsumerState<Diary> {
           },
           body: Builder(
             builder: (context) => CustomScrollView(
+              scrollBehavior: NoGlowScrollBehavior(),
               slivers: [
                 SliverOverlapInjector(
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
@@ -151,11 +160,18 @@ class _FixedTabBarState extends State<FixedTabBar>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: theme.cardColor,
       pinned: true,
+      toolbarHeight: 40,
       flexibleSpace: FlexibleSpaceBar(
         background: TabBar(
           onTap: (idx) {
@@ -163,7 +179,7 @@ class _FixedTabBarState extends State<FixedTabBar>
           },
           controller: _tabController,
           tabs: tabItems,
-          labelPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          labelPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           labelColor: theme.colorScheme.primary,
         ),
       ),

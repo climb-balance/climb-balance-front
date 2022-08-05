@@ -16,7 +16,6 @@ class TopProfileInfo extends StatelessWidget {
       height: 150,
       decoration: BoxDecoration(
         color: theme.cardColor,
-        boxShadow: kElevationToShadow[1],
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
