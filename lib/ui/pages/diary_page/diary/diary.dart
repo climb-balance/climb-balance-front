@@ -114,36 +114,91 @@ class _DiaryState extends ConsumerState<Diary> {
   }
 }
 
-class SliverProfile extends StatefulWidget {
+class SliverProfile extends StatelessWidget {
   final UserProfile profile;
 
   const SliverProfile({Key? key, required this.profile}) : super(key: key);
 
-  @override
-  State<SliverProfile> createState() => _SliverProfileState();
-}
-
-class _SliverProfileState extends State<SliverProfile> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       actions: [
         Padding(
           padding: const EdgeInsets.all(10),
-          child: Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_vert,
-                color: Colors.black,
-              ),
-            ),
+          child: Stack(
+            children: const [
+              ProfileOptions(),
+            ],
           ),
         ),
       ],
       toolbarHeight: 150,
-      flexibleSpace: TopProfileInfo(profile: widget.profile),
+      flexibleSpace: TopProfileInfo(profile: profile),
+    );
+  }
+}
+
+class ProfileOptions extends StatelessWidget {
+  const ProfileOptions({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.topRight,
+      child: PopupMenuButton<int>(
+        icon: Icon(
+          Icons.more_vert,
+          color: theme.colorScheme.onBackground,
+        ),
+        itemBuilder: (context) => [
+          // popupmenu item 1
+          PopupMenuItem(
+            value: 1,
+            // row has two child icon and text.
+            child: Row(
+              children: [
+                Icon(
+                  Icons.edit,
+                  color: theme.colorScheme.onBackground,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text("수정하기")
+              ],
+            ),
+          ),
+          // popupmenu item 2
+          PopupMenuItem(
+            value: 2,
+            // row has two child icon and text
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.notifications,
+                  color: theme.colorScheme.onBackground,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text("알림"),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "2",
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        elevation: 2,
+      ),
     );
   }
 }
