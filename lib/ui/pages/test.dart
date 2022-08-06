@@ -12,7 +12,7 @@ class Test extends ConsumerWidget {
         child: ElevatedButton(
           child: Text('logout'),
           onPressed: () {
-            ref.read(tokenProvider.notifier).clearToken();
+            ref.read(currentUserProvier.notifier).clearToken();
             Navigator.popAndPushNamed(context, '/auth');
           },
         ),

@@ -41,7 +41,7 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
                     "window.document.getElementsByTagName('html')[0].innerText;")
                 .then((html) {
               ref
-                  .read(tokenProvider.notifier)
+                  .read(currentUserProvier.notifier)
                   .updateToken(token: html.split('\\\"')[5]);
               Navigator.pop(context, 'success');
             });

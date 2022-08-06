@@ -135,7 +135,7 @@ class ExpertSetting extends ConsumerWidget {
             ),
           ),
           onPressed: () {
-            ref.read(tokenProvider.notifier).clearToken();
+            ref.read(currentUserProvier.notifier).clearToken();
             Navigator.pushNamedAndRemoveUntil(
                 context, '/auth', (route) => false);
           },
@@ -169,7 +169,7 @@ class LogoutSetting extends ConsumerWidget {
             ),
           ),
           onPressed: () {
-            ref.read(tokenProvider.notifier).clearToken();
+            ref.read(currentUserProvier.notifier).clearToken();
             Navigator.pushNamedAndRemoveUntil(
                 context, '/auth', (route) => false);
           },

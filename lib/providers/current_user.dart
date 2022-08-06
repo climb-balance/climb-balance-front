@@ -1,32 +1,23 @@
+import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/utils/storage/token.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TokenType {
-  String token;
-
-  TokenType({this.token = ''});
-
-  void clear() {
-    token = '';
-  }
-}
-
-class TokenNotifier extends StateNotifier<TokenType> {
+class CurrentUserNotifier extends StateNotifier<UserProfile> {
   final ref;
 
-  TokenNotifier({required this.ref}) : super(TokenType());
+  CurrentUserNotifier({required this.ref}) : super(const UserProfile());
 
   bool isEmpty() {
     return state.token == '';
   }
 
   void updateToken({required String token}) {
-    state = TokenType(token: token);
+    state = state.copyWith(token: token);
     storeStoredToken(token: token);
   }
 
   void clearToken() {
-    state = TokenType();
+    state = state.copyWith(token: '');
     clearStoredToken();
   }
 
@@ -38,8 +29,9 @@ class TokenNotifier extends StateNotifier<TokenType> {
   }
 }
 
-final tokenProvider = StateNotifierProvider<TokenNotifier, TokenType>((ref) {
-  TokenNotifier notifier = TokenNotifier(ref: ref);
+final currentUserProvier =
+    StateNotifierProvider<CurrentUserNotifier, UserProfile>((ref) {
+  CurrentUserNotifier notifier = CurrentUserNotifier(ref: ref);
   notifier.loadTokenFromStorage();
   return notifier;
 });
