@@ -3,7 +3,7 @@ import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../providers/token.dart';
+import '../../../../providers/current_user.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -111,6 +111,40 @@ class DarkModeSetting extends ConsumerWidget {
   }
 }
 
+class ExpertSetting extends ConsumerWidget {
+  const ExpertSetting({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text('로그아웃'),
+        OutlinedButton(
+          style: ButtonStyle(
+            backgroundColor:
+                MaterialStateProperty.all(theme.colorScheme.secondary),
+          ),
+          child: Text(
+            '로그아웃',
+            style: TextStyle(
+              color: theme.colorScheme.onSecondary,
+            ),
+          ),
+          onPressed: () {
+            ref.read(tokenProvider.notifier).clearToken();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/auth', (route) => false);
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class LogoutSetting extends ConsumerWidget {
   const LogoutSetting({
     Key? key,
@@ -129,7 +163,7 @@ class LogoutSetting extends ConsumerWidget {
                 MaterialStateProperty.all(theme.colorScheme.secondary),
           ),
           child: Text(
-            'logout',
+            '로그아웃',
             style: TextStyle(
               color: theme.colorScheme.onSecondary,
             ),
