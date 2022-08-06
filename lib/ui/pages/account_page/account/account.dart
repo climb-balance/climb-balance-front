@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../providers/current_user.dart';
+import '../expert_register/expert_register.dart';
 
 class Account extends ConsumerStatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -64,12 +65,19 @@ class PromptExpert extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('DarkMode'),
-        OutlinedButton(
+        const Text('전문가 등록'),
+        ElevatedButton(
           child: const Text(
-            '전문가 등록',
+            '등록하기',
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExpertRegister(),
+              ),
+            );
+          },
         ),
       ],
     );
