@@ -47,7 +47,7 @@ class TopProfileInfo extends StatelessWidget {
                       '${profile.nickName}#${profile.uniqueCode}',
                       style: theme.textTheme.headline5,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(
@@ -58,7 +58,7 @@ class TopProfileInfo extends StatelessWidget {
                 ),
                 Text('${profile.introduce}'),
               ],
-            )
+            ),
           ],
         ),
       ),

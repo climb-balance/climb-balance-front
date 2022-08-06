@@ -85,45 +85,42 @@ class _DiaryState extends ConsumerState<Diary> {
     final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, _) {
-            return [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      TopProfileInfo(profile: profile),
-                    ],
-                  ),
-                ),
-              ),
-            ];
-          },
-          body: Builder(
-            builder: (context) => CustomScrollView(
-              scrollBehavior: NoGlowScrollBehavior(),
-              slivers: [
-                SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context)),
-                SliverPadding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  sliver: FixedTabBar(
-                    updateFilter: updateFilter,
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    treatedStories.values
-                        .map((stories) => ClassifiedStories(stories: stories))
-                        .toList(),
+        child: CustomScrollView(
+          scrollBehavior: NoGlowScrollBehavior(),
+          slivers: [
+            SliverAppBar(
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
               ],
+              toolbarHeight: 150,
+              flexibleSpace: TopProfileInfo(profile: profile),
             ),
-          ),
+            SliverPadding(
+              padding: const EdgeInsets.only(bottom: 10),
+              sliver: FixedTabBar(
+                updateFilter: updateFilter,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                treatedStories.values
+                    .map((stories) => ClassifiedStories(stories: stories))
+                    .toList(),
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(
