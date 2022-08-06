@@ -19,23 +19,31 @@ class StoryPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Theme.of(context).colorScheme.surfaceVariant,
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => StoryView(
-              story: story,
-              handleBack: () {
-                Navigator.pop(context);
-              },
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: InkWell(
+        splashColor: Theme.of(context).colorScheme.surfaceVariant,
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => StoryView(
+                story: story,
+                handleBack: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: NetworkImage(story.thumbnailUrl),
             ),
           ),
-        );
-      },
-      child: FittedBox(
-        fit: BoxFit.fill,
-        child: Image.network(story.thumbnailUrl),
+        ),
       ),
     );
   }

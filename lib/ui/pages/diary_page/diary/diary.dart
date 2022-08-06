@@ -82,6 +82,7 @@ class _DiaryState extends ConsumerState<Diary> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: NestedScrollView(
@@ -107,8 +108,11 @@ class _DiaryState extends ConsumerState<Diary> {
                 SliverOverlapInjector(
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                         context)),
-                FixedTabBar(
-                  updateFilter: updateFilter,
+                SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  sliver: FixedTabBar(
+                    updateFilter: updateFilter,
+                  ),
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
@@ -169,17 +173,28 @@ class _FixedTabBarState extends State<FixedTabBar>
     final theme = Theme.of(context);
     return SliverAppBar(
       backgroundColor: theme.cardColor,
+      shape: const ContinuousRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
       pinned: true,
+      elevation: 1,
+      forceElevated: true,
       toolbarHeight: 40,
       flexibleSpace: FlexibleSpaceBar(
-        background: TabBar(
-          onTap: (idx) {
-            widget.updateFilter(filters[idx]);
-          },
-          controller: _tabController,
-          tabs: tabItems,
-          labelPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          labelColor: theme.colorScheme.primary,
+        background: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: TabBar(
+            onTap: (idx) {
+              widget.updateFilter(filters[idx]);
+            },
+            controller: _tabController,
+            tabs: tabItems,
+            labelPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            labelColor: theme.colorScheme.primary,
+          ),
         ),
       ),
     );

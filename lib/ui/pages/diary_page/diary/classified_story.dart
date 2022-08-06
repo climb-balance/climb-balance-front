@@ -15,6 +15,9 @@ class ClassifiedStories extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Column(
           children: [
             ClassifiedStoryTags(story: stories[0]),

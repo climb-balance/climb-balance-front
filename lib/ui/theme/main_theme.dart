@@ -9,6 +9,7 @@ ThemeData mainLightTheme() {
     colorScheme: lightColorScheme,
     extensions: <ThemeExtension<dynamic>>[],
     textTheme: customTextTheme(ThemeData.light().textTheme, lightColorScheme),
+    scaffoldBackgroundColor: lightColorScheme.surface,
   );
 }
 
@@ -19,5 +20,6 @@ ThemeData mainDarkTheme() {
     colorScheme: darkColorScheme,
     extensions: <ThemeExtension<dynamic>>[],
     textTheme: customTextTheme(ThemeData.dark().textTheme, darkColorScheme),
+    scaffoldBackgroundColor: darkColorScheme.surface,
   );
 }
