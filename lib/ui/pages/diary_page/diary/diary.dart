@@ -1,16 +1,23 @@
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/providers/serverRequest.dart';
-import 'package:climb_balance/providers/tags.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/serverConfig.dart';
-import '../../../widgets/story/story.dart';
 import '../../../widgets/user_profile_info.dart';
+import 'classified_story.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
+
+class NoGlowScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
 
 class Diary extends ConsumerStatefulWidget {
   const Diary({Key? key}) : super(key: key);
@@ -35,12 +42,7 @@ class _DiaryState extends ConsumerState<Diary> {
 
   void loadProfileData() {
     setState(() {
-      profile = UserProfile(
-        nickName: '심규진',
-        profileImagePath:
-            'https://images.pexels.com/photos/12616283/pexels-photo-12616283.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        uniqueCode: 2131,
-      );
+      profile = genRandomUser();
     });
   }
 
@@ -80,43 +82,29 @@ class _DiaryState extends ConsumerState<Diary> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, _) {
-            return [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      TopProfileInfo(profile: profile),
-                    ],
-                  ),
-                ),
-              ),
-            ];
-          },
-          body: Builder(
-            builder: (context) => CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context)),
-                FixedTabBar(
-                  updateFilter: updateFilter,
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    treatedStories.values
-                        .map((stories) => ClassifiedStory(stories: stories))
-                        .toList(),
-                  ),
-                ),
-              ],
+        child: CustomScrollView(
+          scrollBehavior: NoGlowScrollBehavior(),
+          slivers: [
+            SliverProfile(
+              profile: profile,
             ),
-          ),
+            SliverPadding(
+              padding: const EdgeInsets.only(bottom: 10),
+              sliver: FixedTabBar(
+                updateFilter: updateFilter,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                treatedStories.values
+                    .map((stories) => ClassifiedStories(stories: stories))
+                    .toList(),
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(
@@ -126,26 +114,92 @@ class _DiaryState extends ConsumerState<Diary> {
   }
 }
 
-class ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
-  UserProfile profile;
+class SliverProfile extends StatelessWidget {
+  final UserProfile profile;
 
-  ProfileHeaderDelegate({required this.profile});
+  const SliverProfile({Key? key, required this.profile}) : super(key: key);
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return TopProfileInfo(profile: profile);
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Stack(
+            children: const [
+              ProfileOptions(),
+            ],
+          ),
+        ),
+      ],
+      toolbarHeight: 150,
+      flexibleSpace: TopProfileInfo(profile: profile),
+    );
   }
+}
+
+class ProfileOptions extends StatelessWidget {
+  const ProfileOptions({Key? key}) : super(key: key);
 
   @override
-  double get maxExtent => 150;
-
-  @override
-  double get minExtent => 200;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.topRight,
+      child: PopupMenuButton<int>(
+        icon: Icon(
+          Icons.more_vert,
+          color: theme.colorScheme.onBackground,
+        ),
+        itemBuilder: (context) => [
+          // popupmenu item 1
+          PopupMenuItem(
+            value: 1,
+            // row has two child icon and text.
+            child: Row(
+              children: [
+                Icon(
+                  Icons.edit,
+                  color: theme.colorScheme.onBackground,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text("수정하기")
+              ],
+            ),
+          ),
+          // popupmenu item 2
+          PopupMenuItem(
+            value: 2,
+            // row has two child icon and text
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.notifications,
+                  color: theme.colorScheme.onBackground,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text("알림"),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "2",
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        elevation: 2,
+      ),
+    );
   }
 }
 
@@ -179,91 +233,38 @@ class _FixedTabBarState extends State<FixedTabBar>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: theme.cardColor,
+      shape: const ContinuousRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
       pinned: true,
+      elevation: 1,
+      forceElevated: true,
+      toolbarHeight: 40,
       flexibleSpace: FlexibleSpaceBar(
-        background: TabBar(
-          onTap: (idx) {
-            widget.updateFilter(filters[idx]);
-          },
-          controller: _tabController,
-          tabs: tabItems,
-          labelPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          labelColor: theme.colorScheme.primary,
-        ),
-      ),
-    );
-  }
-}
-
-class ClassifiedStory extends StatelessWidget {
-  final List<Story> stories;
-
-  const ClassifiedStory({Key? key, required this.stories}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: Card(
-        child: Column(
-          children: [
-            ClassifiedStoryTags(story: stories[0]),
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children:
-                  stories.map((story) => StoryPreview(story: story)).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ClassifiedStoryTags extends ConsumerWidget {
-  final Story story;
-
-  const ClassifiedStoryTags({Key? key, required this.story}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 0.5,
-            color: theme.colorScheme.outline,
+        background: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: TabBar(
+            onTap: (idx) {
+              widget.updateFilter(filters[idx]);
+            },
+            controller: _tabController,
+            tabs: tabItems,
+            labelPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            labelColor: theme.colorScheme.primary,
           ),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.date_range),
-                Text(story.getDateString()),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(Icons.location_on),
-                Text(ref
-                    .watch(tagsProvider)
-                    .locations[story.tags.location]
-                    .name),
-              ],
-            ),
-          ],
         ),
       ),
     );
