@@ -13,16 +13,18 @@ class _ExpertRegisterState extends State<ExpertRegister> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('전문가 계정 등록'),
+        centerTitle: true,
+      ),
       body: MySafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                '전문가 정보를 입력해주세요.',
-                style: theme.textTheme.headline5,
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            Text(
+              '제휴 클라이밍장 소속이라면 언제든지 전문가 계정이 될 수 있습니다.',
+              style: theme.textTheme.headline6,
+            ),
+          ],
         ),
       ),
     );

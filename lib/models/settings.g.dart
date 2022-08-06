@@ -7,12 +7,12 @@ part of 'settings.dart';
 // **************************************************************************
 
 _$_Settings _$$_SettingsFromJson(Map<String, dynamic> json) => _$_Settings(
-      darkMode: json['dark_mode'] ?? false,
-      expertMode: json['expert_mode'] ?? false,
+      darkMode: json['darkMode'] ?? false,
+      expertMode: json['expertMode'] ?? false,
     );
 
 Map<String, dynamic> _$$_SettingsToJson(_$_Settings instance) =>
     <String, dynamic>{
-      'dark_mode': instance.darkMode,
-      'expert_mode': instance.expertMode,
+      'darkMode': instance.darkMode,
+      'expertMode': instance.expertMode,
     };

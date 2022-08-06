@@ -94,8 +94,7 @@ class __$$_SettingsCopyWithImpl<$Res> extends _$SettingsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
+@JsonSerializable()
 class _$_Settings implements _Settings {
   const _$_Settings({this.darkMode = false, this.expertMode = false});
 

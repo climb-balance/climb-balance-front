@@ -187,7 +187,7 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_UserProfile implements _UserProfile {
   const _$_UserProfile(
-      {this.nickName = 'default_user',
+      {this.nickName = 'default',
       this.profileImagePath =
           'https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg',
       this.introduce = '',
