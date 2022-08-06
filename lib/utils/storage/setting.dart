@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../providers/settings.dart';
+import '../../models/settings.dart';
 
 Future<Settings> getStoredSettings() async {
   final prefs = await SharedPreferences.getInstance();
