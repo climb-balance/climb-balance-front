@@ -11,6 +11,9 @@ class ExpertProfile with _$ExpertProfile {
     @Default('https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg')
         String profileImagePath,
     @Default('') String introduce,
+    @Default(-1) int climbingCenterId,
+    @Default(-1) int id,
+    @Default(50.0) double reliability,
   }) = _ExpertProfile;
 
   factory ExpertProfile.fromJson(Map<String, dynamic> json) =>
