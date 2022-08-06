@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/utils/storage/setting.dart';
+import 'package:climb_balance/utils/storage/setting_storage.dart';
 import '../models/settings.dart';
 
 class SettingsNotifier extends StateNotifier<Settings> {
