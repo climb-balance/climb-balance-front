@@ -88,24 +88,8 @@ class _DiaryState extends ConsumerState<Diary> {
         child: CustomScrollView(
           scrollBehavior: NoGlowScrollBehavior(),
           slivers: [
-            SliverAppBar(
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.more_vert,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              toolbarHeight: 150,
-              flexibleSpace: TopProfileInfo(profile: profile),
+            SliverProfile(
+              profile: profile,
             ),
             SliverPadding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -126,6 +110,40 @@ class _DiaryState extends ConsumerState<Diary> {
       bottomNavigationBar: const BotNavigationBar(
         currentIdx: 3,
       ),
+    );
+  }
+}
+
+class SliverProfile extends StatefulWidget {
+  final UserProfile profile;
+
+  const SliverProfile({Key? key, required this.profile}) : super(key: key);
+
+  @override
+  State<SliverProfile> createState() => _SliverProfileState();
+}
+
+class _SliverProfileState extends State<SliverProfile> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ],
+      toolbarHeight: 150,
+      flexibleSpace: TopProfileInfo(profile: widget.profile),
     );
   }
 }
