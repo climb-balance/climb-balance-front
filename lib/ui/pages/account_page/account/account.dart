@@ -1,20 +1,23 @@
 import 'package:climb_balance/providers/settings.dart';
+import 'package:climb_balance/ui/pages/account_page/account/setting_card.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../providers/current_user.dart';
 
-class Account extends StatefulWidget {
+class Account extends ConsumerStatefulWidget {
   const Account({Key? key}) : super(key: key);
 
   @override
-  State<Account> createState() => AccountState();
+  ConsumerState<Account> createState() => AccountState();
 }
 
-class AccountState extends State<Account> {
+class AccountState extends ConsumerState<Account> {
   @override
   Widget build(BuildContext context) {
+    final isExpert =
+        ref.watch(currentUserProvider.select((value) => value.isExpert));
     return Scaffold(
       appBar: AppBar(
         title: const Text('설정'),
@@ -29,11 +32,12 @@ class AccountState extends State<Account> {
                   DarkModeSetting(),
                 ],
               ),
-              const SettingCard(
+              SettingCard(
                 groupName: '계정 설정',
                 children: [
-                  EditAccountSetting(),
-                  LogoutSetting(),
+                  isExpert ? const ExpertSetting() : const PromptExpert(),
+                  const EditAccountSetting(),
+                  const LogoutSetting(),
                 ],
               ),
               Row(
@@ -52,59 +56,20 @@ class AccountState extends State<Account> {
   }
 }
 
-class SettingCard extends StatelessWidget {
-  final List<Widget> children;
-  final String groupName;
-
-  const SettingCard({Key? key, required this.children, required this.groupName})
-      : super(key: key);
+class PromptExpert extends StatelessWidget {
+  const PromptExpert({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 0.5,
-                    color: theme.colorScheme.outline,
-                  ),
-                ),
-              ),
-              child: Text(
-                groupName,
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
-            ...children
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DarkModeSetting extends ConsumerWidget {
-  const DarkModeSetting({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    bool darkMode =
-        ref.watch(settingsProvider.select((value) => value.darkMode));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('DarkMode'),
-        Switch(
-          value: darkMode,
-          onChanged: (bool value) {
-            ref.read(settingsProvider.notifier).updateSetting(darkMode: value);
-          },
+        OutlinedButton(
+          child: const Text(
+            '전문가 등록',
+          ),
+          onPressed: () {},
         ),
       ],
     );
@@ -138,6 +103,28 @@ class ExpertSetting extends ConsumerWidget {
             ref.read(currentUserProvider.notifier).clearToken();
             Navigator.pushNamedAndRemoveUntil(
                 context, '/auth', (route) => false);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class DarkModeSetting extends ConsumerWidget {
+  const DarkModeSetting({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool darkMode =
+        ref.watch(settingsProvider.select((value) => value.darkMode));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text('DarkMode'),
+        Switch(
+          value: darkMode,
+          onChanged: (bool value) {
+            ref.read(settingsProvider.notifier).updateSetting(darkMode: value);
           },
         ),
       ],
