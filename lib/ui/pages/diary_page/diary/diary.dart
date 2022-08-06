@@ -1,5 +1,6 @@
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/models/user.dart';
+import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/providers/serverRequest.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,23 +28,14 @@ class Diary extends ConsumerStatefulWidget {
 }
 
 class _DiaryState extends ConsumerState<Diary> {
-  late final UserProfile profile;
-
   late List<Story> stories;
   late Map<String, List<Story>> treatedStories = {};
   FilterType currentFilter = FilterType.noFilter;
 
   @override
   void initState() {
-    loadProfileData();
     loadStories();
     super.initState();
-  }
-
-  void loadProfileData() {
-    setState(() {
-      profile = genRandomUser();
-    });
   }
 
   void loadStories() async {
@@ -88,9 +80,7 @@ class _DiaryState extends ConsumerState<Diary> {
         child: CustomScrollView(
           scrollBehavior: NoGlowScrollBehavior(),
           slivers: [
-            SliverProfile(
-              profile: profile,
-            ),
+            SliverProfile(),
             SliverPadding(
               padding: const EdgeInsets.only(bottom: 10),
               sliver: FixedTabBar(
@@ -114,13 +104,11 @@ class _DiaryState extends ConsumerState<Diary> {
   }
 }
 
-class SliverProfile extends StatelessWidget {
-  final UserProfile profile;
-
-  const SliverProfile({Key? key, required this.profile}) : super(key: key);
+class SliverProfile extends ConsumerWidget {
+  const SliverProfile({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
       actions: [
         Padding(
@@ -133,7 +121,7 @@ class SliverProfile extends StatelessWidget {
         ),
       ],
       toolbarHeight: 150,
-      flexibleSpace: TopProfileInfo(profile: profile),
+      flexibleSpace: TopProfileInfo(profile: ref.watch(currentUserProvider)),
     );
   }
 }

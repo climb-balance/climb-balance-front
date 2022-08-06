@@ -24,8 +24,16 @@ class CurrentUserNotifier extends StateNotifier<UserProfile> {
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
   void loadTokenFromStorage() {
     getStoredToken().then((value) {
-      updateToken(token: value['token'] ?? '');
+      loadUserInfo(value['token'] ?? '');
     });
+  }
+
+  void loadUserInfo(String token) {
+    // 원래는 로그인으로 보내는 로직이 있어야할 것 같음.
+    state = genRandomUser().copyWith(token: token);
+    if (token == '') {
+      return;
+    }
   }
 }
 
