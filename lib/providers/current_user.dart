@@ -29,7 +29,7 @@ class CurrentUserNotifier extends StateNotifier<UserProfile> {
   }
 }
 
-final currentUserProvier =
+final currentUserProvider =
     StateNotifierProvider<CurrentUserNotifier, UserProfile>((ref) {
   CurrentUserNotifier notifier = CurrentUserNotifier(ref: ref);
   notifier.loadTokenFromStorage();
