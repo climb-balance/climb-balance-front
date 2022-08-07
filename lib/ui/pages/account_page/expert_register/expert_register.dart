@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:climb_balance/models/expert_profile.dart';
+import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/providers/expert_register.dart';
 import 'package:climb_balance/ui/widgets/avatarPicker.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
@@ -85,26 +87,48 @@ class _ExpertFormState extends ConsumerState<ExpertForm> {
             ],
           ),
           const IntroduceTextInput(),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid, or false otherwise.
-                if (_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('성공')),
-                  );
-                  Navigator.of(context).pop();
-                  return;
-                }
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('실패')),
-                );
-              },
-              child: Text('등록하기'),
-            ),
-          ),
+          ExpertRegisterButton(formKey: _formKey)
         ],
+      ),
+    );
+  }
+}
+
+class ExpertRegisterButton extends ConsumerWidget {
+  final GlobalKey<FormState> formKey;
+
+  const ExpertRegisterButton({
+    Key? key,
+    required this.formKey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          // Validate returns true if the form is valid, or false otherwise.
+          if (formKey.currentState!.validate()) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('성공')),
+            );
+            ref.read(expertRegisterProvider.notifier).clear();
+            final expertProfile = ref.watch(expertRegisterProvider);
+            ref
+                .read(currentUserProvider.notifier)
+                .updateExpertInfo(ExpertProfile(
+                  nickName: expertProfile.nickName,
+                  introduce: expertProfile.introduce,
+                ));
+            Navigator.of(context).pop();
+            return;
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('실패')),
+          );
+        },
+        child: Text('등록하기'),
       ),
     );
   }
