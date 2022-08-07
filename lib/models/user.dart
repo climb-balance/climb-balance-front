@@ -1,3 +1,4 @@
+import 'package:climb_balance/models/expert_profile.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user.freezed.dart';
@@ -16,6 +17,7 @@ class UserProfile with _$UserProfile {
     @Default(-1) int height,
     @Default(-1) int weight,
     @Default(false) bool isExpert,
+    ExpertProfile? expertProfile,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>

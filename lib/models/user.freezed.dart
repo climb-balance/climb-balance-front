@@ -28,6 +28,7 @@ mixin _$UserProfile {
   int get height => throw _privateConstructorUsedError;
   int get weight => throw _privateConstructorUsedError;
   bool get isExpert => throw _privateConstructorUsedError;
+  ExpertProfile? get expertProfile => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,10 @@ abstract class $UserProfileCopyWith<$Res> {
       int uniqueCode,
       int height,
       int weight,
-      bool isExpert});
+      bool isExpert,
+      ExpertProfile? expertProfile});
+
+  $ExpertProfileCopyWith<$Res>? get expertProfile;
 }
 
 /// @nodoc
@@ -69,6 +73,7 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
     Object? height = freezed,
     Object? weight = freezed,
     Object? isExpert = freezed,
+    Object? expertProfile = freezed,
   }) {
     return _then(_value.copyWith(
       nickName: nickName == freezed
@@ -103,7 +108,22 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
           ? _value.isExpert
           : isExpert // ignore: cast_nullable_to_non_nullable
               as bool,
+      expertProfile: expertProfile == freezed
+          ? _value.expertProfile
+          : expertProfile // ignore: cast_nullable_to_non_nullable
+              as ExpertProfile?,
     ));
+  }
+
+  @override
+  $ExpertProfileCopyWith<$Res>? get expertProfile {
+    if (_value.expertProfile == null) {
+      return null;
+    }
+
+    return $ExpertProfileCopyWith<$Res>(_value.expertProfile!, (value) {
+      return _then(_value.copyWith(expertProfile: value));
+    });
   }
 }
 
@@ -122,7 +142,11 @@ abstract class _$$_UserProfileCopyWith<$Res>
       int uniqueCode,
       int height,
       int weight,
-      bool isExpert});
+      bool isExpert,
+      ExpertProfile? expertProfile});
+
+  @override
+  $ExpertProfileCopyWith<$Res>? get expertProfile;
 }
 
 /// @nodoc
@@ -145,6 +169,7 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
     Object? height = freezed,
     Object? weight = freezed,
     Object? isExpert = freezed,
+    Object? expertProfile = freezed,
   }) {
     return _then(_$_UserProfile(
       nickName: nickName == freezed
@@ -179,6 +204,10 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
           ? _value.isExpert
           : isExpert // ignore: cast_nullable_to_non_nullable
               as bool,
+      expertProfile: expertProfile == freezed
+          ? _value.expertProfile
+          : expertProfile // ignore: cast_nullable_to_non_nullable
+              as ExpertProfile?,
     ));
   }
 }
@@ -195,7 +224,8 @@ class _$_UserProfile implements _UserProfile {
       this.uniqueCode = 1234,
       this.height = -1,
       this.weight = -1,
-      this.isExpert = false});
+      this.isExpert = false,
+      this.expertProfile});
 
   factory _$_UserProfile.fromJson(Map<String, dynamic> json) =>
       _$$_UserProfileFromJson(json);
@@ -224,10 +254,12 @@ class _$_UserProfile implements _UserProfile {
   @override
   @JsonKey()
   final bool isExpert;
+  @override
+  final ExpertProfile? expertProfile;
 
   @override
   String toString() {
-    return 'UserProfile(nickName: $nickName, profileImagePath: $profileImagePath, introduce: $introduce, token: $token, uniqueCode: $uniqueCode, height: $height, weight: $weight, isExpert: $isExpert)';
+    return 'UserProfile(nickName: $nickName, profileImagePath: $profileImagePath, introduce: $introduce, token: $token, uniqueCode: $uniqueCode, height: $height, weight: $weight, isExpert: $isExpert, expertProfile: $expertProfile)';
   }
 
   @override
@@ -244,7 +276,9 @@ class _$_UserProfile implements _UserProfile {
                 .equals(other.uniqueCode, uniqueCode) &&
             const DeepCollectionEquality().equals(other.height, height) &&
             const DeepCollectionEquality().equals(other.weight, weight) &&
-            const DeepCollectionEquality().equals(other.isExpert, isExpert));
+            const DeepCollectionEquality().equals(other.isExpert, isExpert) &&
+            const DeepCollectionEquality()
+                .equals(other.expertProfile, expertProfile));
   }
 
   @JsonKey(ignore: true)
@@ -258,7 +292,8 @@ class _$_UserProfile implements _UserProfile {
       const DeepCollectionEquality().hash(uniqueCode),
       const DeepCollectionEquality().hash(height),
       const DeepCollectionEquality().hash(weight),
-      const DeepCollectionEquality().hash(isExpert));
+      const DeepCollectionEquality().hash(isExpert),
+      const DeepCollectionEquality().hash(expertProfile));
 
   @JsonKey(ignore: true)
   @override
@@ -282,7 +317,8 @@ abstract class _UserProfile implements UserProfile {
       final int uniqueCode,
       final int height,
       final int weight,
-      final bool isExpert}) = _$_UserProfile;
+      final bool isExpert,
+      final ExpertProfile? expertProfile}) = _$_UserProfile;
 
   factory _UserProfile.fromJson(Map<String, dynamic> json) =
       _$_UserProfile.fromJson;
@@ -303,6 +339,8 @@ abstract class _UserProfile implements UserProfile {
   int get weight;
   @override
   bool get isExpert;
+  @override
+  ExpertProfile? get expertProfile;
   @override
   @JsonKey(ignore: true)
   _$$_UserProfileCopyWith<_$_UserProfile> get copyWith =>

@@ -17,6 +17,10 @@ _$_UserProfile _$$_UserProfileFromJson(Map<String, dynamic> json) =>
       height: json['height'] as int? ?? -1,
       weight: json['weight'] as int? ?? -1,
       isExpert: json['isExpert'] as bool? ?? false,
+      expertProfile: json['expertProfile'] == null
+          ? null
+          : ExpertProfile.fromJson(
+              json['expertProfile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_UserProfileToJson(_$_UserProfile instance) =>
@@ -29,4 +33,5 @@ Map<String, dynamic> _$$_UserProfileToJson(_$_UserProfile instance) =>
       'height': instance.height,
       'weight': instance.weight,
       'isExpert': instance.isExpert,
+      'expertProfile': instance.expertProfile,
     };

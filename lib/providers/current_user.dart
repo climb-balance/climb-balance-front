@@ -1,3 +1,4 @@
+import 'package:climb_balance/models/expert_profile.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/utils/storage/token.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +35,10 @@ class CurrentUserNotifier extends StateNotifier<UserProfile> {
     if (token == '') {
       return;
     }
+  }
+
+  void updateExpertInfo(ExpertProfile profile) {
+    state = state.copyWith(expertProfile: profile, isExpert: true);
   }
 }
 
