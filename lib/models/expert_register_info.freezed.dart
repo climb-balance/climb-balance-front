@@ -23,6 +23,7 @@ mixin _$ExpertRegisterInfo {
   String get nickName => throw _privateConstructorUsedError;
   String get introduce => throw _privateConstructorUsedError;
   int get climbingCenterId => throw _privateConstructorUsedError;
+  String get code => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   File? get tmpImage => throw _privateConstructorUsedError;
 
@@ -41,6 +42,7 @@ abstract class $ExpertRegisterInfoCopyWith<$Res> {
       {String nickName,
       String introduce,
       int climbingCenterId,
+      String code,
       @JsonKey(ignore: true) File? tmpImage});
 }
 
@@ -58,6 +60,7 @@ class _$ExpertRegisterInfoCopyWithImpl<$Res>
     Object? nickName = freezed,
     Object? introduce = freezed,
     Object? climbingCenterId = freezed,
+    Object? code = freezed,
     Object? tmpImage = freezed,
   }) {
     return _then(_value.copyWith(
@@ -73,6 +76,10 @@ class _$ExpertRegisterInfoCopyWithImpl<$Res>
           ? _value.climbingCenterId
           : climbingCenterId // ignore: cast_nullable_to_non_nullable
               as int,
+      code: code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String,
       tmpImage: tmpImage == freezed
           ? _value.tmpImage
           : tmpImage // ignore: cast_nullable_to_non_nullable
@@ -92,6 +99,7 @@ abstract class _$$_ExpertRegisterInfoCopyWith<$Res>
       {String nickName,
       String introduce,
       int climbingCenterId,
+      String code,
       @JsonKey(ignore: true) File? tmpImage});
 }
 
@@ -111,6 +119,7 @@ class __$$_ExpertRegisterInfoCopyWithImpl<$Res>
     Object? nickName = freezed,
     Object? introduce = freezed,
     Object? climbingCenterId = freezed,
+    Object? code = freezed,
     Object? tmpImage = freezed,
   }) {
     return _then(_$_ExpertRegisterInfo(
@@ -126,6 +135,10 @@ class __$$_ExpertRegisterInfoCopyWithImpl<$Res>
           ? _value.climbingCenterId
           : climbingCenterId // ignore: cast_nullable_to_non_nullable
               as int,
+      code: code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String,
       tmpImage: tmpImage == freezed
           ? _value.tmpImage
           : tmpImage // ignore: cast_nullable_to_non_nullable
@@ -141,6 +154,7 @@ class _$_ExpertRegisterInfo implements _ExpertRegisterInfo {
       {this.nickName = 'default',
       this.introduce = '',
       this.climbingCenterId = -1,
+      this.code = '',
       @JsonKey(ignore: true) this.tmpImage});
 
   factory _$_ExpertRegisterInfo.fromJson(Map<String, dynamic> json) =>
@@ -156,12 +170,15 @@ class _$_ExpertRegisterInfo implements _ExpertRegisterInfo {
   @JsonKey()
   final int climbingCenterId;
   @override
+  @JsonKey()
+  final String code;
+  @override
   @JsonKey(ignore: true)
   final File? tmpImage;
 
   @override
   String toString() {
-    return 'ExpertRegisterInfo(nickName: $nickName, introduce: $introduce, climbingCenterId: $climbingCenterId, tmpImage: $tmpImage)';
+    return 'ExpertRegisterInfo(nickName: $nickName, introduce: $introduce, climbingCenterId: $climbingCenterId, code: $code, tmpImage: $tmpImage)';
   }
 
   @override
@@ -173,6 +190,7 @@ class _$_ExpertRegisterInfo implements _ExpertRegisterInfo {
             const DeepCollectionEquality().equals(other.introduce, introduce) &&
             const DeepCollectionEquality()
                 .equals(other.climbingCenterId, climbingCenterId) &&
+            const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality().equals(other.tmpImage, tmpImage));
   }
 
@@ -183,6 +201,7 @@ class _$_ExpertRegisterInfo implements _ExpertRegisterInfo {
       const DeepCollectionEquality().hash(nickName),
       const DeepCollectionEquality().hash(introduce),
       const DeepCollectionEquality().hash(climbingCenterId),
+      const DeepCollectionEquality().hash(code),
       const DeepCollectionEquality().hash(tmpImage));
 
   @JsonKey(ignore: true)
@@ -204,6 +223,7 @@ abstract class _ExpertRegisterInfo implements ExpertRegisterInfo {
       {final String nickName,
       final String introduce,
       final int climbingCenterId,
+      final String code,
       @JsonKey(ignore: true) final File? tmpImage}) = _$_ExpertRegisterInfo;
 
   factory _ExpertRegisterInfo.fromJson(Map<String, dynamic> json) =
@@ -215,6 +235,8 @@ abstract class _ExpertRegisterInfo implements ExpertRegisterInfo {
   String get introduce;
   @override
   int get climbingCenterId;
+  @override
+  String get code;
   @override
   @JsonKey(ignore: true)
   File? get tmpImage;

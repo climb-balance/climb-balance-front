@@ -12,6 +12,7 @@ _$_ExpertRegisterInfo _$$_ExpertRegisterInfoFromJson(
       nickName: json['nickName'] as String? ?? 'default',
       introduce: json['introduce'] as String? ?? '',
       climbingCenterId: json['climbingCenterId'] as int? ?? -1,
+      code: json['code'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$_ExpertRegisterInfoToJson(
@@ -20,4 +21,5 @@ Map<String, dynamic> _$$_ExpertRegisterInfoToJson(
       'nickName': instance.nickName,
       'introduce': instance.introduce,
       'climbingCenterId': instance.climbingCenterId,
+      'code': instance.code,
     };

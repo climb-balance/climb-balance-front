@@ -9,10 +9,22 @@ class ExpertRegisterNotifier extends StateNotifier<ExpertRegisterInfo> {
   void updateProfilePicture(File image) {
     state = state.copyWith(tmpImage: image);
   }
+
+  Future<bool> updateClimbingCode(String code) async {
+    if (code.length == 4) {
+      state = state.copyWith(code: code);
+      return true;
+    }
+    return false;
+  }
+
+  void clear() {
+    state = const ExpertRegisterInfo();
+  }
 }
 
-final expertRegisterProvider =
-    StateNotifierProvider<ExpertRegisterNotifier, ExpertRegisterInfo>((ref) {
+final expertRegisterProvider = StateNotifierProvider.autoDispose<
+    ExpertRegisterNotifier, ExpertRegisterInfo>((ref) {
   ExpertRegisterNotifier notifier = ExpertRegisterNotifier();
   return notifier;
 });

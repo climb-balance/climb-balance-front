@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'expert_register_info.g.dart';
@@ -10,6 +12,7 @@ class ExpertRegisterInfo with _$ExpertRegisterInfo {
     @Default('default') String nickName,
     @Default('') String introduce,
     @Default(-1) int climbingCenterId,
+    @Default('') String code,
     @JsonKey(ignore: true) File? tmpImage,
   }) = _ExpertRegisterInfo;
 
