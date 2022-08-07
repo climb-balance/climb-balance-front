@@ -55,8 +55,11 @@ Route mainRoute(RouteSettings settings) {
   debugPrint(settings.name);
   switch (settings.name) {
     case '/testpage':
-      page = TestPage();
-      break;
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => TestPage(),
+      );
     case '/auth':
       page = AuthRoute();
       break;
