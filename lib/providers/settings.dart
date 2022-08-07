@@ -11,11 +11,11 @@ class SettingsNotifier extends StateNotifier<Settings> {
     state = await getStoredSettings();
   }
 
-  void updateSetting({bool? darkMode}) async {
-    if (darkMode != null) {
-      darkMode = state.darkMode;
-    }
-    Settings settings = state.copyWith(darkMode: darkMode);
+  void updateSetting({bool? darkMode, bool? expertMode}) async {
+    darkMode ??= state.darkMode;
+    expertMode ??= state.expertMode;
+    Settings settings =
+        state.copyWith(darkMode: darkMode, expertMode: expertMode);
     await storeSettings(settings);
     state = settings;
   }

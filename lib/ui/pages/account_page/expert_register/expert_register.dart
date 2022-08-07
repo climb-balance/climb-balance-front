@@ -108,12 +108,11 @@ class ExpertRegisterButton extends ConsumerWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Validate returns true if the form is valid, or false otherwise.
           if (formKey.currentState!.validate()) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('성공')),
             );
-            ref.read(expertRegisterProvider.notifier).clear();
+
             final expertProfile = ref.watch(expertRegisterProvider);
             ref
                 .read(currentUserProvider.notifier)
@@ -121,6 +120,8 @@ class ExpertRegisterButton extends ConsumerWidget {
                   nickName: expertProfile.nickName,
                   introduce: expertProfile.introduce,
                 ));
+            ref.read(expertRegisterProvider.notifier).clear();
+            debugPrint('여기까진 온다');
             Navigator.of(context).pop();
             return;
           }

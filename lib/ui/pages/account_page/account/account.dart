@@ -1,11 +1,10 @@
-import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/ui/pages/account_page/account/setting_card.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../providers/current_user.dart';
-import '../expert_register/expert_register.dart';
+import 'account_settings.dart';
 
 class Account extends ConsumerStatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -33,12 +32,12 @@ class AccountState extends ConsumerState<Account> {
                   DarkModeSetting(),
                 ],
               ),
-              SettingCard(
+              const SettingCard(
                 groupName: '계정 설정',
                 children: [
-                  isExpert ? const ExpertSetting() : const PromptExpert(),
-                  const EditAccountSetting(),
-                  const LogoutSetting(),
+                  ExpertSetting(),
+                  EditAccountSetting(),
+                  LogoutSetting(),
                 ],
               ),
               Row(
@@ -53,146 +52,6 @@ class AccountState extends ConsumerState<Account> {
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(currentIdx: 4),
-    );
-  }
-}
-
-class PromptExpert extends StatelessWidget {
-  const PromptExpert({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('전문가 등록'),
-        ElevatedButton(
-          child: const Text(
-            '등록하기',
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ExpertRegister(),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class ExpertSetting extends ConsumerWidget {
-  const ExpertSetting({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('로그아웃'),
-        OutlinedButton(
-          style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all(theme.colorScheme.secondary),
-          ),
-          child: Text(
-            '로그아웃',
-            style: TextStyle(
-              color: theme.colorScheme.onSecondary,
-            ),
-          ),
-          onPressed: () {
-            ref.read(currentUserProvider.notifier).clearToken();
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/auth', (route) => false);
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class DarkModeSetting extends ConsumerWidget {
-  const DarkModeSetting({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    bool darkMode =
-        ref.watch(settingsProvider.select((value) => value.darkMode));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('DarkMode'),
-        Switch(
-          value: darkMode,
-          onChanged: (bool value) {
-            ref.read(settingsProvider.notifier).updateSetting(darkMode: value);
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class LogoutSetting extends ConsumerWidget {
-  const LogoutSetting({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('로그아웃'),
-        OutlinedButton(
-          style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all(theme.colorScheme.secondary),
-          ),
-          child: Text(
-            '로그아웃',
-            style: TextStyle(
-              color: theme.colorScheme.onSecondary,
-            ),
-          ),
-          onPressed: () {
-            ref.read(currentUserProvider.notifier).clearToken();
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/auth', (route) => false);
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class EditAccountSetting extends ConsumerWidget {
-  const EditAccountSetting({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('계정 정보 수정'),
-        OutlinedButton(
-          child: const Text(
-            '수정하기',
-          ),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }
