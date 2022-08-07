@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
@@ -10,25 +12,55 @@ class TopProfileInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 50,
-            foregroundImage: NetworkImage(profile.profileImagePath),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${profile.nickName}#${profile.uniqueCode}',
-                style: theme.textTheme.headline6,
+    return Container(
+      height: 150,
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                image: DecorationImage(
+                  image: NetworkImage(profile.profileImagePath),
+                  fit: BoxFit.cover,
+                ),
+                boxShadow: kElevationToShadow[4],
               ),
-              const Text('계정 등급 : 1')
-            ],
-          )
-        ],
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${profile.nickName}#${profile.uniqueCode}',
+                      style: theme.textTheme.headline5,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '계정 등급 : 1',
+                      style: theme.textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+                Text('${profile.introduce}'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
