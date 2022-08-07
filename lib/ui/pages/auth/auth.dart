@@ -1,6 +1,6 @@
 import 'package:climb_balance/providers/api.dart';
 import 'package:climb_balance/providers/mainRoute.dart';
-import 'package:climb_balance/utils/webView.dart';
+import 'package:climb_balance/utils/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
