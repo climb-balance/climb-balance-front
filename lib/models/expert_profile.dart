@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'expert_profile.freezed.dart';
@@ -14,6 +16,7 @@ class ExpertProfile with _$ExpertProfile {
     @Default(-1) int climbingCenterId,
     @Default(-1) int id,
     @Default(50.0) double reliability,
+    @JsonKey(ignore: true) File? tmpImage,
   }) = _ExpertProfile;
 
   factory ExpertProfile.fromJson(Map<String, dynamic> json) =>
