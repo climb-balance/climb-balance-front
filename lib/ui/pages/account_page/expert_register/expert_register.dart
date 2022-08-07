@@ -1,8 +1,12 @@
 import 'dart:io';
 
+import 'package:climb_balance/providers/expert_register.dart';
 import 'package:climb_balance/ui/widgets/avatarPicker.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'expert_register_text_input.dart';
 
 class ExpertRegister extends StatefulWidget {
   const ExpertRegister({Key? key}) : super(key: key);
@@ -37,14 +41,14 @@ class _ExpertRegisterState extends State<ExpertRegister> {
   }
 }
 
-class ExpertForm extends StatefulWidget {
+class ExpertForm extends ConsumerStatefulWidget {
   const ExpertForm({Key? key}) : super(key: key);
 
   @override
-  State<ExpertForm> createState() => _ExpertFormState();
+  ConsumerState<ExpertForm> createState() => _ExpertFormState();
 }
 
-class _ExpertFormState extends State<ExpertForm> {
+class _ExpertFormState extends ConsumerState<ExpertForm> {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -57,7 +61,13 @@ class _ExpertFormState extends State<ExpertForm> {
             children: [
               Flexible(
                 child: AvatarPicker(
-                  updateFile: (File image) {},
+                  updateFile: (File image) {
+                    ref
+                        .read(expertRegisterProvider.notifier)
+                        .updateProfilePicture(image);
+                  },
+                  image: ref.watch(
+                      expertRegisterProvider.select((value) => value.tmpImage)),
                 ),
               ),
               const SizedBox(
@@ -66,28 +76,15 @@ class _ExpertFormState extends State<ExpertForm> {
               Flexible(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: const [
                     CodeTextInput(),
-                    NameTextInput(),
+                    NickNameTextInput(),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(
-            child: TextFormField(
-              maxLines: 5,
-              validator: (value) {
-                if (value?.length != 4) {
-                  return '코드는 영문 4글자 입니다.';
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                labelText: '경력 및 소개',
-              ),
-            ),
-          ),
+          const IntroduceTextInput(),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -108,54 +105,6 @@ class _ExpertFormState extends State<ExpertForm> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CodeTextInput extends StatefulWidget {
-  const CodeTextInput({Key? key}) : super(key: key);
-
-  @override
-  State<CodeTextInput> createState() => _CodeTextInputState();
-}
-
-class _CodeTextInputState extends State<CodeTextInput> {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: (value) {
-        if (value?.length != 4) {
-          return '4글자 입니다.';
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        labelText: '클라이밍장 코드',
-      ),
-    );
-  }
-}
-
-class NameTextInput extends StatefulWidget {
-  const NameTextInput({Key? key}) : super(key: key);
-
-  @override
-  State<NameTextInput> createState() => _NameTextInputState();
-}
-
-class _NameTextInputState extends State<NameTextInput> {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: (value) {
-        if (value?.length != 4) {
-          return '코드는 영문 4글자 입니다.';
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        labelText: '이름',
       ),
     );
   }

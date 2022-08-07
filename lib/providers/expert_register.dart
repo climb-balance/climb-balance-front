@@ -18,6 +18,14 @@ class ExpertRegisterNotifier extends StateNotifier<ExpertRegisterInfo> {
     return false;
   }
 
+  void updateNickName(String nickName) {
+    state = state.copyWith(nickName: nickName);
+  }
+
+  void updateIntroduce(String introduce) {
+    state = state.copyWith(introduce: introduce);
+  }
+
   void clear() {
     state = const ExpertRegisterInfo();
   }
