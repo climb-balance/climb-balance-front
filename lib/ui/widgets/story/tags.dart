@@ -1,6 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/tag.dart';
+import '../../../providers/tags.dart';
+
+class StoryTagInfo extends ConsumerWidget {
+  final Tags tags;
+
+  const StoryTagInfo({Key? key, required this.tags}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final refState = ref.watch(tagsProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            DateTag(
+              dateString: tags.getDateString(),
+            ),
+            SuccessTag(success: tags.success),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (tags.location != -1)
+              LocationTag(location: refState.locations[tags.location + 1]),
+            if (tags.difficulty != -1)
+              DifficultyTag(
+                  difficulty: refState.difficulties[tags.difficulty + 1]),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 class DateTag extends StatelessWidget {
   final String dateString;

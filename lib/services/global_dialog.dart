@@ -13,3 +13,17 @@ Widget customAlertDialog(BuildContext context,
     ],
   );
 }
+
+void customShowDialog(
+    {required BuildContext context,
+    required String title,
+    required String content}) {
+  showDialog(
+    context: context,
+    builder: (context) => customAlertDialog(
+      context,
+      title: title,
+      content: content,
+    ),
+  );
+}

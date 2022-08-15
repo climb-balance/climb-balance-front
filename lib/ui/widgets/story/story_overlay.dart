@@ -1,13 +1,13 @@
 import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/services/global_dialog.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../models/story.dart';
 import '../../../models/user.dart';
-import '../../../providers/tags.dart';
+import '../commons/row_icon_detail.dart';
 import '../user_profile_info.dart';
 
 class StoryOverlay extends StatefulWidget {
@@ -36,7 +36,9 @@ class _StoryOverlayState extends State<StoryOverlay> {
             : widget.videoPlayerController.play();
       },
       child: Scaffold(
-        floatingActionButton: StoryButtons(),
+        floatingActionButton: StoryButtons(
+          story: widget.story,
+        ),
         floatingActionButtonLocation: CustomFabLoc(),
         backgroundColor: Colors.transparent,
         appBar: StoryOverlayAppBar(
@@ -117,7 +119,9 @@ class CustomFabLoc extends FloatingActionButtonLocation {
 }
 
 class StoryButtons extends StatelessWidget {
-  const StoryButtons({Key? key}) : super(key: key);
+  final Story story;
+
+  const StoryButtons({Key? key, required this.story}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +166,22 @@ class StoryButtons extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            if (story.aiAvailable == 0 || story.expertAvailable == 0) {
+              showModalBottomSheet(
+                enableDrag: true,
+                context: context,
+                builder: (context) => FeedbackRequestSheet(
+                  story: story,
+                ),
+              );
+            } else {
+              customShowDialog(
+                  context: context,
+                  title: '피드백을 요청할 수 없습니다',
+                  content: '이미 피드백이 모두 완료되거나 진행 중 입니다.');
+            }
+          },
           child: Column(
             children: const [
               Icon(
@@ -178,37 +197,34 @@ class StoryButtons extends StatelessWidget {
   }
 }
 
-class StoryTagInfo extends ConsumerWidget {
-  final Tags tags;
+class FeedbackRequestSheet extends StatelessWidget {
+  final Story story;
 
-  const StoryTagInfo({Key? key, required this.tags}) : super(key: key);
+  const FeedbackRequestSheet({Key? key, required this.story}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final refState = ref.watch(tagsProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.end,
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            DateTag(
-              dateString: tags.getDateString(),
+        if (story.aiAvailable == 0)
+          SizedBox(
+            height: 60,
+            child: TextButton(
+              onPressed: () {},
+              child: const RowIconDetail(
+                  icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
             ),
-            SuccessTag(success: tags.success),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (tags.location != -1)
-              LocationTag(location: refState.locations[tags.location + 1]),
-            if (tags.difficulty != -1)
-              DifficultyTag(
-                  difficulty: refState.difficulties[tags.difficulty + 1]),
-          ],
-        ),
+          ),
+        if (story.expertAvailable == 0)
+          SizedBox(
+            height: 60,
+            child: TextButton(
+              onPressed: () {},
+              child: const RowIconDetail(
+                  icon: Icon(Icons.my_library_books), detail: '전문가 피드백 요청하기'),
+            ),
+          ),
       ],
     );
   }
