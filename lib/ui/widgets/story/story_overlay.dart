@@ -36,8 +36,8 @@ class _StoryOverlayState extends State<StoryOverlay> {
             : widget.videoPlayerController.play();
       },
       child: Scaffold(
-        floatingActionButton: const StoryButtons(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButton: StoryButtons(),
+        floatingActionButtonLocation: CustomFabLoc(),
         backgroundColor: Colors.transparent,
         appBar: StoryOverlayAppBar(
             tags: widget.story.tags, handleBack: widget.handleBack),
@@ -104,13 +104,24 @@ class StoryOverlayAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
+class CustomFabLoc extends FloatingActionButtonLocation {
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    return Offset(
+      scaffoldGeometry.scaffoldSize.width -
+          scaffoldGeometry.floatingActionButtonSize.width,
+      scaffoldGeometry.scaffoldSize.height -
+          scaffoldGeometry.floatingActionButtonSize.height,
+    );
+  }
+}
+
 class StoryButtons extends StatelessWidget {
   const StoryButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
