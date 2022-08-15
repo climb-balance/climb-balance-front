@@ -1,3 +1,4 @@
+import 'package:climb_balance/providers/firebase.dart';
 import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/routes/mainRoute.dart';
 import 'package:climb_balance/ui/theme/main_theme.dart';
@@ -16,6 +17,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool darkMode =
         ref.watch(settingsProvider.select((value) => value.darkMode));
+    ref.read(firebaseProvider);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: darkMode ? mainDarkTheme() : mainLightTheme(),
