@@ -24,7 +24,7 @@ class UserProfile with _$UserProfile {
       _$UserProfileFromJson(json);
 }
 
-UserProfile genRandomUser({bool isExpert = false}) {
+UserProfile genRandomUser({bool isExpert = true}) {
   if (isExpert) {
     return const UserProfile(
       nickName: '심규진',
