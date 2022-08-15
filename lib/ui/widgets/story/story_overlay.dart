@@ -1,4 +1,5 @@
 import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +36,8 @@ class _StoryOverlayState extends State<StoryOverlay> {
             : widget.videoPlayerController.play();
       },
       child: Scaffold(
+        floatingActionButton: const StoryButtons(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         backgroundColor: Colors.transparent,
         appBar: StoryOverlayAppBar(
             tags: widget.story.tags, handleBack: widget.handleBack),
@@ -54,20 +57,13 @@ class _StoryOverlayState extends State<StoryOverlay> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(widget.story.description),
-                    StoryButtons(),
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BottomUserProfile(
-                    userProfile: genRandomUser(),
-                    description: widget.story.description,
-                  ),
-                  FeedbackOptions(),
-                ],
-              )
+              BottomUserProfile(
+                userProfile: genRandomUser(),
+                description: widget.story.description,
+              ),
             ],
           ),
         ),
@@ -108,65 +104,6 @@ class StoryOverlayAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class ProgressBar extends StatefulWidget {
-  final VideoPlayerController videoPlayerController;
-
-  const ProgressBar({Key? key, required this.videoPlayerController})
-      : super(key: key);
-
-  @override
-  State<ProgressBar> createState() => _ProgressBarState();
-}
-
-class _ProgressBarState extends State<ProgressBar> {
-  double progressDegree = 0;
-  int progressDuration = 500;
-
-  void initProgress() {
-    progressDuration = 0;
-    progressDegree = 0;
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.videoPlayerController.addListener(() {
-      final value = widget.videoPlayerController.value;
-      progressDegree =
-          (value.position.inMilliseconds / value.duration.inMilliseconds);
-
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.videoPlayerController.removeListener(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedContainer(
-            height: 2,
-            width: progressDegree * MediaQuery.of(context).size.width,
-            color: const ColorScheme.dark().onSurface,
-            duration: Duration(milliseconds: progressDuration),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class StoryButtons extends StatelessWidget {
   const StoryButtons({Key? key}) : super(key: key);
 
@@ -174,6 +111,7 @@ class StoryButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         TextButton(
@@ -209,6 +147,18 @@ class StoryButtons extends StatelessWidget {
                 size: 35,
               ),
               Text('공유'),
+            ],
+          ),
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Column(
+            children: const [
+              Icon(
+                Icons.more,
+                size: 35,
+              ),
+              Text('피드백'),
             ],
           ),
         ),
@@ -273,11 +223,7 @@ class _FeedbackOptionsState extends State<FeedbackOptions> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        TextButton(
-          onPressed: toggleOpenFeedBack,
-          child:
-              openFeedBack ? Icon(Icons.arrow_left) : Icon(Icons.arrow_right),
-        ),
+        TextButton(onPressed: toggleOpenFeedBack, child: Icon(Icons.more)),
         if (openFeedBack)
           Row(
             children: [
