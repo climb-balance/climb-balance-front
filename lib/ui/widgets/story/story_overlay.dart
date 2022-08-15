@@ -1,3 +1,4 @@
+import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,19 +36,8 @@ class _StoryOverlayState extends State<StoryOverlay> {
       },
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: StoryTagInfo(
-            story: widget.story,
-          ),
-          titleTextStyle: Theme.of(context).textTheme.bodyText2,
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: widget.handleBack,
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
+        appBar: StoryOverlayAppBar(
+            tags: widget.story.tags, handleBack: widget.handleBack),
         body: SafeArea(
           minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           child: Column(
@@ -68,10 +58,16 @@ class _StoryOverlayState extends State<StoryOverlay> {
                   ],
                 ),
               ),
-              BottomUserProfile(
-                userProfile: genRandomUser(),
-                description: widget.story.description,
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BottomUserProfile(
+                    userProfile: genRandomUser(),
+                    description: widget.story.description,
+                  ),
+                  FeedbackOptions(),
+                ],
+              )
             ],
           ),
         ),
@@ -81,6 +77,35 @@ class _StoryOverlayState extends State<StoryOverlay> {
       ),
     );
   }
+}
+
+class StoryOverlayAppBar extends StatelessWidget with PreferredSizeWidget {
+  final Tags tags;
+  final void Function() handleBack;
+
+  const StoryOverlayAppBar(
+      {Key? key, required this.tags, required this.handleBack})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: StoryTagInfo(
+        tags: tags,
+      ),
+      titleTextStyle: Theme.of(context).textTheme.bodyText2,
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: handleBack,
+      ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class ProgressBar extends StatefulWidget {
@@ -193,9 +218,9 @@ class StoryButtons extends StatelessWidget {
 }
 
 class StoryTagInfo extends ConsumerWidget {
-  final Story story;
+  final Tags tags;
 
-  const StoryTagInfo({Key? key, required this.story}) : super(key: key);
+  const StoryTagInfo({Key? key, required this.tags}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -208,22 +233,64 @@ class StoryTagInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             DateTag(
-              dateString: story.getDateString(),
+              dateString: tags.getDateString(),
             ),
-            SuccessTag(success: story.tags.success),
+            SuccessTag(success: tags.success),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (story.tags.location != -1)
-              LocationTag(
-                  location: refState.locations[story.tags.location + 1]),
-            if (story.tags.difficulty != -1)
+            if (tags.location != -1)
+              LocationTag(location: refState.locations[tags.location + 1]),
+            if (tags.difficulty != -1)
               DifficultyTag(
-                  difficulty: refState.difficulties[story.tags.difficulty + 1]),
+                  difficulty: refState.difficulties[tags.difficulty + 1]),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class FeedbackOptions extends StatefulWidget {
+  const FeedbackOptions({Key? key}) : super(key: key);
+
+  @override
+  State<FeedbackOptions> createState() => _FeedbackOptionsState();
+}
+
+class _FeedbackOptionsState extends State<FeedbackOptions> {
+  bool openFeedBack = false;
+
+  void toggleOpenFeedBack() {
+    setState(() {
+      openFeedBack = !openFeedBack;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        TextButton(
+          onPressed: toggleOpenFeedBack,
+          child:
+              openFeedBack ? Icon(Icons.arrow_left) : Icon(Icons.arrow_right),
+        ),
+        if (openFeedBack)
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.adb),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.emoji_people),
+                onPressed: () {},
+              ),
+            ],
+          ),
       ],
     );
   }

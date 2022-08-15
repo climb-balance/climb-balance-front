@@ -66,7 +66,7 @@ class TopProfileInfo extends StatelessWidget {
   }
 }
 
-class BottomUserProfile extends StatefulWidget {
+class BottomUserProfile extends StatelessWidget {
   final UserProfile userProfile;
   final String description;
 
@@ -75,78 +75,36 @@ class BottomUserProfile extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<BottomUserProfile> createState() => _BottomUserProfileState();
-}
-
-class _BottomUserProfileState extends State<BottomUserProfile> {
-  bool openFeedBack = false;
-
-  void toggleOpenFeedBack() {
-    setState(() {
-      openFeedBack = !openFeedBack;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        CircleAvatar(
+          backgroundImage: Image.network(userProfile.profileImagePath).image,
+          radius: 20,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              backgroundImage:
-                  Image.network(widget.userProfile.profileImagePath).image,
-              radius: 20,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+            Row(
               children: [
-                Row(
-                  children: [
-                    Text(widget.userProfile.nickName),
-                    Text('#${widget.userProfile.uniqueCode.toString()}'),
-                  ],
-                ),
-                Text(
-                  '${widget.userProfile.height}cm/${widget.userProfile.weight}kg',
-                  style: theme.textTheme.bodyText2?.copyWith(
-                    color: theme.colorScheme.secondary,
-                  ),
-                ),
+                Text(userProfile.nickName),
+                Text('#${userProfile.uniqueCode.toString()}'),
               ],
+            ),
+            Text(
+              '${userProfile.height}cm/${userProfile.weight}kg',
+              style: theme.textTheme.bodyText2?.copyWith(
+                color: theme.colorScheme.secondary,
+              ),
             ),
           ],
         ),
-        Row(
-          children: [
-            TextButton(
-              onPressed: toggleOpenFeedBack,
-              child: openFeedBack
-                  ? Icon(Icons.arrow_left)
-                  : Icon(Icons.arrow_right),
-            ),
-            if (openFeedBack)
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.adb),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.emoji_people),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-          ],
-        )
       ],
     );
   }
