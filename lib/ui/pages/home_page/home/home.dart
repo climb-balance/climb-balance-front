@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:climb_balance/ui/widgets/story/story.dart';
+import 'package:climb_balance/utils/durations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -131,6 +132,7 @@ class FeedbackStatus extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final aiStatus = ref.watch(aiFeedbackStatusProvider);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(5),
@@ -140,32 +142,64 @@ class FeedbackStatus extends ConsumerWidget {
               'AI 피드백 진행상황',
               style: theme.textTheme.headline6,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             SizedBox(
               height: 80,
               child: aiStatus.waiting
-                  ? PieChart(
-                      PieChartData(
-                        centerSpaceRadius: 10,
-                        sections: [
-                          PieChartSectionData(
-                            title: '',
-                            color: theme.colorScheme.primary,
-                            value: 25,
-                            radius: 25,
-                          ),
-                        ],
-                      ),
-                      swapAnimationDuration: Duration(milliseconds: 150),
-                      swapAnimationCurve: Curves.linear,
-                    )
+                  ? const AiFeedbackStatusInform()
                   : const NoFeedbackInform(),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class AiFeedbackStatusInform extends ConsumerWidget {
+  const AiFeedbackStatusInform({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final aiStatus = ref.watch(aiFeedbackStatusProvider);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: PieChart(
+            PieChartData(
+              centerSpaceRadius: 10,
+              startDegreeOffset: 270,
+              sectionsSpace: 0,
+              sections: [
+                PieChartSectionData(
+                  showTitle: false,
+                  color: theme.colorScheme.primary,
+                  value: aiStatus.allTime.inSeconds.toDouble() -
+                      aiStatus.leftTime.inSeconds,
+                  radius: 30,
+                ),
+                PieChartSectionData(
+                  showTitle: false,
+                  color: theme.colorScheme.secondary,
+                  value: aiStatus.leftTime.inSeconds.toDouble(),
+                  radius: 30,
+                ),
+              ],
+            ),
+            swapAnimationDuration: const Duration(milliseconds: 850),
+            swapAnimationCurve: Curves.linear,
+          ),
+        ),
+        Text(formatDuration(aiStatus.leftTime),
+            style: theme.textTheme.subtitle1),
+      ],
     );
   }
 }
@@ -177,7 +211,7 @@ class NoFeedbackInform extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: const [
         Text('요청한 피드백이 완료되었거나 없습니다.'),
       ],
     );

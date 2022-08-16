@@ -213,6 +213,11 @@ class FeedbackRequestSheet extends ConsumerWidget {
           MaterialPageRoute(
               builder: (BuildContext context) => const AiFeedbackAds()));
       return;
+    } else if (ref
+        .watch(aiFeedbackStatusProvider.select((value) => value.waiting))) {
+      customShowDialog(
+          context: context, title: '실패', content: '이미 진행 중인 영상이 있습니다.');
+      return;
     }
     String waitMessage = rank == 2 ? '5분' : '24시간';
     bool result = await customShowConfirm(

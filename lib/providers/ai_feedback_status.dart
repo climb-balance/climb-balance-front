@@ -7,6 +7,7 @@ class FeedbackStatus {
   final Duration leftTime;
   final bool waiting;
   final Duration allTime;
+
   const FeedbackStatus({
     this.leftTime = const Duration(
       seconds: 0,
@@ -27,14 +28,16 @@ class AiFeedbackStatusNotifier extends StateNotifier<FeedbackStatus> {
     state =
         FeedbackStatus(waiting: true, leftTime: timerTime, allTime: timerTime);
     Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (state.leftTime.inSeconds == 0) {
+      if (state.leftTime.inSeconds <= 0) {
         timer.cancel();
+        state = const FeedbackStatus(waiting: false);
+      } else {
+        state = FeedbackStatus(
+          waiting: true,
+          leftTime: state.leftTime - const Duration(seconds: 1),
+          allTime: state.allTime,
+        );
       }
-      state = FeedbackStatus(
-        waiting: true,
-        leftTime: state.leftTime - const Duration(seconds: 1),
-        allTime: state.allTime,
-      );
     });
   }
 }
