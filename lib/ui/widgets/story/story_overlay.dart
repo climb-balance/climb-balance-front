@@ -1,7 +1,7 @@
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/providers/current_user.dart';
-import 'package:climb_balance/services/global_dialog.dart';
 import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
+import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
