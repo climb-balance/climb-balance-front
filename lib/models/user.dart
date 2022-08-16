@@ -40,7 +40,7 @@ UserProfile genRandomUser({bool isExpert = true}) {
       weight: 50,
       description: '안녕하세요. 즐거운 클라이밍해요!!',
       isExpert: true,
-      rank: random.nextInt(2) - 1,
+      rank: 2,
     );
   }
   return UserProfile(

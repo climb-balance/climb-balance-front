@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:climb_balance/ui/widgets/story/story.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../providers/ai_feedback_status.dart';
 import 'continuous_statistics.dart';
 import 'heat_map.dart';
 import 'image_banner.dart';
@@ -103,6 +106,7 @@ class MainPage extends StatelessWidget {
             Card(child: ImageBanner()),
             MainStatistics(),
             // TODO stack으로 옮겨야함.
+            FeedbackStatus(),
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -116,6 +120,66 @@ class MainPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(currentIdx: 0),
+    );
+  }
+}
+
+class FeedbackStatus extends ConsumerWidget {
+  const FeedbackStatus({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final aiStatus = ref.watch(aiFeedbackStatusProvider);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Text(
+              'AI 피드백 진행상황',
+              style: theme.textTheme.headline6,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              height: 80,
+              child: aiStatus.waiting
+                  ? PieChart(
+                      PieChartData(
+                        centerSpaceRadius: 10,
+                        sections: [
+                          PieChartSectionData(
+                            title: '',
+                            color: theme.colorScheme.primary,
+                            value: 25,
+                            radius: 25,
+                          ),
+                        ],
+                      ),
+                      swapAnimationDuration: Duration(milliseconds: 150),
+                      swapAnimationCurve: Curves.linear,
+                    )
+                  : const NoFeedbackInform(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NoFeedbackInform extends StatelessWidget {
+  const NoFeedbackInform({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('요청한 피드백이 완료되었거나 없습니다.'),
+      ],
     );
   }
 }
@@ -145,7 +209,7 @@ class MainStatistics extends StatelessWidget {
             return Row(
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
+                  width: (MediaQuery.of(context).size.width / 2) - 5,
                   child: HeatMap(
                     datas: snapshot.data!,
                   ),

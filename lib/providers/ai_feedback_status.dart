@@ -34,7 +34,7 @@ class AiFeedbackStatusNotifier extends StateNotifier<FeedbackStatus> {
   }
 }
 
-final aiFeedbackStatusNotifier =
+final aiFeedbackStatusProvider =
     StateNotifierProvider<AiFeedbackStatusNotifier, FeedbackStatus>((ref) {
   AiFeedbackStatusNotifier notifier = AiFeedbackStatusNotifier(ref: ref);
   return notifier;

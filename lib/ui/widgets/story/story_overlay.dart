@@ -1,4 +1,5 @@
 import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/providers/ai_feedback_status.dart';
 import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
 import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
@@ -205,7 +206,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
 
   const FeedbackRequestSheet({Key? key, required this.story}) : super(key: key);
 
-  void handleAiFeedbackBtnClick(context, int rank) async {
+  void handleAiFeedbackBtnClick(context, int rank, WidgetRef ref) async {
     if (rank == 0) {
       Navigator.push(
           context,
@@ -213,7 +214,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
               builder: (BuildContext context) => const AiFeedbackAds()));
       return;
     }
-    String waitMessage = rank == 1 ? '5분' : '24시간';
+    String waitMessage = rank == 2 ? '5분' : '24시간';
     bool result = await customShowConfirm(
         context: context,
         title: 'AI 피드백 요청',
@@ -225,6 +226,9 @@ class FeedbackRequestSheet extends ConsumerWidget {
         context: context,
         title: '성공',
         content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
+    ref.read(aiFeedbackStatusProvider.notifier).addTimer(
+        timerTime:
+            rank == 2 ? const Duration(minutes: 5) : const Duration(days: 1));
     Navigator.pop(context);
   }
 
@@ -240,7 +244,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
             height: 60,
             child: TextButton(
               onPressed: () {
-                handleAiFeedbackBtnClick(context, rank);
+                handleAiFeedbackBtnClick(context, rank, ref);
               },
               child: const RowIconDetail(
                   icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
