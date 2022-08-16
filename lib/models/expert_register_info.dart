@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'expert_register_info.g.dart';
-
 part 'expert_register_info.freezed.dart';
+
+part 'expert_register_info.g.dart';
 
 @freezed
 class ExpertRegisterInfo with _$ExpertRegisterInfo {

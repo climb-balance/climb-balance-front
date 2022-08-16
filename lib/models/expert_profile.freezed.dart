@@ -161,7 +161,7 @@ class __$$_ExpertProfileCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ExpertProfile implements _ExpertProfile {
+class _$_ExpertProfile with DiagnosticableTreeMixin implements _ExpertProfile {
   const _$_ExpertProfile(
       {this.nickName = 'default',
       this.profileImagePath =
@@ -194,8 +194,21 @@ class _$_ExpertProfile implements _ExpertProfile {
   final double reliability;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'ExpertProfile(nickName: $nickName, profileImagePath: $profileImagePath, introduce: $introduce, climbingCenterId: $climbingCenterId, id: $id, reliability: $reliability)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ExpertProfile'))
+      ..add(DiagnosticsProperty('nickName', nickName))
+      ..add(DiagnosticsProperty('profileImagePath', profileImagePath))
+      ..add(DiagnosticsProperty('introduce', introduce))
+      ..add(DiagnosticsProperty('climbingCenterId', climbingCenterId))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('reliability', reliability));
   }
 
   @override

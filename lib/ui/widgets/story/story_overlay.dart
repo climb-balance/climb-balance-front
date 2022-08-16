@@ -211,7 +211,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const AiFeedbackAds()));
-    }
+    } else {}
   }
 
   @override

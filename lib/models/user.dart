@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:climb_balance/models/expert_profile.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user.freezed.dart';

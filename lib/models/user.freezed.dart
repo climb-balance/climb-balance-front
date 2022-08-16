@@ -227,7 +227,7 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_UserProfile implements _UserProfile {
+class _$_UserProfile with DiagnosticableTreeMixin implements _UserProfile {
   const _$_UserProfile(
       {this.nickName = 'default',
       this.profileImage =
@@ -275,8 +275,25 @@ class _$_UserProfile implements _UserProfile {
   final ExpertProfile? expertProfile;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'UserProfile(nickName: $nickName, profileImage: $profileImage, description: $description, token: $token, uniqueTag: $uniqueTag, height: $height, weight: $weight, isExpert: $isExpert, rank: $rank, expertProfile: $expertProfile)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'UserProfile'))
+      ..add(DiagnosticsProperty('nickName', nickName))
+      ..add(DiagnosticsProperty('profileImage', profileImage))
+      ..add(DiagnosticsProperty('description', description))
+      ..add(DiagnosticsProperty('token', token))
+      ..add(DiagnosticsProperty('uniqueTag', uniqueTag))
+      ..add(DiagnosticsProperty('height', height))
+      ..add(DiagnosticsProperty('weight', weight))
+      ..add(DiagnosticsProperty('isExpert', isExpert))
+      ..add(DiagnosticsProperty('rank', rank))
+      ..add(DiagnosticsProperty('expertProfile', expertProfile));
   }
 
   @override
