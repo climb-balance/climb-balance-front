@@ -1,4 +1,4 @@
-import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_request.dart';
+import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
 import 'package:flutter/material.dart';
 
 class TestPage extends StatefulWidget {
@@ -11,6 +11,6 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
-    return AiFeedbackRequest();
+    return AiFeedbackAds();
   }
 }

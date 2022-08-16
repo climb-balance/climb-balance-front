@@ -1,16 +1,14 @@
-import 'dart:ui';
-
 import 'package:climb_balance/ui/widgets/commons/my_icons.dart';
 import 'package:flutter/material.dart';
 
-class AiFeedbackRequest extends StatefulWidget {
-  const AiFeedbackRequest({Key? key}) : super(key: key);
+class AiFeedbackAds extends StatefulWidget {
+  const AiFeedbackAds({Key? key}) : super(key: key);
 
   @override
-  State<AiFeedbackRequest> createState() => _AiFeedbackRequestState();
+  State<AiFeedbackAds> createState() => _AiFeedbackAdsState();
 }
 
-class _AiFeedbackRequestState extends State<AiFeedbackRequest> {
+class _AiFeedbackAdsState extends State<AiFeedbackAds> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -21,7 +19,7 @@ class _AiFeedbackRequestState extends State<AiFeedbackRequest> {
         elevation: 1,
       ),
       body: SafeArea(
-        minimum: EdgeInsets.fromLTRB(20, 20, 20, 20),
+        minimum: const EdgeInsets.fromLTRB(20, 20, 20, 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

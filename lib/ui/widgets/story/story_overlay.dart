@@ -1,9 +1,11 @@
 import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/services/global_dialog.dart';
-import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_request.dart';
+import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../models/story.dart';
@@ -198,20 +200,24 @@ class StoryButtons extends StatelessWidget {
   }
 }
 
-class FeedbackRequestSheet extends StatelessWidget {
+class FeedbackRequestSheet extends ConsumerWidget {
   final Story story;
 
   const FeedbackRequestSheet({Key? key, required this.story}) : super(key: key);
 
-  void handleAiFeedbackBtnClick(context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => AiFeedbackRequest()));
+  void handleAiFeedbackBtnClick(context, int rank) {
+    if (rank == 0) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const AiFeedbackAds()));
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final int rank =
+        ref.watch(currentUserProvider.select((value) => value.rank));
     return ListView(
       shrinkWrap: true,
       children: [
@@ -220,7 +226,7 @@ class FeedbackRequestSheet extends StatelessWidget {
             height: 60,
             child: TextButton(
               onPressed: () {
-                handleAiFeedbackBtnClick(context);
+                handleAiFeedbackBtnClick(context, rank);
               },
               child: const RowIconDetail(
                   icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
