@@ -205,13 +205,26 @@ class FeedbackRequestSheet extends ConsumerWidget {
 
   const FeedbackRequestSheet({Key? key, required this.story}) : super(key: key);
 
-  void handleAiFeedbackBtnClick(context, int rank) {
+  void handleAiFeedbackBtnClick(context, int rank) async {
     if (rank == 0) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const AiFeedbackAds()));
-    } else {}
+      return;
+    }
+    String waitMessage = rank == 1 ? '5분' : '24시간';
+    bool result = await customShowConfirm(
+        context: context,
+        title: 'AI 피드백 요청',
+        content: '소요 시간은 시간은 최대 $waitMessage입니다.');
+    if (!result) {
+      return;
+    }
+    customShowDialog(
+        context: context,
+        title: '성공',
+        content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
   }
 
   @override

@@ -32,7 +32,7 @@ Widget customConfirmDialog(BuildContext context,
   );
 }
 
-Future<bool?> customShowConfirm(
+Future<bool> customShowConfirm(
     {required BuildContext context,
     required String title,
     required String content}) async {
