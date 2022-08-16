@@ -27,7 +27,7 @@ class TopProfileInfo extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
                 image: DecorationImage(
-                  image: NetworkImage(profile.profileImagePath),
+                  image: NetworkImage(profile.profileImage),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: kElevationToShadow[4],
@@ -44,7 +44,7 @@ class TopProfileInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${profile.nickName}#${profile.uniqueCode}',
+                      '${profile.nickName}#${profile.uniqueTag}',
                       style: theme.textTheme.headline5,
                     ),
                     const SizedBox(
@@ -56,7 +56,7 @@ class TopProfileInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text('${profile.introduce}'),
+                Text('${profile.description}'),
               ],
             ),
           ],
@@ -81,7 +81,7 @@ class BottomUserProfile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
-          backgroundImage: Image.network(userProfile.profileImagePath).image,
+          backgroundImage: Image.network(userProfile.profileImage).image,
           radius: 20,
         ),
         const SizedBox(
@@ -94,7 +94,7 @@ class BottomUserProfile extends StatelessWidget {
             Row(
               children: [
                 Text(userProfile.nickName),
-                Text('#${userProfile.uniqueCode.toString()}'),
+                Text('#${userProfile.uniqueTag.toString()}'),
               ],
             ),
             Text(
