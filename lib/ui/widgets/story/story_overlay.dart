@@ -225,6 +225,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
         context: context,
         title: '성공',
         content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
+    Navigator.pop(context);
   }
 
   @override
