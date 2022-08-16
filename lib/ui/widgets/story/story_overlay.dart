@@ -1,5 +1,6 @@
 import 'package:climb_balance/models/tag.dart';
 import 'package:climb_balance/services/global_dialog.dart';
+import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_request.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
@@ -202,6 +203,13 @@ class FeedbackRequestSheet extends StatelessWidget {
 
   const FeedbackRequestSheet({Key? key, required this.story}) : super(key: key);
 
+  void handleAiFeedbackBtnClick(context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => AiFeedbackRequest()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -211,7 +219,9 @@ class FeedbackRequestSheet extends StatelessWidget {
           SizedBox(
             height: 60,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                handleAiFeedbackBtnClick(context);
+              },
               child: const RowIconDetail(
                   icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
             ),

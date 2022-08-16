@@ -73,7 +73,7 @@ Story getRandomStory() {
     likes: random.nextInt(100),
     description: '안녕하세요',
     comments: random.nextInt(100),
-    aiAvailable: random.nextInt(3) - 1,
+    aiAvailable: 0,
     expertAvailable: random.nextInt(3) - 1,
     uploadDate: DateTime.now(),
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
