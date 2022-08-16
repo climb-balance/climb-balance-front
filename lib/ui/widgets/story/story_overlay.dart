@@ -11,6 +11,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../models/story.dart';
 import '../../../models/user.dart';
+import '../../pages/feedback_page/expert_feedback_request/expert_feedback_request.dart';
 import '../commons/row_icon_detail.dart';
 import '../user_profile_info.dart';
 
@@ -237,6 +238,13 @@ class FeedbackRequestSheet extends ConsumerWidget {
     Navigator.pop(context);
   }
 
+  void handleExpertFeedbackBtnClick(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => const ExpertFeedbackRequest()));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final int rank =
@@ -259,7 +267,9 @@ class FeedbackRequestSheet extends ConsumerWidget {
           SizedBox(
             height: 60,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                handleExpertFeedbackBtnClick(context);
+              },
               child: const RowIconDetail(
                   icon: Icon(Icons.my_library_books), detail: '전문가 피드백 요청하기'),
             ),

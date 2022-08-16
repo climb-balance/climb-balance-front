@@ -44,7 +44,7 @@ class MainRoute extends ConsumerWidget {
       },
       child: Navigator(
         key: _navigatorKey,
-        initialRoute: true ? HOME_PAGE_PATH : '/testpage',
+        initialRoute: false ? HOME_PAGE_PATH : '/testpage',
         //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
         onGenerateRoute: mainRoute,
       ),
