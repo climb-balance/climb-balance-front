@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:climb_balance/models/expert_profile.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -10,13 +12,14 @@ class UserProfile with _$UserProfile {
   const factory UserProfile({
     @Default('default') String nickName,
     @Default('https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg')
-        String profileImagePath,
-    @Default('') String introduce,
+        String profileImage,
+    @Default('') String description,
     @Default('') String token,
-    @Default(1234) int uniqueCode,
+    @Default(1234) int uniqueTag,
     @Default(-1) int height,
     @Default(-1) int weight,
     @Default(false) bool isExpert,
+    @Default(0) int rank,
     ExpertProfile? expertProfile,
   }) = _UserProfile;
 
@@ -25,25 +28,28 @@ class UserProfile with _$UserProfile {
 }
 
 UserProfile genRandomUser({bool isExpert = true}) {
+  Random random = Random(1);
   if (isExpert) {
-    return const UserProfile(
+    return UserProfile(
       nickName: '심규진',
-      profileImagePath:
+      profileImage:
           'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/00480565a56a710bc697f41f9a31e617d1d7a989_full.jpg',
-      uniqueCode: 1234,
+      uniqueTag: 1234,
       height: 160,
       weight: 50,
-      introduce: '안녕하세요. 즐거운 클라이밍해요!!',
+      description: '안녕하세요. 즐거운 클라이밍해요!!',
       isExpert: true,
+      rank: random.nextInt(2) - 1,
     );
   }
-  return const UserProfile(
+  return UserProfile(
     nickName: '심규진',
-    profileImagePath:
+    profileImage:
         'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/00/00480565a56a710bc697f41f9a31e617d1d7a989_full.jpg',
-    uniqueCode: 1234,
+    uniqueTag: 1234,
     height: 160,
     weight: 50,
-    introduce: '안녕하세요. 즐거운 클라이밍해요!!',
+    description: '안녕하세요. 즐거운 클라이밍해요!!',
+    rank: random.nextInt(2) - 1,
   );
 }

@@ -21,13 +21,14 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserProfile {
   String get nickName => throw _privateConstructorUsedError;
-  String get profileImagePath => throw _privateConstructorUsedError;
-  String get introduce => throw _privateConstructorUsedError;
+  String get profileImage => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
-  int get uniqueCode => throw _privateConstructorUsedError;
+  int get uniqueTag => throw _privateConstructorUsedError;
   int get height => throw _privateConstructorUsedError;
   int get weight => throw _privateConstructorUsedError;
   bool get isExpert => throw _privateConstructorUsedError;
+  int get rank => throw _privateConstructorUsedError;
   ExpertProfile? get expertProfile => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,13 +44,14 @@ abstract class $UserProfileCopyWith<$Res> {
       _$UserProfileCopyWithImpl<$Res>;
   $Res call(
       {String nickName,
-      String profileImagePath,
-      String introduce,
+      String profileImage,
+      String description,
       String token,
-      int uniqueCode,
+      int uniqueTag,
       int height,
       int weight,
       bool isExpert,
+      int rank,
       ExpertProfile? expertProfile});
 
   $ExpertProfileCopyWith<$Res>? get expertProfile;
@@ -66,13 +68,14 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
   @override
   $Res call({
     Object? nickName = freezed,
-    Object? profileImagePath = freezed,
-    Object? introduce = freezed,
+    Object? profileImage = freezed,
+    Object? description = freezed,
     Object? token = freezed,
-    Object? uniqueCode = freezed,
+    Object? uniqueTag = freezed,
     Object? height = freezed,
     Object? weight = freezed,
     Object? isExpert = freezed,
+    Object? rank = freezed,
     Object? expertProfile = freezed,
   }) {
     return _then(_value.copyWith(
@@ -80,21 +83,21 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      profileImagePath: profileImagePath == freezed
-          ? _value.profileImagePath
-          : profileImagePath // ignore: cast_nullable_to_non_nullable
+      profileImage: profileImage == freezed
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
               as String,
-      introduce: introduce == freezed
-          ? _value.introduce
-          : introduce // ignore: cast_nullable_to_non_nullable
+      description: description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       token: token == freezed
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      uniqueCode: uniqueCode == freezed
-          ? _value.uniqueCode
-          : uniqueCode // ignore: cast_nullable_to_non_nullable
+      uniqueTag: uniqueTag == freezed
+          ? _value.uniqueTag
+          : uniqueTag // ignore: cast_nullable_to_non_nullable
               as int,
       height: height == freezed
           ? _value.height
@@ -108,6 +111,10 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
           ? _value.isExpert
           : isExpert // ignore: cast_nullable_to_non_nullable
               as bool,
+      rank: rank == freezed
+          ? _value.rank
+          : rank // ignore: cast_nullable_to_non_nullable
+              as int,
       expertProfile: expertProfile == freezed
           ? _value.expertProfile
           : expertProfile // ignore: cast_nullable_to_non_nullable
@@ -136,13 +143,14 @@ abstract class _$$_UserProfileCopyWith<$Res>
   @override
   $Res call(
       {String nickName,
-      String profileImagePath,
-      String introduce,
+      String profileImage,
+      String description,
       String token,
-      int uniqueCode,
+      int uniqueTag,
       int height,
       int weight,
       bool isExpert,
+      int rank,
       ExpertProfile? expertProfile});
 
   @override
@@ -162,13 +170,14 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
   @override
   $Res call({
     Object? nickName = freezed,
-    Object? profileImagePath = freezed,
-    Object? introduce = freezed,
+    Object? profileImage = freezed,
+    Object? description = freezed,
     Object? token = freezed,
-    Object? uniqueCode = freezed,
+    Object? uniqueTag = freezed,
     Object? height = freezed,
     Object? weight = freezed,
     Object? isExpert = freezed,
+    Object? rank = freezed,
     Object? expertProfile = freezed,
   }) {
     return _then(_$_UserProfile(
@@ -176,21 +185,21 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      profileImagePath: profileImagePath == freezed
-          ? _value.profileImagePath
-          : profileImagePath // ignore: cast_nullable_to_non_nullable
+      profileImage: profileImage == freezed
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
               as String,
-      introduce: introduce == freezed
-          ? _value.introduce
-          : introduce // ignore: cast_nullable_to_non_nullable
+      description: description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       token: token == freezed
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      uniqueCode: uniqueCode == freezed
-          ? _value.uniqueCode
-          : uniqueCode // ignore: cast_nullable_to_non_nullable
+      uniqueTag: uniqueTag == freezed
+          ? _value.uniqueTag
+          : uniqueTag // ignore: cast_nullable_to_non_nullable
               as int,
       height: height == freezed
           ? _value.height
@@ -204,6 +213,10 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
           ? _value.isExpert
           : isExpert // ignore: cast_nullable_to_non_nullable
               as bool,
+      rank: rank == freezed
+          ? _value.rank
+          : rank // ignore: cast_nullable_to_non_nullable
+              as int,
       expertProfile: expertProfile == freezed
           ? _value.expertProfile
           : expertProfile // ignore: cast_nullable_to_non_nullable
@@ -217,14 +230,15 @@ class __$$_UserProfileCopyWithImpl<$Res> extends _$UserProfileCopyWithImpl<$Res>
 class _$_UserProfile implements _UserProfile {
   const _$_UserProfile(
       {this.nickName = 'default',
-      this.profileImagePath =
+      this.profileImage =
           'https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg',
-      this.introduce = '',
+      this.description = '',
       this.token = '',
-      this.uniqueCode = 1234,
+      this.uniqueTag = 1234,
       this.height = -1,
       this.weight = -1,
       this.isExpert = false,
+      this.rank = 0,
       this.expertProfile});
 
   factory _$_UserProfile.fromJson(Map<String, dynamic> json) =>
@@ -235,16 +249,16 @@ class _$_UserProfile implements _UserProfile {
   final String nickName;
   @override
   @JsonKey()
-  final String profileImagePath;
+  final String profileImage;
   @override
   @JsonKey()
-  final String introduce;
+  final String description;
   @override
   @JsonKey()
   final String token;
   @override
   @JsonKey()
-  final int uniqueCode;
+  final int uniqueTag;
   @override
   @JsonKey()
   final int height;
@@ -255,11 +269,14 @@ class _$_UserProfile implements _UserProfile {
   @JsonKey()
   final bool isExpert;
   @override
+  @JsonKey()
+  final int rank;
+  @override
   final ExpertProfile? expertProfile;
 
   @override
   String toString() {
-    return 'UserProfile(nickName: $nickName, profileImagePath: $profileImagePath, introduce: $introduce, token: $token, uniqueCode: $uniqueCode, height: $height, weight: $weight, isExpert: $isExpert, expertProfile: $expertProfile)';
+    return 'UserProfile(nickName: $nickName, profileImage: $profileImage, description: $description, token: $token, uniqueTag: $uniqueTag, height: $height, weight: $weight, isExpert: $isExpert, rank: $rank, expertProfile: $expertProfile)';
   }
 
   @override
@@ -269,14 +286,15 @@ class _$_UserProfile implements _UserProfile {
             other is _$_UserProfile &&
             const DeepCollectionEquality().equals(other.nickName, nickName) &&
             const DeepCollectionEquality()
-                .equals(other.profileImagePath, profileImagePath) &&
-            const DeepCollectionEquality().equals(other.introduce, introduce) &&
-            const DeepCollectionEquality().equals(other.token, token) &&
+                .equals(other.profileImage, profileImage) &&
             const DeepCollectionEquality()
-                .equals(other.uniqueCode, uniqueCode) &&
+                .equals(other.description, description) &&
+            const DeepCollectionEquality().equals(other.token, token) &&
+            const DeepCollectionEquality().equals(other.uniqueTag, uniqueTag) &&
             const DeepCollectionEquality().equals(other.height, height) &&
             const DeepCollectionEquality().equals(other.weight, weight) &&
             const DeepCollectionEquality().equals(other.isExpert, isExpert) &&
+            const DeepCollectionEquality().equals(other.rank, rank) &&
             const DeepCollectionEquality()
                 .equals(other.expertProfile, expertProfile));
   }
@@ -286,13 +304,14 @@ class _$_UserProfile implements _UserProfile {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(nickName),
-      const DeepCollectionEquality().hash(profileImagePath),
-      const DeepCollectionEquality().hash(introduce),
+      const DeepCollectionEquality().hash(profileImage),
+      const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(token),
-      const DeepCollectionEquality().hash(uniqueCode),
+      const DeepCollectionEquality().hash(uniqueTag),
       const DeepCollectionEquality().hash(height),
       const DeepCollectionEquality().hash(weight),
       const DeepCollectionEquality().hash(isExpert),
+      const DeepCollectionEquality().hash(rank),
       const DeepCollectionEquality().hash(expertProfile));
 
   @JsonKey(ignore: true)
@@ -311,13 +330,14 @@ class _$_UserProfile implements _UserProfile {
 abstract class _UserProfile implements UserProfile {
   const factory _UserProfile(
       {final String nickName,
-      final String profileImagePath,
-      final String introduce,
+      final String profileImage,
+      final String description,
       final String token,
-      final int uniqueCode,
+      final int uniqueTag,
       final int height,
       final int weight,
       final bool isExpert,
+      final int rank,
       final ExpertProfile? expertProfile}) = _$_UserProfile;
 
   factory _UserProfile.fromJson(Map<String, dynamic> json) =
@@ -326,19 +346,21 @@ abstract class _UserProfile implements UserProfile {
   @override
   String get nickName;
   @override
-  String get profileImagePath;
+  String get profileImage;
   @override
-  String get introduce;
+  String get description;
   @override
   String get token;
   @override
-  int get uniqueCode;
+  int get uniqueTag;
   @override
   int get height;
   @override
   int get weight;
   @override
   bool get isExpert;
+  @override
+  int get rank;
   @override
   ExpertProfile? get expertProfile;
   @override
