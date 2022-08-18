@@ -136,24 +136,24 @@ class StoryButtons extends StatelessWidget {
         TextButton(
           onPressed: () {},
           child: Column(
-            children: const [
-              Icon(
+            children: [
+              const Icon(
                 Icons.thumb_up,
                 size: 35,
               ),
-              Text('200k')
+              Text('${story.likes}'),
             ],
           ),
         ),
         TextButton(
           onPressed: () {},
           child: Column(
-            children: const [
-              Icon(
+            children: [
+              const Icon(
                 Icons.comment,
                 size: 35,
               ),
-              Text('200k'),
+              Text('${story.comments}'),
             ],
           ),
         ),
