@@ -149,7 +149,9 @@ class __$$_ExpertRegisterInfoCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ExpertRegisterInfo implements _ExpertRegisterInfo {
+class _$_ExpertRegisterInfo
+    with DiagnosticableTreeMixin
+    implements _ExpertRegisterInfo {
   const _$_ExpertRegisterInfo(
       {this.nickName = 'default',
       this.introduce = '',
@@ -177,8 +179,20 @@ class _$_ExpertRegisterInfo implements _ExpertRegisterInfo {
   final File? tmpImage;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'ExpertRegisterInfo(nickName: $nickName, introduce: $introduce, climbingCenterId: $climbingCenterId, code: $code, tmpImage: $tmpImage)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ExpertRegisterInfo'))
+      ..add(DiagnosticsProperty('nickName', nickName))
+      ..add(DiagnosticsProperty('introduce', introduce))
+      ..add(DiagnosticsProperty('climbingCenterId', climbingCenterId))
+      ..add(DiagnosticsProperty('code', code))
+      ..add(DiagnosticsProperty('tmpImage', tmpImage));
   }
 
   @override

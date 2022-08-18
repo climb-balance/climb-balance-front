@@ -9,14 +9,15 @@ part of 'user.dart';
 _$_UserProfile _$$_UserProfileFromJson(Map<String, dynamic> json) =>
     _$_UserProfile(
       nickName: json['nickName'] as String? ?? 'default',
-      profileImagePath: json['profileImagePath'] as String? ??
+      profileImage: json['profileImage'] as String? ??
           'https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg',
-      introduce: json['introduce'] as String? ?? '',
+      description: json['description'] as String? ?? '',
       token: json['token'] as String? ?? '',
-      uniqueCode: json['uniqueCode'] as int? ?? 1234,
+      uniqueTag: json['uniqueTag'] as int? ?? 1234,
       height: json['height'] as int? ?? -1,
       weight: json['weight'] as int? ?? -1,
       isExpert: json['isExpert'] as bool? ?? false,
+      rank: json['rank'] as int? ?? 0,
       expertProfile: json['expertProfile'] == null
           ? null
           : ExpertProfile.fromJson(
@@ -26,12 +27,13 @@ _$_UserProfile _$$_UserProfileFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_UserProfileToJson(_$_UserProfile instance) =>
     <String, dynamic>{
       'nickName': instance.nickName,
-      'profileImagePath': instance.profileImagePath,
-      'introduce': instance.introduce,
+      'profileImage': instance.profileImage,
+      'description': instance.description,
       'token': instance.token,
-      'uniqueCode': instance.uniqueCode,
+      'uniqueTag': instance.uniqueTag,
       'height': instance.height,
       'weight': instance.weight,
       'isExpert': instance.isExpert,
+      'rank': instance.rank,
       'expertProfile': instance.expertProfile,
     };

@@ -95,7 +95,7 @@ class __$$_SettingsCopyWithImpl<$Res> extends _$SettingsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Settings implements _Settings {
+class _$_Settings with DiagnosticableTreeMixin implements _Settings {
   const _$_Settings({this.darkMode = false, this.expertMode = false});
 
   factory _$_Settings.fromJson(Map<String, dynamic> json) =>
@@ -109,8 +109,17 @@ class _$_Settings implements _Settings {
   final dynamic expertMode;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'Settings(darkMode: $darkMode, expertMode: $expertMode)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'Settings'))
+      ..add(DiagnosticsProperty('darkMode', darkMode))
+      ..add(DiagnosticsProperty('expertMode', expertMode));
   }
 
   @override
