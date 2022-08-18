@@ -1,6 +1,6 @@
 import 'package:climb_balance/models/tag.dart';
-import 'package:climb_balance/providers/ai_feedback_status.dart';
 import 'package:climb_balance/providers/current_user.dart';
+import 'package:climb_balance/providers/feedback_status.dart';
 import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
 import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
@@ -11,7 +11,6 @@ import 'package:video_player/video_player.dart';
 
 import '../../../models/story.dart';
 import '../../../models/user.dart';
-import '../../pages/feedback_page/expert_feedback_request/expert_feedback_request.dart';
 import '../commons/row_icon_detail.dart';
 import '../user_profile_info.dart';
 
@@ -215,7 +214,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
               builder: (BuildContext context) => const AiFeedbackAds()));
       return;
     } else if (ref
-        .watch(aiFeedbackStatusProvider.select((value) => value.waiting))) {
+        .watch(feedbackStatusProvider.select((value) => value.aiIsWaiting))) {
       customShowDialog(
           context: context, title: '실패', content: '이미 진행 중인 영상이 있습니다.');
       return;
@@ -232,17 +231,27 @@ class FeedbackRequestSheet extends ConsumerWidget {
         context: context,
         title: '성공',
         content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
-    ref.read(aiFeedbackStatusProvider.notifier).addTimer(
+    ref.read(feedbackStatusProvider.notifier).addTimer(
         timerTime:
             rank == 2 ? const Duration(minutes: 5) : const Duration(days: 1));
     Navigator.pop(context);
   }
 
-  void handleExpertFeedbackBtnClick(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => const ExpertFeedbackRequest()));
+  void handleExpertFeedbackBtnClick(BuildContext context) async {
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (BuildContext context) => const ExpertFeedbackRequest()));
+    bool result = await customShowConfirm(
+        context: context, title: '전문가 피드백 요청', content: '정말로 신청하시겠습니까?');
+    if (!result) {
+      return;
+    }
+    customShowDialog(
+        context: context,
+        title: '성공',
+        content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
+    Navigator.pop(context);
   }
 
   @override

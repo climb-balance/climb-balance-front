@@ -8,7 +8,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../providers/ai_feedback_status.dart';
+import '../../../../providers/feedback_status.dart';
 import 'continuous_statistics.dart';
 import 'heat_map.dart';
 import 'image_banner.dart';
@@ -103,12 +103,17 @@ class MainPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
-            Card(child: ImageBanner()),
-            MainStatistics(),
+          children: [
+            const Card(child: const ImageBanner()),
+            const MainStatistics(),
             // TODO stack으로 옮겨야함.
-            FeedbackStatus(),
-            Expanded(
+            Row(
+              children: const [
+                Flexible(child: AiFeedbackStatus()),
+                Flexible(child: ExpertFeedbackStatus()),
+              ],
+            ),
+            const Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Icon(
@@ -125,13 +130,60 @@ class MainPage extends StatelessWidget {
   }
 }
 
-class FeedbackStatus extends ConsumerWidget {
-  const FeedbackStatus({Key? key}) : super(key: key);
+class ExpertFeedbackStatus extends ConsumerWidget {
+  const ExpertFeedbackStatus({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final aiStatus = ref.watch(aiFeedbackStatusProvider);
+    final finishedExpertFeedback = ref.watch(
+        feedbackStatusProvider.select((value) => value.finishedExpertFeedback));
+    final waitingExpertFeedback = ref.watch(
+        feedbackStatusProvider.select((value) => value.waitingExpertFeedback));
+
+    return Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            children: [
+              Text(
+                '전문가 피드백',
+                style: theme.textTheme.headline6,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SizedBox(
+                height: 80,
+                child: Column(
+                  children: [
+                    Text(
+                      '${waitingExpertFeedback}/${finishedExpertFeedback}',
+                      style: theme.textTheme.headline4,
+                    ),
+                    Text(
+                      '대기/완료',
+                      style: theme.textTheme.subtitle2,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AiFeedbackStatus extends ConsumerWidget {
+  const AiFeedbackStatus({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final aiStatus = ref.watch(feedbackStatusProvider);
 
     return Card(
       child: Padding(
@@ -139,7 +191,7 @@ class FeedbackStatus extends ConsumerWidget {
         child: Column(
           children: [
             Text(
-              'AI 피드백 진행상황',
+              'AI 피드백',
               style: theme.textTheme.headline6,
             ),
             const SizedBox(
@@ -147,7 +199,7 @@ class FeedbackStatus extends ConsumerWidget {
             ),
             SizedBox(
               height: 80,
-              child: aiStatus.waiting
+              child: aiStatus.aiIsWaiting
                   ? const AiFeedbackStatusInform()
                   : const NoFeedbackInform(),
             ),
@@ -166,7 +218,7 @@ class AiFeedbackStatusInform extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final aiStatus = ref.watch(aiFeedbackStatusProvider);
+    final aiStatus = ref.watch(feedbackStatusProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -181,14 +233,14 @@ class AiFeedbackStatusInform extends ConsumerWidget {
                 PieChartSectionData(
                   showTitle: false,
                   color: theme.colorScheme.primary,
-                  value: aiStatus.allTime.inSeconds.toDouble() -
-                      aiStatus.leftTime.inSeconds,
+                  value: aiStatus.aiWaitingTime.inSeconds.toDouble() -
+                      aiStatus.aiLeftTime.inSeconds,
                   radius: 30,
                 ),
                 PieChartSectionData(
                   showTitle: false,
                   color: theme.colorScheme.secondary,
-                  value: aiStatus.leftTime.inSeconds.toDouble(),
+                  value: aiStatus.aiLeftTime.inSeconds.toDouble(),
                   radius: 30,
                 ),
               ],
@@ -197,7 +249,7 @@ class AiFeedbackStatusInform extends ConsumerWidget {
             swapAnimationCurve: Curves.linear,
           ),
         ),
-        Text(formatDuration(aiStatus.leftTime),
+        Text(formatDuration(aiStatus.aiLeftTime),
             style: theme.textTheme.subtitle1),
       ],
     );
@@ -209,11 +261,11 @@ class NoFeedbackInform extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('요청한 피드백이 완료되었거나 없습니다.'),
-      ],
+    return const Expanded(
+      child: Text(
+        '요청한 피드백이 완료되었거나 없습니다.',
+        overflow: TextOverflow.fade,
+      ),
     );
   }
 }
@@ -242,28 +294,27 @@ class MainStatistics extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return Row(
               children: [
-                SizedBox(
-                  width: (MediaQuery.of(context).size.width / 2) - 5,
+                Flexible(
                   child: HeatMap(
                     datas: snapshot.data!,
                   ),
                 ),
-                ContinuousStatistics(
-                  datas: snapshot.data!,
+                Flexible(
+                  child: ContinuousStatistics(
+                    datas: snapshot.data!,
+                  ),
                 ),
               ],
             );
           }
           return Row(
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
+              Flexible(
                 child: HeatMap(
                   datas: List<int>.filled(30, 0),
                 ),
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
+              Flexible(
                 child: HeatMap(
                   datas: List<int>.filled(30, 0),
                 ),
