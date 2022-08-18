@@ -36,12 +36,7 @@ class Story {
   }
 
   Story.fromJson(Map<String, dynamic> json)
-      : tags = Tags(
-          difficulty: json['difficulty'],
-          videoDate: DateTime.parse(json['video_date']),
-          location: json['location'],
-          success: json['success'],
-        ),
+      : tags = Tags.fromJson(json['tags']),
         likes = json['likes'],
         description = json['description'],
         comments = json['comments'],

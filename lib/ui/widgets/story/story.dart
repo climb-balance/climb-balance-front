@@ -1,4 +1,5 @@
 import 'package:climb_balance/ui/theme/main_theme.dart';
+import 'package:climb_balance/ui/widgets/story/story_comments.dart';
 import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -40,7 +41,7 @@ class StoryPreview extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
-              fit: BoxFit.fill,
+              fit: BoxFit.fitWidth,
               image: NetworkImage(story.thumbnailUrl),
             ),
           ),
@@ -63,6 +64,13 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   late final VideoPlayerController _videoPlayerController;
+  bool isCommentOpen = false;
+
+  void toggleCommentOpen() {
+    setState(() {
+      isCommentOpen = !isCommentOpen;
+    });
+  }
 
   @override
   void initState() {
@@ -113,24 +121,45 @@ class _StoryViewState extends State<StoryView> {
           ),
         ),
       ),
-      child: Stack(
-        children: [
-          Expanded(
-            child: Center(
-              child: _videoPlayerController.value.isInitialized
-                  ? AspectRatio(
-                      aspectRatio: _videoPlayerController.value.aspectRatio,
-                      child: VideoPlayer(_videoPlayerController),
-                    )
-                  : const CircularProgressIndicator(),
-            ),
+      child: Material(
+        color: Colors.transparent,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isCommentOpen) toggleCommentOpen();
+                      },
+                      // TODO 가운데만 클릭된다.
+                      child: Center(
+                        child: _videoPlayerController.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
+                                child: VideoPlayer(_videoPlayerController),
+                              )
+                            : const CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                  if (isCommentOpen)
+                    StoryComments(toggleCommentOpen: toggleCommentOpen),
+                ],
+              ),
+              if (!isCommentOpen)
+                StoryOverlay(
+                  story: widget.story,
+                  handleBack: widget.handleBack,
+                  videoPlayerController: _videoPlayerController,
+                  toggleCommentOpen: toggleCommentOpen,
+                ),
+            ],
           ),
-          StoryOverlay(
-            story: widget.story,
-            handleBack: widget.handleBack,
-            videoPlayerController: _videoPlayerController,
-          ),
-        ],
+        ),
       ),
     );
   }
