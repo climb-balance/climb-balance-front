@@ -7,6 +7,7 @@ import 'package:climb_balance/utils/durations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../../providers/feedback_status.dart';
 import 'continuous_statistics.dart';
@@ -93,11 +94,30 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          children: const [Icon(Icons.balance), Text('클라임밸런스')],
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 25,
+              width: 25,
+              child: SvgPicture.asset(
+                'assets/logo.svg',
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
+            const Text('클라임밸런스'),
+          ],
         ),
+        actions: const [
+          Icon(Icons.notifications),
+          SizedBox(
+            width: 10,
+          )
+        ],
       ),
       body: SafeArea(
         child: Column(
