@@ -5,6 +5,11 @@ class ExpertFeedbackRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('전문가 피드백 요청'),
+        centerTitle: true,
+      ),
+    );
   }
 }
