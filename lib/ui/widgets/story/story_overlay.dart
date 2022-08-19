@@ -19,6 +19,7 @@ class StoryOverlay extends StatefulWidget {
   final Story story;
   final void Function() handleBack;
   final void Function() toggleCommentOpen;
+
   const StoryOverlay({
     Key? key,
     required this.story,
@@ -129,6 +130,7 @@ class CustomFabLoc extends FloatingActionButtonLocation {
 class StoryButtons extends StatelessWidget {
   final Story story;
   final void Function() toggleCommentOpen;
+
   const StoryButtons(
       {Key? key, required this.story, required this.toggleCommentOpen})
       : super(key: key);
@@ -139,6 +141,17 @@ class StoryButtons extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        TextButton(
+          onPressed: () {},
+          child: Column(
+            children: [
+              const Icon(
+                Icons.android,
+                size: 35,
+              ),
+            ],
+          ),
+        ),
         TextButton(
           onPressed: () {},
           child: Column(

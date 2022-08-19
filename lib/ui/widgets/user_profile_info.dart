@@ -50,10 +50,6 @@ class TopProfileInfo extends StatelessWidget {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      '계정 등급 : 1',
-                      style: theme.textTheme.subtitle1,
-                    ),
                   ],
                 ),
                 Text('${profile.description}'),
