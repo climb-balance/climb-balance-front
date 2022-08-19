@@ -19,6 +19,7 @@ class MyApp extends ConsumerWidget {
         ref.watch(settingsProvider.select((value) => value.darkMode));
     ref.read(firebaseProvider);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: darkMode ? mainDarkTheme() : mainLightTheme(),
       initialRoute: '/',

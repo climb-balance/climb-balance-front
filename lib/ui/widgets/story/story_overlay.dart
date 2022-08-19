@@ -18,13 +18,15 @@ class StoryOverlay extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
   final Story story;
   final void Function() handleBack;
+  final void Function() toggleCommentOpen;
 
-  const StoryOverlay(
-      {Key? key,
-      required this.story,
-      required this.handleBack,
-      required this.videoPlayerController})
-      : super(key: key);
+  const StoryOverlay({
+    Key? key,
+    required this.story,
+    required this.handleBack,
+    required this.videoPlayerController,
+    required this.toggleCommentOpen,
+  }) : super(key: key);
 
   @override
   State<StoryOverlay> createState() => _StoryOverlayState();
@@ -42,11 +44,14 @@ class _StoryOverlayState extends State<StoryOverlay> {
       child: Scaffold(
         floatingActionButton: StoryButtons(
           story: widget.story,
+          toggleCommentOpen: widget.toggleCommentOpen,
         ),
         floatingActionButtonLocation: CustomFabLoc(),
         backgroundColor: Colors.transparent,
         appBar: StoryOverlayAppBar(
-            tags: widget.story.tags, handleBack: widget.handleBack),
+          tags: widget.story.tags,
+          handleBack: widget.handleBack,
+        ),
         body: SafeArea(
           minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           child: Column(
@@ -124,8 +129,11 @@ class CustomFabLoc extends FloatingActionButtonLocation {
 
 class StoryButtons extends StatelessWidget {
   final Story story;
+  final void Function() toggleCommentOpen;
 
-  const StoryButtons({Key? key, required this.story}) : super(key: key);
+  const StoryButtons(
+      {Key? key, required this.story, required this.toggleCommentOpen})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,24 +144,35 @@ class StoryButtons extends StatelessWidget {
         TextButton(
           onPressed: () {},
           child: Column(
-            children: const [
-              Icon(
-                Icons.thumb_up,
+            children: [
+              const Icon(
+                Icons.android,
                 size: 35,
               ),
-              Text('200k')
             ],
           ),
         ),
         TextButton(
           onPressed: () {},
           child: Column(
-            children: const [
-              Icon(
+            children: [
+              const Icon(
+                Icons.thumb_up,
+                size: 35,
+              ),
+              Text('${story.likes}'),
+            ],
+          ),
+        ),
+        TextButton(
+          onPressed: toggleCommentOpen,
+          child: Column(
+            children: [
+              const Icon(
                 Icons.comment,
                 size: 35,
               ),
-              Text('200k'),
+              Text('${story.comments}'),
             ],
           ),
         ),

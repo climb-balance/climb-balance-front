@@ -36,7 +36,7 @@ class Story {
   }
 
   Story.fromJson(Map<String, dynamic> json)
-      : tags = (json['tags'] != null ? Tags.fromJson(json['tags']) : null)!,
+      : tags = Tags.fromJson(json['tags']),
         likes = json['likes'],
         description = json['description'],
         comments = json['comments'],
@@ -45,7 +45,7 @@ class Story {
         aiAvailable = json['ai_available'],
         expertAvailable = json['expert_available'],
         uploaderId = json['uploader_id'],
-        videoId = json['video_id'] ?? 0;
+        videoId = json['video_id'] ?? 1;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

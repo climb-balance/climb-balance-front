@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
+import 'package:climb_balance/ui/widgets/commons/my_icons.dart';
+import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:climb_balance/ui/widgets/story/story.dart';
 import 'package:climb_balance/utils/durations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../../providers/feedback_status.dart';
 import 'continuous_statistics.dart';
@@ -93,32 +96,68 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: const [Icon(Icons.balance), Text('클라임밸런스')],
-        ),
-      ),
-      body: SafeArea(
+      appBar: HomeAppBar(),
+      body: MySafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Card(child: const ImageBanner()),
+            const ImageBanner(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '통계',
+                    style: theme.textTheme.headline6,
+                  ),
+                  Icon(
+                    Icons.more_horiz,
+                    color: theme.colorScheme.primary,
+                  ),
+                ],
+              ),
+            ),
             const MainStatistics(),
-            // TODO stack으로 옮겨야함.
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '피드백',
+                    style: theme.textTheme.headline6,
+                  ),
+                  Icon(
+                    Icons.more_horiz,
+                    color: theme.colorScheme.primary,
+                  ),
+                ],
+              ),
+            ),
             Row(
               children: const [
                 Flexible(child: AiFeedbackStatus()),
                 Flexible(child: ExpertFeedbackStatus()),
               ],
             ),
-            const Expanded(
+            Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Icon(
-                  Icons.keyboard_double_arrow_up,
+                child: GradientIcon(
+                  icon: Icons.keyboard_double_arrow_up,
                   size: 50,
+                  gradient: LinearGradient(
+                    colors: [
+                      theme.colorScheme.secondary,
+                      theme.colorScheme.tertiary,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
                 ),
               ),
             ),
@@ -148,19 +187,20 @@ class ExpertFeedbackStatus extends ConsumerWidget {
           child: Column(
             children: [
               Text(
-                '전문가 피드백',
-                style: theme.textTheme.headline6,
+                '전문가',
+                style: theme.textTheme.subtitle2,
               ),
               const SizedBox(
                 height: 5,
               ),
               SizedBox(
-                height: 80,
+                height: 110,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       '${waitingExpertFeedback}/${finishedExpertFeedback}',
-                      style: theme.textTheme.headline4,
+                      style: theme.textTheme.subtitle1,
                     ),
                     Text(
                       '대기/완료',
@@ -185,25 +225,27 @@ class AiFeedbackStatus extends ConsumerWidget {
     final theme = Theme.of(context);
     final aiStatus = ref.watch(feedbackStatusProvider);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          children: [
-            Text(
-              'AI 피드백',
-              style: theme.textTheme.headline6,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            SizedBox(
-              height: 80,
-              child: aiStatus.aiIsWaiting
-                  ? const AiFeedbackStatusInform()
-                  : const NoFeedbackInform(),
-            ),
-          ],
+    return Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            children: [
+              Text(
+                '인공지능',
+                style: theme.textTheme.subtitle2,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SizedBox(
+                height: 110,
+                child: aiStatus.aiIsWaiting
+                    ? const AiFeedbackStatusInform()
+                    : const NoFeedbackInform(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -219,34 +261,36 @@ class AiFeedbackStatusInform extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final aiStatus = ref.watch(feedbackStatusProvider);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: PieChart(
-            PieChartData(
-              centerSpaceRadius: 10,
-              startDegreeOffset: 270,
-              sectionsSpace: 0,
-              sections: [
-                PieChartSectionData(
-                  showTitle: false,
-                  color: theme.colorScheme.primary,
-                  value: aiStatus.aiWaitingTime.inSeconds.toDouble() -
-                      aiStatus.aiLeftTime.inSeconds,
-                  radius: 30,
-                ),
-                PieChartSectionData(
-                  showTitle: false,
-                  color: theme.colorScheme.secondary,
-                  value: aiStatus.aiLeftTime.inSeconds.toDouble(),
-                  radius: 30,
-                ),
-              ],
+        SizedBox(
+          height: 80,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: PieChart(
+              PieChartData(
+                centerSpaceRadius: 10,
+                startDegreeOffset: 270,
+                sectionsSpace: 0,
+                sections: [
+                  PieChartSectionData(
+                    showTitle: false,
+                    color: theme.colorScheme.primary,
+                    value: aiStatus.aiWaitingTime.inSeconds.toDouble() -
+                        aiStatus.aiLeftTime.inSeconds,
+                    radius: 30,
+                  ),
+                  PieChartSectionData(
+                    showTitle: false,
+                    color: theme.colorScheme.secondary,
+                    value: aiStatus.aiLeftTime.inSeconds.toDouble(),
+                    radius: 30,
+                  ),
+                ],
+              ),
+              swapAnimationDuration: const Duration(milliseconds: 850),
+              swapAnimationCurve: Curves.linear,
             ),
-            swapAnimationDuration: const Duration(milliseconds: 850),
-            swapAnimationCurve: Curves.linear,
           ),
         ),
         Text(formatDuration(aiStatus.aiLeftTime),
@@ -325,4 +369,52 @@ class MainStatistics extends StatelessWidget {
       ),
     );
   }
+}
+
+class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
+  const HomeAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 5,
+          ),
+          Container(
+            height: 25,
+            width: 25,
+            child: SvgPicture.asset(
+              'assets/logo.svg',
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          Text(
+            '클라임밸런스',
+            style: TextStyle(
+              color: theme.colorScheme.onBackground,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        Icon(
+          Icons.notifications,
+          color: theme.colorScheme.primary,
+        ),
+        const SizedBox(
+          width: 20,
+        )
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

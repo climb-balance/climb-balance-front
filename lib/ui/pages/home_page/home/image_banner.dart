@@ -26,13 +26,11 @@ class _ImageBannerState extends ConsumerState<ImageBanner> {
         CarouselSlider(
           items: images
               .map(
-                (image) => Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: _height,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Image.network(image),
+                (image) => ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(_height / 8),
                   ),
+                  child: Image.network(image, fit: BoxFit.fill),
                 ),
               )
               .toList(),
