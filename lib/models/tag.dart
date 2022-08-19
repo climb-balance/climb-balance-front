@@ -1,67 +1,28 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class Tags {
-  int location;
-  int difficulty;
-  bool success;
-  DateTime videoDate;
+// To parse this JSON data, do
+//
+//     final tags = tagsFromJson(jsonString);
 
-  Tags(
-      {this.location = -1,
-      this.difficulty = -1,
-      this.success = false,
-      required this.videoDate});
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  String getDateString() {
-    return '${videoDate.year}-${videoDate.month < 10 ? "0" + videoDate.month.toString() : videoDate.month}-${videoDate.day < 10 ? "0" + videoDate.day.toString() : videoDate.day}';
-  }
+part 'tags.freezed.dart';
 
-  Tags.fromJson(Map<String, dynamic> json)
-      : location = json['location'],
-        difficulty = json['difficulty'],
-        success = json['success'] == 'true',
-        videoDate = DateTime.parse(json['video_date']);
+part 'tags.g.dart';
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['location'] = location;
-    data['difficulty'] = difficulty;
-    data['success'] = success;
-    data['video_date'] = videoDate;
-    return data;
-  }
-}
+Tags tagsFromJson(String str) => Tags.fromJson(json.decode(str));
 
-class TagSelection {
-  String detail;
-  int id;
+String tagsToJson(Tags data) => json.encode(data.toJson());
 
-  TagSelection({this.detail = "-", this.id = -1});
+@freezed
+abstract class Tags with _$Tags {
+  const factory Tags({
+    int storyId,
+    int location,
+    int difficulty,
+    bool success,
+    DateTime videoDate,
+  }) = _Tags;
 
-  String getDetail() {
-    return detail;
-  }
-}
-
-class Location {
-  int id;
-  String name;
-
-  Location({this.id = -1, this.name = ''});
-}
-
-class Difficulty {
-  int id;
-  String name;
-  Color color;
-
-  Difficulty({this.id = -1, this.name = '', required this.color});
-}
-
-@immutable
-class TagsSelection {
-  List<Location> locations = [];
-  List<Difficulty> difficulties = [];
-
-  TagsSelection({this.locations = const [], this.difficulties = const []});
+  factory Tags.fromJson(Map<String, dynamic> json) => _$TagsFromJson(json);
 }
