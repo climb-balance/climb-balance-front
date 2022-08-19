@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "722569510491",
+    "project_id": "climb-balance",
+    "storage_bucket": "climb-balance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722569510491:android:fbb5692e75f122d8fdc97e",
+        "android_client_info": {
+          "package_name": "com.climb_balance.climb_balance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722569510491-ut9es8cum6l46h49stbgdc2faikhabdv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtgPCazwwuZD_dFt6YLWtZOlkdFwauBRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722569510491-ut9es8cum6l46h49stbgdc2faikhabdv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "722569510491-pfo8bede8np171m7b0u78m7992959nu2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.climbbalance.climbBalance"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

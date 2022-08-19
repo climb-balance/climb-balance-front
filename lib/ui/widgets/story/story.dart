@@ -1,12 +1,14 @@
-import 'package:climb_balance/ui/theme/main_theme.dart';
+import 'package:climb_balance/ui/widgets/story/story_comments.dart';
 import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../models/story.dart';
+import '../../theme/specific_theme.dart';
 
 List<String> testVideos = [
-  'https://assets.mixkit.co/videos/preview/mixkit-mysterious-pale-looking-fashion-woman-at-winter-39878-large.mp4',
+  'http://15.164.163.153:3000/story/1/video?type=raw',
+  'http://15.164.163.153:3000/story/1/video?type=ai',
   'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
   'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
   'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
@@ -39,7 +41,7 @@ class StoryPreview extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
-              fit: BoxFit.fill,
+              fit: BoxFit.fitWidth,
               image: NetworkImage(story.thumbnailUrl),
             ),
           ),
@@ -62,6 +64,13 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   late final VideoPlayerController _videoPlayerController;
+  bool isCommentOpen = false;
+
+  void toggleCommentOpen() {
+    setState(() {
+      isCommentOpen = !isCommentOpen;
+    });
+  }
 
   @override
   void initState() {
@@ -78,56 +87,43 @@ class _StoryViewState extends State<StoryView> {
   @override
   Widget build(BuildContext context) {
     const themeColor = ColorScheme.dark();
-    final mainWhite = themeColor.onBackground;
-    return Theme(
-      data: mainDarkTheme().copyWith(
-        iconTheme: IconThemeData(
-          color: mainWhite,
-          shadows: [
-            Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+    return StoryViewTheme(
+      child: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (isCommentOpen) toggleCommentOpen();
+                    },
+                    // TODO 가운데만 클릭된다.
+                    child: Center(
+                      child: _videoPlayerController.value.isInitialized
+                          ? AspectRatio(
+                              aspectRatio:
+                                  _videoPlayerController.value.aspectRatio,
+                              child: VideoPlayer(_videoPlayerController),
+                            )
+                          : const CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+                if (isCommentOpen)
+                  StoryComments(toggleCommentOpen: toggleCommentOpen),
+              ],
+            ),
+            if (!isCommentOpen)
+              StoryOverlay(
+                story: widget.story,
+                handleBack: widget.handleBack,
+                videoPlayerController: _videoPlayerController,
+                toggleCommentOpen: toggleCommentOpen,
+              ),
           ],
         ),
-        textButtonTheme: TextButtonThemeData(
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(
-              mainWhite,
-            ),
-            textStyle: MaterialStateProperty.all(
-              TextStyle(
-                color: mainWhite,
-                shadows: [
-                  Shadow(
-                      color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
-                ],
-              ),
-            ),
-          ),
-        ),
-        textTheme: TextTheme(
-          bodyText2: TextStyle(
-            color: mainWhite,
-            shadows: [
-              Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
-            ],
-          ),
-        ),
-      ),
-      child: Stack(
-        children: [
-          Center(
-            child: _videoPlayerController.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _videoPlayerController.value.aspectRatio,
-                    child: VideoPlayer(_videoPlayerController),
-                  )
-                : const CircularProgressIndicator(),
-          ),
-          StoryOverlay(
-            story: widget.story,
-            handleBack: widget.handleBack,
-            videoPlayerController: _videoPlayerController,
-          ),
-        ],
       ),
     );
   }

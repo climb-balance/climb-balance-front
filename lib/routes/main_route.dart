@@ -1,12 +1,14 @@
-import 'package:climb_balance/configs/routeConfig.dart';
+import 'package:climb_balance/configs/route_config.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/routes/authRoute.dart';
+import 'package:climb_balance/ui/pages/account_page/account/account.dart';
 import 'package:climb_balance/ui/pages/community/community.dart';
 import 'package:climb_balance/ui/pages/diary_page/diary/diary.dart';
+import 'package:climb_balance/ui/pages/feedback_page/feedback_list/feedback_list.dart';
 import 'package:climb_balance/ui/pages/testPage/testPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/ui/pages/account_page/account/account.dart';
+
 import '../ui/pages/home_page/home/home.dart';
 
 class MainRoute extends ConsumerWidget {
@@ -42,7 +44,7 @@ class MainRoute extends ConsumerWidget {
       },
       child: Navigator(
         key: _navigatorKey,
-        initialRoute: true ? HOME_PAGE_PATH : '/testpage',
+        initialRoute: false ? HOME_PAGE_PATH : '/testpage',
         //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
         onGenerateRoute: mainRoute,
       ),
@@ -86,6 +88,12 @@ Route mainRoute(RouteSettings settings) {
         settings: settings,
         // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
         pageBuilder: (_, __, ___) => Account(),
+      );
+    case FEEDBACK_PAGE_PATH:
+      return PageRouteBuilder(
+        settings: settings,
+        // Pass this to make popUntil(), pushNamedAndRemoveUntil(), works
+        pageBuilder: (_, __, ___) => FeedbackList(),
       );
     default:
       page = Container();

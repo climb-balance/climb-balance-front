@@ -27,7 +27,7 @@ class TopProfileInfo extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
                 image: DecorationImage(
-                  image: NetworkImage(profile.profileImagePath),
+                  image: NetworkImage(profile.profileImage),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: kElevationToShadow[4],
@@ -44,19 +44,15 @@ class TopProfileInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${profile.nickName}#${profile.uniqueCode}',
+                      '${profile.nickName}#${profile.uniqueTag}',
                       style: theme.textTheme.headline5,
                     ),
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      '계정 등급 : 1',
-                      style: theme.textTheme.subtitle1,
-                    ),
                   ],
                 ),
-                Text('${profile.introduce}'),
+                Text('${profile.description}'),
               ],
             ),
           ],
@@ -66,7 +62,7 @@ class TopProfileInfo extends StatelessWidget {
   }
 }
 
-class BottomUserProfile extends StatefulWidget {
+class BottomUserProfile extends StatelessWidget {
   final UserProfile userProfile;
   final String description;
 
@@ -75,78 +71,36 @@ class BottomUserProfile extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<BottomUserProfile> createState() => _BottomUserProfileState();
-}
-
-class _BottomUserProfileState extends State<BottomUserProfile> {
-  bool openFeedBack = false;
-
-  void toggleOpenFeedBack() {
-    setState(() {
-      openFeedBack = !openFeedBack;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        CircleAvatar(
+          backgroundImage: Image.network(userProfile.profileImage).image,
+          radius: 20,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              backgroundImage:
-                  Image.network(widget.userProfile.profileImagePath).image,
-              radius: 20,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+            Row(
               children: [
-                Row(
-                  children: [
-                    Text(widget.userProfile.nickName),
-                    Text('#${widget.userProfile.uniqueCode.toString()}'),
-                  ],
-                ),
-                Text(
-                  '${widget.userProfile.height}cm/${widget.userProfile.weight}kg',
-                  style: theme.textTheme.bodyText2?.copyWith(
-                    color: theme.colorScheme.secondary,
-                  ),
-                ),
+                Text(userProfile.nickName),
+                Text('#${userProfile.uniqueTag.toString()}'),
               ],
+            ),
+            Text(
+              '${userProfile.height}cm/${userProfile.weight}kg',
+              style: theme.textTheme.bodyText2?.copyWith(
+                color: theme.colorScheme.secondary,
+              ),
             ),
           ],
         ),
-        Row(
-          children: [
-            TextButton(
-              onPressed: toggleOpenFeedBack,
-              child: openFeedBack
-                  ? Icon(Icons.arrow_left)
-                  : Icon(Icons.arrow_right),
-            ),
-            if (openFeedBack)
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.adb),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.emoji_people),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-          ],
-        )
       ],
     );
   }

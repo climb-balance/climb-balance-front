@@ -1,34 +1,37 @@
 import 'dart:io';
 
-import 'package:climb_balance/configs/routeConfig.dart';
+import 'package:climb_balance/configs/route_config.dart';
+import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/providers/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/edit_video.dart';
 import 'package:image_picker/image_picker.dart';
 
-class BotNavigationBar extends StatelessWidget {
+class BotNavigationBar extends ConsumerWidget {
   final int currentIdx;
 
   const BotNavigationBar({Key? key, required this.currentIdx})
       : super(key: key);
-  static const paths = [
-    HOME_PAGE_PATH,
-    COMMUNITY_PAGE_PATH,
-    '',
-    DIARY_PAGE_PATH,
-    ACCOUNT_PAGE_PATH
-  ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool isExpert =
+        ref.watch(settingsProvider.select((value) => value.expertMode));
+    final List<String> paths = [
+      HOME_PAGE_PATH,
+      COMMUNITY_PAGE_PATH,
+      '',
+      isExpert ? FEEDBACK_PAGE_PATH : DIARY_PAGE_PATH,
+      ACCOUNT_PAGE_PATH
+    ];
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIdx,
       showSelectedLabels: false,
       showUnselectedLabels: false,
       iconSize: 36,
-      onTap: (index) => {_onItemTapped(index, context)},
+      onTap: (index) => {_onItemTapped(index, context, paths)},
       items: [
         const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
         const BottomNavigationBarItem(
@@ -39,14 +42,18 @@ class BotNavigationBar extends StatelessWidget {
               color: Theme.of(context).colorScheme.tertiary,
             ),
             label: ''),
-        const BottomNavigationBarItem(icon: Icon(Icons.book), label: 'diary'),
+        isExpert
+            ? const BottomNavigationBarItem(
+                icon: Icon(Icons.feedback), label: 'feedback')
+            : const BottomNavigationBarItem(
+                icon: Icon(Icons.book), label: 'diary'),
         const BottomNavigationBarItem(
             icon: Icon(Icons.account_circle), label: 'account')
       ],
     );
   }
 
-  void _onItemTapped(int index, BuildContext context) {
+  void _onItemTapped(int index, BuildContext context, List<String> paths) {
     if (index == 2) {
       showModalBottomSheet(
           context: context, builder: (context) => const PickVideo());

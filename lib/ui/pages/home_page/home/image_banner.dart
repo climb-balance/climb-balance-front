@@ -1,18 +1,19 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ImageBanner extends StatefulWidget {
+class ImageBanner extends ConsumerStatefulWidget {
   const ImageBanner({Key? key}) : super(key: key);
 
   @override
-  State<ImageBanner> createState() => _ImageBannerState();
+  ConsumerState<ImageBanner> createState() => _ImageBannerState();
 }
 
-class _ImageBannerState extends State<ImageBanner> {
+class _ImageBannerState extends ConsumerState<ImageBanner> {
   static const double _height = 200;
   final List<String> images = [
-    'https://www.navercorp.com/navercorp_/promotion/tvAds/2021/20210803115600_1.png',
-    'https://img.freepik.com/free-vector/abstract-website-banner-with-modern-shapes_1361-1738.jpg?w=2000',
+    'https://i.ibb.co/QDQ2VKN/banner2.png',
+    'https://i.ibb.co/z7qX2Lt/banner1.png',
     'https://img.freepik.com/free-vector/modern-website-banner-template-with-abstract-shapes_1361-3311.jpg?w=2000'
   ];
   int current = 0;
@@ -25,13 +26,11 @@ class _ImageBannerState extends State<ImageBanner> {
         CarouselSlider(
           items: images
               .map(
-                (image) => Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: _height,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Image.network(image),
+                (image) => ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(_height / 8),
                   ),
+                  child: Image.network(image, fit: BoxFit.fill),
                 ),
               )
               .toList(),

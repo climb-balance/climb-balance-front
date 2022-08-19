@@ -36,7 +36,7 @@ class Story {
   }
 
   Story.fromJson(Map<String, dynamic> json)
-      : tags = (json['tags'] != null ? Tags.fromJson(json['tags']) : null)!,
+      : tags = Tags.fromJson(json['tags']),
         likes = json['likes'],
         description = json['description'],
         comments = json['comments'],
@@ -45,7 +45,7 @@ class Story {
         aiAvailable = json['ai_available'],
         expertAvailable = json['expert_available'],
         uploaderId = json['uploader_id'],
-        videoId = json['video_id'] ?? 0;
+        videoId = json['video_id'] ?? 1;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -73,8 +73,8 @@ Story getRandomStory() {
     likes: random.nextInt(100),
     description: '안녕하세요',
     comments: random.nextInt(100),
-    aiAvailable: random.nextInt(3),
-    expertAvailable: random.nextInt(3),
+    aiAvailable: 0,
+    expertAvailable: random.nextInt(3) - 1,
     uploadDate: DateTime.now(),
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
     uploaderId: 1,

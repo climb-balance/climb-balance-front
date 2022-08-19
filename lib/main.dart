@@ -1,5 +1,6 @@
+import 'package:climb_balance/providers/firebase.dart';
 import 'package:climb_balance/providers/settings.dart';
-import 'package:climb_balance/routes/mainRoute.dart';
+import 'package:climb_balance/routes/main_route.dart';
 import 'package:climb_balance/ui/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,9 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool darkMode =
         ref.watch(settingsProvider.select((value) => value.darkMode));
+    ref.read(firebaseProvider);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: darkMode ? mainDarkTheme() : mainLightTheme(),
       initialRoute: '/',
