@@ -18,14 +18,13 @@ class MainRoute extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final token = ref.watch(userProvider.select((value) => value.token));
-    debugPrint(token.toString() + ":토큰토큰");
     return WillPopScope(
       onWillPop: () async {
         return !await _navigatorKey.currentState!.maybePop();
       },
       child: Navigator(
         key: _navigatorKey,
-        initialRoute: token == '' ? AUTH_PAGE_PATH : HOME_PAGE_PATH,
+        initialRoute: token == '' ? HOME_PAGE_PATH : HOME_PAGE_PATH,
         //ref.read(tokenProvider.notifier).isEmpty() ? '/auth' : '/home',
         onGenerateRoute: mainRoute,
       ),

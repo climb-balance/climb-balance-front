@@ -13,7 +13,7 @@ class DiaryNotifier extends StateNotifier<List<List<Story>>> {
   DiaryNotifier() : super([]);
 
   void loadStories() async {
-    final Result<List<Story>> result = await ServerService().getUserStories();
+    final Result<List<Story>> result = await ServerService.getUserStories();
     result.when(
         success: (stories) {
           filterStories(FilterType.noFilter);

@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import 'server_config.dart';
-
 class ServerRequest {
   static const timeOutDuration = Duration(seconds: 2);
   static String ServerUrl = 'http://15.164.163.153:3000';
@@ -26,15 +24,5 @@ class ServerRequest {
       throw const HttpException('요청 에러');
     }
     return body;
-  }
-
-  static Future<String> getLoginHtml() async {
-    Uri uri = Uri.parse(ServerUrl + ServerNaverPath);
-    http.Response res = await http
-        .get(uri)
-        .timeout(timeOutDuration)
-        .catchError((err) => throw err)
-        .whenComplete(() => {});
-    return res.body;
   }
 }

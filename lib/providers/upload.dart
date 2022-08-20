@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -85,20 +84,17 @@ class UploadNotifier extends StateNotifier<UploadType> {
   }
 
   Future<bool> upload() async {
-    ref.read(asyncStatusProvider.notifier).toggleLoading();
     Uri uri = Uri.parse('http://192.168.107.189:3000/story/1/video');
     final req = http.MultipartRequest('POST', uri);
     final mulitpartfile =
         await http.MultipartFile.fromPath('file', state.file!.path)
             .timeout(const Duration(seconds: 2))
             .onError((error, stackTrace) {
-      ref.read(asyncStatusProvider.notifier).toggleLoading();
       throw error!;
     });
 
     req.files.add(mulitpartfile);
     final res = await req.send();
-    ref.read(asyncStatusProvider.notifier).toggleLoading();
     if (res.statusCode < 300) {
       return true;
     } else {
