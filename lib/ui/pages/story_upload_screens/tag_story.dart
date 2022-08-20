@@ -1,5 +1,6 @@
-import 'package:climb_balance/models/tag_selector.dart';
-import 'package:climb_balance/providers/upload.dart';
+import 'package:climb_balance/providers/story_upload_provider.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/modal_difficulty_tag_picker.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/modal_location_tag_picker.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:flutter/material.dart';
@@ -8,70 +9,15 @@ import 'package:video_trimmer/video_trimmer.dart';
 
 import 'bottom_step_bar.dart';
 
-class TagStory extends ConsumerStatefulWidget {
-  final Trimmer trimmer;
-
-  const TagStory({Key? key, required this.trimmer}) : super(key: key);
+class TagStory extends ConsumerWidget {
+  const TagStory({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<TagStory> createState() => _TagVideoState();
-}
-
-class _TagVideoState extends ConsumerState<TagStory> {
-  late DifficultySelector difficulty;
-  late LocationSelector location;
-  late bool success;
-  late DateTime date;
-
-  @override
-  void initState() {
-    UploadType state = ref.read(uploadProvider.notifier).getState();
-    difficulty = state.difficulty;
-    location = state.location;
-    success = state.success;
-    date = state.date;
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    ref.read(uploadProvider.notifier).setTags(
-        difficulty: difficulty,
-        location: location,
-        success: success,
-        date: date);
-    super.dispose();
-  }
-
-  void handleDatePick() async {
-    DateTime? newDate = await showDatePicker(
-        context: context,
-        initialDate: date,
-        firstDate: DateTime(2010),
-        lastDate: DateTime.now());
-    if (newDate == null) return;
-    setState(() {
-      date = newDate;
-    });
-  }
-
-  void handelTagNext() {
-    ref.read(uploadProvider.notifier).setTags(
-          location: location,
-          difficulty: difficulty,
-          success: success,
-          date: date,
-        );
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WriteDesc(trimmer: widget.trimmer),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final trimmer = ref.read(storyUploadProvider.notifier).getTrimmer;
+    final success =
+        ref.watch(storyUploadProvider.select((value) => value.success));
+    final date = ref.watch(storyUploadProvider.select((value) => value.date));
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -89,7 +35,7 @@ class _TagVideoState extends ConsumerState<TagStory> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
             child: VideoViewer(
-              trimmer: widget.trimmer,
+              trimmer: trimmer,
             ),
           ),
           MySafeArea(
@@ -97,25 +43,55 @@ class _TagVideoState extends ConsumerState<TagStory> {
               children: [
                 Row(
                   children: [
-                    Text('실패/성공:'),
+                    const Text('실패/성공:'),
                     Switch(
                       value: success,
-                      onChanged: (value) {
-                        setState(() {
-                          success = value;
-                        });
-                      },
+                      onChanged:
+                          ref.read(storyUploadProvider.notifier).handleSuccess,
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('날짜:'),
+                    const Text('날짜:'),
                     TextButton(
-                      // TODO 분리
-                      child: Text('${date.year}-${date.month}-${date.day}'),
-                      onPressed: handleDatePick,
-                    )
+                      onPressed: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: date!,
+                          firstDate: DateTime(2010),
+                          lastDate: DateTime.now(),
+                        ).then((value) => ref
+                            .read(storyUploadProvider.notifier)
+                            .handleDatePick);
+                      },
+                      child: Text('${date?.year}-${date?.month}-${date?.day}'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text('위치:'),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => ModalLocationTagPicker());
+                      },
+                      child: Text('${date?.year}-${date?.month}-${date?.day}'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text('위치:'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ModalDifficultyTagPicker()));
+                      },
+                      child: Text('${date?.year}-${date?.month}-${date?.day}'),
+                    ),
                   ],
                 )
               ],
@@ -124,7 +100,14 @@ class _TagVideoState extends ConsumerState<TagStory> {
         ],
       ),
       bottomNavigationBar: BottomStepBar(
-        handleNext: handelTagNext,
+        handleNext: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WriteDesc(trimmer: trimmer),
+            ),
+          );
+        },
       ),
     );
   }

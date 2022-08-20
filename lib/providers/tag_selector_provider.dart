@@ -41,41 +41,57 @@ List<LocationSelector> locationData = [
 
 class LocationSelectorNotifier extends StateNotifier<List<LocationSelector>> {
   LocationSelectorNotifier() : super([]);
+  List<LocationSelector> filteredLocationSelector = [];
 
-  void loadLocationDatas() {
+  void _loadLocationDatas() {
     state = locationData;
+    filteredLocationSelector = locationData;
   }
 
   LocationSelector getLocationSelector(int idx) {
     return state[idx + 1];
   }
+
+  get getFilteredLocationSelector => filteredLocationSelector;
+
+  void updateFilteredLocationSelector(String query) {
+    filteredLocationSelector =
+        state.where((location) => location.name.contains(query)).toList();
+  }
 }
 
-final locationSelectorProvider =
-    StateNotifierProvider<LocationSelectorNotifier, List<LocationSelector>>(
-        (_) {
+final locationSelectorProvider = StateNotifierProvider.autoDispose<
+    LocationSelectorNotifier, List<LocationSelector>>((_) {
   LocationSelectorNotifier notifier = LocationSelectorNotifier();
-  notifier.loadLocationDatas();
+  notifier._loadLocationDatas();
   return notifier;
 });
 
 class DifficultySelectorNotifier
     extends StateNotifier<List<DifficultySelector>> {
   DifficultySelectorNotifier() : super([]);
+  List<DifficultySelector> filteredDifficultySelector = [];
 
-  void loadDifficultyDatas() {
+  void _loadDifficultyDatas() {
     state = difficultyData;
+    filteredDifficultySelector = difficultyData;
   }
 
   DifficultySelector getDifficultySelector(int idx) {
     return state[idx + 1];
   }
+
+  void updateFilteredDifficultySelector(String query) {
+    filteredDifficultySelector =
+        state.where((difficulty) => difficulty.name.contains(query)).toList();
+  }
+
+  get getFilteredDifficultySelector => filteredDifficultySelector;
 }
 
-final difficultySelectorProvider =
-    StateNotifierProvider<DifficultySelectorNotifier, List<DifficultySelector>>(
-        (_) {
+final difficultySelectorProvider = StateNotifierProvider.autoDispose<
+    DifficultySelectorNotifier, List<DifficultySelector>>((_) {
   DifficultySelectorNotifier notifier = DifficultySelectorNotifier();
-  notifier.loadDifficultyDatas();
+  notifier._loadDifficultyDatas();
   return notifier;
 });

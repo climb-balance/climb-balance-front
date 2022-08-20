@@ -6,7 +6,7 @@ class BottomStepBar extends StatelessWidget {
   final void Function() handleNext;
   final String next;
 
-  BottomStepBar({Key? key, required this.handleNext, this.next = "다음"})
+  const BottomStepBar({Key? key, required this.handleNext, this.next = "다음"})
       : super(key: key);
 
   @override

@@ -1,47 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SearchTextInput extends StatefulWidget {
-  final String query;
+class SearchTextInput extends StatelessWidget {
   final void Function(String) handleQuery;
 
-  const SearchTextInput(
-      {Key? key, required this.query, required this.handleQuery})
+  const SearchTextInput({Key? key, required this.handleQuery})
       : super(key: key);
 
   @override
-  State<SearchTextInput> createState() => _SearchTextInputState();
-}
-
-class _SearchTextInputState extends State<SearchTextInput> {
-  final _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.text = widget.query;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Icon(Icons.search),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: TextField(
-            controller: _controller,
-            onChanged: widget.handleQuery,
-          ),
-        )
-      ],
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 80,
+      child: TextField(
+        onChanged: handleQuery,
+        style: Theme.of(context).textTheme.subtitle2,
+        decoration: const InputDecoration(
+          prefixIcon: Icon(Icons.search),
+          labelText: '클라이밍장 이름을 입력하세요',
+        ),
+      ),
     );
   }
 }
