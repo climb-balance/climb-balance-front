@@ -17,17 +17,15 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     state = StoryUpload(date: DateTime.now());
 
     final ImagePicker picker = ImagePicker();
-    isCam
+    final image = isCam
         ? await picker.pickVideo(source: ImageSource.camera)
-        : await picker.pickVideo(source: ImageSource.gallery).then((image) {
-            if (image == null) {
-              return;
-            }
-            state = state.copyWith(
-              file: File(image.path),
-            );
-          });
-    return;
+        : await picker.pickVideo(source: ImageSource.gallery);
+    if (image == null) {
+      throw '에러';
+    }
+    state = state.copyWith(
+      file: File(image.path),
+    );
   }
 
   Trimmer loadTrimmer() {

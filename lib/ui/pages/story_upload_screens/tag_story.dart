@@ -84,11 +84,12 @@ class TagStory extends ConsumerWidget {
                 ),
                 Row(
                   children: [
-                    const Text('위치:'),
+                    const Text('난이도:'),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ModalDifficultyTagPicker()));
+                        showDialog(
+                            context: context,
+                            builder: (context) => ModalDifficultyTagPicker());
                       },
                       child: Text('${date?.year}-${date?.month}-${date?.day}'),
                     ),

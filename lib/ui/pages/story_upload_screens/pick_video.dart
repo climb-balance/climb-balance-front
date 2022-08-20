@@ -27,8 +27,9 @@ class PickVideo extends ConsumerWidget {
           height: 60,
           child: TextButton(
             onPressed: () {
-              handlePick(isCam: true);
-              handleNext(context);
+              handlePick(isCam: true).then((_) {
+                handleNext(context);
+              });
             },
             child: const Text('직접 촬영하기'),
           ),

@@ -3,33 +3,20 @@ import 'package:climb_balance/ui/widgets/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModalDifficultyTagPicker extends ConsumerStatefulWidget {
+class ModalDifficultyTagPicker extends ConsumerWidget {
   const ModalDifficultyTagPicker({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ModalDifficultyTagPicker> createState() =>
-      _ModalLocationTagPickerState();
-}
-
-class _ModalLocationTagPickerState
-    extends ConsumerState<ModalDifficultyTagPicker> {
-  void updateQuery(String query) {
-    ref
-        .read(difficultySelectorProvider.notifier)
-        .updateFilteredDifficultySelector(query);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
+    final updateQuery = ref
+        .read(difficultySelectorProvider.notifier)
+        .updateFilteredDifficultySelector;
     final datas = ref
         .watch(difficultySelectorProvider.notifier)
         .getFilteredDifficultySelector;
     return Dialog(
-      child: Container(
-        width: size.width - 40,
-        height: size.height - 80,
-        color: Theme.of(context).colorScheme.surface,
+      child: SafeArea(
         child: SingleChildScrollView(
           child: ListView.custom(
             shrinkWrap: true,
