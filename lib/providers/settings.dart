@@ -1,5 +1,6 @@
+import 'package:climb_balance/services/storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/utils/storage/setting_storage.dart';
+
 import '../models/settings.dart';
 
 class SettingsNotifier extends StateNotifier<Settings> {
@@ -8,7 +9,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
   SettingsNotifier({required this.ref}) : super(const Settings());
 
   void loadSettingFromStorage() async {
-    state = await getStoredSettings();
+    state = await StorageService.getStoredSettings();
   }
 
   void updateSetting({bool? darkMode, bool? expertMode}) async {
@@ -16,7 +17,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
     expertMode ??= state.expertMode;
     Settings settings =
         state.copyWith(darkMode: darkMode, expertMode: expertMode);
-    await storeSettings(settings);
+    await StorageService.storeSettings(settings);
     state = settings;
   }
 }

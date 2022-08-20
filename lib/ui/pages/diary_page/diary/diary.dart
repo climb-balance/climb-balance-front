@@ -1,5 +1,5 @@
-import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/providers/diary_provider.dart';
+import 'package:climb_balance/providers/user_provider.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,7 +66,7 @@ class SliverProfile extends ConsumerWidget {
         ),
       ],
       toolbarHeight: 150,
-      flexibleSpace: TopProfileInfo(profile: ref.watch(currentUserProvider)),
+      flexibleSpace: TopProfileInfo(profile: ref.watch(userProvider)),
     );
   }
 }

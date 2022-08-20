@@ -1,6 +1,6 @@
 import 'package:climb_balance/models/story_tag.dart';
-import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/providers/feedback_status.dart';
+import 'package:climb_balance/providers/user_provider.dart';
 import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
 import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
@@ -275,8 +275,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final int rank =
-        ref.watch(currentUserProvider.select((value) => value.rank));
+    final int rank = ref.watch(userProvider.select((value) => value.rank));
     return ListView(
       shrinkWrap: true,
       children: [

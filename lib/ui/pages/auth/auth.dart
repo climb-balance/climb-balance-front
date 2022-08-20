@@ -1,5 +1,4 @@
 import 'package:climb_balance/providers/api.dart';
-import 'package:climb_balance/providers/mainRoute.dart';
 import 'package:climb_balance/utils/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,10 +54,8 @@ class NaverLogin extends ConsumerWidget {
         ),
       ).then((res) => toRegisterd
           ? Navigator.pushNamed(context, '/register')
-          : ref.read(mainRouteProvider.notifier).toMain());
-    }).catchError((err) {
-      ref.read(mainRouteProvider.notifier).toMain();
-    });
+          : Navigator.pop(context));
+    }).catchError((err) {});
   }
 
   @override

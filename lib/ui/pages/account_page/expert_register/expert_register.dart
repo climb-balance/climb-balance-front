@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:climb_balance/models/expert_profile.dart';
-import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/providers/expert_register.dart';
+import 'package:climb_balance/providers/user_provider.dart';
 import 'package:climb_balance/ui/widgets/avatarPicker.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:flutter/material.dart';
@@ -114,9 +114,7 @@ class ExpertRegisterButton extends ConsumerWidget {
             );
 
             final expertProfile = ref.watch(expertRegisterProvider);
-            ref
-                .read(currentUserProvider.notifier)
-                .updateExpertInfo(ExpertProfile(
+            ref.read(userProvider.notifier).updateExpertInfo(ExpertProfile(
                   nickName: expertProfile.nickName,
                   introduce: expertProfile.introduce,
                 ));

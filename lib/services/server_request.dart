@@ -4,11 +4,11 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import '../configs/server_config.dart';
+import 'server_config.dart';
 
 class ServerRequest {
   static const timeOutDuration = Duration(seconds: 2);
-
+  static String ServerUrl = 'http://15.164.163.153:3000';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Accpet': 'application/json'
@@ -16,7 +16,7 @@ class ServerRequest {
 
   static Future<dynamic> get(String url) async {
     http.Response res = await http
-        .get(Uri.parse(url), headers: headers)
+        .get(Uri.parse(ServerUrl + url), headers: headers)
         .timeout(timeOutDuration)
         .catchError((err) => throw err)
         .whenComplete(() {});
