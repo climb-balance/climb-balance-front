@@ -1,10 +1,10 @@
-import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/models/tag_selector.dart';
 import 'package:climb_balance/providers/upload.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
-import 'package:video_trimmer/video_trimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:video_trimmer/video_trimmer.dart';
 
 import 'bottom_step_bar.dart';
 
@@ -18,8 +18,8 @@ class TagStory extends ConsumerStatefulWidget {
 }
 
 class _TagVideoState extends ConsumerState<TagStory> {
-  late Difficulty difficulty;
-  late Location location;
+  late DifficultySelector difficulty;
+  late LocationSelector location;
   late bool success;
   late DateTime date;
 

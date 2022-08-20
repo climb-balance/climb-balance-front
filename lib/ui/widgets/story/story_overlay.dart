@@ -1,4 +1,4 @@
-import 'package:climb_balance/models/tag.dart';
+import 'package:climb_balance/models/story_tag.dart';
 import 'package:climb_balance/providers/current_user.dart';
 import 'package:climb_balance/providers/feedback_status.dart';
 import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
@@ -87,7 +87,7 @@ class _StoryOverlayState extends State<StoryOverlay> {
 }
 
 class StoryOverlayAppBar extends StatelessWidget with PreferredSizeWidget {
-  final Tags tags;
+  final StoryTags tags;
   final void Function() handleBack;
 
   const StoryOverlayAppBar(

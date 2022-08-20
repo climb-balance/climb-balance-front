@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../models/story.dart';
-import '../../../../providers/tags.dart';
+import '../../../../providers/tag_selector_provider.dart';
 import '../../../widgets/story/story.dart';
 
 class ClassifiedStories extends StatelessWidget {
@@ -60,16 +60,20 @@ class ClassifiedStoryTags extends ConsumerWidget {
             Row(
               children: [
                 const Icon(Icons.date_range),
-                Text(story.getDateString()),
+                Text(
+                  story.tags.formatDatetime(),
+                ),
               ],
             ),
             Row(
               children: [
                 const Icon(Icons.location_on),
-                Text(ref
-                    .watch(tagsProvider)
-                    .locations[story.tags.location]
-                    .name),
+                Text(
+                  ref
+                      .read(locationSelectorProvider.notifier)
+                      .getLocationSelector(story.tags.location)
+                      .name,
+                ),
               ],
             ),
           ],

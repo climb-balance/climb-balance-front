@@ -1,17 +1,21 @@
+import 'package:climb_balance/models/tag_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../models/tag.dart';
-import '../../../providers/tags.dart';
+import '../../../models/story_tag.dart';
+import '../../../providers/tag_selector_provider.dart';
 
 class StoryTagInfo extends ConsumerWidget {
-  final Tags tags;
+  final StoryTags tags;
 
   const StoryTagInfo({Key? key, required this.tags}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final refState = ref.watch(tagsProvider);
+    final getLocation =
+        ref.read(locationSelectorProvider.notifier).getLocationSelector;
+    final getDifficulty =
+        ref.read(difficultySelectorProvider.notifier).getDifficultySelector;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -20,7 +24,7 @@ class StoryTagInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             DateTag(
-              dateString: tags.getDateString(),
+              dateString: tags.formatDatetime(),
             ),
             SuccessTag(success: tags.success),
           ],
@@ -29,10 +33,9 @@ class StoryTagInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             if (tags.location != -1)
-              LocationTag(location: refState.locations[tags.location + 1]),
+              LocationTag(location: getLocation(tags.location)),
             if (tags.difficulty != -1)
-              DifficultyTag(
-                  difficulty: refState.difficulties[tags.difficulty + 1]),
+              DifficultyTag(difficulty: getDifficulty(tags.location)),
           ],
         ),
       ],
@@ -58,7 +61,7 @@ class DateTag extends StatelessWidget {
 }
 
 class LocationTag extends StatelessWidget {
-  final Location location;
+  final LocationSelector location;
 
   const LocationTag({Key? key, required this.location}) : super(key: key);
 
@@ -75,7 +78,7 @@ class LocationTag extends StatelessWidget {
 }
 
 class DifficultyTag extends StatelessWidget {
-  final Difficulty difficulty;
+  final DifficultySelector difficulty;
 
   const DifficultyTag({Key? key, required this.difficulty}) : super(key: key);
 

@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:climb_balance/configs/route_config.dart';
 import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/providers/upload.dart';
+import 'package:climb_balance/routes/route_config.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/edit_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/edit_video.dart';
 import 'package:image_picker/image_picker.dart';
 
 class BotNavigationBar extends ConsumerWidget {

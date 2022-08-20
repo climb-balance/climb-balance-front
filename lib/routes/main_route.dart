@@ -1,6 +1,6 @@
-import 'package:climb_balance/configs/route_config.dart';
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:climb_balance/routes/authRoute.dart';
+import 'package:climb_balance/routes/route_config.dart';
 import 'package:climb_balance/ui/pages/account_page/account/account.dart';
 import 'package:climb_balance/ui/pages/community/community.dart';
 import 'package:climb_balance/ui/pages/diary_page/diary/diary.dart';

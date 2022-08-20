@@ -4,3 +4,10 @@ String formatDuration(Duration duration) {
   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
   return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }
+
+String formatDatetime(DateTime datetime) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(datetime.minute.remainder(60));
+  String twoDigitSeconds = twoDigits(datetime.minute.remainder(60));
+  return "${twoDigits(datetime.hour)}:$twoDigitMinutes:$twoDigitSeconds";
+}

@@ -3,8 +3,6 @@ import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../configs/serverConfig.dart';
-import '../../../../providers/serverRequest.dart';
 import '../../../widgets/story/tags.dart';
 
 class FeedbackList extends ConsumerStatefulWidget {
@@ -15,38 +13,12 @@ class FeedbackList extends ConsumerStatefulWidget {
 }
 
 class _FeedbackListState extends ConsumerState<FeedbackList> {
-  late List<Story> stories = [];
-
-  @override
-  void initState() {
-    loadStories();
-    super.initState();
-  }
-
-  void loadStories() async {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      List<Story> newStories = [];
-      final body = await ref
-          .read(serverRequestPrivider)
-          .get(ServerUrl + ServerStoryPath);
-      for (final data in body['stories']) {
-        final story = Story.fromJson(data);
-        newStories.add(story);
-      }
-      stories = newStories;
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children:
-                stories.map((story) => FeedbackCard(story: story)).toList(),
-          ),
+          child: Container(),
         ),
       ),
       bottomNavigationBar: BotNavigationBar(

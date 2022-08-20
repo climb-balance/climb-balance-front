@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:climb_balance/models/tag.dart';
+
 import 'package:climb_balance/providers/asyncStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/tag_selector.dart';
+
 class UploadType {
   double start, end;
-  Location location;
-  Difficulty difficulty;
+  LocationSelector location;
+  DifficultySelector difficulty;
   bool success;
   DateTime date;
   String detail;
@@ -42,8 +44,8 @@ class UploadNotifier extends StateNotifier<UploadType> {
   // TODO state 불변으로 만들어야함!!!!!
   UploadNotifier({required this.ref})
       : super(UploadType(
-            location: Location(),
-            difficulty: Difficulty(color: Colors.black),
+            location: LocationSelector(),
+            difficulty: DifficultySelector(color: Colors.black),
             date: DateTime.now()));
 
   void setFile({required File file}) {
@@ -53,8 +55,8 @@ class UploadNotifier extends StateNotifier<UploadType> {
   }
 
   void setTags(
-      {required Location location,
-      required Difficulty difficulty,
+      {required LocationSelector location,
+      required DifficultySelector difficulty,
       required bool success,
       required DateTime date}) {
     UploadType newState = state;

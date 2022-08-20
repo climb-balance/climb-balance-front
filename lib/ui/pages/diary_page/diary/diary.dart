@@ -1,16 +1,11 @@
-import 'package:climb_balance/models/story.dart';
-import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/providers/current_user.dart';
-import 'package:climb_balance/providers/serverRequest.dart';
+import 'package:climb_balance/providers/diary_provider.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../configs/serverConfig.dart';
 import '../../../widgets/user_profile_info.dart';
 import 'classified_story.dart';
-
-enum FilterType { noFilter, aiOnly, expertOnly }
 
 class NoGlowScrollBehavior extends ScrollBehavior {
   @override
@@ -20,76 +15,26 @@ class NoGlowScrollBehavior extends ScrollBehavior {
   }
 }
 
-class Diary extends ConsumerStatefulWidget {
+class Diary extends ConsumerWidget {
   const Diary({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<Diary> createState() => _DiaryState();
-}
-
-class _DiaryState extends ConsumerState<Diary> {
-  late List<Story> stories;
-  late Map<String, List<Story>> treatedStories = {};
-  FilterType currentFilter = FilterType.noFilter;
-
-  @override
-  void initState() {
-    loadStories();
-    super.initState();
-  }
-
-  void loadStories() async {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      List<Story> newStories = [];
-      final body = await ref
-          .read(serverRequestPrivider)
-          .get(ServerUrl + ServerStoryPath);
-      for (final data in body['stories']) {
-        final story = Story.fromJson(data);
-        newStories.add(story);
-      }
-      stories = newStories;
-      updateFilter(FilterType.noFilter);
-    });
-  }
-
-  void updateFilter(FilterType filter) {
-    treatedStories = <String, List<Story>>{};
-    for (final story in stories) {
-      final String key = story.makeKey();
-      if (filter == FilterType.aiOnly && story.aiAvailable != 2) {
-        continue;
-      } else if (filter == FilterType.expertOnly &&
-          story.expertAvailable != 2) {
-        continue;
-      }
-      if (treatedStories.containsKey(key)) {
-        treatedStories[key]?.add(story);
-      } else {
-        treatedStories[key] = [story];
-      }
-    }
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final classifiedStories = ref.watch(diaryProvider);
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           scrollBehavior: NoGlowScrollBehavior(),
           slivers: [
-            SliverProfile(),
-            SliverPadding(
-              padding: const EdgeInsets.only(bottom: 10),
-              sliver: FixedTabBar(
-                updateFilter: updateFilter,
-              ),
+            const SliverProfile(),
+            const SliverPadding(
+              padding: EdgeInsets.only(bottom: 10),
+              sliver: FixedTabBar(),
             ),
             SliverList(
               delegate: SliverChildListDelegate(
-                treatedStories.values
+                classifiedStories
                     .map((stories) => ClassifiedStories(stories: stories))
                     .toList(),
               ),
@@ -191,16 +136,14 @@ class ProfileOptions extends StatelessWidget {
   }
 }
 
-class FixedTabBar extends StatefulWidget {
-  final void Function(FilterType) updateFilter;
-
-  const FixedTabBar({Key? key, required this.updateFilter}) : super(key: key);
+class FixedTabBar extends ConsumerStatefulWidget {
+  const FixedTabBar({Key? key}) : super(key: key);
 
   @override
-  State<FixedTabBar> createState() => _FixedTabBarState();
+  ConsumerState<FixedTabBar> createState() => _FixedTabBarState();
 }
 
-class _FixedTabBarState extends State<FixedTabBar>
+class _FixedTabBarState extends ConsumerState<FixedTabBar>
     with TickerProviderStateMixin {
   late TabController _tabController;
   static const tabItems = [
@@ -246,7 +189,7 @@ class _FixedTabBarState extends State<FixedTabBar>
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: TabBar(
             onTap: (idx) {
-              widget.updateFilter(filters[idx]);
+              ref.read(diaryProvider.notifier).filterStories(filters[idx]);
             },
             controller: _tabController,
             tabs: tabItems,

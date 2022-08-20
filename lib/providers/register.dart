@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/register.dart';
+
+import '../models/register_user.dart';
 
 class RegisterNotifier extends StateNotifier<RegisterType> {
   RegisterNotifier() : super(RegisterType());
