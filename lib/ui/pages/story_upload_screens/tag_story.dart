@@ -68,9 +68,12 @@ class TagStory extends ConsumerWidget {
                             initialDate: date!,
                             firstDate: DateTime(2010),
                             lastDate: DateTime.now(),
-                          ).then((value) => ref
-                              .read(storyUploadProvider.notifier)
-                              .handleDatePick);
+                            locale: const Locale('ko', "KR"),
+                          ).then(
+                            (value) => ref
+                                .read(storyUploadProvider.notifier)
+                                .handleDatePick,
+                          );
                         },
                         child: DateTag(
                           date: date!,
