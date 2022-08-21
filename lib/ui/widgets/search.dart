@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 class SearchTextInput extends StatefulWidget {
   final void Function(String) handleQuery;
+  final String searchLabel;
 
-  const SearchTextInput({Key? key, required this.handleQuery})
-      : super(key: key);
+  const SearchTextInput({
+    Key? key,
+    required this.handleQuery,
+    required this.searchLabel,
+  }) : super(key: key);
 
   @override
   State<SearchTextInput> createState() => _SearchTextInputState();
@@ -32,14 +36,14 @@ class _SearchTextInputState extends State<SearchTextInput> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 80,
+      height: 60,
       child: TextField(
         controller: _controller,
         onChanged: widget.handleQuery,
         style: Theme.of(context).textTheme.subtitle2,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           prefixIcon: Icon(Icons.search),
-          labelText: '클라이밍장 이름을 입력하세요',
+          labelText: widget.searchLabel,
         ),
       ),
     );

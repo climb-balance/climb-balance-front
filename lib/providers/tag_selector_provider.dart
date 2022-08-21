@@ -69,7 +69,10 @@ final locationSelectorProvider = StateNotifierProvider.autoDispose<
 
 class DifficultySelectorNotifier
     extends StateNotifier<List<DifficultySelector>> {
-  DifficultySelectorNotifier() : super([]);
+  final AutoDisposeStateNotifierProviderRef<DifficultySelectorNotifier,
+      List<DifficultySelector>> ref;
+
+  DifficultySelectorNotifier(this.ref) : super([]);
   List<DifficultySelector> filteredDifficultySelector = [];
 
   void _loadDifficultyDatas() {
@@ -90,8 +93,8 @@ class DifficultySelectorNotifier
 }
 
 final difficultySelectorProvider = StateNotifierProvider.autoDispose<
-    DifficultySelectorNotifier, List<DifficultySelector>>((_) {
-  DifficultySelectorNotifier notifier = DifficultySelectorNotifier();
+    DifficultySelectorNotifier, List<DifficultySelector>>((ref) {
+  DifficultySelectorNotifier notifier = DifficultySelectorNotifier(ref);
   notifier._loadDifficultyDatas();
   return notifier;
 });
