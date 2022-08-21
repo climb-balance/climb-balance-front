@@ -8,6 +8,7 @@ part 'story_tag.g.dart';
 class StoryTags with _$StoryTags {
   const StoryTags._();
 
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory StoryTags({
     @Default(-1) int location,
     @Default(-1) int difficulty,

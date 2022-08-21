@@ -10,6 +10,7 @@ part 'user.g.dart';
 
 @freezed
 class UserProfile with _$UserProfile {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserProfile({
     @Default('default') String nickName,
     @Default('https://i.ibb.co/d6SZN17/20220320-214742.jpg')

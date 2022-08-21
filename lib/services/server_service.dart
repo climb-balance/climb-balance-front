@@ -8,8 +8,9 @@ import 'server_config.dart';
 class ServerService {
   static Future<Result<List<Story>>> getUserStories() async {
     try {
-      final result = await ServerRequest.get(ServerStoryPath);
-      return Result.success(result);
+      final preResult = await ServerRequest.get(ServerStoryPath);
+      final result = StoryList.fromJson({"storyList": preResult["stories"]});
+      return Result.success(result.storyList);
     } catch (e) {
       return const Result.error('네트워크 에러');
     }

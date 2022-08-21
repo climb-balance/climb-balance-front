@@ -9,6 +9,7 @@ part 'story_upload.g.dart';
 
 @freezed
 class StoryUpload with _$StoryUpload {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory StoryUpload({
     @Default(-1) double start,
     @Default(-1) double end,

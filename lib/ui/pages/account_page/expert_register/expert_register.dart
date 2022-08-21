@@ -115,8 +115,8 @@ class ExpertRegisterButton extends ConsumerWidget {
 
             final expertProfile = ref.watch(expertRegisterProvider);
             ref.read(userProvider.notifier).updateExpertInfo(ExpertProfile(
-                  nickName: expertProfile.nickName,
-                  introduce: expertProfile.introduce,
+                  nickname: expertProfile.nickname,
+                  description: expertProfile.description,
                 ));
             ref.read(expertRegisterProvider.notifier).clear();
             debugPrint('여기까진 온다');

@@ -8,17 +8,20 @@ import '../models/story.dart';
 enum FilterType { noFilter, aiOnly, expertOnly }
 
 class DiaryNotifier extends StateNotifier<List<List<Story>>> {
-  late List<Story> stories;
+  List<Story> stories = [];
 
   DiaryNotifier() : super([]);
 
   void loadStories() async {
     final Result<List<Story>> result = await ServerService.getUserStories();
     result.when(
-        success: (stories) {
+        success: (getStories) {
+          stories = getStories;
           filterStories(FilterType.noFilter);
         },
-        error: (message) {},
+        error: (message) {
+          return result;
+        },
         loading: () {});
   }
 

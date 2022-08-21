@@ -9,6 +9,7 @@ part 'story.g.dart';
 
 @freezed
 class Story with _$Story {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Story({
     required StoryTags tags,
     required int likes,
@@ -19,7 +20,7 @@ class Story with _$Story {
     required DateTime uploadDate,
     required String thumbnailUrl,
     required int uploaderId,
-    required int videoId,
+    @Default(0) int videoId,
   }) = _Story;
 
   factory Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);
@@ -44,4 +45,14 @@ Story getRandomStory() {
     uploaderId: random.nextInt(2),
     videoId: random.nextInt(4),
   );
+}
+
+@freezed
+class StoryList with _$StoryList {
+  const factory StoryList({
+    required List<Story> storyList,
+  }) = _StoryList;
+
+  factory StoryList.fromJson(Map<String, dynamic> json) =>
+      _$StoryListFromJson(json);
 }

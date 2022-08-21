@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/expert_register_info.dart';
@@ -18,12 +19,12 @@ class ExpertRegisterNotifier extends StateNotifier<ExpertRegisterInfo> {
     return false;
   }
 
-  void updateNickName(String nickName) {
-    state = state.copyWith(nickName: nickName);
+  void updateNickname(String nickname) {
+    state = state.copyWith(nickname: nickname);
   }
 
-  void updateIntroduce(String introduce) {
-    state = state.copyWith(introduce: introduce);
+  void updateDescription(String description) {
+    state = state.copyWith(description: description);
   }
 
   void clear() {
