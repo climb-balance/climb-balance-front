@@ -57,7 +57,7 @@ dependencies:
   firebase_storage:
   fl_chart: ^0.55.1
   flutter_svg: ^1.1.4
-
+  share_plus: ^4.0.10+1
 
 
 dev_dependencies:
