@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
 
 abstract class Selector {
-  abstract int id;
-  abstract String name;
+  int id;
+  String name;
+  Color? color;
+
+  Selector({this.id = -1, this.name = '', this.color});
 }
 
-class LocationSelector implements Selector {
-  @override
-  int id;
-  @override
-  String name;
-
-  LocationSelector({this.id = -1, this.name = ''});
+class LocationSelector extends Selector {
+  LocationSelector({super.id = -1, super.name = ''});
 }
 
-class DifficultySelector implements Selector {
-  @override
-  int id;
-  @override
-  String name;
-  Color color;
-
-  DifficultySelector({this.id = -1, this.name = '', required this.color});
+class DifficultySelector extends Selector {
+  DifficultySelector({super.id = -1, super.name = '', required super.color});
 }

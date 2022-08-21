@@ -39,62 +39,42 @@ List<LocationSelector> locationData = [
   LocationSelector(id: 3, name: '이천 클라임바운스'),
 ];
 
-class LocationSelectorNotifier extends StateNotifier<List<LocationSelector>> {
-  LocationSelectorNotifier() : super([]);
-  List<LocationSelector> filteredLocationSelector = [];
+class SelectorNotifier extends StateNotifier<List<Selector>> {
+  final ref;
+  List<Selector> _originalData = [];
 
-  void _loadLocationDatas() {
-    state = locationData;
-    filteredLocationSelector = locationData;
+  SelectorNotifier(this.ref) : super([]);
+
+  void initDatas(List<Selector> datas) {
+    _originalData = datas;
+    state = datas;
   }
 
-  LocationSelector getLocationSelector(int idx) {
-    return state[idx + 1];
+  Selector getSelector(int idx) {
+    return _originalData[idx + 1];
   }
 
-  get getFilteredLocationSelector => filteredLocationSelector;
-
-  void updateFilteredLocationSelector(String query) {
-    filteredLocationSelector =
-        state.where((location) => location.name.contains(query)).toList();
+  void updateDatas(String query) {
+    List<Selector> newData = [];
+    for (final data in _originalData) {
+      if (data.name.contains(query)) {
+        newData.add(data);
+      }
+    }
+    state = newData;
   }
 }
 
-final locationSelectorProvider = StateNotifierProvider.autoDispose<
-    LocationSelectorNotifier, List<LocationSelector>>((_) {
-  LocationSelectorNotifier notifier = LocationSelectorNotifier();
-  notifier._loadLocationDatas();
+final locationSelectorProvider =
+    StateNotifierProvider.autoDispose<SelectorNotifier, List<Selector>>((ref) {
+  SelectorNotifier notifier = SelectorNotifier(ref);
+  notifier.initDatas(locationData);
   return notifier;
 });
 
-class DifficultySelectorNotifier
-    extends StateNotifier<List<DifficultySelector>> {
-  final AutoDisposeStateNotifierProviderRef<DifficultySelectorNotifier,
-      List<DifficultySelector>> ref;
-
-  DifficultySelectorNotifier(this.ref) : super([]);
-  List<DifficultySelector> filteredDifficultySelector = [];
-
-  void _loadDifficultyDatas() {
-    state = difficultyData;
-    filteredDifficultySelector = difficultyData;
-  }
-
-  DifficultySelector getDifficultySelector(int idx) {
-    return state[idx + 1];
-  }
-
-  void updateFilteredDifficultySelector(String query) {
-    filteredDifficultySelector =
-        state.where((difficulty) => difficulty.name.contains(query)).toList();
-  }
-
-  get getFilteredDifficultySelector => filteredDifficultySelector;
-}
-
-final difficultySelectorProvider = StateNotifierProvider.autoDispose<
-    DifficultySelectorNotifier, List<DifficultySelector>>((ref) {
-  DifficultySelectorNotifier notifier = DifficultySelectorNotifier(ref);
-  notifier._loadDifficultyDatas();
+final difficultySelectorProvider =
+    StateNotifierProvider.autoDispose<SelectorNotifier, List<Selector>>((ref) {
+  SelectorNotifier notifier = SelectorNotifier(ref);
+  notifier.initDatas(difficultyData);
   return notifier;
 });

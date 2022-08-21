@@ -21,7 +21,6 @@ class _SearchTextInputState extends State<SearchTextInput> {
   void initState() {
     super.initState();
     _controller.addListener(() {
-      debugPrint(_controller.value.text);
       widget.handleQuery(_controller.value.text);
     });
   }

@@ -71,7 +71,7 @@ class ClassifiedStoryTags extends ConsumerWidget {
                 Text(
                   ref
                       .read(locationSelectorProvider.notifier)
-                      .getLocationSelector(story.tags.location)
+                      .getSelector(story.tags.location)
                       .name,
                 ),
               ],

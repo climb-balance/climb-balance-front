@@ -1,21 +1,16 @@
-import 'package:climb_balance/models/tag_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/story_tag.dart';
 import '../../../providers/tag_selector_provider.dart';
 
-class StoryTagInfo extends ConsumerWidget {
+class StoryTagInfo extends StatelessWidget {
   final StoryTags tags;
 
   const StoryTagInfo({Key? key, required this.tags}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final getLocation =
-        ref.read(locationSelectorProvider.notifier).getLocationSelector;
-    final getDifficulty =
-        ref.read(difficultySelectorProvider.notifier).getDifficultySelector;
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -33,9 +28,13 @@ class StoryTagInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             if (tags.location != -1)
-              LocationTag(location: getLocation(tags.location)),
+              LocationTag(
+                location: tags.location,
+              ),
             if (tags.difficulty != -1)
-              DifficultyTag(difficulty: getDifficulty(tags.location)),
+              DifficultyTag(
+                difficulty: tags.difficulty,
+              ),
           ],
         ),
       ],
@@ -60,42 +59,46 @@ class DateTag extends StatelessWidget {
   }
 }
 
-class LocationTag extends StatelessWidget {
-  final LocationSelector location;
+class LocationTag extends ConsumerWidget {
+  final int location;
 
   const LocationTag({Key? key, required this.location}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locationValue =
+        ref.read(locationSelectorProvider.notifier).getSelector(location);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Icon(Icons.location_on),
-        Text(location.name),
+        const Icon(Icons.location_on),
+        Text(locationValue.name),
       ],
     );
   }
 }
 
-class DifficultyTag extends StatelessWidget {
-  final DifficultySelector difficulty;
+class DifficultyTag extends ConsumerWidget {
+  final int difficulty;
 
   const DifficultyTag({Key? key, required this.difficulty}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final difficultyValue =
+        ref.read(difficultySelectorProvider.notifier).getSelector(difficulty);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           Icons.bookmark,
-          color: difficulty.color,
+          color: difficultyValue.color,
         ),
         Text(
-          difficulty.name,
+          difficultyValue.name,
           style: TextStyle(
-            color: difficulty.color,
+            color: difficultyValue.color,
           ),
         ),
       ],

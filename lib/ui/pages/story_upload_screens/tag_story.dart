@@ -18,18 +18,6 @@ class TagStory extends ConsumerWidget {
     final success =
         ref.watch(storyUploadProvider.select((value) => value.success));
     final date = ref.watch(storyUploadProvider.select((value) => value.date));
-    final locationDatas = ref
-        .watch(locationSelectorProvider.notifier)
-        .getFilteredLocationSelector;
-    final locationUpdateQuery = ref
-        .read(locationSelectorProvider.notifier)
-        .updateFilteredLocationSelector;
-    final difficultyUpdateQuery = ref
-        .read(difficultySelectorProvider.notifier)
-        .updateFilteredDifficultySelector;
-    final difficultyDatas = ref
-        .watch(difficultySelectorProvider.notifier)
-        .getFilteredDifficultySelector;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -90,8 +78,7 @@ class TagStory extends ConsumerWidget {
                           context: context,
                           builder: (context) => ModalPicker(
                             searchLabel: "클라이밍장 이름을 검색해주세요",
-                            datas: locationDatas,
-                            updateQuery: locationUpdateQuery,
+                            provider: locationSelectorProvider,
                           ),
                         );
                       },
@@ -108,8 +95,7 @@ class TagStory extends ConsumerWidget {
                           context: context,
                           builder: (context) => ModalPicker(
                             searchLabel: "난이도 태그를 검색해주세요",
-                            datas: difficultyDatas,
-                            updateQuery: difficultyUpdateQuery,
+                            provider: difficultySelectorProvider,
                           ),
                         );
                       },
