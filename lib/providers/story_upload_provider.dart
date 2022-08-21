@@ -56,6 +56,16 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     );
   }
 
+  void updateLocation({int? location}) {
+    if (location == null) return;
+    state = state.copyWith(location: location);
+  }
+
+  void updateDifficulty({int? difficulty}) {
+    if (difficulty == null) return;
+    state = state.copyWith(difficulty: difficulty);
+  }
+
   void handleSuccess(final value) {
     state = state.copyWith(success: value);
   }

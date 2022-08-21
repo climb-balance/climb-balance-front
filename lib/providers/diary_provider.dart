@@ -42,7 +42,7 @@ class DiaryNotifier extends StateNotifier<List<List<Story>>> {
   }
 
   String _makeStoryKey(Story story) {
-    return formatDatetime(story.tags.videoDate) +
+    return formatDatetimeToHHMMSS(story.tags.videoDate) +
         story.tags.location.toString();
   }
 }

@@ -2,6 +2,7 @@ import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/modal_picker.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
+import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -18,6 +19,10 @@ class TagStory extends ConsumerWidget {
     final success =
         ref.watch(storyUploadProvider.select((value) => value.success));
     final date = ref.watch(storyUploadProvider.select((value) => value.date));
+    final location =
+        ref.watch(storyUploadProvider.select((value) => value.location));
+    final difficulty =
+        ref.watch(storyUploadProvider.select((value) => value.difficulty));
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -29,84 +34,105 @@ class TagStory extends ConsumerWidget {
         leading: Container(),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: VideoViewer(
-              trimmer: trimmer,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              child: VideoViewer(
+                trimmer: trimmer,
+              ),
             ),
-          ),
-          MySafeArea(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const Text('실패/성공:'),
-                    Switch(
-                      value: success,
-                      onChanged:
-                          ref.read(storyUploadProvider.notifier).handleSuccess,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('날짜:'),
-                    TextButton(
-                      onPressed: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: date!,
-                          firstDate: DateTime(2010),
-                          lastDate: DateTime.now(),
-                        ).then((value) => ref
+            MySafeArea(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Text('실패/성공:'),
+                      Switch(
+                        value: success,
+                        onChanged: ref
                             .read(storyUploadProvider.notifier)
-                            .handleDatePick);
-                      },
-                      child: Text('${date?.year}-${date?.month}-${date?.day}'),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('위치:'),
-                    TextButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ModalPicker(
-                            searchLabel: "클라이밍장 이름을 검색해주세요",
-                            provider: locationSelectorProvider,
-                          ),
-                        );
-                      },
-                      child: Text('${date?.year}-${date?.month}-${date?.day}'),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('난이도:'),
-                    TextButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ModalPicker(
-                            searchLabel: "난이도 태그를 검색해주세요",
-                            provider: difficultySelectorProvider,
-                          ),
-                        );
-                      },
-                      child: Text('${date?.year}-${date?.month}-${date?.day}'),
-                    ),
-                  ],
-                )
-              ],
+                            .handleSuccess,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('날짜:'),
+                      TextButton(
+                        onPressed: () {
+                          showDatePicker(
+                            context: context,
+                            initialDate: date!,
+                            firstDate: DateTime(2010),
+                            lastDate: DateTime.now(),
+                          ).then((value) => ref
+                              .read(storyUploadProvider.notifier)
+                              .handleDatePick);
+                        },
+                        child: DateTag(
+                          date: date!,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('위치:'),
+                      TextButton(
+                        onPressed: () {
+                          showDialog<int>(
+                            context: context,
+                            builder: (context) => ModalPicker(
+                              searchLabel: "클라이밍장 이름을 검색해주세요",
+                              provider: locationSelectorProvider,
+                            ),
+                          ).then(
+                            (value) => ref
+                                .read(storyUploadProvider.notifier)
+                                .updateLocation(
+                                  location: value,
+                                ),
+                          );
+                        },
+                        child: LocationTag(
+                          location: location,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('난이도:'),
+                      TextButton(
+                        onPressed: () {
+                          showDialog<int>(
+                            context: context,
+                            builder: (context) => ModalPicker(
+                              searchLabel: "난이도 태그를 검색해주세요",
+                              provider: difficultySelectorProvider,
+                            ),
+                          ).then(
+                            (value) => ref
+                                .read(storyUploadProvider.notifier)
+                                .updateDifficulty(
+                                  difficulty: value,
+                                ),
+                          );
+                        },
+                        child: DifficultyTag(
+                          difficulty: difficulty,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: BottomStepBar(
         handleNext: () {

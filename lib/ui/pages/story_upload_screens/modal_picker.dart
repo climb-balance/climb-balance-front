@@ -30,19 +30,27 @@ class ModalPicker extends ConsumerWidget {
         child: SizedBox(
           width: size.width - 80,
           height: size.height - 80,
-          child: ListView.custom(
-            shrinkWrap: true,
-            childrenDelegate: SliverChildListDelegate(
-              [
-                SearchTextInput(
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                flexibleSpace: SearchTextInput(
                   handleQuery: updateQuery,
                   searchLabel: searchLabel,
                 ),
-                ...datas.map(
-                  (data) => PickItem(data: data),
+                pinned: true,
+                leading: Container(),
+                backgroundColor: Colors.transparent,
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    ...datas.map(
+                      (data) => PickItem(data: data),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

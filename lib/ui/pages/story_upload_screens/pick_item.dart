@@ -29,7 +29,9 @@ class PickItem extends StatelessWidget {
           ),
         ),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop(data.id);
+          },
           child: Text(
             data.name,
             style: theme.textTheme.subtitle2,

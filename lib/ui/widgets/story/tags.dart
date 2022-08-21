@@ -1,3 +1,4 @@
+import 'package:climb_balance/utils/durations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +20,7 @@ class StoryTagInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             DateTag(
-              dateString: tags.formatDatetime(),
+              date: tags.videoDate,
             ),
             SuccessTag(success: tags.success),
           ],
@@ -43,9 +44,9 @@ class StoryTagInfo extends StatelessWidget {
 }
 
 class DateTag extends StatelessWidget {
-  final String dateString;
+  final DateTime date;
 
-  const DateTag({Key? key, required this.dateString}) : super(key: key);
+  const DateTag({Key? key, required this.date}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,9 @@ class DateTag extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Icon(Icons.calendar_today),
-        Text(dateString),
+        Text(
+          formatDatetimeToYYMMDD(date),
+        ),
       ],
     );
   }
@@ -87,21 +90,24 @@ class DifficultyTag extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final difficultyValue =
         ref.read(difficultySelectorProvider.notifier).getSelector(difficulty);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          Icons.bookmark,
-          color: difficultyValue.color,
-        ),
-        Text(
-          difficultyValue.name,
-          style: TextStyle(
+    return Container(
+      color: Theme.of(context).colorScheme.secondary,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.bookmark,
             color: difficultyValue.color,
           ),
-        ),
-      ],
+          Text(
+            difficultyValue.name,
+            style: TextStyle(
+              color: difficultyValue.color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

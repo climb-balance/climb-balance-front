@@ -5,15 +5,15 @@ import '../models/tag_selector.dart';
 
 List<DifficultySelector> difficultyData = [
   DifficultySelector(name: '난이도 정보 없음', color: Colors.white),
-  DifficultySelector(id: 0, name: '빨강', color: Colors.red),
+  DifficultySelector(id: 1, name: '빨강', color: Colors.red),
   DifficultySelector(id: 2, name: '파랑', color: Colors.blue),
   DifficultySelector(id: 3, name: '초록', color: Colors.green),
   DifficultySelector(id: 4, name: '검정', color: Colors.black),
-  DifficultySelector(id: 0, name: '빨강', color: Colors.red),
+  DifficultySelector(id: 1, name: '빨강', color: Colors.red),
   DifficultySelector(id: 2, name: '파랑', color: Colors.blue),
   DifficultySelector(id: 3, name: '초록', color: Colors.green),
   DifficultySelector(id: 4, name: '검정', color: Colors.black),
-  DifficultySelector(id: 0, name: '빨강', color: Colors.red),
+  DifficultySelector(id: 1, name: '빨강', color: Colors.red),
   DifficultySelector(id: 2, name: '파랑', color: Colors.blue),
   DifficultySelector(id: 3, name: '초록', color: Colors.green),
   DifficultySelector(id: 4, name: '검정', color: Colors.black),
@@ -51,7 +51,10 @@ class SelectorNotifier extends StateNotifier<List<Selector>> {
   }
 
   Selector getSelector(int idx) {
-    return _originalData[idx + 1];
+    if (idx == -1) {
+      return _originalData[0];
+    }
+    return _originalData[idx];
   }
 
   void updateDatas(String query) {
