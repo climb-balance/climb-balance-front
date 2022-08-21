@@ -7,6 +7,7 @@ import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../models/story.dart';
@@ -179,7 +180,10 @@ class StoryButtons extends ConsumerWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Share.share(
+                '클라임 밸런스에서 다양한 클라이밍 영상과 AI 자세 분석, 맞춤 강습 매칭을 만나보세요!! https://climb-balance.com/video/123124');
+          },
           child: Column(
             children: const [
               Icon(
