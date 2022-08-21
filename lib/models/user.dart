@@ -21,6 +21,7 @@ class UserProfile with _$UserProfile {
     @Default(-1) int weight,
     @Default(false) bool isExpert,
     @Default(0) int rank,
+    @Default(1) int userId,
     ExpertProfile? expertProfile,
   }) = _UserProfile;
 

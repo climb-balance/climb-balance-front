@@ -127,7 +127,7 @@ class CustomFabLoc extends FloatingActionButtonLocation {
   }
 }
 
-class StoryButtons extends StatelessWidget {
+class StoryButtons extends ConsumerWidget {
   final Story story;
   final void Function() toggleCommentOpen;
 
@@ -136,22 +136,24 @@ class StoryButtons extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final curUserId = ref.watch(userProvider.select((value) => value.userId));
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        TextButton(
-          onPressed: () {},
-          child: Column(
-            children: [
-              const Icon(
-                Icons.android,
-                size: 35,
-              ),
-            ],
+        if (curUserId == curUserId && story.aiAvailable == 3)
+          TextButton(
+            onPressed: () {},
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.android,
+                  size: 35,
+                ),
+              ],
+            ),
           ),
-        ),
         TextButton(
           onPressed: () {},
           child: Column(
@@ -188,34 +190,43 @@ class StoryButtons extends StatelessWidget {
             ],
           ),
         ),
-        TextButton(
-          onPressed: () {
-            if (story.aiAvailable == 0 || story.expertAvailable == 0) {
-              showModalBottomSheet(
-                enableDrag: true,
-                context: context,
-                builder: (context) => FeedbackRequestSheet(
-                  story: story,
-                ),
-              );
-            } else {
-              customShowDialog(
-                  context: context,
-                  title: '피드백을 요청할 수 없습니다',
-                  content: '이미 피드백이 모두 완료되거나 진행 중 입니다.');
-            }
-          },
-          child: Column(
-            children: const [
-              Icon(
-                Icons.more,
-                size: 35,
-              ),
-              Text('피드백'),
-            ],
-          ),
-        ),
+        if (curUserId == curUserId &&
+            (story.aiAvailable == 1 || story.expertAvailable == 1))
+          StoryFeedbackBtn(story: story),
       ],
+    );
+  }
+}
+
+class StoryFeedbackBtn extends StatelessWidget {
+  const StoryFeedbackBtn({
+    Key? key,
+    required this.story,
+  }) : super(key: key);
+
+  final Story story;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        showModalBottomSheet(
+          enableDrag: true,
+          context: context,
+          builder: (context) => FeedbackRequestSheet(
+            story: story,
+          ),
+        );
+      },
+      child: Column(
+        children: const [
+          Icon(
+            Icons.more,
+            size: 35,
+          ),
+          Text('피드백'),
+        ],
+      ),
     );
   }
 }
@@ -231,11 +242,6 @@ class FeedbackRequestSheet extends ConsumerWidget {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const AiFeedbackAds()));
-      return;
-    } else if (ref
-        .watch(feedbackStatusProvider.select((value) => value.aiIsWaiting))) {
-      customShowDialog(
-          context: context, title: '실패', content: '이미 진행 중인 영상이 있습니다.');
       return;
     }
     String waitMessage = rank == 2 ? '5분' : '24시간';
@@ -279,7 +285,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
     return ListView(
       shrinkWrap: true,
       children: [
-        if (story.aiAvailable == 0)
+        if (story.aiAvailable == 1)
           SizedBox(
             height: 60,
             child: TextButton(
@@ -290,7 +296,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
                   icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
             ),
           ),
-        if (story.expertAvailable == 0)
+        if (story.expertAvailable == 1)
           SizedBox(
             height: 60,
             child: TextButton(
