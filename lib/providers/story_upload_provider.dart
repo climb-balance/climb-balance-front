@@ -1,17 +1,18 @@
 import 'dart:io';
 
+import 'package:climb_balance/services/server_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
+import '../models/result.dart';
 import '../models/story_upload.dart';
-import '../ui/pages/story_upload_screens/write_desc.dart';
 
 class StoryUploadNotifier extends StateNotifier<StoryUpload> {
   StoryUploadNotifier() : super(const StoryUpload());
 
-  Trimmer trimmer = Trimmer();
+  final Trimmer _trimmer = Trimmer();
 
   Future<void> handlePick({required bool isCam}) async {
     state = StoryUpload(date: DateTime.now());
@@ -29,15 +30,15 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
   }
 
   Trimmer loadTrimmer() {
-    return trimmer..loadVideo(videoFile: state.file!);
+    return _trimmer..loadVideo(videoFile: state.file!);
   }
 
-  get getTrimmer => trimmer;
+  get trimmer => _trimmer;
 
   void handleEditNext({required BuildContext context}) {
     state.copyWith(
-      start: trimmer.videoStartPos,
-      end: trimmer.videoEndPos,
+      start: _trimmer.videoStartPos,
+      end: _trimmer.videoEndPos,
     );
   }
 
@@ -45,15 +46,6 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     if (newDate == null) return;
 
     state = state.copyWith(date: newDate);
-  }
-
-  void handleTagNext({required BuildContext context}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WriteDesc(trimmer: trimmer),
-      ),
-    );
   }
 
   void updateLocation({int? location}) {
@@ -66,8 +58,27 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     state = state.copyWith(difficulty: difficulty);
   }
 
+  void updateDetail(String? detail) {
+    detail ??= '';
+    state = state.copyWith(detail: detail);
+  }
+
   void handleSuccess(final value) {
     state = state.copyWith(success: value);
+  }
+
+  Future<Result<bool>> upload() async {
+    final Result<bool> result = await ServerService.storyUpload(state);
+    return result;
+  }
+
+  @override
+  void dispose() {
+    _trimmer.videoPlayerController?.dispose();
+
+    _trimmer.dispose();
+
+    super.dispose();
   }
 }
 

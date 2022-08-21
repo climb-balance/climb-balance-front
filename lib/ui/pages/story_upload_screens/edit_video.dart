@@ -1,5 +1,6 @@
 import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/tag_story.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -17,13 +18,7 @@ class EditVideo extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width,
-              child: VideoViewer(
-                trimmer: trimmer,
-              ),
-            ),
+            UploadVideoPreview(),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Column(

@@ -2,6 +2,7 @@ import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/services/server_request.dart';
 
 import '../models/result.dart';
+import '../models/story_upload.dart';
 import 'server_config.dart';
 
 class ServerService {
@@ -21,5 +22,22 @@ class ServerService {
     } catch (e) {
       return const Result.error('네트워크 에러');
     }
+  }
+
+  static Future<Result<bool>> storyUpload(StoryUpload data) async {
+    int storyId;
+    try {
+      final result = await ServerRequest.post(ServerStoryPath, data);
+      storyId = result;
+    } catch (e) {
+      return Result.error('스토리 업로드 오류');
+    }
+
+    try {
+      ServerRequest.multiPartUpload('$ServerStoryPath/$storyId', data.file!);
+    } catch (e) {
+      return Result.error('영상 업로드 오류');
+    }
+    return Result.success(true);
   }
 }

@@ -25,4 +25,40 @@ class ServerRequest {
     }
     return body;
   }
+
+  static Future<dynamic> post(String url, dynamic data) async {
+    http.Response res = await http
+        .post(
+          Uri.parse(ServerUrl + url),
+          body: jsonEncode(data),
+          headers: headers,
+        )
+        .timeout(timeOutDuration)
+        .catchError((err) => throw err)
+        .whenComplete(() {});
+    final statusCode = res.statusCode;
+    final body = json.decode(utf8.decode(res.bodyBytes));
+    if (statusCode < 200 || statusCode > 400 || body == null) {
+      throw const HttpException('요청 에러');
+    }
+    return body;
+  }
+
+  static Future<dynamic> multiPartUpload(String url, File file) async {
+    Uri uri = Uri.parse('http://192.168.107.189:3000/story/1/video');
+    final req = http.MultipartRequest('POST', uri);
+    try {
+      final multiPartFile = await http.MultipartFile.fromPath('file', file.path)
+          .timeout(const Duration(seconds: 2));
+      req.files.add(multiPartFile);
+      final res = await req.send();
+      if (res.statusCode < 300) {
+        return true;
+      } else {
+        throw ('d');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

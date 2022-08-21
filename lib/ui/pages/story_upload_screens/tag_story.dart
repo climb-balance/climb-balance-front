@@ -1,11 +1,11 @@
 import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/modal_picker.dart';
+import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
 import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:video_trimmer/video_trimmer.dart';
 
 import '../../../providers/tag_selector_provider.dart';
 import 'bottom_step_bar.dart';
@@ -15,7 +15,6 @@ class TagStory extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final trimmer = ref.read(storyUploadProvider.notifier).getTrimmer;
     final success =
         ref.watch(storyUploadProvider.select((value) => value.success));
     final date = ref.watch(storyUploadProvider.select((value) => value.date));
@@ -37,13 +36,7 @@ class TagStory extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width,
-              child: VideoViewer(
-                trimmer: trimmer,
-              ),
-            ),
+            const UploadVideoPreview(),
             MySafeArea(
               child: Column(
                 children: [
@@ -142,7 +135,7 @@ class TagStory extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WriteDesc(trimmer: trimmer),
+              builder: (context) => const WriteDesc(),
             ),
           );
         },
