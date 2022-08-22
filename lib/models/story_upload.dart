@@ -16,8 +16,8 @@ class StoryUpload with _$StoryUpload {
     @Default(-1) int location,
     @Default(-1) int difficulty,
     @Default(false) bool success,
-    DateTime? date,
-    @Default('') String detail,
+    DateTime? videoDate,
+    @Default('empty') String description,
     @JsonKey(ignore: true) File? file,
   }) = _StoryUpload;
 

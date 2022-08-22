@@ -13,12 +13,13 @@ class Story with _$Story {
   const factory Story({
     required StoryTags tags,
     required int likes,
-    required String description,
+    @Default('') String description,
     required int comments,
     required int aiAvailable,
     required int expertAvailable,
     required DateTime uploadDate,
-    required String thumbnailUrl,
+    @Default('https://static-cse.canva.com/blob/651263/youtube.jpg')
+        String thumbnailUrl,
     required int uploaderId,
     @Default(0) int videoId,
   }) = _Story;

@@ -17,7 +17,8 @@ class TagStory extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final success =
         ref.watch(storyUploadProvider.select((value) => value.success));
-    final date = ref.watch(storyUploadProvider.select((value) => value.date));
+    final date =
+        ref.watch(storyUploadProvider.select((value) => value.videoDate));
     final location =
         ref.watch(storyUploadProvider.select((value) => value.location));
     final difficulty =
@@ -65,7 +66,7 @@ class TagStory extends ConsumerWidget {
                           ).then(
                             (value) => ref
                                 .read(storyUploadProvider.notifier)
-                                .handleDatePick,
+                                .handleDatePick(value),
                           );
                         },
                         child: DateTag(

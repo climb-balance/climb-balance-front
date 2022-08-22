@@ -15,7 +15,7 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
   final Trimmer _trimmer = Trimmer();
 
   Future<void> handlePick({required bool isCam}) async {
-    state = StoryUpload(date: DateTime.now());
+    state = StoryUpload(videoDate: DateTime.now());
 
     final ImagePicker picker = ImagePicker();
     final image = isCam
@@ -45,7 +45,7 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
   void handleDatePick(DateTime? newDate) async {
     if (newDate == null) return;
 
-    state = state.copyWith(date: newDate);
+    state = state.copyWith(videoDate: newDate);
   }
 
   void updateLocation({int? location}) {
@@ -58,9 +58,9 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     state = state.copyWith(difficulty: difficulty);
   }
 
-  void updateDetail(String? detail) {
-    detail ??= '';
-    state = state.copyWith(detail: detail);
+  void updateDescription(String? description) {
+    description ??= '';
+    state = state.copyWith(description: description);
   }
 
   void handleSuccess(final value) {
@@ -74,11 +74,9 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
 
   @override
   void dispose() {
-    _trimmer.videoPlayerController?.dispose();
-
-    _trimmer.dispose();
-
     super.dispose();
+    _trimmer.videoPlayerController?.dispose();
+    _trimmer.dispose();
   }
 }
 

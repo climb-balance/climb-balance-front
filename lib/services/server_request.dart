@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ServerRequest {
   static const timeOutDuration = Duration(seconds: 2);
-  static String ServerUrl = 'http://127.0.0.1:3000';
+  static String ServerUrl = 'http://10.0.2.2:3000';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Accpet': 'application/json'
@@ -20,7 +20,7 @@ class ServerRequest {
         .whenComplete(() {});
     final statusCode = res.statusCode;
     final body = json.decode(utf8.decode(res.bodyBytes));
-    if (statusCode < 200 || statusCode > 400 || body == null) {
+    if (statusCode < 200 || statusCode >= 400 || body == null) {
       throw const HttpException('요청 에러');
     }
     return body;
@@ -38,7 +38,7 @@ class ServerRequest {
         .whenComplete(() {});
     final statusCode = res.statusCode;
     final body = json.decode(utf8.decode(res.bodyBytes));
-    if (statusCode < 200 || statusCode > 400 || body == null) {
+    if (statusCode < 200 || statusCode >= 400 || body == null) {
       throw const HttpException('요청 에러');
     }
     return body;
@@ -52,10 +52,9 @@ class ServerRequest {
           .timeout(const Duration(seconds: 2));
       req.files.add(multiPartFile);
       final res = await req.send();
-      if (res.statusCode < 300) {
-        return true;
-      } else {
-        throw ('d');
+      final statusCode = res.statusCode;
+      if (statusCode < 200 || statusCode >= 400) {
+        throw const HttpException('요청 에러');
       }
     } catch (e) {
       rethrow;

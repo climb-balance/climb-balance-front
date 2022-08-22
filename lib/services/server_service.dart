@@ -9,6 +9,7 @@ class ServerService {
   static Future<Result<List<Story>>> getUserStories() async {
     try {
       final preResult = await ServerRequest.get(ServerStoryPath);
+      // TODO : 임시로 버그 막음 임 원래
       final result = StoryList.fromJson({"storyList": preResult["stories"]});
       return Result.success(result.storyList);
     } catch (e) {
@@ -29,13 +30,15 @@ class ServerService {
     int storyId;
     try {
       final result = await ServerRequest.post(ServerStoryPath, data);
-      storyId = result['story_id'];
+      //storyId = result['story_id'];
+      storyId = result;
     } catch (e) {
       return Result.error('스토리 업로드 오류');
     }
 
     try {
-      ServerRequest.multiPartUpload('$ServerStoryPath/$storyId', data.file!);
+      ServerRequest.multiPartUpload(
+          '$ServerStoryPath/$storyId$serverVideoPath', data.file!);
     } catch (e) {
       return Result.error('영상 업로드 오류');
     }

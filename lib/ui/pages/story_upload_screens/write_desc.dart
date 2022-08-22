@@ -30,6 +30,12 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    ref.read(storyUploadProvider.notifier).dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -63,7 +69,8 @@ class WriteDescription extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updateDetail = ref.read(storyUploadProvider.notifier).updateDetail;
+    final updateDetail =
+        ref.read(storyUploadProvider.notifier).updateDescription;
     return TextField(
       maxLines: 4,
       decoration: const InputDecoration(
