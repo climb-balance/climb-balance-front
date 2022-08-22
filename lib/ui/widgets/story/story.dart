@@ -76,7 +76,7 @@ class _StoryViewState extends State<StoryView> {
   void initState() {
     super.initState();
     _videoPlayerController =
-        VideoPlayerController.network(testVideos[widget.story.videoId])
+        VideoPlayerController.network(testVideos[widget.story.storyId])
           ..initialize().then((_) {
             _videoPlayerController.setLooping(true);
             _videoPlayerController.play();
