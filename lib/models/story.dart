@@ -17,11 +17,11 @@ class Story with _$Story {
     required int comments,
     required int aiAvailable,
     required int expertAvailable,
-    required DateTime uploadDate,
+    required DateTime? uploadDate,
     @Default('https://static-cse.canva.com/blob/651263/youtube.jpg')
         String thumbnailUrl,
     required int uploaderId,
-    @Default(0) int videoId,
+    @Default(0) int storyId,
   }) = _Story;
 
   factory Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);
@@ -44,7 +44,7 @@ Story getRandomStory() {
     uploadDate: DateTime.now(),
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
     uploaderId: random.nextInt(2),
-    videoId: random.nextInt(4),
+    storyId: random.nextInt(4),
   );
 }
 

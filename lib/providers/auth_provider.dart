@@ -21,7 +21,6 @@ class AuthNotifier extends StateNotifier<bool> {
             ? Navigator.pushNamed(context, '/register')
             : Navigator.pop(context));
       },
-      loading: () {},
       error: (error) {},
     );
   }

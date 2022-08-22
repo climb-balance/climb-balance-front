@@ -19,14 +19,14 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
   void handleUpload() async {
     Result<bool> result = await ref.read(storyUploadProvider.notifier).upload();
     result.when(
-        success: (value) {
-          ref.refresh(storyUploadProvider);
-          Navigator.popUntil(context, ModalRoute.withName('/'));
-        },
-        loading: () {},
-        error: (message) {
-          customShowDialog(context: context, title: '에러', content: message);
-        });
+      success: (value) {
+        ref.refresh(storyUploadProvider);
+        Navigator.popUntil(context, ModalRoute.withName('/'));
+      },
+      error: (message) {
+        customShowDialog(context: context, title: '에러', content: message);
+      },
+    );
   }
 
   @override

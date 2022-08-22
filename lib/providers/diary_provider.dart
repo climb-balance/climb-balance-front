@@ -15,14 +15,14 @@ class DiaryNotifier extends StateNotifier<List<List<Story>>> {
   void loadStories() async {
     final Result<List<Story>> result = await ServerService.getUserStories();
     result.when(
-        success: (getStories) {
-          stories = getStories;
-          filterStories(FilterType.noFilter);
-        },
-        error: (message) {
-          return result;
-        },
-        loading: () {});
+      success: (getStories) {
+        stories = getStories;
+        filterStories(FilterType.noFilter);
+      },
+      error: (message) {
+        return result;
+      },
+    );
   }
 
   void filterStories(FilterType filter) {
