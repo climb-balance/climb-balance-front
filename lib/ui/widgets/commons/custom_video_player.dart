@@ -13,22 +13,27 @@ class CustomVideoPlayer extends ConsumerStatefulWidget {
 }
 
 class _CustomVideoPlayerState extends ConsumerState<CustomVideoPlayer> {
+  late final VideoPlayerController? videoPlayerController;
+
   @override
   void initState() {
     super.initState();
     ref
         .read(videoControllerProvider.notifier)
-        .updateVideoController(widget.storyId);
+        .getVideoPlayerController(widget.storyId)
+        .then((value) {
+      videoPlayerController = value;
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final videoPlayerController = ref.watch(videoControllerProvider)!;
     return Center(
-      child: videoPlayerController.value.isInitialized
+      child: videoPlayerController != null
           ? AspectRatio(
-              aspectRatio: videoPlayerController.value.aspectRatio,
-              child: VideoPlayer(videoPlayerController),
+              aspectRatio: videoPlayerController!.value.aspectRatio,
+              child: VideoPlayer(videoPlayerController!),
             )
           : const CircularProgressIndicator(),
     );

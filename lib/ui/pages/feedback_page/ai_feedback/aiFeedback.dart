@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../theme/specific_theme.dart';
+import '../../../widgets/commons/stars.dart';
 
 class AiFeedback extends StatefulWidget {
   const AiFeedback({Key? key}) : super(key: key);
@@ -140,7 +141,7 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: 2,
+              numOfStar: 4,
             ),
           ],
         ),
@@ -151,7 +152,7 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: 4,
+              numOfStar: 5,
             ),
           ],
         ),
@@ -162,31 +163,11 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: 3,
+              numOfStar: 7,
             ),
           ],
         ),
       ],
-    );
-  }
-}
-
-class Stars extends StatelessWidget {
-  final int numOfStar;
-
-  const Stars({Key? key, this.numOfStar = 2}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> datas = [];
-    for (int i = 0; i < numOfStar; i += 1) {
-      datas.add(const Icon(
-        Icons.star,
-        color: Colors.yellow,
-      ));
-    }
-    return Row(
-      children: datas,
     );
   }
 }
