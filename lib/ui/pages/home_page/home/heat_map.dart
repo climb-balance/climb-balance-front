@@ -9,14 +9,16 @@ class HeatMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: GridView.count(
-        padding: const EdgeInsets.all(5),
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 5,
-        crossAxisSpacing: 5,
-        crossAxisCount: 6,
-        children: datas.map((data) => HeatMapSquare(data: data)).toList(),
+    return Flexible(
+      child: Card(
+        child: GridView.count(
+          padding: const EdgeInsets.all(5),
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
+          crossAxisCount: 6,
+          children: datas.map((data) => HeatMapSquare(data: data)).toList(),
+        ),
       ),
     );
   }

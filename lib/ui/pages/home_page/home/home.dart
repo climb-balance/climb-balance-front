@@ -140,14 +140,8 @@ class MainPage extends StatelessWidget {
             ),
             Row(
               children: const [
-                Flexible(
-                  child: AiFeedbackStatus(),
-                  fit: FlexFit.tight,
-                ),
-                Flexible(
-                  child: ExpertFeedbackStatus(),
-                  fit: FlexFit.tight,
-                ),
+                AiFeedbackStatus(),
+                ExpertFeedbackStatus(),
               ],
             ),
             Expanded(
@@ -186,35 +180,38 @@ class ExpertFeedbackStatus extends ConsumerWidget {
     final waitingExpertFeedback = ref.watch(
         feedbackStatusProvider.select((value) => value.waitingExpertFeedback));
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          children: [
-            Text(
-              '전문가',
-              style: theme.textTheme.subtitle2,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            SizedBox(
-              height: 110,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${waitingExpertFeedback}/${finishedExpertFeedback}',
-                    style: theme.textTheme.subtitle1,
-                  ),
-                  Text(
-                    '대기/완료',
-                    style: theme.textTheme.subtitle2,
-                  )
-                ],
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            children: [
+              Text(
+                '전문가',
+                style: theme.textTheme.subtitle2,
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 5,
+              ),
+              SizedBox(
+                height: 110,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${waitingExpertFeedback}/${finishedExpertFeedback}',
+                      style: theme.textTheme.subtitle1,
+                    ),
+                    Text(
+                      '대기/완료',
+                      style: theme.textTheme.subtitle2,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -229,25 +226,28 @@ class AiFeedbackStatus extends ConsumerWidget {
     final theme = Theme.of(context);
     final aiStatus = ref.watch(feedbackStatusProvider);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          children: [
-            Text(
-              '인공지능',
-              style: theme.textTheme.subtitle2,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            SizedBox(
-              height: 110,
-              child: aiStatus.aiIsWaiting
-                  ? const AiFeedbackStatusInform()
-                  : const NoFeedbackInform(),
-            ),
-          ],
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            children: [
+              Text(
+                '인공지능',
+                style: theme.textTheme.subtitle2,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SizedBox(
+                height: 110,
+                child: aiStatus.aiIsWaiting
+                    ? const AiFeedbackStatusInform()
+                    : const NoFeedbackInform(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -338,30 +338,22 @@ class MainStatistics extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return Row(
               children: [
-                Flexible(
-                  child: HeatMap(
-                    datas: snapshot.data!,
-                  ),
+                HeatMap(
+                  datas: snapshot.data!,
                 ),
-                Flexible(
-                  child: ContinuousStatistics(
-                    datas: snapshot.data!,
-                  ),
+                ContinuousStatistics(
+                  datas: snapshot.data!,
                 ),
               ],
             );
           }
           return Row(
             children: [
-              Flexible(
-                child: HeatMap(
-                  datas: List<int>.filled(30, 0),
-                ),
+              HeatMap(
+                datas: List<int>.filled(30, 0),
               ),
-              Flexible(
-                child: HeatMap(
-                  datas: List<int>.filled(30, 0),
-                ),
+              HeatMap(
+                datas: List<int>.filled(30, 0),
               ),
             ],
           );

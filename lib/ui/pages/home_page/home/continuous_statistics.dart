@@ -31,18 +31,21 @@ class _ContinuousStatisticsState extends State<ContinuousStatistics> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('$cont회', style: theme.textTheme.headline6),
-          Icon(
-            Icons.local_fire_department,
-            color: theme.colorScheme.tertiary.withOpacity(cont / 30),
-            size: 75,
-          ),
-          Text('연속 클라이밍'),
-        ],
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('$cont회', style: theme.textTheme.headline6),
+            Icon(
+              Icons.local_fire_department,
+              color: theme.colorScheme.tertiary.withOpacity(cont / 30),
+              size: 75,
+            ),
+            Text('연속 클라이밍'),
+          ],
+        ),
       ),
     );
   }
