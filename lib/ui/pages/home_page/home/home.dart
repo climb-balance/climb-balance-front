@@ -307,11 +307,9 @@ class NoFeedbackInform extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
-      child: Text(
-        '요청한 피드백이 완료되었거나 없습니다.',
-        overflow: TextOverflow.fade,
-      ),
+    return Text(
+      '요청한 피드백이 완료되었거나 없습니다.',
+      overflow: TextOverflow.fade,
     );
   }
 }

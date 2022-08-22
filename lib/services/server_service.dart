@@ -29,7 +29,7 @@ class ServerService {
     int storyId;
     try {
       final result = await ServerRequest.post(ServerStoryPath, data);
-      storyId = result;
+      storyId = result['story_id'];
     } catch (e) {
       return Result.error('스토리 업로드 오류');
     }
