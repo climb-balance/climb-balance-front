@@ -37,8 +37,13 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
 
   void handleEditNext({required BuildContext context}) {
     state.copyWith(
-      start: _trimmer.videoStartPos,
-      end: _trimmer.videoEndPos,
+      start: _trimmer.videoStartPos.toInt() == 0
+          ? null
+          : _trimmer.videoStartPos / 1000,
+      end: _trimmer.videoEndPos.toInt() ==
+              _trimmer.videoPlayerController!.value.duration.inMilliseconds
+          ? null
+          : _trimmer.videoEndPos / 1000,
     );
   }
 

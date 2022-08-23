@@ -11,8 +11,8 @@ part 'story_upload.g.dart';
 class StoryUpload with _$StoryUpload {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory StoryUpload({
-    @Default(-1) double start,
-    @Default(-1) double end,
+    double? start,
+    double? end,
     @Default(-1) int location,
     @Default(-1) int difficulty,
     @Default(false) bool success,

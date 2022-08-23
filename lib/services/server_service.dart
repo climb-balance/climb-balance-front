@@ -19,7 +19,7 @@ class ServerService {
     try {
       final preResult = await ServerRequest.get(ServerStoryPath);
       // TODO : 임시로 버그 막음 임 원래 final result = StoryList.fromJson({"storyList": preResult["stories"]});
-      final result = StoryList.fromJson({"storyList": preResult});
+      final result = StoryList.fromJson({"story_list": preResult});
       return Result.success(result.storyList);
     } catch (e) {
       return const Result.error('네트워크 에러');
