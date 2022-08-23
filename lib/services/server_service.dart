@@ -6,6 +6,7 @@ import '../models/result.dart';
 import '../models/story_upload.dart';
 import 'server_config.dart';
 
+// TODO remove
 List<String> testVideos = [
   'http://15.164.163.153:3000/story/1/video?type=raw',
   'http://15.164.163.153:3000/story/1/video?type=ai',
@@ -65,8 +66,9 @@ class ServerService {
   static Future<Result<VideoPlayerController>> gerStoryVideo(int storyId,
       {bool isAi = false}) async {
     try {
-      final controller = VideoPlayerController.network(
+      final m3u8 = await ServerRequest.get(
           '$ServerStoryPath/$storyId$serverVideoPath?type=${isAi ? 'ai' : 'raw'}');
+      final controller = VideoPlayerController.network(m3u8);
       return Result.success(controller);
     } catch (e) {
       return const Result.error('영상 불러오기 오류');
@@ -74,27 +76,30 @@ class ServerService {
   }
 
   static String gerStoryVideoPath(int storyId, {bool isAi = false}) {
-    List<String> testVideos = [
-      'http://15.164.163.153:3000/story/1/video?type=raw',
-      'http://15.164.163.153:3000/story/1/video?type=ai',
-      'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
-      'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
-      'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
-    ];
-    //return '${ServerRequest.serverUrl}$ServerStoryPath/$storyId$serverVideoPath/?type=${isAi ? 'ai' : 'raw'}';
-    return testVideos[0];
+    return '${ServerRequest.serverUrl}$ServerStoryPath/$storyId$serverVideoPath/?type=${isAi ? 'ai' : 'raw'}';
   }
 
+  // TODO tmp
   static VideoPlayerController tmpStoryVideo(int storyId, {bool isAi = false}) {
-    List<String> testVideos = [
-      'http://15.164.163.153:3000/story/1/video?type=raw',
-      'http://15.164.163.153:3000/story/1/video?type=ai',
-      'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
-      'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
-      'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
-    ];
     return VideoPlayerController.network(
-      'http://15.164.163.153:3000/story/1/video?type=raw',
+      isAi
+          ? 'http://15.164.163.153:3000/story/1/video?type=ai'
+          : 'http://15.164.163.153:3000/story/1/video?type=raw',
     );
+  }
+
+  static Future<Result<bool>> putAiFeedback(
+      int storyId, String pushToken) async {
+    try {
+      final result = await ServerRequest.put(
+        '$ServerStoryPath/{storyId}$serverAiFeedbackPath',
+        {
+          'push_token': pushToken,
+        },
+      );
+      return const Result.success(true);
+    } catch (e) {
+      return const Result.error('AI 피드백 요청 오류');
+    }
   }
 }

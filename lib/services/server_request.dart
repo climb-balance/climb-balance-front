@@ -53,6 +53,24 @@ class ServerRequest {
     return body;
   }
 
+  static Future<dynamic> put(String url, dynamic data) async {
+    http.Response res = await http
+        .put(
+          Uri.parse(_serverUrl + url),
+          body: jsonEncode(data),
+          headers: headers,
+        )
+        .timeout(timeOutDuration)
+        .catchError((err) => throw err)
+        .whenComplete(() {});
+    final statusCode = res.statusCode;
+    final body = json.decode(utf8.decode(res.bodyBytes));
+    if (statusCode < 200 || statusCode >= 400 || body == null) {
+      throw const HttpException('요청 에러');
+    }
+    return body;
+  }
+
   static Future<dynamic> multiPartUpload(String url, File file) async {
     Uri uri = Uri.parse('${_serverUrl}${url}');
     final req = http.MultipartRequest('POST', uri);

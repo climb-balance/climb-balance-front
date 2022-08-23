@@ -44,7 +44,7 @@ Story getRandomStory() {
     uploadDate: DateTime.now(),
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
     uploaderId: random.nextInt(2),
-    storyId: random.nextInt(4),
+    storyId: 1,
   );
 }
 

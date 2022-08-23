@@ -29,13 +29,7 @@ class StoryPreview extends StatefulWidget {
 
 class _StoryPreviewState extends State<StoryPreview> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    debugPrint(ServerService.gerStoryVideoPath(widget.story.storyId));
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
@@ -57,7 +51,6 @@ class _StoryPreviewState extends State<StoryPreview> {
             video: ServerService.gerStoryVideoPath(widget.story.storyId),
             imageFormat: ImageFormat.JPEG,
             maxWidth: 128,
-            // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
             quality: 100,
           ),
           builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
@@ -112,13 +105,45 @@ class _StoryViewState extends State<StoryView> {
   @override
   void initState() {
     super.initState();
-    ServerService.gerStoryVideo(widget.story.storyId).then((result) {
-      result.when(
-          error: (String message) {},
-          success: (value) {
-            _videoPlayerController = value;
-            setState(() {});
-          });
+    // TODO 복구
+    // _videoPlayerController = ServerService.tmpStoryVideo(1)
+    //   ..initialize().then((_) {
+    //     _videoPlayerController.play();
+    //     _videoPlayerController.setLooping(true);
+    //     setState(() {});
+    //   });
+    // ServerService.gerStoryVideo(widget.story.storyId).then((result) {
+    //   result.when(
+    //       error: (String message) {},
+    //       success: (value) {
+    //         _videoPlayerController = value;
+    //         _videoPlayerController.initialize().then((_) {
+    //           _videoPlayerController.play();
+    //           _videoPlayerController.setLooping(true);
+    //           setState(() {});
+    //         });
+    //       });
+    // });
+    _videoPlayerController = VideoPlayerController.network(
+      ServerService.gerStoryVideoPath(widget.story.storyId),
+      formatHint: VideoFormat.hls,
+    );
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+      _videoPlayerController.setLooping(true);
+      setState(() {});
+    });
+    _videoPlayerController.addListener(() {
+      if (_videoPlayerController.value.hasError) {
+        debugPrint(
+            'Video Error: ${_videoPlayerController.value.errorDescription}');
+      }
+      if (_videoPlayerController.value.isBuffering) {
+        debugPrint('Please wait');
+      }
+      if (_videoPlayerController.value.isInitialized) {
+        debugPrint('the video is initialized');
+      }
     });
   }
 
@@ -153,7 +178,7 @@ class _StoryViewState extends State<StoryView> {
                   StoryComments(toggleCommentOpen: toggleCommentOpen),
               ],
             ),
-            if (!isCommentOpen)
+            if (!isCommentOpen && _videoPlayerController.value.isInitialized)
               StoryOverlay(
                 story: widget.story,
                 handleBack: widget.handleBack,

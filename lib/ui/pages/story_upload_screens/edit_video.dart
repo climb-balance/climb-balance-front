@@ -45,7 +45,7 @@ class EditVideo extends ConsumerWidget {
       ),
       bottomNavigationBar: BottomStepBar(
         handleNext: () {
-          handleEdit(context: context);
+          handleEdit();
           Navigator.push(
             context,
             MaterialPageRoute(

@@ -25,8 +25,8 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
     Result<bool> result = await ref.read(storyUploadProvider.notifier).upload();
     result.when(
       success: (value) {
-        ref.refresh(storyUploadProvider);
         Navigator.popUntil(context, ModalRoute.withName('/'));
+        ref.read(storyUploadProvider.notifier).dispose();
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);
@@ -53,6 +53,9 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const UploadVideoPreview(),
+                  SizedBox(
+                    height: 10,
+                  ),
                   MySafeArea(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,

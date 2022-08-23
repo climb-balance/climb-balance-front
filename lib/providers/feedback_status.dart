@@ -4,25 +4,7 @@ import 'package:climb_balance/providers/firebase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 
-class FeedbackStatus {
-  final Duration aiLeftTime;
-  final bool aiIsWaiting;
-  final Duration aiWaitingTime;
-  final int waitingExpertFeedback;
-  final int finishedExpertFeedback;
-
-  const FeedbackStatus({
-    this.aiLeftTime = const Duration(
-      seconds: 0,
-    ),
-    this.aiWaitingTime = const Duration(
-      seconds: 0,
-    ),
-    this.aiIsWaiting = false,
-    this.waitingExpertFeedback = 0,
-    this.finishedExpertFeedback = 0,
-  });
-}
+import '../models/feedback_status.dart';
 
 class FeedbackStatusNotifier extends StateNotifier<FeedbackStatus> {
   final StateNotifierProviderRef<FeedbackStatusNotifier, FeedbackStatus> ref;
@@ -45,6 +27,13 @@ class FeedbackStatusNotifier extends StateNotifier<FeedbackStatus> {
         );
       }
     });
+  }
+
+  void clearTimer() {
+    state = FeedbackStatus(
+      finishedExpertFeedback: state.finishedExpertFeedback,
+      waitingExpertFeedback: state.waitingExpertFeedback,
+    );
   }
 }
 

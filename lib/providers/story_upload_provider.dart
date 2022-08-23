@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:climb_balance/services/server_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -35,8 +34,8 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
 
   get trimmer => _trimmer;
 
-  void handleEditNext({required BuildContext context}) {
-    state.copyWith(
+  void handleEditNext() {
+    state = state.copyWith(
       start: _trimmer.videoStartPos.toInt() == 0
           ? null
           : _trimmer.videoStartPos / 1000,

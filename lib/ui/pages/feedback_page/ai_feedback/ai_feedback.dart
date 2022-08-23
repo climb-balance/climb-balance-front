@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:climb_balance/services/server_service.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../utils/durations.dart';
 import '../../../theme/specific_theme.dart';
 import '../../../widgets/commons/stars.dart';
 
@@ -19,11 +21,11 @@ class _AiFeedbackState extends State<AiFeedback> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-        'http://15.164.163.153:3000/story/1/video?type=ai')
+    _controller = ServerService.tmpStoryVideo(1, isAi: true)
       ..initialize().then((value) {
         _controller.setLooping(true);
         _controller.play();
+        setState(() {});
       });
   }
 
@@ -35,22 +37,33 @@ class _AiFeedbackState extends State<AiFeedback> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return StoryViewTheme(
       child: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
-              child: Center(
-                child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(
-                    _controller,
-                  ),
-                ),
-              ),
+            Container(
+              width: size.width,
+              height: size.width,
+              child: _controller.value.isInitialized
+                  ? Center(
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(
+                          _controller,
+                        ),
+                      ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
-            AiFeedbackProgressBar(),
-            AiFeedbackInformation(),
+            if (_controller.value.isInitialized)
+              AiFeedbackProgressBar(
+                controller: _controller,
+              ),
+            const AiFeedbackInformation(),
           ],
         ),
       ),
@@ -70,6 +83,7 @@ class AiFeedbackInformation extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             AiFeedbackScore(),
             Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.')
@@ -80,23 +94,53 @@ class AiFeedbackInformation extends StatelessWidget {
   }
 }
 
-class AiFeedbackProgressBar extends StatelessWidget {
-  const AiFeedbackProgressBar({Key? key}) : super(key: key);
+class AiFeedbackProgressBar extends StatefulWidget {
+  VideoPlayerController controller;
+
+  AiFeedbackProgressBar({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  State<AiFeedbackProgressBar> createState() => _AiFeedbackProgressBarState();
+}
+
+class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
+  double progress = 0.0;
+  String progressText = "00:00";
+  final List<Color> colors = [
+    Colors.grey,
+    Colors.red,
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.grey,
+    Colors.red,
+    Colors.red,
+    Colors.red,
+    Colors.grey,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(() {
+      final value = widget.controller.value;
+      progress = value.position.inMilliseconds / value.duration.inMilliseconds;
+      progressText = formatDuration(value.position).substring(3);
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller.removeListener(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final Random random = Random();
-    final List<Color> colors = [];
-    for (int i = 0; i < 10; i++) {
-      int num = random.nextInt(6);
-      if (num < 3) {
-        colors.add(Colors.red);
-      } else if (num < 5) {
-        colors.add(Colors.green);
-      } else {
-        colors.add(Colors.black);
-      }
-    }
+
     return Stack(
       children: [
         Padding(
@@ -108,18 +152,26 @@ class AiFeedbackProgressBar extends StatelessWidget {
             ),
           ),
         ),
-        Column(
-          children: [
-            Text('00:22'),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 12,
-                width: 3,
-                color: Colors.white,
+        AnimatedPositioned(
+          left: size.width * progress,
+          duration: Duration(
+            seconds: 1,
+          ),
+          child: Column(
+            children: [
+              Text(
+                progressText,
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 12,
+                  width: 3,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

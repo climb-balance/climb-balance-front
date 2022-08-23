@@ -1,6 +1,8 @@
 import 'package:climb_balance/models/story_tag.dart';
+import 'package:climb_balance/providers/feedback_request.dart';
 import 'package:climb_balance/providers/feedback_status.dart';
 import 'package:climb_balance/providers/user_provider.dart';
+import 'package:climb_balance/ui/pages/feedback_page/ai_feedback/ai_feedback.dart';
 import 'package:climb_balance/ui/pages/feedback_page/ai_feedback_request/ai_feedback_ads.dart';
 import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
 import 'package:climb_balance/ui/widgets/story/progress_bar.dart';
@@ -139,13 +141,21 @@ class StoryButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final curUserId = ref.watch(userProvider.select((value) => value.userId));
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (curUserId == curUserId && story.aiAvailable == 3)
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AiFeedback(),
+                ),
+              );
+            },
             child: Column(
               children: const [
                 Icon(
@@ -260,6 +270,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
         context: context,
         title: '성공',
         content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
+    ref.read(feedbackRequestProvider.notifier).requestAi(story.storyId);
     ref.read(feedbackStatusProvider.notifier).addTimer(
         timerTime:
             rank == 2 ? const Duration(minutes: 5) : const Duration(days: 1));
