@@ -30,12 +30,10 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
         javascriptMode: JavascriptMode.unrestricted,
         initialUrl: 'about:blank',
         onWebViewCreated: (WebViewController webViewController) {
-          _controller = webViewController;
-          _controller.loadUrl('http://54.180.155.137:3000/auth/naver');
+          webViewController.loadHtmlString(widget.html);
         },
         onPageFinished: (url) {
-          if (url
-              .startsWith('http://54.180.155.137:3000/auth/naver/callback')) {
+          if (url.endsWith('/user/auth/callback')) {
             _controller
                 .runJavascriptReturningResult(
                     "window.document.getElementsByTagName('html')[0].innerText;")

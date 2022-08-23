@@ -11,11 +11,11 @@ class AuthNotifier extends StateNotifier<bool> {
       BuildContext context, WidgetRef ref, bool toRegisterd) async {
     final result = await ServerService.getLoginHtml();
     result.when(
-      success: (success) async {
+      success: (value) async {
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => NaverWebView(html: success.value),
+            builder: (context) => NaverWebView(html: value),
           ),
         ).then((res) => toRegisterd
             ? Navigator.pushNamed(context, '/register')
@@ -26,7 +26,8 @@ class AuthNotifier extends StateNotifier<bool> {
   }
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, bool>((ref) {
+final authProvider =
+    StateNotifierProvider.autoDispose<AuthNotifier, bool>((ref) {
   final notifier = AuthNotifier();
   return notifier;
 });
