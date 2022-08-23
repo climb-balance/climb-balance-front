@@ -6,10 +6,12 @@ import 'package:http/http.dart' as http;
 
 class ServerRequest {
   static const timeOutDuration = Duration(seconds: 2);
-  static const String _serverUrl = 'http://10.0.2.2:3000';
+  static const String _serverUrl = 'http://223.222.80.70:3000';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
-    'Accpet': 'application/json'
+    'Accpet': 'application/json',
+    'Authorization':
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzbnNfaWQiOjEsImVtYWlsIjoicGluZWRlbHRhQGljbG91ZC5jb20iLCJpYXQiOjE2NjEyMzQ0MzMsImV4cCI6MTY5Mjc5MjAzM30.BilNsIT7wxUTyEL1PK4dSzkjCReg54YgsIqQZyuo0N8',
   };
 
   static get serverUrl => _serverUrl;

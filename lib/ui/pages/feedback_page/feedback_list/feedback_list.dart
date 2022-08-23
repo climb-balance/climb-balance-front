@@ -21,7 +21,7 @@ class _FeedbackListState extends ConsumerState<FeedbackList> {
     return Scaffold(
       body: SafeArea(
         child: PageView.custom(
-          scrollDirection: Axis.vertical,
+          scrollDirection: Axis.horizontal,
           childrenDelegate: SliverChildListDelegate(
             [
               FeedbackCard(
@@ -67,22 +67,27 @@ class _FeedbackCardState extends State<FeedbackCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        Flexible(
-          child: Center(
-            child: _controller.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
-                  )
-                : const CircularProgressIndicator(),
+    final size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            width: size.width,
+            height: size.width,
+            child: Center(
+              child: _controller.value.isInitialized
+                  ? AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    )
+                  : const CircularProgressIndicator(),
+            ),
           ),
-        ),
-        FeedbackWrite(
-          story: widget.story,
-        ),
-      ],
+          FeedbackWrite(
+            story: widget.story,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -106,6 +111,15 @@ class FeedbackWrite extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('피드백', style: theme.textTheme.subtitle1),
+              const StarsPicker(),
+              TextField(
+                maxLines: 4,
+                style: theme.textTheme.bodyText2,
+              ),
+              const Divider(
+                height: 25,
+              ),
               Text('태그 정보', style: theme.textTheme.subtitle1),
               Row(
                 children: [
@@ -119,19 +133,10 @@ class FeedbackWrite extends StatelessWidget {
               ),
               Text('요청 사항', style: theme.textTheme.subtitle1),
               const Text('00:23의 스타트 부분이 너무 어렵습니다.'),
-              const Divider(
-                height: 25,
-              ),
-              Text('피드백', style: theme.textTheme.subtitle1),
-              const StarsPicker(),
-              TextField(
-                maxLines: 4,
-                style: theme.textTheme.bodyText2,
-              ),
               Center(
                 child:
                     ElevatedButton(onPressed: () {}, child: const Text('제출하기')),
-              )
+              ),
             ],
           ),
         ),

@@ -1,4 +1,4 @@
-import 'package:climb_balance/ui/pages/feedback_page/ai_feedback/aiFeedback.dart';
+import 'package:climb_balance/ui/pages/feedback_page/ai_feedback/ai_feedback.dart';
 import 'package:flutter/material.dart';
 
 class TestPage extends StatefulWidget {

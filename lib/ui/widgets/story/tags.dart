@@ -20,7 +20,7 @@ class StoryTagInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             DateTag(
-              date: tags.videoDate,
+              date: tags.getVideoDate,
             ),
             SuccessTag(success: tags.success),
           ],

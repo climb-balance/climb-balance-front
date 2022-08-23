@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:climb_balance/ui/widgets/story/story_comments.dart';
 import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../models/story.dart';
+import '../../../services/server_service.dart';
 import '../../theme/specific_theme.dart';
 
 List<String> testVideos = [
@@ -14,13 +18,24 @@ List<String> testVideos = [
   'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
 ];
 
-class StoryPreview extends StatelessWidget {
+class StoryPreview extends StatefulWidget {
   final Story story;
 
   const StoryPreview({Key? key, required this.story}) : super(key: key);
 
   @override
+  State<StoryPreview> createState() => _StoryPreviewState();
+}
+
+class _StoryPreviewState extends State<StoryPreview> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    debugPrint(ServerService.gerStoryVideoPath(widget.story.storyId));
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
@@ -29,7 +44,7 @@ class StoryPreview extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => StoryView(
-                story: story,
+                story: widget.story,
                 handleBack: () {
                   Navigator.pop(context);
                 },
@@ -37,14 +52,36 @@ class StoryPreview extends StatelessWidget {
             ),
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(
-              fit: BoxFit.fitWidth,
-              image: NetworkImage(story.thumbnailUrl),
-            ),
+        child: FutureBuilder<Uint8List?>(
+          future: VideoThumbnail.thumbnailData(
+            video: ServerService.gerStoryVideoPath(widget.story.storyId),
+            imageFormat: ImageFormat.JPEG,
+            maxWidth: 128,
+            // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+            quality: 100,
           ),
+          builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    fit: BoxFit.fitWidth,
+                    image: MemoryImage(snapshot.data!),
+                  ),
+                ),
+              );
+            }
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  image: NetworkImage(widget.story.thumbnailUrl),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -75,13 +112,14 @@ class _StoryViewState extends State<StoryView> {
   @override
   void initState() {
     super.initState();
-    _videoPlayerController =
-        VideoPlayerController.network(testVideos[widget.story.storyId])
-          ..initialize().then((_) {
-            _videoPlayerController.setLooping(true);
-            _videoPlayerController.play();
+    ServerService.gerStoryVideo(widget.story.storyId).then((result) {
+      result.when(
+          error: (String message) {},
+          success: (value) {
+            _videoPlayerController = value;
             setState(() {});
           });
+    });
   }
 
   @override

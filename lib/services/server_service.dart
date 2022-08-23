@@ -18,7 +18,8 @@ class ServerService {
   static Future<Result<List<Story>>> getUserStories() async {
     try {
       final preResult = await ServerRequest.get(ServerStoryPath);
-      final result = StoryList.fromJson({"storyList": preResult["stories"]});
+      // TODO : 임시로 버그 막음 임 원래 final result = StoryList.fromJson({"storyList": preResult["stories"]});
+      final result = StoryList.fromJson({"story_list": preResult});
       return Result.success(result.storyList);
     } catch (e) {
       return const Result.error('네트워크 에러');
@@ -61,7 +62,7 @@ class ServerService {
     return const Result.success(true);
   }
 
-  static Future<Result<VideoPlayerController>> storyVideo(int storyId,
+  static Future<Result<VideoPlayerController>> gerStoryVideo(int storyId,
       {bool isAi = false}) async {
     try {
       final controller = VideoPlayerController.network(
@@ -72,6 +73,18 @@ class ServerService {
     }
   }
 
+  static String gerStoryVideoPath(int storyId, {bool isAi = false}) {
+    List<String> testVideos = [
+      'http://15.164.163.153:3000/story/1/video?type=raw',
+      'http://15.164.163.153:3000/story/1/video?type=ai',
+      'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
+      'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
+      'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
+    ];
+    //return '${ServerRequest.serverUrl}$ServerStoryPath/$storyId$serverVideoPath/?type=${isAi ? 'ai' : 'raw'}';
+    return testVideos[0];
+  }
+
   static VideoPlayerController tmpStoryVideo(int storyId, {bool isAi = false}) {
     List<String> testVideos = [
       'http://15.164.163.153:3000/story/1/video?type=raw',
@@ -80,6 +93,8 @@ class ServerService {
       'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
       'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
     ];
-    return VideoPlayerController.network(testVideos[storyId]);
+    return VideoPlayerController.network(
+      'http://15.164.163.153:3000/story/1/video?type=raw',
+    );
   }
 }
