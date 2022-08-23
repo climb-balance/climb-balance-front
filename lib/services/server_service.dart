@@ -18,9 +18,17 @@ class ServerService {
   static Future<Result<List<Story>>> getUserStories() async {
     try {
       final preResult = await ServerRequest.get(ServerStoryPath);
-      // TODO : 임시로 버그 막음 임 원래 final result = StoryList.fromJson({"storyList": preResult["stories"]});
-      final result = StoryList.fromJson({"story_list": preResult});
+      final result = StoryList.fromJson({"storyList": preResult["stories"]});
       return Result.success(result.storyList);
+    } catch (e) {
+      return const Result.error('네트워크 에러');
+    }
+  }
+
+  static Future<Result<Story>> getStory(int storyId) async {
+    try {
+      final result = await ServerRequest.get('$ServerStoryPath/$storyId');
+      return Result.success(Story.fromJson(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
     }
@@ -39,8 +47,7 @@ class ServerService {
     int storyId;
     try {
       final result = await ServerRequest.post(ServerStoryPath, data);
-      //TODO: storyId = result['story_id'];
-      storyId = result;
+      storyId = result['story_id'];
     } catch (e) {
       return const Result.error('스토리 업로드 오류');
     }

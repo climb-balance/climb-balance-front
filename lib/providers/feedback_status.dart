@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:climb_balance/providers/firebase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -9,6 +10,7 @@ class FeedbackStatus {
   final Duration aiWaitingTime;
   final int waitingExpertFeedback;
   final int finishedExpertFeedback;
+
   const FeedbackStatus({
     this.aiLeftTime = const Duration(
       seconds: 0,
@@ -23,11 +25,12 @@ class FeedbackStatus {
 }
 
 class FeedbackStatusNotifier extends StateNotifier<FeedbackStatus> {
-  final ref;
+  final StateNotifierProviderRef<FeedbackStatusNotifier, FeedbackStatus> ref;
 
   FeedbackStatusNotifier({required this.ref}) : super(const FeedbackStatus());
 
   void addTimer({required Duration timerTime}) {
+    ref.watch(firebaseProvider);
     state = FeedbackStatus(
         aiIsWaiting: true, aiLeftTime: timerTime, aiWaitingTime: timerTime);
     Timer.periodic(const Duration(seconds: 1), (timer) {
