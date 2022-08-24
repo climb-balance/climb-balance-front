@@ -29,10 +29,10 @@ class DiaryNotifier extends StateNotifier<List<List<Story>>> {
     Map<String, List<Story>> classifiedStories = {};
     for (final story in stories) {
       final String key = _makeStoryKey(story);
-      if (filter == FilterType.aiOnly && story.aiAvailable != 2) {
+      if (filter == FilterType.aiOnly && story.aiAvailable != 3) {
         continue;
       } else if (filter == FilterType.expertOnly &&
-          story.expertAvailable != 2) {
+          story.expertAvailable != 3) {
         continue;
       }
       if (classifiedStories.containsKey(key)) {
@@ -45,7 +45,7 @@ class DiaryNotifier extends StateNotifier<List<List<Story>>> {
   }
 
   String _makeStoryKey(Story story) {
-    return formatDatetimeToHHMMSS(story.tags.getVideoDate) +
+    return formatDatetimeToYYMMDD(story.tags.getVideoDate) +
         story.tags.location.toString();
   }
 }

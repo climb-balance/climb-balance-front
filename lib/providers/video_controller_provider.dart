@@ -9,7 +9,7 @@ class VideoControllerNotifier extends StateNotifier<VideoPlayerController?> {
 
   Future<VideoPlayerController?> getVideoPlayerController(int storyId,
       {bool isAi = false}) async {
-    final result = await ServerService.gerStoryVideo(storyId, isAi: isAi);
+    final result = await ServerService.getStoryVideo(storyId, isAi: isAi);
     result.when(
         success: (controller) {
           controller.initialize().then((value) {

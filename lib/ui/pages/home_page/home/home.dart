@@ -319,10 +319,10 @@ class MainStatistics extends StatelessWidget {
   Future<List<int>> loadDatas() async {
     Random random = Random();
     List<int> result = [];
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 15; i++) {
       result.add(random.nextInt(10));
     }
-    return Future.delayed(const Duration(seconds: 1), () {
+    return Future.delayed(const Duration(milliseconds: 200), () {
       return result;
     });
   }
@@ -349,10 +349,10 @@ class MainStatistics extends StatelessWidget {
           return Row(
             children: [
               HeatMap(
-                datas: List<int>.filled(30, 0),
+                datas: List<int>.filled(15, 0),
               ),
               HeatMap(
-                datas: List<int>.filled(30, 0),
+                datas: List<int>.filled(15, 0),
               ),
             ],
           );

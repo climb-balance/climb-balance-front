@@ -40,6 +40,7 @@ class _StoryOverlayState extends State<StoryOverlay> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapUp: (_) {
+        if (!widget.videoPlayerController.value.isInitialized) return;
         widget.videoPlayerController.value.isPlaying
             ? widget.videoPlayerController.pause()
             : widget.videoPlayerController.play();
@@ -152,7 +153,9 @@ class StoryButtons extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => AiFeedback(),
+                  builder: (_) => AiFeedback(
+                    story: story,
+                  ),
                 ),
               );
             },

@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/services/server_request.dart';
+import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../models/ai_feedback_detail.dart';
 import '../models/result.dart';
 import '../models/story_upload.dart';
 import 'server_config.dart';
@@ -63,19 +67,47 @@ class ServerService {
     return const Result.success(true);
   }
 
-  static Future<Result<VideoPlayerController>> gerStoryVideo(int storyId,
+  static Future<Result<VideoPlayerController>> getStoryVideo(int storyId,
       {bool isAi = false}) async {
     try {
-      final m3u8 = await ServerRequest.get(
+      final body = await ServerRequest.get(
           '$ServerStoryPath/$storyId$serverVideoPath?type=${isAi ? 'ai' : 'raw'}');
-      final controller = VideoPlayerController.network(m3u8);
-      return Result.success(controller);
+      return Result.success(VideoPlayerController.network(body));
     } catch (e) {
       return const Result.error('영상 불러오기 오류');
     }
   }
 
-  static String gerStoryVideoPath(int storyId, {bool isAi = false}) {
+  // TODO tmp
+  static Future<Result<Uint8List>> getStoryThumbnail(int storyId) async {
+    try {
+      final path = await ServerRequest.nativeGet(
+          '$ServerStoryPath/$storyId$serverVideoPath?type=thumbnail');
+      return Result.success(path);
+    } catch (e) {
+      return const Result.error('영상 불러오기 오류');
+    }
+  }
+
+  static String getStoryThumbnailPath(int storyId) {
+    return '${ServerRequest.serverUrl}$ServerStoryPath/$storyId$serverVideoPath?type=thumbnail';
+  }
+
+  static Future<Result<AiFeedbackDetail>> getStoryAiDetail(int storyId) async {
+    try {
+      final body = await ServerRequest.get(
+          '$ServerStoryPath/$storyId$serverVideoPath?type=json');
+      debugPrint('a');
+      return Result.success(AiFeedbackDetail(
+          value: List.from(
+        body.cast<int>(),
+      )));
+    } catch (e) {
+      return const Result.error('영상 불러오기 오류');
+    }
+  }
+
+  static String getStoryVideoPath(int storyId, {bool isAi = false}) {
     return '${ServerRequest.serverUrl}$ServerStoryPath/$storyId$serverVideoPath/?type=${isAi ? 'ai' : 'raw'}';
   }
 
@@ -92,9 +124,9 @@ class ServerService {
       int storyId, String pushToken) async {
     try {
       final result = await ServerRequest.put(
-        '$ServerStoryPath/{storyId}$serverAiFeedbackPath',
+        '$ServerStoryPath/$storyId$serverAiFeedbackPath',
         {
-          'push_token': pushToken,
+          'token': pushToken,
         },
       );
       return const Result.success(true);

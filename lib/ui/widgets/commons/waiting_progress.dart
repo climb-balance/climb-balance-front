@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Waiting extends StatelessWidget {
-  const Waiting({Key? key}) : super(key: key);
+class WaitingProgress extends StatelessWidget {
+  const WaitingProgress({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,19 @@
 import 'dart:math';
 
+import 'package:climb_balance/models/ai_feedback_detail.dart';
 import 'package:climb_balance/services/server_service.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../models/story.dart';
 import '../../../../utils/durations.dart';
 import '../../../theme/specific_theme.dart';
 import '../../../widgets/commons/stars.dart';
 
 class AiFeedback extends StatefulWidget {
-  const AiFeedback({Key? key}) : super(key: key);
+  final Story story;
+
+  const AiFeedback({Key? key, required this.story}) : super(key: key);
 
   @override
   State<AiFeedback> createState() => _AiFeedbackState();
@@ -17,16 +21,32 @@ class AiFeedback extends StatefulWidget {
 
 class _AiFeedbackState extends State<AiFeedback> {
   late final VideoPlayerController _controller;
+  AiFeedbackDetail detail = const AiFeedbackDetail(value: [0]);
 
   @override
   void initState() {
     super.initState();
-    _controller = ServerService.tmpStoryVideo(1, isAi: true)
-      ..initialize().then((value) {
+
+    final path =
+        ServerService.getStoryVideoPath(widget.story.storyId, isAi: true);
+    debugPrint(path);
+    _controller = VideoPlayerController.network(
+      path,
+      formatHint: VideoFormat.hls,
+    )..initialize().then((value) {
         _controller.setLooping(true);
         _controller.play();
         setState(() {});
       });
+    ServerService.getStoryAiDetail(widget.story.storyId).then(
+      (result) => result.when(
+        success: (value) {
+          detail = value;
+          setState(() {});
+        },
+        error: (_) {},
+      ),
+    );
   }
 
   @override
@@ -61,9 +81,12 @@ class _AiFeedbackState extends State<AiFeedback> {
             ),
             if (_controller.value.isInitialized)
               AiFeedbackProgressBar(
+                detail: detail,
                 controller: _controller,
               ),
-            const AiFeedbackInformation(),
+            AiFeedbackInformation(
+              detail: detail,
+            ),
           ],
         ),
       ),
@@ -72,11 +95,40 @@ class _AiFeedbackState extends State<AiFeedback> {
 }
 
 class AiFeedbackInformation extends StatelessWidget {
-  const AiFeedbackInformation({Key? key}) : super(key: key);
+  final AiFeedbackDetail detail;
+
+  const AiFeedbackInformation({Key? key, required this.detail})
+      : super(key: key);
+
+  int longestGoodLength() {
+    int maxLength = 0;
+    int curLength = 0;
+    for (int i = 0; i < detail.value.length; i++) {
+      if (detail.value[i] == 1) {
+        curLength += 1;
+        maxLength = max(maxLength, curLength);
+      } else {
+        curLength = 0;
+      }
+    }
+
+    return maxLength;
+  }
+
+  int goodCount() {
+    int curLength = 0;
+    for (int i = 0; i < detail.value.length; i++) {
+      if (detail.value[i] == 1) {
+        curLength += 1;
+      }
+    }
+    return curLength;
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
       color: theme.colorScheme.surface,
       height: 150,
@@ -84,8 +136,9 @@ class AiFeedbackInformation extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            AiFeedbackScore(),
+          children: [
+            AiFeedbackScore(
+                precision: longestGoodLength(), balance: goodCount()),
             Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.')
           ],
         ),
@@ -95,9 +148,12 @@ class AiFeedbackInformation extends StatelessWidget {
 }
 
 class AiFeedbackProgressBar extends StatefulWidget {
-  VideoPlayerController controller;
+  final AiFeedbackDetail detail;
+  final VideoPlayerController controller;
 
-  AiFeedbackProgressBar({Key? key, required this.controller}) : super(key: key);
+  const AiFeedbackProgressBar(
+      {Key? key, required this.controller, required this.detail})
+      : super(key: key);
 
   @override
   State<AiFeedbackProgressBar> createState() => _AiFeedbackProgressBarState();
@@ -106,22 +162,21 @@ class AiFeedbackProgressBar extends StatefulWidget {
 class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
   double progress = 0.0;
   String progressText = "00:00";
-  final List<Color> colors = [
-    Colors.grey,
-    Colors.red,
-    Colors.green,
-    Colors.green,
-    Colors.green,
-    Colors.grey,
-    Colors.red,
-    Colors.red,
-    Colors.red,
-    Colors.grey,
-  ];
+  late final List<Color> colors;
 
   @override
   void initState() {
     super.initState();
+    colors = widget.detail.value.map((val) {
+      if (val == 0) {
+        return Colors.grey;
+      } else if (val == 1) {
+        return Colors.green;
+      } else {
+        return Colors.red;
+      }
+    }).toList();
+    setState(() {});
     widget.controller.addListener(() {
       final value = widget.controller.value;
       progress = value.position.inMilliseconds / value.duration.inMilliseconds;
@@ -139,7 +194,6 @@ class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final Random random = Random();
 
     return Stack(
       children: [
@@ -179,7 +233,12 @@ class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
 }
 
 class AiFeedbackScore extends StatelessWidget {
-  const AiFeedbackScore({Key? key}) : super(key: key);
+  final int precision;
+  final int balance;
+
+  const AiFeedbackScore(
+      {Key? key, required this.precision, required this.balance})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +252,7 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: 4,
+              numOfStar: (precision / 5).toInt(),
             ),
           ],
         ),
@@ -215,7 +274,7 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: 7,
+              numOfStar: (balance / 5).toInt(),
             ),
           ],
         ),

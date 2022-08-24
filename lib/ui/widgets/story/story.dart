@@ -28,6 +28,24 @@ class StoryPreview extends StatefulWidget {
 }
 
 class _StoryPreviewState extends State<StoryPreview> {
+  Uint8List? data;
+
+  void getThumbnail() async {
+    data = await VideoThumbnail.thumbnailData(
+      video: ServerService.getStoryThumbnailPath(widget.story.storyId),
+      imageFormat: ImageFormat.JPEG,
+      maxWidth: 128,
+      quality: 100,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getThumbnail();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -46,35 +64,16 @@ class _StoryPreviewState extends State<StoryPreview> {
             ),
           );
         },
-        child: FutureBuilder<Uint8List?>(
-          future: VideoThumbnail.thumbnailData(
-            video: ServerService.gerStoryVideoPath(widget.story.storyId),
-            imageFormat: ImageFormat.JPEG,
-            maxWidth: 128,
-            quality: 100,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            image: DecorationImage(
+              fit: BoxFit.fitWidth,
+              image: (data == null
+                  ? NetworkImage('https://i.imgur.com/wJuxMJU.jpeg')
+                  : MemoryImage(data!) as ImageProvider),
+            ),
           ),
-          builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  image: DecorationImage(
-                    fit: BoxFit.fitWidth,
-                    image: MemoryImage(snapshot.data!),
-                  ),
-                ),
-              );
-            }
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                  fit: BoxFit.fitWidth,
-                  image: NetworkImage(widget.story.thumbnailUrl),
-                ),
-              ),
-            );
-          },
         ),
       ),
     );
@@ -125,25 +124,13 @@ class _StoryViewState extends State<StoryView> {
     //       });
     // });
     _videoPlayerController = VideoPlayerController.network(
-      ServerService.gerStoryVideoPath(widget.story.storyId),
+      ServerService.getStoryVideoPath(widget.story.storyId),
       formatHint: VideoFormat.hls,
     );
     _videoPlayerController.initialize().then((_) {
       _videoPlayerController.play();
       _videoPlayerController.setLooping(true);
       setState(() {});
-    });
-    _videoPlayerController.addListener(() {
-      if (_videoPlayerController.value.hasError) {
-        debugPrint(
-            'Video Error: ${_videoPlayerController.value.errorDescription}');
-      }
-      if (_videoPlayerController.value.isBuffering) {
-        debugPrint('Please wait');
-      }
-      if (_videoPlayerController.value.isInitialized) {
-        debugPrint('the video is initialized');
-      }
     });
   }
 
@@ -178,7 +165,7 @@ class _StoryViewState extends State<StoryView> {
                   StoryComments(toggleCommentOpen: toggleCommentOpen),
               ],
             ),
-            if (!isCommentOpen && _videoPlayerController.value.isInitialized)
+            if (!isCommentOpen)
               StoryOverlay(
                 story: widget.story,
                 handleBack: widget.handleBack,

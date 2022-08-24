@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:climb_balance/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -33,16 +32,18 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
           webViewController.loadHtmlString(widget.html);
         },
         onPageFinished: (url) {
-          if (url.endsWith('/user/auth/callback')) {
+          debugPrint(url);
+          debugPrint(url.contains('/user/auth/callback?code').toString());
+          if (url.contains('/user/auth/callback?code')) {
             _controller
                 .runJavascriptReturningResult(
                     "window.document.getElementsByTagName('html')[0].innerText;")
                 .then((html) {
-              ref
-                  .read(userProvider.notifier)
-                  .updateToken(token: html.split('\\\"')[5]);
-              Navigator.pop(context, 'success');
+              debugPrint(html);
+            }).catchError((_) {
+              debugPrint("assa");
             });
+            Navigator.pop(context, 'success');
           }
         },
       ),

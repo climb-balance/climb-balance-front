@@ -2,7 +2,7 @@ import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
 import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
-import 'package:climb_balance/ui/widgets/commons/waiting.dart';
+import 'package:climb_balance/ui/widgets/commons/waiting_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -74,7 +74,7 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
             next: '업로드',
           ),
         ),
-        if (isWaiting) Waiting(),
+        if (isWaiting) WaitingProgress(),
       ],
     );
   }
