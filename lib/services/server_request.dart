@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ServerRequest {
   static const timeOutDuration = Duration(seconds: 2);
-  static const String _serverUrl = 'http://223.222.80.70:3000';
+  static const String _serverUrl = 'http://192.168.0.28:3000';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Accpet': 'application/json',
@@ -72,7 +72,7 @@ class ServerRequest {
   }
 
   static Future<dynamic> multiPartUpload(String url, File file) async {
-    Uri uri = Uri.parse('${_serverUrl}${url}');
+    Uri uri = Uri.parse('${serverUrl}${url}');
     final req = http.MultipartRequest('POST', uri);
     try {
       final multiPartFile = await http.MultipartFile.fromPath('file', file.path)

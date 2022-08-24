@@ -25,6 +25,7 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
     Result<bool> result = await ref.read(storyUploadProvider.notifier).upload();
     result.when(
       success: (value) {
+        // TODO : fix route
         Navigator.popUntil(context, ModalRoute.withName('/'));
         ref.read(storyUploadProvider.notifier).dispose();
       },
