@@ -280,7 +280,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
     Navigator.pop(context);
   }
 
-  void handleExpertFeedbackBtnClick(BuildContext context) async {
+  void handleExpertFeedbackBtnClick(BuildContext context, WidgetRef ref) async {
     // Navigator.push(
     //     context,
     //     MaterialPageRoute(
@@ -294,6 +294,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
         context: context,
         title: '성공',
         content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
+    //ref.read(feedbackStatusProvider)
     Navigator.pop(context);
   }
 
@@ -319,7 +320,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
             height: 60,
             child: TextButton(
               onPressed: () {
-                handleExpertFeedbackBtnClick(context);
+                handleExpertFeedbackBtnClick(context, ref);
               },
               child: const RowIconDetail(
                   icon: Icon(Icons.my_library_books), detail: '전문가 피드백 요청하기'),

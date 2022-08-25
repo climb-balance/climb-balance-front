@@ -44,16 +44,16 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const UploadVideoPreview(),
-                  SizedBox(
-                    height: 10,
-                  ),
                   MySafeArea(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: const [
+                        SizedBox(
+                          height: 10,
+                        ),
                         WriteDescription(),
                       ],
                     ),

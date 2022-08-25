@@ -10,14 +10,6 @@ import '../../../models/story.dart';
 import '../../../services/server_service.dart';
 import '../../theme/specific_theme.dart';
 
-List<String> testVideos = [
-  'http://15.164.163.153:3000/story/1/video?type=raw',
-  'http://15.164.163.153:3000/story/1/video?type=ai',
-  'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
-  'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
-];
-
 class StoryPreview extends StatefulWidget {
   final Story story;
 
@@ -34,7 +26,6 @@ class _StoryPreviewState extends State<StoryPreview> {
     data = await VideoThumbnail.thumbnailData(
       video: ServerService.getStoryThumbnailPath(widget.story.storyId),
       imageFormat: ImageFormat.JPEG,
-      maxWidth: 128,
       quality: 100,
     );
     setState(() {});
@@ -64,16 +55,44 @@ class _StoryPreviewState extends State<StoryPreview> {
             ),
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(
-              fit: BoxFit.fitWidth,
-              image: (data == null
-                  ? NetworkImage('https://i.imgur.com/wJuxMJU.jpeg')
-                  : MemoryImage(data!) as ImageProvider),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: (data == null
+                      ? const NetworkImage('https://i.imgur.com/wJuxMJU.jpeg')
+                      : MemoryImage(data!) as ImageProvider),
+                ),
+              ),
             ),
-          ),
+            const Icon(
+              Icons.bookmark,
+              color: Colors.red,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 5,
+                left: 6,
+              ),
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                  color: Colors.white,
+                ),
+                child: Icon(
+                  widget.story.tags.success
+                      ? Icons.check_circle
+                      : Icons.change_circle,
+                  size: 12,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
