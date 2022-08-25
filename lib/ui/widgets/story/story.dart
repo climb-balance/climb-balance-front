@@ -3,10 +3,12 @@ import 'dart:typed_data';
 import 'package:climb_balance/ui/widgets/story/story_comments.dart';
 import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../models/story.dart';
+import '../../../providers/tag_selector_provider.dart';
 import '../../../services/server_service.dart';
 import '../../theme/specific_theme.dart';
 
@@ -68,33 +70,50 @@ class _StoryPreviewState extends State<StoryPreview> {
                 ),
               ),
             ),
-            const Icon(
-              Icons.bookmark,
-              color: Colors.red,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 5,
-                left: 6,
-              ),
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                  color: Colors.white,
-                ),
-                child: Icon(
-                  widget.story.tags.success
-                      ? Icons.check_circle
-                      : Icons.change_circle,
-                  size: 12,
-                ),
-              ),
-            ),
+            StoryPreviewIcon(story: widget.story)
           ],
         ),
       ),
+    );
+  }
+}
+
+class StoryPreviewIcon extends ConsumerWidget {
+  final Story story;
+  const StoryPreviewIcon({Key? key, required this.story}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final difficultyColor = ref
+            .read(difficultySelectorProvider.notifier)
+            .getSelector(story.tags.difficulty)
+            .color ??
+        Colors.white;
+    return Stack(
+      children: [
+        Icon(
+          Icons.bookmark,
+          color: difficultyColor,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 5,
+            left: 6,
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+              color: Colors.white,
+            ),
+            child: Icon(
+              story.tags.success ? Icons.check_circle : Icons.change_circle,
+              size: 12,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
