@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ServerRequest {
   static const timeOutDuration = Duration(seconds: 5);
-  static const String _serverUrl = 'http://3.39.255.101:3000';
+  static const String _serverUrl = 'http://192.168.0.100:3000';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Accpet': 'application/json',

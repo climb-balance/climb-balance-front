@@ -79,7 +79,6 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
   @override
   void dispose() {
     super.dispose();
-    _trimmer.videoPlayerController?.dispose();
     _trimmer.dispose();
   }
 }

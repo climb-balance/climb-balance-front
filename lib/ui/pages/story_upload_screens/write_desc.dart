@@ -26,8 +26,7 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
     result.when(
       success: (value) {
         // TODO : fix route
-        Navigator.popUntil(context, ModalRoute.withName('/'));
-        ref.read(storyUploadProvider.notifier).dispose();
+        Navigator.popUntil(context, ModalRoute.withName("/"));
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);
@@ -35,12 +34,6 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
         setState(() {});
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    ref.read(storyUploadProvider.notifier).dispose();
   }
 
   @override
