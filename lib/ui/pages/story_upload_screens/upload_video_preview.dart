@@ -12,13 +12,18 @@ class UploadVideoPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    return Container(
-      color: theme.colorScheme.secondaryContainer,
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.width,
-      child: VideoViewer(
-        trimmer: ref.watch(storyUploadProvider.notifier).trimmer,
-      ),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final size = constraints.maxWidth;
+        return Container(
+          width: size,
+          height: size,
+          color: theme.colorScheme.secondaryContainer,
+          child: VideoViewer(
+            trimmer: ref.watch(storyUploadProvider.notifier).trimmer,
+          ),
+        );
+      },
     );
   }
 }

@@ -14,7 +14,18 @@ class EditVideo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final trimmer = ref.watch(storyUploadProvider.notifier).loadTrimmer();
     final handleEdit = ref.watch(storyUploadProvider.notifier).handleEditNext;
+    final theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '영상 편집',
+          style: TextStyle(color: theme.colorScheme.onSurface),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        leading: Container(),
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Column(
           children: [

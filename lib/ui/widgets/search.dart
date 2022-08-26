@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+final _formKey = GlobalKey<FormState>();
+
 class SearchTextInput extends StatefulWidget {
   final void Function(String) handleQuery;
   final String searchLabel;
@@ -37,6 +39,7 @@ class _SearchTextInputState extends State<SearchTextInput> {
       width: MediaQuery.of(context).size.width,
       height: 60,
       child: TextField(
+        key: _formKey,
         controller: _controller,
         onChanged: widget.handleQuery,
         style: Theme.of(context).textTheme.subtitle2,

@@ -40,7 +40,7 @@ UserProfile genRandomUser({bool isExpert = true}) {
       height: 160,
       weight: 50,
       description: '안녕하세요. 즐거운 클라이밍해요!!',
-      isExpert: true,
+      isExpert: false,
       rank: 2,
     );
   }

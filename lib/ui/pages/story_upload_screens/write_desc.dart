@@ -41,6 +41,7 @@ class _DetailVideoState extends ConsumerState<WriteDesc> {
     return Stack(
       children: [
         Scaffold(
+          resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(

@@ -2,6 +2,7 @@ import 'package:climb_balance/models/story.dart';
 import 'package:climb_balance/services/server_service.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:climb_balance/ui/widgets/commons/stars.dart';
+import 'package:climb_balance/ui/widgets/commons/waiting_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -140,8 +141,25 @@ class FeedbackWrite extends StatelessWidget {
               Text('요청 사항', style: theme.textTheme.subtitle1),
               const Text('00:23의 스타트 부분이 너무 어렵습니다.'),
               Center(
-                child:
-                    ElevatedButton(onPressed: () {}, child: const Text('제출하기')),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WaitingProgress(),
+                        fullscreenDialog: true,
+                      ),
+                    );
+                    await Future.delayed(
+                      Duration(milliseconds: 500),
+                    );
+                    Navigator.popUntil(context, (route) {
+                      debugPrint(ModalRoute.of(context)?.settings.name);
+                      return false;
+                    });
+                  },
+                  child: const Text('제출하기'),
+                ),
               ),
             ],
           ),

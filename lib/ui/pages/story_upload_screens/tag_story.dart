@@ -23,11 +23,12 @@ class TagStory extends ConsumerWidget {
         ref.watch(storyUploadProvider.select((value) => value.location));
     final difficulty =
         ref.watch(storyUploadProvider.select((value) => value.difficulty));
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '태그 달기',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
