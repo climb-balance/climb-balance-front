@@ -1,47 +1,53 @@
 import 'package:flutter/material.dart';
 
-class SearchTextInput extends StatefulWidget {
-  final String query;
-  final void Function(String) handleQuery;
+final _formKey = GlobalKey<FormState>();
 
-  const SearchTextInput(
-      {Key? key, required this.query, required this.handleQuery})
-      : super(key: key);
+class SearchTextInput extends StatefulWidget {
+  final void Function(String) handleQuery;
+  final String searchLabel;
+
+  const SearchTextInput({
+    Key? key,
+    required this.handleQuery,
+    required this.searchLabel,
+  }) : super(key: key);
 
   @override
   State<SearchTextInput> createState() => _SearchTextInputState();
 }
 
 class _SearchTextInputState extends State<SearchTextInput> {
-  final _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.query;
+    _controller.addListener(() {
+      widget.handleQuery(_controller.value.text);
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Icon(Icons.search),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: TextField(
-            controller: _controller,
-            onChanged: widget.handleQuery,
-          ),
-        )
-      ],
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 60,
+      child: TextField(
+        key: _formKey,
+        controller: _controller,
+        onChanged: widget.handleQuery,
+        style: Theme.of(context).textTheme.subtitle2,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search),
+          labelText: widget.searchLabel,
+        ),
+      ),
     );
   }
 }

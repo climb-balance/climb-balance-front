@@ -31,7 +31,8 @@ class _ContinuousStatisticsState extends State<ContinuousStatistics> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Expanded(
+    return Flexible(
+      fit: FlexFit.tight,
       child: Card(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

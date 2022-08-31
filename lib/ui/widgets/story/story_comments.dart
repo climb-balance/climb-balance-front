@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../commons/stars.dart';
+
 class StoryComments extends StatelessWidget {
   final void Function() toggleCommentOpen;
 
@@ -66,7 +68,7 @@ class CommentsList extends StatelessWidget {
             Comment(
               profileImage: 'https://i.imgur.com/4rhu9D0.png',
               name: '클라임바운스 한성희',
-              score: '2.1점',
+              score: 4,
               content:
                   '영상 잘봤습니다. 전체적으로 자세가 너무 아쉽네요. 00:38 같은 경우에는 더 잘할 수 있을 것 같은데, 무게 중심을 너무 조급하게 잡으시는 것 같아요.',
             ),
@@ -76,7 +78,7 @@ class CommentsList extends StatelessWidget {
             Comment(
               profileImage: 'https://i.imgur.com/dlNIA10.jpeg',
               name: '정글짐 이시선',
-              score: '3점',
+              score: 3,
               content: '00:12의 발 무브가 정말 좋네요. 그러나 좀 더 아웃사이드로 밟으셨다면 좋겠네요.',
             ),
           ],
@@ -89,7 +91,7 @@ class CommentsList extends StatelessWidget {
 class Comment extends StatelessWidget {
   final String profileImage;
   final String name;
-  final String score;
+  final int score;
   final String content;
 
   const Comment(
@@ -136,11 +138,9 @@ class Comment extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.yellow,
+                    Stars(
+                      numOfStar: score,
                     ),
-                    Text(score),
                   ],
                 ),
               ),

@@ -62,7 +62,7 @@ class _NickNameTextInputState extends ConsumerState<NickNameTextInput> {
     _controller.addListener(() {
       ref
           .read(expertRegisterProvider.notifier)
-          .updateNickName(_controller.text);
+          .updateNickname(_controller.text);
     });
   }
 
@@ -107,7 +107,7 @@ class _IntroduceTextInputState extends ConsumerState<IntroduceTextInput> {
     _controller.addListener(() {
       ref
           .read(expertRegisterProvider.notifier)
-          .updateIntroduce(_controller.text);
+          .updateDescription(_controller.text);
     });
   }
 

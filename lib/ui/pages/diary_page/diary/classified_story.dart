@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../models/story.dart';
-import '../../../../providers/tags.dart';
 import '../../../widgets/story/story.dart';
+import '../../../widgets/story/tags.dart';
 
 class ClassifiedStories extends StatelessWidget {
   final List<Story> stories;
@@ -57,21 +57,8 @@ class ClassifiedStoryTags extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                const Icon(Icons.date_range),
-                Text(story.getDateString()),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(Icons.location_on),
-                Text(ref
-                    .watch(tagsProvider)
-                    .locations[story.tags.location]
-                    .name),
-              ],
-            ),
+            DateTag(date: story.tags.getVideoDate),
+            LocationTag(location: story.tags.location),
           ],
         ),
       ),

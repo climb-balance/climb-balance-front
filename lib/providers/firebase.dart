@@ -1,15 +1,25 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/firebase_service.dart';
+
+enum NotificationEvent {
+  aiComplete,
+}
+
 class FirebaseNotifier extends StateNotifier<String?> {
-  final ref;
+  final StateNotifierProviderRef<FirebaseNotifier, String?> ref;
 
   FirebaseNotifier({required this.ref}) : super(null);
 
   void initFirebase() async {
-    await Firebase.initializeApp();
-    state = await FirebaseMessaging.instance.getToken();
+    final result = await FirebaseService.getFirebaseMessagingToken();
+    result.when(success: (value) {
+      state = value;
+      debugPrint(value);
+    }, error: (message) {
+      return;
+    });
   }
 }
 

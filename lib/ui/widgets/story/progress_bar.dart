@@ -41,20 +41,24 @@ class _ProgressBarState extends State<ProgressBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedContainer(
-            height: 2,
-            width: progressDegree * MediaQuery.of(context).size.width,
-            color: const ColorScheme.dark().onSurface,
-            duration: Duration(milliseconds: progressDuration),
-          ),
-        ],
+    final size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: size.width,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 10,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              height: 2,
+              width: progressDegree * size.width,
+              color: const ColorScheme.dark().onSurface,
+              duration: Duration(milliseconds: progressDuration),
+            ),
+          ],
+        ),
       ),
     );
   }

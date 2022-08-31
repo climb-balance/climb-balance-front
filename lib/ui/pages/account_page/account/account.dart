@@ -3,7 +3,7 @@ import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../providers/current_user.dart';
+import '../../../../providers/user_provider.dart';
 import 'account_settings.dart';
 
 class Account extends ConsumerStatefulWidget {
@@ -16,8 +16,7 @@ class Account extends ConsumerStatefulWidget {
 class AccountState extends ConsumerState<Account> {
   @override
   Widget build(BuildContext context) {
-    final isExpert =
-        ref.watch(currentUserProvider.select((value) => value.isExpert));
+    final isExpert = ref.watch(userProvider.select((value) => value.isExpert));
     return Scaffold(
       appBar: AppBar(
         title: const Text('설정'),

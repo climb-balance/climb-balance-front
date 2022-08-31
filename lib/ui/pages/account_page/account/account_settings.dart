@@ -2,7 +2,7 @@ import 'package:climb_balance/providers/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../providers/current_user.dart';
+import '../../../../providers/user_provider.dart';
 import '../expert_register/expert_register.dart';
 
 class RegisterExpert extends StatelessWidget {
@@ -63,8 +63,7 @@ class ExpertSetting extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isExpert =
-        ref.watch(currentUserProvider.select((value) => value.isExpert));
+    final isExpert = ref.watch(userProvider.select((value) => value.isExpert));
     return isExpert ? const ExpertSwap() : const RegisterExpert();
   }
 }
@@ -115,7 +114,7 @@ class LogoutSetting extends ConsumerWidget {
             ),
           ),
           onPressed: () {
-            ref.read(currentUserProvider.notifier).clearToken();
+            ref.read(userProvider.notifier).clearToken();
             Navigator.pushNamedAndRemoveUntil(
                 context, '/auth', (route) => false);
           },

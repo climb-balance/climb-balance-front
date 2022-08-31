@@ -1,17 +1,17 @@
+import 'package:climb_balance/utils/durations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../models/tag.dart';
-import '../../../providers/tags.dart';
+import '../../../models/story_tag.dart';
+import '../../../providers/tag_selector_provider.dart';
 
-class StoryTagInfo extends ConsumerWidget {
-  final Tags tags;
+class StoryTagInfo extends StatelessWidget {
+  final StoryTags tags;
 
   const StoryTagInfo({Key? key, required this.tags}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final refState = ref.watch(tagsProvider);
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -20,7 +20,7 @@ class StoryTagInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             DateTag(
-              dateString: tags.getDateString(),
+              date: tags.getVideoDate,
             ),
             SuccessTag(success: tags.success),
           ],
@@ -29,10 +29,13 @@ class StoryTagInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             if (tags.location != -1)
-              LocationTag(location: refState.locations[tags.location + 1]),
+              LocationTag(
+                location: tags.location,
+              ),
             if (tags.difficulty != -1)
               DifficultyTag(
-                  difficulty: refState.difficulties[tags.difficulty + 1]),
+                difficulty: tags.difficulty,
+              ),
           ],
         ),
       ],
@@ -41,9 +44,9 @@ class StoryTagInfo extends ConsumerWidget {
 }
 
 class DateTag extends StatelessWidget {
-  final String dateString;
+  final DateTime date;
 
-  const DateTag({Key? key, required this.dateString}) : super(key: key);
+  const DateTag({Key? key, required this.date}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,51 +54,60 @@ class DateTag extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Icon(Icons.calendar_today),
-        Text(dateString),
+        Text(
+          formatDatetimeToYYMMDD(date),
+        ),
       ],
     );
   }
 }
 
-class LocationTag extends StatelessWidget {
-  final Location location;
+class LocationTag extends ConsumerWidget {
+  final int location;
 
   const LocationTag({Key? key, required this.location}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locationValue =
+        ref.read(locationSelectorProvider.notifier).getSelector(location);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Icon(Icons.location_on),
-        Text(location.name),
+        const Icon(Icons.location_on),
+        Text(locationValue.name),
       ],
     );
   }
 }
 
-class DifficultyTag extends StatelessWidget {
-  final Difficulty difficulty;
+class DifficultyTag extends ConsumerWidget {
+  final int difficulty;
 
   const DifficultyTag({Key? key, required this.difficulty}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          Icons.bookmark,
-          color: difficulty.color,
-        ),
-        Text(
-          difficulty.name,
-          style: TextStyle(
-            color: difficulty.color,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final difficultyValue =
+        ref.read(difficultySelectorProvider.notifier).getSelector(difficulty);
+    return Container(
+      color: Theme.of(context).colorScheme.secondary,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.bookmark,
+            color: difficultyValue.color,
           ),
-        ),
-      ],
+          Text(
+            difficultyValue.name,
+            style: TextStyle(
+              color: difficultyValue.color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

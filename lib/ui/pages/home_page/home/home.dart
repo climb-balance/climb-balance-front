@@ -80,7 +80,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
       child: PageView.custom(
         onPageChanged: (page) {
-          debugPrint("이미 넘어갔다.");
           currentPage = page;
         },
         controller: _pageController,
@@ -140,8 +139,8 @@ class MainPage extends StatelessWidget {
             ),
             Row(
               children: const [
-                Flexible(child: AiFeedbackStatus()),
-                Flexible(child: ExpertFeedbackStatus()),
+                AiFeedbackStatus(),
+                ExpertFeedbackStatus(),
               ],
             ),
             Expanded(
@@ -180,7 +179,8 @@ class ExpertFeedbackStatus extends ConsumerWidget {
     final waitingExpertFeedback = ref.watch(
         feedbackStatusProvider.select((value) => value.waitingExpertFeedback));
 
-    return Expanded(
+    return Flexible(
+      fit: FlexFit.tight,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(5),
@@ -225,7 +225,8 @@ class AiFeedbackStatus extends ConsumerWidget {
     final theme = Theme.of(context);
     final aiStatus = ref.watch(feedbackStatusProvider);
 
-    return Expanded(
+    return Flexible(
+      fit: FlexFit.tight,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(5),
@@ -305,11 +306,9 @@ class NoFeedbackInform extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
-      child: Text(
-        '요청한 피드백이 완료되었거나 없습니다.',
-        overflow: TextOverflow.fade,
-      ),
+    return Text(
+      '요청한 피드백이 완료되었거나 없습니다.',
+      overflow: TextOverflow.fade,
     );
   }
 }
@@ -320,10 +319,10 @@ class MainStatistics extends StatelessWidget {
   Future<List<int>> loadDatas() async {
     Random random = Random();
     List<int> result = [];
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 15; i++) {
       result.add(random.nextInt(10));
     }
-    return Future.delayed(const Duration(seconds: 1), () {
+    return Future.delayed(const Duration(milliseconds: 200), () {
       return result;
     });
   }
@@ -338,30 +337,22 @@ class MainStatistics extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return Row(
               children: [
-                Flexible(
-                  child: HeatMap(
-                    datas: snapshot.data!,
-                  ),
+                HeatMap(
+                  datas: snapshot.data!,
                 ),
-                Flexible(
-                  child: ContinuousStatistics(
-                    datas: snapshot.data!,
-                  ),
+                ContinuousStatistics(
+                  datas: snapshot.data!,
                 ),
               ],
             );
           }
           return Row(
             children: [
-              Flexible(
-                child: HeatMap(
-                  datas: List<int>.filled(30, 0),
-                ),
+              HeatMap(
+                datas: List<int>.filled(15, 0),
               ),
-              Flexible(
-                child: HeatMap(
-                  datas: List<int>.filled(30, 0),
-                ),
+              HeatMap(
+                datas: List<int>.filled(15, 0),
               ),
             ],
           );
