@@ -1,6 +1,4 @@
-import 'package:climb_balance/providers/api.dart';
-import 'package:climb_balance/providers/mainRoute.dart';
-import 'package:climb_balance/utils/web_view.dart';
+import 'package:climb_balance/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,22 +42,7 @@ class AuthState extends ConsumerState<Auth> {
 class NaverLogin extends ConsumerWidget {
   final bool toRegisterd;
 
-  NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
-
-  void onNaverLogin(BuildContext context, WidgetRef ref) async {
-    await ref.read(serverProiver).getLoginHtml().then((html) async {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NaverWebView(html: html),
-        ),
-      ).then((res) => toRegisterd
-          ? Navigator.pushNamed(context, '/register')
-          : ref.read(mainRouteProvider.notifier).toMain());
-    }).catchError((err) {
-      ref.read(mainRouteProvider.notifier).toMain();
-    });
-  }
+  const NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,7 +51,9 @@ class NaverLogin extends ConsumerWidget {
         backgroundColor:
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
-      onPressed: () => {onNaverLogin(context, ref)},
+      onPressed: () {
+        ref.read(authProvider.notifier).onNaverLogin(context, ref, toRegisterd);
+      },
       child: SizedBox(
         width: 150,
         child: Row(

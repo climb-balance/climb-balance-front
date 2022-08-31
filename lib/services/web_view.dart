@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:climb_balance/providers/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -30,21 +29,21 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
         javascriptMode: JavascriptMode.unrestricted,
         initialUrl: 'about:blank',
         onWebViewCreated: (WebViewController webViewController) {
-          _controller = webViewController;
-          _controller.loadUrl('http://54.180.155.137:3000/auth/naver');
+          webViewController.loadHtmlString(widget.html);
         },
         onPageFinished: (url) {
-          if (url
-              .startsWith('http://54.180.155.137:3000/auth/naver/callback')) {
+          debugPrint(url);
+          debugPrint(url.contains('/user/auth/callback?code').toString());
+          if (url.contains('/user/auth/callback?code')) {
             _controller
                 .runJavascriptReturningResult(
                     "window.document.getElementsByTagName('html')[0].innerText;")
                 .then((html) {
-              ref
-                  .read(currentUserProvider.notifier)
-                  .updateToken(token: html.split('\\\"')[5]);
-              Navigator.pop(context, 'success');
+              debugPrint(html);
+            }).catchError((_) {
+              debugPrint("assa");
             });
+            Navigator.pop(context, 'success');
           }
         },
       ),

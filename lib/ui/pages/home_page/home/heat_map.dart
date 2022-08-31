@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class HeatMap extends StatelessWidget {
@@ -9,14 +10,79 @@ class HeatMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: GridView.count(
-        padding: const EdgeInsets.all(5),
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 5,
-        crossAxisSpacing: 5,
-        crossAxisCount: 6,
-        children: datas.map((data) => HeatMapSquare(data: data)).toList(),
+    final List<FlSpot> spotDatas = [];
+    for (int i = 0; i < datas.length; i++) {
+      spotDatas.add(FlSpot(i.toDouble(), datas[i].toDouble()));
+    }
+    final theme = Theme.of(context);
+    return Flexible(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: LineChart(
+            LineChartData(
+              gridData: FlGridData(
+                show: false,
+                drawVerticalLine: true,
+                horizontalInterval: 3,
+                verticalInterval: 3,
+                getDrawingHorizontalLine: (value) {
+                  return FlLine(
+                    color: const Color(0xff919191),
+                    strokeWidth: 1,
+                  );
+                },
+                getDrawingVerticalLine: (value) {
+                  return FlLine(
+                    color: const Color(0xff838383),
+                    strokeWidth: 1,
+                  );
+                },
+              ),
+              titlesData: FlTitlesData(
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                    interval: 3,
+                    reservedSize: 42,
+                  ),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+              ),
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spotDatas,
+                  isStrokeCapRound: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorTween(
+                              begin: theme.colorScheme.primary,
+                              end: theme.colorScheme.tertiary)
+                          .lerp(0.2)!,
+                      ColorTween(
+                              begin: theme.colorScheme.primary,
+                              end: theme.colorScheme.tertiary)
+                          .lerp(0.2)!,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  dotData: FlDotData(
+                    show: false,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

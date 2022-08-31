@@ -1,12 +1,12 @@
 import 'package:climb_balance/models/expert_profile.dart';
 import 'package:climb_balance/models/user.dart';
-import 'package:climb_balance/utils/storage/token.dart';
+import 'package:climb_balance/services/storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CurrentUserNotifier extends StateNotifier<UserProfile> {
+class UserNotifier extends StateNotifier<UserProfile> {
   final ref;
 
-  CurrentUserNotifier({required this.ref}) : super(const UserProfile());
+  UserNotifier({required this.ref}) : super(const UserProfile());
 
   bool isEmpty() {
     return state.token == '';
@@ -14,23 +14,22 @@ class CurrentUserNotifier extends StateNotifier<UserProfile> {
 
   void updateToken({required String token}) {
     state = state.copyWith(token: token);
-    storeStoredToken(token: token);
+    StorageService.storeStoredToken(token: token);
   }
 
   void clearToken() {
     state = state.copyWith(token: '');
-    clearStoredToken();
+    StorageService.clearStoredToken();
   }
 
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
   void loadTokenFromStorage() {
-    getStoredToken().then((value) {
+    StorageService.getStoredToken().then((value) {
       loadUserInfo(value['token'] ?? '');
     });
   }
 
   void loadUserInfo(String token) {
-    // 원래는 로그인으로 보내는 로직이 있어야할 것 같음.
     state = genRandomUser().copyWith(token: token);
     if (token == '') {
       return;
@@ -42,9 +41,8 @@ class CurrentUserNotifier extends StateNotifier<UserProfile> {
   }
 }
 
-final currentUserProvider =
-    StateNotifierProvider<CurrentUserNotifier, UserProfile>((ref) {
-  CurrentUserNotifier notifier = CurrentUserNotifier(ref: ref);
+final userProvider = StateNotifierProvider<UserNotifier, UserProfile>((ref) {
+  UserNotifier notifier = UserNotifier(ref: ref);
   notifier.loadTokenFromStorage();
   return notifier;
 });

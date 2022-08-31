@@ -10,6 +10,7 @@ part 'user.g.dart';
 
 @freezed
 class UserProfile with _$UserProfile {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserProfile({
     @Default('default') String nickName,
     @Default('https://i.ibb.co/d6SZN17/20220320-214742.jpg')
@@ -21,6 +22,7 @@ class UserProfile with _$UserProfile {
     @Default(-1) int weight,
     @Default(false) bool isExpert,
     @Default(0) int rank,
+    @Default(1) int userId,
     ExpertProfile? expertProfile,
   }) = _UserProfile;
 
@@ -38,7 +40,7 @@ UserProfile genRandomUser({bool isExpert = true}) {
       height: 160,
       weight: 50,
       description: '안녕하세요. 즐거운 클라이밍해요!!',
-      isExpert: true,
+      isExpert: false,
       rank: 2,
     );
   }

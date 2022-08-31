@@ -1,23 +1,43 @@
+import 'dart:typed_data';
+
 import 'package:climb_balance/ui/widgets/story/story_comments.dart';
 import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../models/story.dart';
+import '../../../providers/tag_selector_provider.dart';
+import '../../../services/server_service.dart';
 import '../../theme/specific_theme.dart';
 
-List<String> testVideos = [
-  'http://15.164.163.153:3000/story/1/video?type=raw',
-  'http://15.164.163.153:3000/story/1/video?type=ai',
-  'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-heads-like-matrushka-32647-large.mp4',
-  'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/house-painter-promotion-video-template-design-b0d4f2ba5aa5af51d385d0bbf813c908_screen.mp4?ts=1614933517',
-];
-
-class StoryPreview extends StatelessWidget {
+class StoryPreview extends StatefulWidget {
   final Story story;
 
   const StoryPreview({Key? key, required this.story}) : super(key: key);
+
+  @override
+  State<StoryPreview> createState() => _StoryPreviewState();
+}
+
+class _StoryPreviewState extends State<StoryPreview> {
+  Uint8List? data;
+
+  void getThumbnail() async {
+    data = await VideoThumbnail.thumbnailData(
+      video: ServerService.getStoryThumbnailPath(widget.story.storyId),
+      imageFormat: ImageFormat.JPEG,
+      quality: 100,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getThumbnail();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +49,7 @@ class StoryPreview extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => StoryView(
-                story: story,
+                story: widget.story,
                 handleBack: () {
                   Navigator.pop(context);
                 },
@@ -37,16 +57,63 @@ class StoryPreview extends StatelessWidget {
             ),
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(
-              fit: BoxFit.fitWidth,
-              image: NetworkImage(story.thumbnailUrl),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: (data == null
+                      ? const NetworkImage('https://i.imgur.com/wJuxMJU.jpeg')
+                      : MemoryImage(data!) as ImageProvider),
+                ),
+              ),
+            ),
+            StoryPreviewIcon(story: widget.story)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StoryPreviewIcon extends ConsumerWidget {
+  final Story story;
+  const StoryPreviewIcon({Key? key, required this.story}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final difficultyColor = ref
+            .read(difficultySelectorProvider.notifier)
+            .getSelector(story.tags.difficulty)
+            .color ??
+        Colors.white;
+    return Stack(
+      children: [
+        Icon(
+          Icons.bookmark,
+          color: difficultyColor,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 5,
+            left: 6,
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+              color: Colors.white,
+            ),
+            child: Icon(
+              story.tags.success ? Icons.check_circle : Icons.change_circle,
+              size: 12,
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -75,13 +142,34 @@ class _StoryViewState extends State<StoryView> {
   @override
   void initState() {
     super.initState();
-    _videoPlayerController =
-        VideoPlayerController.network(testVideos[widget.story.videoId])
-          ..initialize().then((_) {
-            _videoPlayerController.setLooping(true);
-            _videoPlayerController.play();
-            setState(() {});
-          });
+    // TODO 복구
+    // _videoPlayerController = ServerService.tmpStoryVideo(1)
+    //   ..initialize().then((_) {
+    //     _videoPlayerController.play();
+    //     _videoPlayerController.setLooping(true);
+    //     setState(() {});
+    //   });
+    // ServerService.gerStoryVideo(widget.story.storyId).then((result) {
+    //   result.when(
+    //       error: (String message) {},
+    //       success: (value) {
+    //         _videoPlayerController = value;
+    //         _videoPlayerController.initialize().then((_) {
+    //           _videoPlayerController.play();
+    //           _videoPlayerController.setLooping(true);
+    //           setState(() {});
+    //         });
+    //       });
+    // });
+    _videoPlayerController = VideoPlayerController.network(
+      ServerService.getStoryVideoPath(widget.story.storyId),
+      formatHint: VideoFormat.hls,
+    );
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+      _videoPlayerController.setLooping(true);
+      setState(() {});
+    });
   }
 
   @override

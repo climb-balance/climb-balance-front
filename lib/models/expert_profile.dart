@@ -7,11 +7,12 @@ part 'expert_profile.g.dart';
 
 @freezed
 class ExpertProfile with _$ExpertProfile {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ExpertProfile({
-    @Default('default') String nickName,
+    @Default('default') String nickname,
     @Default('https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg')
         String profileImagePath,
-    @Default('') String introduce,
+    @Default('') String description,
     @Default(-1) int climbingCenterId,
     @Default(-1) int id,
     @Default(50.0) double reliability,
