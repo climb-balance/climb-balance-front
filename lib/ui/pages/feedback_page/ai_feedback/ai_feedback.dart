@@ -63,30 +63,28 @@ class _AiFeedbackState extends State<AiFeedback> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              width: size.width,
-              height: size.width,
-              child: _controller.value.isInitialized
-                  ? Center(
+            _controller.value.isInitialized
+                ? Expanded(
+                    child: Center(
                       child: AspectRatio(
                         aspectRatio: _controller.value.aspectRatio,
                         child: VideoPlayer(
                           _controller,
                         ),
                       ),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
                     ),
-            ),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
             if (_controller.value.isInitialized)
-              AiFeedbackProgressBar(
-                detail: detail,
-                controller: _controller,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AiFeedbackProgressBar(
+                  detail: detail,
+                  controller: _controller,
+                ),
               ),
-            AiFeedbackInformation(
-              detail: detail,
-            ),
           ],
         ),
       ),
