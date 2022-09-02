@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:climb_balance/models/story.dart';
+import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/services/server_request.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';

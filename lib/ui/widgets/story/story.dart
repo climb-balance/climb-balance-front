@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-import '../../../models/story.dart';
+import '../../../domain/model/story.dart';
 import '../../../providers/tag_selector_provider.dart';
 import '../../../services/server_service.dart';
 import '../../theme/specific_theme.dart';
@@ -26,7 +26,7 @@ class _StoryPreviewState extends State<StoryPreview> {
 
   void getThumbnail() async {
     data = await VideoThumbnail.thumbnailData(
-      video: ServerService.getStoryThumbnailPath(widget.story.storyId),
+      video: ServerService.getStoryThumbnailPath(widget.story.storyId!),
       imageFormat: ImageFormat.JPEG,
       quality: 100,
     );
@@ -80,6 +80,7 @@ class _StoryPreviewState extends State<StoryPreview> {
 
 class StoryPreviewIcon extends ConsumerWidget {
   final Story story;
+
   const StoryPreviewIcon({Key? key, required this.story}) : super(key: key);
 
   @override
@@ -162,7 +163,7 @@ class _StoryViewState extends State<StoryView> {
     //       });
     // });
     _videoPlayerController = VideoPlayerController.network(
-      ServerService.getStoryVideoPath(widget.story.storyId),
+      ServerService.getStoryVideoPath(widget.story.storyId!),
       formatHint: VideoFormat.hls,
     );
     _videoPlayerController.initialize().then((_) {

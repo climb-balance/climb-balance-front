@@ -5,7 +5,7 @@ import 'package:climb_balance/services/server_service.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../models/story.dart';
+import '../../../../domain/model/story.dart';
 import '../../../../utils/durations.dart';
 import '../../../theme/specific_theme.dart';
 import '../../../widgets/commons/stars.dart';
@@ -28,7 +28,7 @@ class _AiFeedbackState extends State<AiFeedback> {
     super.initState();
 
     final path =
-        ServerService.getStoryVideoPath(widget.story.storyId, isAi: true);
+        ServerService.getStoryVideoPath(widget.story.storyId!, isAi: true);
     debugPrint(path);
     _controller = VideoPlayerController.network(
       path,
@@ -38,7 +38,7 @@ class _AiFeedbackState extends State<AiFeedback> {
         _controller.play();
         setState(() {});
       });
-    ServerService.getStoryAiDetail(widget.story.storyId).then(
+    ServerService.getStoryAiDetail(widget.story.storyId!).then(
       (result) => result.when(
         success: (value) {
           detail = value;

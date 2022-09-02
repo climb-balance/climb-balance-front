@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:climb_balance/models/story.dart';
+import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:climb_balance/ui/widgets/commons/my_icons.dart';
 import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
@@ -33,7 +33,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
     _pageController = PageController();
     pageItems.add(StoryView(
-      story: getRandomStory(),
+      story: genRandomStory(),
       handleBack: handleBack,
     ));
   }
@@ -45,7 +45,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     if (pageItems.length < idx) {
       pageItems.add(StoryView(
-        story: getRandomStory(),
+        story: genRandomStory(),
         handleBack: handleBack,
       ));
     }

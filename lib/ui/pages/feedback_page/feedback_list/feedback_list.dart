@@ -1,4 +1,4 @@
-import 'package:climb_balance/models/story.dart';
+import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/services/server_service.dart';
 import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:climb_balance/ui/widgets/commons/stars.dart';
@@ -26,10 +26,10 @@ class _FeedbackListState extends ConsumerState<FeedbackList> {
           childrenDelegate: SliverChildListDelegate(
             [
               FeedbackCard(
-                story: getRandomStory(),
+                story: genRandomStory(),
               ),
               FeedbackCard(
-                story: getRandomStory(),
+                story: genRandomStory(),
               ),
             ],
           ),
@@ -57,7 +57,7 @@ class _FeedbackCardState extends State<FeedbackCard> {
   @override
   void initState() {
     super.initState();
-    _controller = ServerService.tmpStoryVideo(widget.story.storyId);
+    _controller = ServerService.tmpStoryVideo(widget.story.storyId!);
     _controller.initialize().then((value) {
       _controller.play();
       _controller.setLooping(true);

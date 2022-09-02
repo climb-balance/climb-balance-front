@@ -2,8 +2,8 @@ import 'package:climb_balance/services/server_service.dart';
 import 'package:climb_balance/utils/durations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../domain/model/story.dart';
 import '../models/result.dart';
-import '../models/story.dart';
 
 enum FilterType { noFilter, aiOnly, expertOnly }
 

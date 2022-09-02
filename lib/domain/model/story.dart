@@ -12,22 +12,23 @@ class Story with _$Story {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Story({
     required StoryTags tags,
-    required int likes,
+    @Default(0) int likes,
     @Default('') String description,
-    required int comments,
-    required int aiAvailable,
-    required int expertAvailable,
+    @Default(0) int comments,
+    @Default(0) int aiAvailable,
+    @Default(0) int expertAvailable,
     required DateTime? uploadDate,
     @Default('https://static-cse.canva.com/blob/651263/youtube.jpg')
         String thumbnailUrl,
     required int uploaderId,
-    @Default(0) int storyId,
+    @JsonSerializable(includeIfNull: false) int? storyId,
   }) = _Story;
 
   factory Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);
 }
 
-Story getRandomStory() {
+// TODO remove
+Story genRandomStory() {
   Random random = Random();
   return Story(
     tags: StoryTags(

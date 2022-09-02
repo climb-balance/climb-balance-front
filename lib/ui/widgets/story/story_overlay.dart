@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../models/story.dart';
+import '../../../domain/model/story.dart';
 import '../../../models/user.dart';
 import '../commons/row_icon_detail.dart';
 import '../user_profile_info.dart';
@@ -273,7 +273,7 @@ class FeedbackRequestSheet extends ConsumerWidget {
         context: context,
         title: '성공',
         content: '요청이 완료되었습니다. 진행 상태는 메인 페이지에서 확인할 수 있습니다.');
-    ref.read(feedbackRequestProvider.notifier).requestAi(story.storyId);
+    ref.read(feedbackRequestProvider.notifier).requestAi(story.storyId!);
     ref.read(feedbackStatusProvider.notifier).addTimer(
         timerTime:
             rank == 2 ? const Duration(minutes: 5) : const Duration(days: 1));

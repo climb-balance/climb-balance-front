@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../models/story.dart';
+import '../../../../domain/model/story.dart';
 import '../../../widgets/story/story.dart';
 import '../../../widgets/story/tags.dart';
 
