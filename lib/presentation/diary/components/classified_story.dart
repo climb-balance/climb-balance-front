@@ -57,7 +57,7 @@ class ClassifiedStoryTags extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            DateTag(date: story.tags.getVideoDate),
+            DateTag(date: story.tags.videoDate),
             LocationTag(location: story.tags.location),
           ],
         ),

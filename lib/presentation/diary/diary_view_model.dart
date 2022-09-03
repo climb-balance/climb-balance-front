@@ -64,7 +64,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   }
 
   String _makeStoryKey(Story story) {
-    return formatDatetimeToYYMMDD(story.tags.getVideoDate) +
+    return formatDatetimeToYYMMDD(story.tags.videoDate) +
         story.tags.location.toString();
   }
 }

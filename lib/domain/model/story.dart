@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:climb_balance/models/story_tag.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'story_tag.dart';
 
 part 'story.freezed.dart';
 

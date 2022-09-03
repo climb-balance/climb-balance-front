@@ -3,6 +3,7 @@ import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../common/const/data.dart';
 import '../data_source/result.dart';
 
 // TODO move to di
@@ -43,6 +44,12 @@ class StoryRepositoryImpl implements StoryRepository {
       success: (value) => Result.success(value),
       error: (String message) => Result.error(message),
     );
+  }
+
+  // TODO this function must be removed
+  // this is tmp
+  String getStoryThumbnailPath(int id) {
+    return '${serverUrl}$serverStoryPath/$id$serverVideoPath?type=thumbnail';
   }
 
   @override
