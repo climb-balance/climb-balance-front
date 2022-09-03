@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../data_source/result.dart';
 
 // TODO move to di
-final storyRepositoryProvider = Provider<StoryRepositoryImpl>((ref) {
+final storyRepositoryImplProvider = Provider<StoryRepositoryImpl>((ref) {
   final server = ref.watch(storyServerHelperProvider);
   return StoryRepositoryImpl(server);
 });
