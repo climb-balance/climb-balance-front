@@ -8,10 +8,13 @@ abstract class StoryRepository {
 
   Future<Result<List<Story>>> getStories();
 
+  Future<Result<String>> getStoryThumbnailPathById(int id);
+
   Future<Result<Story>> getStoryById(int id);
 
   Future<void> updateStory(Story story);
 
-  // TODO id or story
+  Future<Result<int>> likeStory();
+
   Future<void> deleteStory(int id);
 }

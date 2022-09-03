@@ -37,6 +37,15 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
+  Future<Result<String>> getStoryThumbnailPathById(int id) async {
+    final result = await server.getStoryThumbnailPathById(id);
+    return result.when(
+      success: (value) => Result.success(value),
+      error: (String message) => Result.error(message),
+    );
+  }
+
+  @override
   Future<Result<List<Story>>> getStories() async {
     final result = await server.getStories();
     return result.when(
@@ -55,6 +64,12 @@ class StoryRepositoryImpl implements StoryRepository {
   @override
   Future<void> deleteStory(int id) {
     // TODO: implement deleteStory
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<int>> likeStory() {
+    // TODO: implement likeStory
     throw UnimplementedError();
   }
 }

@@ -30,27 +30,8 @@ class Server {
         .catchError((err) => throw err)
         .whenComplete(() {});
     final statusCode = res.statusCode;
-    dynamic body;
-    try {
-      body = json.decode(utf8.decode(res.bodyBytes));
-    } catch (e) {
-      body = utf8.decode(res.bodyBytes);
-    }
-    if (statusCode < 200 || statusCode >= 400 || body == null) {
-      throw const HttpException('요청 에러');
-    }
-    return body;
-  }
-
-  Future<dynamic> nativeGet(String url) async {
-    http.Response res = await http
-        .get(Uri.parse(serverUrl + url), headers: headers)
-        .timeout(_timeOutDuration)
-        .catchError((err) => throw err)
-        .whenComplete(() {});
-    final statusCode = res.statusCode;
-    dynamic body = res.bodyBytes;
-    if (statusCode < 200 || statusCode >= 400 || body == null) {
+    final body = res.bodyBytes;
+    if (statusCode < 200 || statusCode >= 400) {
       throw const HttpException('요청 에러');
     }
     return body;
@@ -67,8 +48,8 @@ class Server {
         .catchError((err) => throw err)
         .whenComplete(() {});
     final statusCode = res.statusCode;
-    final body = json.decode(utf8.decode(res.bodyBytes));
-    if (statusCode < 200 || statusCode >= 400 || body == null) {
+    final body = res.bodyBytes;
+    if (statusCode < 200 || statusCode >= 400) {
       throw const HttpException('요청 에러');
     }
     return body;
@@ -85,8 +66,8 @@ class Server {
         .catchError((err) => throw err)
         .whenComplete(() {});
     final statusCode = res.statusCode;
-    final body = json.decode(utf8.decode(res.bodyBytes));
-    if (statusCode < 200 || statusCode >= 400 || body == null) {
+    final body = res.bodyBytes;
+    if (statusCode < 200 || statusCode >= 400) {
       throw const HttpException('요청 에러');
     }
     return body;

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:climb_balance/data/data_source/server.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -20,7 +22,7 @@ class StoryServerHelper {
     int id;
     try {
       final result = await server.post(serverStoryPath, story);
-      id = result['story_id'];
+      id = jsonDecode(result)['story_id'];
     } catch (e) {
       return const Result.error('스토리 업로드 오류');
     }
@@ -40,7 +42,7 @@ class StoryServerHelper {
   Future<Result<Map<String, dynamic>>> getStoryById(int id) async {
     try {
       final result = await server.get('$serverStoryPath/$id');
-      return Result.success(result);
+      return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
     }
@@ -55,9 +57,20 @@ class StoryServerHelper {
     try {
       final result = await server.get(serverStoryPath);
       // TODO : 임시로 버그 막음 임 원래 result["stories"]
-      return result;
+      return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
+    }
+  }
+
+  Future<Result<String>> getStoryThumbnailPathById(int id) async {
+    try {
+      final result = await server
+          .get('$serverStoryPath/$id$serverVideoPath?type=thumbnail');
+
+      return Result.success(jsonDecode(result)["url"]);
+    } catch (e) {
+      return const Result.error('썸네일 불러오기 오류');
     }
   }
 
@@ -68,6 +81,16 @@ class StoryServerHelper {
 
   Future<void> deleteStory(int id) async {
     // TODO: implement deleteStory
+    throw UnimplementedError();
+  }
+
+  Future<Result<List<String>>> getCommentById(int id) {
+    // TODO: implement getCommentById
+    throw UnimplementedError();
+  }
+
+  Future<Result<int>> likeStory() {
+    // TODO: implement likeStory
     throw UnimplementedError();
   }
 }
