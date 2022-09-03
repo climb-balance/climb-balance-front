@@ -33,13 +33,13 @@ class StoryServerHelper {
     } catch (e) {
       return const Result.error('영상 업로드 오류');
     }
-    return const Result.success(true);
+    return const Result.success(null);
   }
 
-  Future<Result<Story>> getStoryById(int id) async {
+  Future<Result<Map<String, dynamic>>> getStoryById(int id) async {
     try {
       final result = await server.get('$serverStoryPath/$id');
-      return Result.success(Story.fromJson(result));
+      return Result.success(result);
     } catch (e) {
       return const Result.error('네트워크 에러');
     }
@@ -50,12 +50,11 @@ class StoryServerHelper {
     throw UnimplementedError();
   }
 
-  Future<Result<List<Story>>> getStories() async {
+  Future<Result<Iterable>> getStories() async {
     try {
-      final preResult = await server.get(serverStoryPath);
-      // TODO : 임시로 버그 막음 임 원래 final result = StoryList.fromJson({"storyList": preResult["stories"]});
-      final result = StoryList.fromJson({"story_list": preResult});
-      return Result.success(result.storyList);
+      final result = await server.get(serverStoryPath);
+      // TODO : 임시로 버그 막음 임 원래 result["stories"]
+      return result;
     } catch (e) {
       return const Result.error('네트워크 에러');
     }
