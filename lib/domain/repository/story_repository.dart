@@ -2,10 +2,12 @@ import '../model/story.dart';
 
 abstract class StoryRepository {
   Future<Story> getRecommendStory();
+
   Future<List<Story>> getStories();
+
   Future<Story?> getStoryById(int id);
 
-  Future<void> createStory(Story story);
+  Future<void> createStory(Story story, String videoPath);
 
   Future<void> updateStory(Story story);
 

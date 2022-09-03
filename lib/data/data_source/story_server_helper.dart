@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:climb_balance/data/data_source/server.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,7 +15,7 @@ class StoryServerHelper {
 
   StoryServerHelper(this.server);
 
-  Future<Result<void>> createStory(Story story, File video) async {
+  Future<Result<void>> createStory(Story story, String videoPath) async {
     int id;
     try {
       final result = await server.post(serverStoryPath, story);
@@ -26,12 +24,12 @@ class StoryServerHelper {
       return const Result.error('스토리 업로드 오류');
     }
 
-    return await createVideo(id, video);
+    return await uploadVideo(id, videoPath);
   }
 
-  Future<Result<void>> createVideo(int id, File video) async {
+  Future<Result<void>> uploadVideo(int id, String videoPath) async {
     try {
-      server.multiPartUpload('$serverStoryPath/$id$serverVideoPath', video);
+      server.multiPartUpload('$serverStoryPath/$id$serverVideoPath', videoPath);
     } catch (e) {
       return const Result.error('영상 업로드 오류');
     }

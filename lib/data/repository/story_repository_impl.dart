@@ -14,9 +14,8 @@ class StoryRepositoryImpl implements StoryRepository {
   StoryRepositoryImpl(this.server);
 
   @override
-  Future<void> createStory(Story story) {
-    // TODO: implement deleteStory
-    throw UnimplementedError();
+  Future<void> createStory(Story story, String videoPath) async {
+    await server.createStory(story, videoPath);
   }
 
   @override

@@ -92,11 +92,11 @@ class Server {
     return body;
   }
 
-  Future<dynamic> multiPartUpload(String url, File file) async {
+  Future<dynamic> multiPartUpload(String url, String videoPath) async {
     Uri uri = Uri.parse('${serverUrl}${url}');
     final req = http.MultipartRequest('POST', uri);
     try {
-      final multiPartFile = await http.MultipartFile.fromPath('file', file.path)
+      final multiPartFile = await http.MultipartFile.fromPath('file', videoPath)
           .timeout(const Duration(seconds: 2));
       req.files.add(multiPartFile);
       final res = await req.send();
