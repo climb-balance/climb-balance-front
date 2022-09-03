@@ -1,4 +1,4 @@
-import 'package:climb_balance/domain/util/story_filter.dart';
+import 'package:climb_balance/domain/util/stories_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -29,7 +29,7 @@ class FilterTabBar extends StatelessWidget {
 
 class FilterItem extends ConsumerWidget {
   final String filterTitle;
-  final StoryFilter filter;
+  final StoriesFilter filter;
 
   const FilterItem({
     required this.filterTitle,

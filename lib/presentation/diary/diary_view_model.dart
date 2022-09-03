@@ -5,7 +5,7 @@ import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
 import '../../domain/util/durationTime.dart';
-import '../../domain/util/story_filter.dart';
+import '../../domain/util/stories_filter.dart';
 import 'diary_event.dart';
 import 'diary_state.dart';
 
@@ -25,7 +25,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
 
   void onEvent(DiaryEvent event) {
     event.when(
-        filterStories: (StoryFilter storyFilter) {
+        filterStories: (StoriesFilter storyFilter) {
           _filterStories(storyFilter);
         },
         loadStories: _loadStories);
@@ -36,19 +36,20 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
     result.when(
       success: (getStories) {
         stories = getStories;
-        _filterStories(const StoryFilter.noFilter());
+        _filterStories(const StoriesFilter.noFilter());
       },
       error: (message) {},
     );
   }
 
-  void _filterStories(StoryFilter storyFilter) {
+  void _filterStories(StoriesFilter storyFilter) {
     Map<String, List<Story>> classifiedStories = {};
     for (final story in stories) {
       final String key = _makeStoryKey(story);
-      if (storyFilter == const StoryFilter.aiOnly() && story.aiAvailable != 3) {
+      if (storyFilter == const StoriesFilter.aiOnly() &&
+          story.aiAvailable != 3) {
         continue;
-      } else if (storyFilter == const StoryFilter.expertOnly() &&
+      } else if (storyFilter == const StoriesFilter.expertOnly() &&
           story.expertAvailable != 3) {
         continue;
       }

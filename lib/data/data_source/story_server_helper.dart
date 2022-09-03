@@ -19,29 +19,30 @@ class StoryServerHelper {
   StoryServerHelper(this.server);
 
   Future<Result<void>> createStory(Story story, String videoPath) async {
-    int id;
+    int storyId;
     try {
       final result = await server.post(serverStoryPath, story);
-      id = jsonDecode(result)['story_id'];
+      storyId = jsonDecode(result)['story_id'];
     } catch (e) {
       return const Result.error('스토리 업로드 오류');
     }
 
-    return await uploadVideo(id, videoPath);
+    return await uploadVideo(storyId, videoPath);
   }
 
-  Future<Result<void>> uploadVideo(int id, String videoPath) async {
+  Future<Result<void>> uploadVideo(int storyId, String videoPath) async {
     try {
-      server.multiPartUpload('$serverStoryPath/$id$serverVideoPath', videoPath);
+      server.multiPartUpload(
+          '$serverStoryPath/$storyId$serverVideoPath', videoPath);
     } catch (e) {
       return const Result.error('영상 업로드 오류');
     }
     return const Result.success(null);
   }
 
-  Future<Result<Map<String, dynamic>>> getStoryById(int id) async {
+  Future<Result<Map<String, dynamic>>> getStoryById(int storyId) async {
     try {
-      final result = await server.get('$serverStoryPath/$id');
+      final result = await server.get('$serverStoryPath/$storyId');
       return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
@@ -63,10 +64,10 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<String>> getStoryThumbnailPathById(int id) async {
+  Future<Result<String>> getStoryThumbnailPathById(int storyId) async {
     try {
       final result = await server
-          .get('$serverStoryPath/$id$serverVideoPath?type=thumbnail');
+          .get('$serverStoryPath/$storyId$serverVideoPath?type=thumbnail');
 
       return Result.success(jsonDecode(result)["url"]);
     } catch (e) {
@@ -79,12 +80,12 @@ class StoryServerHelper {
     throw UnimplementedError();
   }
 
-  Future<void> deleteStory(int id) async {
+  Future<void> deleteStory(int storyId) async {
     // TODO: implement deleteStory
     throw UnimplementedError();
   }
 
-  Future<Result<List<String>>> getCommentById(int id) {
+  Future<Result<List<String>>> getCommentById(int storyId) {
     // TODO: implement getCommentById
     throw UnimplementedError();
   }

@@ -1,13 +1,14 @@
-import 'package:climb_balance/ui/widgets/story/story_comments.dart';
-import 'package:climb_balance/ui/widgets/story/story_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../domain/model/story.dart';
-import '../../../services/server_service.dart';
+import '../../data/repository/story_repository_impl.dart';
 import '../../ui/theme/specific_theme.dart';
+import 'components/story_comments.dart';
+import 'components/story_overlay.dart';
 
-class StoryScreen extends StatefulWidget {
+class StoryScreen extends ConsumerStatefulWidget {
   final Story story;
   final void Function() handleBack;
 
@@ -15,10 +16,10 @@ class StoryScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StoryScreen> createState() => _StoryScreenState();
+  ConsumerState<StoryScreen> createState() => _StoryScreenState();
 }
 
-class _StoryScreenState extends State<StoryScreen> {
+class _StoryScreenState extends ConsumerState<StoryScreen> {
   late final VideoPlayerController _videoPlayerController;
   bool isCommentOpen = false;
 
@@ -31,27 +32,9 @@ class _StoryScreenState extends State<StoryScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO 복구
-    // _videoPlayerController = ServerService.tmpStoryVideo(1)
-    //   ..initialize().then((_) {
-    //     _videoPlayerController.play();
-    //     _videoPlayerController.setLooping(true);
-    //     setState(() {});
-    //   });
-    // ServerService.gerStoryVideo(widget.story.storyId).then((result) {
-    //   result.when(
-    //       error: (String message) {},
-    //       success: (value) {
-    //         _videoPlayerController = value;
-    //         _videoPlayerController.initialize().then((_) {
-    //           _videoPlayerController.play();
-    //           _videoPlayerController.setLooping(true);
-    //           setState(() {});
-    //         });
-    //       });
-    // });
+    final repository = ref.watch(storyRepositoryImplProvider);
     _videoPlayerController = VideoPlayerController.network(
-      ServerService.getStoryVideoPath(widget.story.storyId!),
+      repository.getStoryVideoPathById(widget.story.storyId!),
       formatHint: VideoFormat.hls,
     );
     _videoPlayerController.initialize().then((_) {
@@ -59,6 +42,12 @@ class _StoryScreenState extends State<StoryScreen> {
       _videoPlayerController.setLooping(true);
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _videoPlayerController.dispose();
   }
 
   @override
@@ -103,11 +92,5 @@ class _StoryScreenState extends State<StoryScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoPlayerController.dispose();
   }
 }

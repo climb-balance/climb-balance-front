@@ -23,8 +23,8 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<Story>> getStoryById(int id) async {
-    final result = await server.getStoryById(id);
+  Future<Result<Story>> getStoryById(int storyId) async {
+    final result = await server.getStoryById(storyId);
     return result.when(
       success: (data) => Result.success(Story.fromJson(data)),
       error: (message) => Result.error(message),
@@ -38,8 +38,8 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<String>> getStoryThumbnailPathById(int id) async {
-    final result = await server.getStoryThumbnailPathById(id);
+  Future<Result<String>> getStoryThumbnailPathById(int storyId) async {
+    final result = await server.getStoryThumbnailPathById(storyId);
     return result.when(
       success: (value) => Result.success(value),
       error: (String message) => Result.error(message),
@@ -48,8 +48,13 @@ class StoryRepositoryImpl implements StoryRepository {
 
   // TODO this function must be removed
   // this is tmp
-  String getStoryThumbnailPath(int id) {
-    return '${serverUrl}$serverStoryPath/$id$serverVideoPath?type=thumbnail';
+  String getStoryThumbnailPath(int storyId) {
+    return '$serverUrl$serverStoryPath/$storyId$serverVideoPath?type=thumbnail';
+  }
+
+  @override
+  String getStoryVideoPathById(int storyId, {bool isAi = false}) {
+    return '$serverUrl$serverStoryPath/$storyId$serverVideoPath/?type=${isAi ? 'ai' : 'raw'}';
   }
 
   @override
@@ -69,7 +74,7 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<void> deleteStory(int id) {
+  Future<void> deleteStory(int storyId) {
     // TODO: implement deleteStory
     throw UnimplementedError();
   }
