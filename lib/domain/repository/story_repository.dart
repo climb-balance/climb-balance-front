@@ -13,5 +13,5 @@ abstract class StoryRepository {
   Future<void> updateStory(Story story);
 
   // TODO id or story
-  Future<void> deleteStory(Story story);
+  Future<void> deleteStory(int id);
 }

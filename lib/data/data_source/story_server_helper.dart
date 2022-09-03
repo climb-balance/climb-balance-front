@@ -5,6 +5,7 @@ import '../../common/const/data.dart';
 import '../../domain/model/story.dart';
 import 'result.dart';
 
+// TODO move to di
 final storyServerHelperProvider = Provider<StoryServerHelper>((ref) {
   final server = ref.watch(serverProvider);
   return StoryServerHelper(server);

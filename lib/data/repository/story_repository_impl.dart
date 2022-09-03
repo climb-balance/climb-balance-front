@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data_source/result.dart';
 
+// TODO move to di
 final storyRepositoryProvider = Provider<StoryRepositoryImpl>((ref) {
   final server = ref.watch(storyServerHelperProvider);
   return StoryRepositoryImpl(server);
@@ -52,7 +53,7 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<void> deleteStory(Story story) {
+  Future<void> deleteStory(int id) {
     // TODO: implement deleteStory
     throw UnimplementedError();
   }
