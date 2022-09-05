@@ -18,8 +18,13 @@ class StoryRepositoryImpl implements StoryRepository {
   StoryRepositoryImpl(this.server);
 
   @override
-  Future<Result<void>> createStory(Story story, String videoPath) async {
-    return await server.createStory(story, videoPath);
+  Future<Result<void>> createStory({
+    required Story story,
+    required String videoPath,
+    required double start,
+    required double end,
+  }) async {
+    return await server.createStory(story, videoPath, start, end);
   }
 
   @override

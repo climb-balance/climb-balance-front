@@ -1,8 +1,9 @@
-import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-class Community extends StatelessWidget {
-  const Community({Key? key}) : super(key: key);
+import '../common/components/bot_navigation_bar.dart';
+
+class CommunityScreen extends StatelessWidget {
+  const CommunityScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:climb_balance/data/data_source/serverComm.dart';
+import 'package:climb_balance/data/data_source/server_comm.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/const/data.dart';
@@ -18,7 +18,12 @@ class StoryServerHelper {
 
   StoryServerHelper(this.server);
 
-  Future<Result<void>> createStory(Story story, String videoPath) async {
+  Future<Result<void>> createStory(
+    Story story,
+    String videoPath,
+    double start,
+    double end,
+  ) async {
     int storyId;
     try {
       final result = await server.post(serverStoryPath, story);

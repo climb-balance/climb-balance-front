@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../ui/widgets/commons/stars.dart';
+import '../../common/components/stars.dart';
 
 class StoryComments extends StatelessWidget {
   final void Function() toggleCommentOpen;

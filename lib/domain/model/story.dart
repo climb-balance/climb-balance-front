@@ -18,7 +18,7 @@ class Story with _$Story {
     @Default(0) int comments,
     @Default(0) int aiAvailable,
     @Default(0) int expertAvailable,
-    required DateTime? uploadDate,
+    @Default(0) int uploadTimestamp,
     @Default('https://static-cse.canva.com/blob/651263/youtube.jpg')
         String thumbnailUrl,
     required int uploaderId,
@@ -33,7 +33,7 @@ Story genRandomStory() {
   Random random = Random();
   return Story(
     tags: StoryTags(
-      videoDate: DateTime.now(),
+      videoTimestamp: DateTime.now().millisecondsSinceEpoch,
       difficulty: random.nextInt(4) - 1,
       location: random.nextInt(4) - 1,
       success: false,
@@ -43,7 +43,7 @@ Story genRandomStory() {
     comments: random.nextInt(100),
     aiAvailable: random.nextInt(3) + 1,
     expertAvailable: random.nextInt(3) + 1,
-    uploadDate: DateTime.now(),
+    uploadTimestamp: DateTime.now().millisecondsSinceEpoch,
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
     uploaderId: 2,
     storyId: random.nextInt(10),

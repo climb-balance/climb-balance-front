@@ -1,8 +1,8 @@
 import 'package:climb_balance/utils/durations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../models/story_tag.dart';
+import '../../../domain/model/story_tag.dart';
 import '../../../providers/tag_selector_provider.dart';
 
 class StoryTagInfo extends StatelessWidget {
@@ -20,7 +20,7 @@ class StoryTagInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             DateTag(
-              date: tags.getVideoDate,
+              date: DateTime.fromMillisecondsSinceEpoch(tags.videoTimestamp),
             ),
             SuccessTag(success: tags.success),
           ],

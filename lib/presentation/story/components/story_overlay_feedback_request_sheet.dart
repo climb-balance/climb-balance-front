@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../domain/model/story.dart';
-import '../../../ui/widgets/commons/row_icon_detail.dart';
+import '../../common/components/row_icon_detail.dart';
 import '../story_view_model.dart';
 
 class StoryOverlayFeedbackRequestSheet extends ConsumerWidget {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../domain/model/story.dart';
-import '../../../ui/widgets/story/story.dart';
-import '../../../ui/widgets/story/tags.dart';
+import '../../common/components/story_preview.dart';
+import '../../common/components/tags.dart';
 
 class ClassifiedStories extends StatelessWidget {
   final List<Story> stories;
@@ -57,7 +57,11 @@ class ClassifiedStoryTags extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            DateTag(date: story.tags.videoDate),
+            DateTag(
+              date: DateTime.fromMillisecondsSinceEpoch(
+                story.tags.videoTimestamp,
+              ),
+            ),
             LocationTag(location: story.tags.location),
           ],
         ),

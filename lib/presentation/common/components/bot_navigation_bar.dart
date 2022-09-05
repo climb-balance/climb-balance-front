@@ -1,9 +1,10 @@
+import 'package:climb_balance/common/const/route_config.dart';
 import 'package:climb_balance/providers/settings.dart';
-import 'package:climb_balance/routes/route_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../pages/story_upload_screens/pick_video.dart';
+import '../../../ui/pages/story_upload_screens/pick_video.dart';
 
 class BotNavigationBar extends ConsumerWidget {
   final int currentIdx;
@@ -51,12 +52,12 @@ class BotNavigationBar extends ConsumerWidget {
   }
 
   void _onItemTapped(int index, BuildContext context, List<String> paths) {
+    debugPrint(GoRouter.of(context).location);
     if (index == 2) {
       showModalBottomSheet(
           context: context, builder: (context) => const PickVideo());
     } else {
-      Navigator.pushNamedAndRemoveUntil(
-          context, paths[index], (route) => false);
+      GoRouter.of(context).go(paths[index]);
     }
   }
 }

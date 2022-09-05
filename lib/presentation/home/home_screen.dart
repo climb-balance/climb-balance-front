@@ -1,29 +1,30 @@
 import 'dart:math';
 
 import 'package:climb_balance/domain/model/story.dart';
-import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
-import 'package:climb_balance/ui/widgets/commons/my_icons.dart';
-import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
-import 'package:climb_balance/ui/widgets/story/story.dart';
+import 'package:climb_balance/presentation/common/components/my_icons.dart';
+import 'package:climb_balance/presentation/story/story_screen.dart';
 import 'package:climb_balance/utils/durations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../providers/feedback_status.dart';
-import 'continuous_statistics.dart';
-import 'heat_map.dart';
-import 'image_banner.dart';
+import '../common/components/bot_navigation_bar.dart';
+import '../common/components/safe_area.dart';
+import 'components/continuous_statistics.dart';
+import 'components/heat_map.dart';
+import 'components/image_banner.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => HomeState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late PageController _pageController;
   int currentPage = 0;
   List<Widget> pageItems = [];
@@ -32,7 +33,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _pageController = PageController();
-    pageItems.add(StoryView(
+    pageItems.add(StoryScreen(
       story: genRandomStory(),
       handleBack: handleBack,
     ));
@@ -44,7 +45,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
 
     if (pageItems.length < idx) {
-      pageItems.add(StoryView(
+      pageItems.add(StoryScreen(
         story: genRandomStory(),
         handleBack: handleBack,
       ));
@@ -97,7 +98,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: HomeAppBar(),
+      appBar: const HomeAppBar(),
       body: MySafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,

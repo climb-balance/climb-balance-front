@@ -4,7 +4,6 @@ import '../../data/data_source/result.dart';
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
-import '../../domain/util/durationTime.dart';
 import '../../domain/util/stories_filter.dart';
 import 'diary_event.dart';
 import 'diary_state.dart';
@@ -65,7 +64,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   }
 
   String _makeStoryKey(Story story) {
-    return formatDatetimeToYYMMDD(story.tags.videoDate) +
+    return story.tags.videoTimestamp.toString() +
         story.tags.location.toString();
   }
 }

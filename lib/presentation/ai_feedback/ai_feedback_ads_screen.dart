@@ -1,4 +1,4 @@
-import 'package:climb_balance/ui/widgets/commons/my_icons.dart';
+import 'package:climb_balance/presentation/common/components/my_icons.dart';
 import 'package:flutter/material.dart';
 
 class AiFeedbackAdsScreen extends StatefulWidget {

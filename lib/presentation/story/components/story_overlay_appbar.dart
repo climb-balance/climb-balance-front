@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../domain/model/story_tag.dart';
-import '../../common/tags.dart';
+import '../../common/components/tags.dart';
 
 class StoryOverlayAppBar extends StatelessWidget with PreferredSizeWidget {
   final StoryTags tags;

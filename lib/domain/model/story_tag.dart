@@ -13,7 +13,7 @@ class StoryTags with _$StoryTags {
     @Default(-1) int location,
     @Default(-1) int difficulty,
     @Default(false) bool success,
-    required DateTime videoDate,
+    @Default(0) int videoTimestamp,
   }) = _StoryTags;
 
   factory StoryTags.fromJson(Map<String, dynamic> json) =>
