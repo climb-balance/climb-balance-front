@@ -25,7 +25,7 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
   void getThumbnail() async {
     final repository = ref.watch(storyRepositoryImplProvider);
     data = await VideoThumbnail.thumbnailData(
-      video: repository.getStoryThumbnailPath(widget.story.storyId!),
+      video: repository.getStoryThumbnailPath(widget.story.storyId),
       imageFormat: ImageFormat.JPEG,
       quality: 100,
     );

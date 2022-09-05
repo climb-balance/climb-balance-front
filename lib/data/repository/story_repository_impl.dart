@@ -84,4 +84,17 @@ class StoryRepositoryImpl implements StoryRepository {
     // TODO: implement likeStory
     throw UnimplementedError();
   }
+
+  @override
+  Future<Result<void>> putAiFeedback(int storyId) async {
+    final result = await server.putAiFeedback(storyId, 'pushToken');
+    return result.when(
+      success: (value) {
+        return const Result.success(null);
+      },
+      error: (message) {
+        return Result.error(message);
+      },
+    );
+  }
 }

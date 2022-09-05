@@ -16,7 +16,9 @@ abstract class StoryRepository {
 
   Future<void> updateStory(Story story);
 
+  Future<void> deleteStory(int storyId);
+
   Future<Result<int>> likeStory();
 
-  Future<void> deleteStory(int storyId);
+  Future<Result<void>> putAiFeedback(int storyId);
 }

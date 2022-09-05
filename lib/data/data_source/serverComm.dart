@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 
 import '../../common/const/data.dart';
 
-final serverProvider = Provider<Server>((ref) {
-  return Server();
+final serverProvider = Provider<ServerComm>((ref) {
+  return ServerComm();
 });
 
-class Server {
+class ServerComm {
   // TODO auth change
   final Map<String, String> headers = {
     'Content-Type': 'application/json',

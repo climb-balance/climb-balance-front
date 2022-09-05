@@ -1,9 +1,9 @@
+import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../domain/model/story.dart';
-import '../../data/repository/story_repository_impl.dart';
 import '../../ui/theme/specific_theme.dart';
 import 'components/story_comments.dart';
 import 'components/story_overlay.dart';
@@ -30,21 +30,6 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    final repository = ref.watch(storyRepositoryImplProvider);
-    _videoPlayerController = VideoPlayerController.network(
-      repository.getStoryVideoPathById(widget.story.storyId!),
-      formatHint: VideoFormat.hls,
-    );
-    _videoPlayerController.initialize().then((_) {
-      _videoPlayerController.play();
-      _videoPlayerController.setLooping(true);
-      setState(() {});
-    });
-  }
-
-  @override
   void dispose() {
     super.dispose();
     _videoPlayerController.dispose();
@@ -53,6 +38,16 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
   @override
   Widget build(BuildContext context) {
     const themeColor = ColorScheme.dark();
+    final provider = storyViewModelProvider(widget.story);
+    _videoPlayerController = VideoPlayerController.network(
+      ref.read(provider.notifier).getStoryVideoPath(),
+      formatHint: VideoFormat.hls,
+    );
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+      _videoPlayerController.setLooping(true);
+      setState(() {});
+    });
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
@@ -83,7 +78,7 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
             ),
             if (!isCommentOpen)
               StoryOverlay(
-                story: widget.story,
+                provider: provider,
                 handleBack: widget.handleBack,
                 videoPlayerController: _videoPlayerController,
                 toggleCommentOpen: toggleCommentOpen,

@@ -22,7 +22,7 @@ class Story with _$Story {
     @Default('https://static-cse.canva.com/blob/651263/youtube.jpg')
         String thumbnailUrl,
     required int uploaderId,
-    @JsonSerializable(includeIfNull: false) int? storyId,
+    @Default(-1) int storyId,
   }) = _Story;
 
   factory Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);

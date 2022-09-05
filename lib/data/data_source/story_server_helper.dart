@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:climb_balance/data/data_source/server.dart';
+import 'package:climb_balance/data/data_source/serverComm.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/const/data.dart';
@@ -14,7 +14,7 @@ final storyServerHelperProvider = Provider<StoryServerHelper>((ref) {
 });
 
 class StoryServerHelper {
-  Server server;
+  ServerComm server;
 
   StoryServerHelper(this.server);
 
@@ -93,5 +93,19 @@ class StoryServerHelper {
   Future<Result<int>> likeStory() {
     // TODO: implement likeStory
     throw UnimplementedError();
+  }
+
+  Future<Result<void>> putAiFeedback(int storyId, String pushToken) async {
+    try {
+      final result = await server.put(
+        '$serverStoryPath/$storyId$serverAiFeedbackPath',
+        {
+          'token': pushToken,
+        },
+      );
+      return const Result.success(null);
+    } catch (e) {
+      return const Result.error('AI 피드백 요청 오류');
+    }
   }
 }
