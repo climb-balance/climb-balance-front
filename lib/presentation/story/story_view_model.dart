@@ -1,12 +1,11 @@
+import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
-import 'package:climb_balance/presentation/story/story_event.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/util/feedback_status.dart';
-import '../../providers/user_provider.dart';
 import '../ai_feedback/ai_feedback_ads_screen.dart';
 import '../common/custom_dialog.dart';
 
@@ -37,22 +36,14 @@ class StoryViewModel extends StateNotifier<Story> {
     );
   }
 
-  void onEvent(StoryEvent event) {
-    event.when(
-      likeStory: _likeStory,
-      requestAiFeedback: _requestAiFeedback,
-      requestExpertFeedback: (BuildContext context) {},
-      loadComments: () {},
-    );
-  }
-
-  void _likeStory() {
+  void likeStory() {
     // TODO implement
     repository.likeStory();
   }
 
-  void _requestAiFeedback(BuildContext context) async {
-    final int rank = ref.watch(userProvider.select((value) => value.rank));
+  void requestAiFeedback(BuildContext context) async {
+    final int rank =
+        ref.watch(currentUserProvider.select((value) => value.rank));
     if (rank == 0) {
       Navigator.push(
           context,

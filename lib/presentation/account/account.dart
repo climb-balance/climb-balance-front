@@ -1,9 +1,9 @@
+import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/setting_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../presentation/common/components/bot_navigation_bar.dart';
-import '../../../../providers/user_provider.dart';
 import 'account_settings.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
@@ -16,7 +16,8 @@ class AccountScreen extends ConsumerStatefulWidget {
 class AccountState extends ConsumerState<AccountScreen> {
   @override
   Widget build(BuildContext context) {
-    final isExpert = ref.watch(userProvider.select((value) => value.isExpert));
+    final isExpert =
+        ref.watch(currentUserProvider.select((value) => value.isExpert));
     return Scaffold(
       appBar: AppBar(
         title: const Text('설정'),

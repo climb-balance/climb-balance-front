@@ -1,3 +1,4 @@
+import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
 import 'package:climb_balance/presentation/community/community_screen.dart';
@@ -9,12 +10,11 @@ import '../../presentation/diary/diary_screen.dart';
 import '../../presentation/feedback_list/feedback_list.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/story/story_screen.dart';
-import '../../providers/user_provider.dart';
 import '../../ui/pages/auth/auth.dart';
 import '../const/route_config.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final token = ref.watch(userProvider.select((value) => value.token));
+  final token = ref.watch(currentUserProvider.select((value) => value.token));
 
   return GoRouter(
     initialLocation: token == '' ? homePageRoute : homePageRoute,

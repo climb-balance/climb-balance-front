@@ -1,9 +1,9 @@
 import 'package:climb_balance/common/const/route_config.dart';
-import 'package:climb_balance/providers/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../common/provider/settings_provider.dart';
 import '../../../ui/pages/story_upload_screens/pick_video.dart';
 
 class BotNavigationBar extends ConsumerWidget {

@@ -1,4 +1,5 @@
 import 'package:climb_balance/domain/util/stories_filter.dart';
+import 'package:climb_balance/presentation/diary/diary_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -39,6 +40,11 @@ class FilterItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return OutlinedButton(onPressed: () {}, child: Text(filterTitle));
+    return OutlinedButton(
+      onPressed: () {
+        ref.read(diaryViewModelProvider.notifier).filterStories(filter);
+      },
+      child: Text(filterTitle),
+    );
   }
 }

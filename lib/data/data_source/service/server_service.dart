@@ -5,13 +5,13 @@ import 'dart:io';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common/const/data.dart';
+import '../../../common/const/server_config.dart';
 
-final serverProvider = Provider<ServerComm>((ref) {
-  return ServerComm();
+final serverServiceProvider = Provider<ServerService>((ref) {
+  return ServerService();
 });
 
-class ServerComm {
+class ServerService {
   // TODO auth change
   final Map<String, String> headers = {
     'Content-Type': 'application/json',

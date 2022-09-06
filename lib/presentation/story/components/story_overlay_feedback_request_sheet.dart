@@ -1,4 +1,3 @@
-import 'package:climb_balance/presentation/story/story_event.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,7 +23,7 @@ class StoryOverlayFeedbackRequestSheet extends ConsumerWidget {
             height: 60,
             child: TextButton(
               onPressed: () {
-                notifier.onEvent(StoryEvent.requestAiFeedback(context));
+                notifier.requestAiFeedback(context);
               },
               child: const RowIconDetail(
                   icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
@@ -35,7 +34,8 @@ class StoryOverlayFeedbackRequestSheet extends ConsumerWidget {
             height: 60,
             child: TextButton(
               onPressed: () {
-                notifier.onEvent(StoryEvent.requestExpertFeedback(context));
+                // TODO expert
+                notifier.requestAiFeedback(context);
               },
               child: const RowIconDetail(
                   icon: Icon(Icons.my_library_books), detail: '전문가 피드백 요청하기'),

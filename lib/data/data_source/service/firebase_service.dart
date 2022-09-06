@@ -1,10 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../common/models/result.dart';
+import '../../../common/models/result.dart';
+
+final firebaseServiceProvider = Provider<FirebaseService>((ref) {
+  return FirebaseService();
+});
 
 class FirebaseService {
-  static Future<Result<String>> getFirebaseMessagingToken() async {
+  Future<Result<String>> getFirebaseMessagingToken() async {
     try {
       await Firebase.initializeApp();
       final result = await FirebaseMessaging.instance.getToken();

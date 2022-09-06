@@ -1,19 +1,18 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/data_source/result.dart';
+import '../../common/models/result.dart';
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
 import '../../domain/util/feedback_status.dart';
 import '../../domain/util/stories_filter.dart';
-import 'diary_event.dart';
 import 'diary_state.dart';
 
 final diaryViewModelProvider =
     StateNotifierProvider.autoDispose<DiaryViewModel, DiaryState>((ref) {
   DiaryViewModel notifier =
       DiaryViewModel(ref.watch(storyRepositoryImplProvider));
-  notifier._loadStories();
+  notifier.loadStories();
   return notifier;
 });
 
@@ -23,26 +22,18 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
 
   DiaryViewModel(this.repository) : super(const DiaryState());
 
-  void onEvent(DiaryEvent event) {
-    event.when(
-        filterStories: (StoriesFilter storyFilter) {
-          _filterStories(storyFilter);
-        },
-        loadStories: _loadStories);
-  }
-
-  void _loadStories() async {
+  void loadStories() async {
     final Result<List<Story>> result = await repository.getStories();
     result.when(
       success: (getStories) {
         stories = getStories;
-        _filterStories(const StoriesFilter.noFilter());
+        filterStories(const StoriesFilter.noFilter());
       },
       error: (message) {},
     );
   }
 
-  void _filterStories(StoriesFilter storyFilter) {
+  void filterStories(StoriesFilter storyFilter) {
     Map<String, List<Story>> classifiedStories = {};
     for (final story in stories) {
       final String key = _makeStoryKey(story);

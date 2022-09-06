@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../../domain/model/user.dart';
 import '../../models/user.dart';
 
 class TopProfileInfo extends StatelessWidget {
-  final UserProfile profile;
+  final User user;
 
-  const TopProfileInfo({Key? key, required this.profile}) : super(key: key);
+  const TopProfileInfo({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class TopProfileInfo extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
                 image: DecorationImage(
-                  image: NetworkImage(profile.profileImage),
+                  image: NetworkImage(user.profileImage),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: kElevationToShadow[4],
@@ -44,7 +45,7 @@ class TopProfileInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${profile.nickName}',
+                      '${user.nickName}',
                       style: theme.textTheme.headline5,
                     ),
                     const SizedBox(
@@ -52,7 +53,7 @@ class TopProfileInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text('${profile.description}'),
+                Text('${user.description}'),
               ],
             ),
           ],

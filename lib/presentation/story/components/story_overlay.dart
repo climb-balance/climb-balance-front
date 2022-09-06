@@ -1,5 +1,5 @@
 import 'package:climb_balance/common/const/route_config.dart';
-import 'package:climb_balance/presentation/story/story_event.dart';
+import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +8,6 @@ import 'package:video_player/video_player.dart';
 
 import '../../../domain/util/feedback_status.dart';
 import '../../../models/user.dart';
-import '../../../providers/user_provider.dart';
 import '../../../ui/widgets/user_profile_info.dart';
 import '../story_view_model.dart';
 import 'progress_bar.dart';
@@ -105,7 +104,8 @@ class StoryButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final curUserId = ref.watch(userProvider.select((value) => value.userId));
+    final curUserId =
+        ref.watch(currentUserProvider.select((value) => value.userId));
     final story = ref.watch(storyViewModelProvider(storyId));
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -127,9 +127,7 @@ class StoryButtons extends ConsumerWidget {
           ),
         TextButton(
           onPressed: () {
-            ref
-                .read(storyViewModelProvider(storyId).notifier)
-                .onEvent(const StoryEvent.likeStory());
+            ref.read(storyViewModelProvider(storyId).notifier).likeStory();
           },
           child: Column(
             children: [

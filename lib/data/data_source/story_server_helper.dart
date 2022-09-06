@@ -1,22 +1,22 @@
 import 'dart:convert';
 
-import 'package:climb_balance/data/data_source/server_comm.dart';
+import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/const/data.dart';
+import '../../common/const/server_config.dart';
+import '../../common/models/result.dart';
 import '../../domain/model/story.dart';
-import 'result.dart';
 
 // TODO move to di
 final storyServerHelperProvider = Provider<StoryServerHelper>((ref) {
-  final server = ref.watch(serverProvider);
+  final server = ref.watch(serverServiceProvider);
   return StoryServerHelper(server);
 });
 
 class StoryServerHelper {
-  ServerComm server;
+  final ServerService server;
 
-  StoryServerHelper(this.server);
+  const StoryServerHelper(this.server);
 
   Future<Result<void>> createStory(
     Story story,

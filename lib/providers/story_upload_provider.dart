@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../data/data_source/result.dart';
+import '../common/models/result.dart';
 import '../models/story_upload.dart';
 
 class StoryUploadNotifier extends StateNotifier<StoryUpload> {

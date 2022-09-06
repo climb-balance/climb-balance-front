@@ -1,25 +1,30 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/settings.dart';
+import '../../../common/models/settings.dart';
+
+final storageServiceProvider = Provider<StorageService>((ref) {
+  return StorageService();
+});
 
 class StorageService {
-  static Future<Map<String, String>> getStoredToken() async {
+  Future<Map<String, String>> getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
     return {'token': token};
   }
 
-  static Future<void> storeStoredToken({required String token}) async {
+  Future<void> storeStoredToken({required String token}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
   }
 
-  static Future<void> clearStoredToken() async {
+  Future<void> clearStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', '');
   }
 
-  static Future<Settings> getStoredSettings() async {
+  Future<Settings> getStoredSettings() async {
     final prefs = await SharedPreferences.getInstance();
     bool darkMode = prefs.getBool('darkmode') ?? false;
     bool expertMode = prefs.getBool('expertmode') ?? false;
@@ -28,7 +33,7 @@ class StorageService {
     return settings;
   }
 
-  static Future<void> storeSettings(Settings settings) async {
+  Future<void> storeSettings(Settings settings) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('darkmode', settings.darkMode);
     await prefs.setBool('expertmode', settings.expertMode);

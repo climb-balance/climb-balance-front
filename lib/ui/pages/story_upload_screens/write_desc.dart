@@ -3,7 +3,7 @@ import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/data_source/result.dart';
+import '../../../common/models/result.dart';
 import '../../../presentation/common/components/safe_area.dart';
 import '../../../presentation/common/components/waiting_progress.dart';
 import '../../../presentation/common/custom_dialog.dart';
