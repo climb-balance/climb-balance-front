@@ -1,6 +1,5 @@
 import 'package:climb_balance/common/provider/router_provider.dart';
 import 'package:climb_balance/presentation/story/story_screen.dart';
-import 'package:climb_balance/providers/firebase.dart';
 import 'package:climb_balance/services/server_service.dart';
 import 'package:climb_balance/ui/theme/main_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'common/provider/firebase_provider.dart';
 import 'common/provider/settings_provider.dart';
 
 void main() {
