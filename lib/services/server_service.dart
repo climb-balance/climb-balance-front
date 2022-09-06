@@ -5,7 +5,7 @@ import 'package:climb_balance/services/server_request.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../models/result.dart';
+import '../data/data_source/result.dart';
 import '../models/story_upload.dart';
 import '../presentation/ai_feedback/ai_feedback_state.dart';
 import 'server_config.dart';

@@ -1,18 +1,16 @@
 import 'dart:math';
 
 import 'package:climb_balance/presentation/common/components/my_icons.dart';
-import 'package:climb_balance/utils/durations.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../providers/feedback_status.dart';
 import '../common/components/bot_navigation_bar.dart';
 import '../common/components/safe_area.dart';
 import 'components/continuous_statistics.dart';
 import 'components/heat_map.dart';
 import 'components/image_banner_preview.dart';
+import 'home_view_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -99,9 +97,9 @@ class ExpertFeedbackStatus extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final finishedExpertFeedback = ref.watch(
-        feedbackStatusProvider.select((value) => value.finishedExpertFeedback));
+        homeViewModelProvider.select((value) => value.completedExpertFeedback));
     final waitingExpertFeedback = ref.watch(
-        feedbackStatusProvider.select((value) => value.waitingExpertFeedback));
+        homeViewModelProvider.select((value) => value.waitingExpertFeedback));
 
     return Flexible(
       fit: FlexFit.tight,
@@ -147,7 +145,6 @@ class AiFeedbackStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final aiStatus = ref.watch(feedbackStatusProvider);
 
     return Flexible(
       fit: FlexFit.tight,
@@ -165,7 +162,8 @@ class AiFeedbackStatus extends ConsumerWidget {
               ),
               SizedBox(
                 height: 110,
-                child: aiStatus.aiIsWaiting
+                // TODO connect main state
+                child: true
                     ? const AiFeedbackStatusInform()
                     : const NoFeedbackInform(),
               ),
@@ -185,41 +183,13 @@ class AiFeedbackStatusInform extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final aiStatus = ref.watch(feedbackStatusProvider);
+
     return Column(
       children: [
         SizedBox(
           height: 80,
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: PieChart(
-              PieChartData(
-                centerSpaceRadius: 10,
-                startDegreeOffset: 270,
-                sectionsSpace: 0,
-                sections: [
-                  PieChartSectionData(
-                    showTitle: false,
-                    color: theme.colorScheme.primary,
-                    value: aiStatus.aiWaitingTime.inSeconds.toDouble() -
-                        aiStatus.aiLeftTime.inSeconds,
-                    radius: 30,
-                  ),
-                  PieChartSectionData(
-                    showTitle: false,
-                    color: theme.colorScheme.secondary,
-                    value: aiStatus.aiLeftTime.inSeconds.toDouble(),
-                    radius: 30,
-                  ),
-                ],
-              ),
-              swapAnimationDuration: const Duration(milliseconds: 850),
-              swapAnimationCurve: Curves.linear,
-            ),
-          ),
+          child: AspectRatio(aspectRatio: 1, child: Text('s')),
         ),
-        Text(formatDuration(aiStatus.aiLeftTime),
-            style: theme.textTheme.subtitle1),
       ],
     );
   }

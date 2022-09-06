@@ -1,3 +1,4 @@
+import 'package:climb_balance/presentation/account/account.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
 import 'package:climb_balance/presentation/community/community_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import '../../presentation/feedback_list/feedback_list.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/story/story_screen.dart';
 import '../../providers/user_provider.dart';
-import '../../ui/pages/account_page/account/account.dart';
 import '../../ui/pages/auth/auth.dart';
 import '../const/route_config.dart';
 
@@ -75,7 +75,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: accountPageRoute,
         pageBuilder: (context, state) => const MaterialPage<void>(
-          child: Account(),
+          child: AccountScreen(),
         ),
       ),
       GoRoute(

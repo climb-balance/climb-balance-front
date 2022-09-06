@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:climb_balance/services/server_service.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../models/result.dart';
+import '../data/data_source/result.dart';
 import '../models/story_upload.dart';
 
 class StoryUploadNotifier extends StateNotifier<StoryUpload> {

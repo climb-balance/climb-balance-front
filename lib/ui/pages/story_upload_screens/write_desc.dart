@@ -1,9 +1,9 @@
 import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../models/result.dart';
+import '../../../data/data_source/result.dart';
 import '../../../presentation/common/components/safe_area.dart';
 import '../../../presentation/common/components/waiting_progress.dart';
 import '../../../presentation/common/custom_dialog.dart';

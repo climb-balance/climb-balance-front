@@ -1,15 +1,13 @@
-import 'package:climb_balance/models/result.dart';
 import 'package:climb_balance/providers/firebase.dart';
 import 'package:climb_balance/services/server_service.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/feedback_status.dart';
+import '../data/data_source/result.dart';
 
 class FeedbackRequestNotifier extends StateNotifier<void> {
   final StateNotifierProviderRef<FeedbackRequestNotifier, void> ref;
 
-  FeedbackRequestNotifier({required this.ref}) : super(const FeedbackStatus());
+  FeedbackRequestNotifier({required this.ref}) : super(null);
 
   Future<Result<bool>> requestAi(int storyId) async {
     final String pushToken = ref.watch(firebaseProvider)!;

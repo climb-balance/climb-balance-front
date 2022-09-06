@@ -1,7 +1,7 @@
 import 'package:climb_balance/models/expert_profile.dart';
 import 'package:climb_balance/models/user.dart';
 import 'package:climb_balance/services/storage_service.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UserNotifier extends StateNotifier<UserProfile> {
   final ref;

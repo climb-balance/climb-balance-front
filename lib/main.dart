@@ -1,6 +1,5 @@
 import 'package:climb_balance/common/provider/router_provider.dart';
 import 'package:climb_balance/presentation/story/story_screen.dart';
-import 'package:climb_balance/providers/feedback_status.dart';
 import 'package:climb_balance/providers/firebase.dart';
 import 'package:climb_balance/providers/settings.dart';
 import 'package:climb_balance/services/server_service.dart';
@@ -29,7 +28,6 @@ class MyApp extends ConsumerWidget {
       final data = message.data;
 
       if (data['notification_id'] == 'AI_COMPLETE') {}
-      ref.read(feedbackStatusProvider.notifier).clearTimer();
       final result = await ServerService.getStory(data['video_id'] ?? 1);
       result.when(
         success: (storyId) {

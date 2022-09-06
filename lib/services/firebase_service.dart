@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../models/result.dart';
+import '../data/data_source/result.dart';
 
 class FirebaseService {
   static Future<Result<String>> getFirebaseMessagingToken() async {

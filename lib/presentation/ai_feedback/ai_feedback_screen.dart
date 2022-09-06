@@ -234,7 +234,7 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: (precision / 5).toInt(),
+              numOfStar: precision ~/ 5,
             ),
           ],
         ),
@@ -244,7 +244,7 @@ class AiFeedbackScore extends StatelessWidget {
               '유연성',
               style: theme.textTheme.headline6,
             ),
-            Stars(
+            const Stars(
               numOfStar: 5,
             ),
           ],
@@ -256,7 +256,7 @@ class AiFeedbackScore extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Stars(
-              numOfStar: (balance / 5).toInt(),
+              numOfStar: balance ~/ 5,
             ),
           ],
         ),
