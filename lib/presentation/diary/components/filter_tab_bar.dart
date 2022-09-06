@@ -22,7 +22,13 @@ class FilterTabBar extends StatelessWidget {
       forceElevated: true,
       toolbarHeight: 40,
       flexibleSpace: FlexibleSpaceBar(
-        background: Row(),
+        background: Row(
+          children: const [
+            FilterItem(filterTitle: '전체', filter: StoriesFilter.noFilter()),
+            FilterItem(filterTitle: 'AI', filter: StoriesFilter.aiOnly()),
+            FilterItem(filterTitle: '전문가', filter: StoriesFilter.expertOnly()),
+          ],
+        ),
       ),
     );
   }
@@ -40,11 +46,26 @@ class FilterItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return OutlinedButton(
-      onPressed: () {
-        ref.read(diaryViewModelProvider.notifier).filterStories(filter);
-      },
-      child: Text(filterTitle),
+    final currentFilter =
+        ref.watch(diaryViewModelProvider.select((value) => value.storyFilter));
+    final theme = Theme.of(context);
+    return Flexible(
+      fit: FlexFit.tight,
+      child: InkWell(
+        onTap: () {
+          ref.read(diaryViewModelProvider.notifier).filterStories(filter);
+        },
+        child: Center(
+          child: Text(
+            filterTitle,
+            style: TextStyle(
+              color: currentFilter == filter
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurface,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
