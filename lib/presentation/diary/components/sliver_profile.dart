@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../common/provider/current_user_provider.dart';
-import '../../../ui/widgets/user_profile_info.dart';
+import '../../common/components/user_profile_info.dart';
 
 class SliverProfile extends ConsumerWidget {
   const SliverProfile({Key? key}) : super(key: key);

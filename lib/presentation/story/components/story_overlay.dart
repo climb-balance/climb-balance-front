@@ -6,9 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../domain/model/user.dart';
 import '../../../domain/util/feedback_status.dart';
-import '../../../models/user.dart';
-import '../../../ui/widgets/user_profile_info.dart';
+import '../../common/components/user_profile_info.dart';
 import '../story_view_model.dart';
 import 'progress_bar.dart';
 import 'story_overlay_appbar.dart';
@@ -66,7 +66,7 @@ class StoryOverlay extends ConsumerWidget {
                 ),
               ),
               BottomUserProfile(
-                userProfile: genRandomUser(),
+                user: genRandomUser(),
                 description: story.description,
               ),
             ],

@@ -12,6 +12,7 @@ import '../../presentation/home/home_screen.dart';
 import '../../presentation/story/story_screen.dart';
 import '../../ui/pages/auth/auth.dart';
 import '../const/route_config.dart';
+import '../const/route_name.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final token = ref.watch(currentUserProvider.select((value) => value.token));
@@ -43,6 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: storyPageSubRoute,
+            name: diaryStoryName,
             builder: (context, state) {
               final storyId = int.parse(state.params['sid']!);
 

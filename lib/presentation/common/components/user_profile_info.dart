@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-import '../../domain/model/user.dart';
-import '../../models/user.dart';
+import '../../../domain/model/user.dart';
 
 class TopProfileInfo extends StatelessWidget {
   final User user;
@@ -45,7 +42,7 @@ class TopProfileInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${user.nickName}',
+                      user.nickName,
                       style: theme.textTheme.headline5,
                     ),
                     const SizedBox(
@@ -53,7 +50,7 @@ class TopProfileInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text('${user.description}'),
+                Text(user.description),
               ],
             ),
           ],
@@ -64,11 +61,11 @@ class TopProfileInfo extends StatelessWidget {
 }
 
 class BottomUserProfile extends StatelessWidget {
-  final UserProfile userProfile;
+  final User user;
   final String description;
 
   const BottomUserProfile(
-      {Key? key, required this.userProfile, required this.description})
+      {Key? key, required this.user, required this.description})
       : super(key: key);
 
   @override
@@ -78,7 +75,7 @@ class BottomUserProfile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
-          backgroundImage: Image.network(userProfile.profileImage).image,
+          backgroundImage: Image.network(user.profileImage).image,
           radius: 20,
         ),
         const SizedBox(
@@ -90,11 +87,11 @@ class BottomUserProfile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(userProfile.nickName),
+                Text(user.nickName),
               ],
             ),
             Text(
-              '${userProfile.height}cm/${userProfile.weight}kg',
+              '${user.height}cm/${user.weight}kg',
               style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.secondary,
               ),

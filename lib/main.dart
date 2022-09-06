@@ -1,12 +1,12 @@
 import 'package:climb_balance/common/provider/router_provider.dart';
-import 'package:climb_balance/presentation/story/story_screen.dart';
-import 'package:climb_balance/services/server_service.dart';
 import 'package:climb_balance/ui/theme/main_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'common/const/route_name.dart';
 import 'common/provider/firebase_provider.dart';
 import 'common/provider/settings_provider.dart';
 
@@ -17,7 +17,6 @@ void main() {
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO move firebase logic to main
@@ -28,20 +27,10 @@ class MyApp extends ConsumerWidget {
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       final data = message.data;
 
-      if (data['notification_id'] == 'AI_COMPLETE') {}
-      final result = await ServerService.getStory(data['video_id'] ?? 1);
-      result.when(
-        success: (storyId) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => StoryScreen(
-                storyId: storyId,
-              ),
-            ),
-          );
-        },
-        error: (message) {},
-      );
+      if (data['notification_id'] == 'AI_COMPLETE') {
+        final storyId = data['video_id'] ?? '1';
+        context.goNamed(diaryStoryName, params: {'sid': storyId});
+      }
     });
     final router = ref.watch(routerProvider);
     return MaterialApp.router(

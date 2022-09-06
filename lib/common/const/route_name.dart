@@ -1,0 +1,1 @@
+const diaryStoryName = 'diary-story';
