@@ -21,7 +21,16 @@ class UserServerHelper {
       final result = await server.get(serverProfilePath);
       return Result.success(jsonDecode(result));
     } catch (e) {
-      return const Result.error('영상 업로드 오류');
+      return const Result.error('내 정보 불러오기 오류');
+    }
+  }
+
+  Future<Result<Map<String, dynamic>>> getUserProfileById(int userId) async {
+    try {
+      final result = await server.get('$serverProfilePath/$userId');
+      return Result.success(jsonDecode(result));
+    } catch (e) {
+      return const Result.error('유저 정보 불러오기 오류');
     }
   }
 }

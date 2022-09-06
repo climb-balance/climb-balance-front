@@ -1,60 +1,80 @@
+import 'package:climb_balance/common/const/route_config.dart';
 import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
-import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
+import 'package:climb_balance/presentation/story/story_state.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../data/repository/user_repository_impl.dart';
 import '../../domain/util/feedback_status.dart';
-import '../ai_feedback/ai_feedback_ads_screen.dart';
 import '../common/custom_dialog.dart';
 
 final storyViewModelProvider = StateNotifierProvider.family
-    .autoDispose<StoryViewModel, Story, int>((ref, storyId) {
+    .autoDispose<StoryViewModel, StoryState, int>((ref, storyId) {
   StoryViewModel notifier = StoryViewModel(
     ref: ref,
-    repository: ref.watch(storyRepositoryImplProvider),
+    storyRepository: ref.watch(storyRepositoryImplProvider),
+    userRepository: ref.watch(userRepositoryImplProvider),
   );
   notifier._init(storyId);
   return notifier;
 });
 
-class StoryViewModel extends StateNotifier<Story> {
-  final AutoDisposeStateNotifierProviderRef<StoryViewModel, Story> ref;
-  final StoryRepository repository;
+class StoryViewModel extends StateNotifier<StoryState> {
+  final AutoDisposeStateNotifierProviderRef<StoryViewModel, StoryState> ref;
+  final StoryRepository storyRepository;
+  final UserRepositoryImpl userRepository;
 
-  StoryViewModel({required this.ref, required this.repository})
-      : super(const Story());
+  StoryViewModel({
+    required this.ref,
+    required this.storyRepository,
+    required this.userRepository,
+  }) : super(const StoryState());
 
   void _init(int storyId) async {
-    final result = await repository.getStoryById(storyId);
+    final result = await storyRepository.getStoryById(storyId);
     result.when(
-      success: (value) {
-        state = value;
+      success: (value) async {
+        state = state.copyWith(story: value);
+        _updateUploader(state.story.uploaderId);
       },
       error: (message) => {},
     );
   }
 
+  void _updateUploader(int uploaderId) async {
+    final result = await userRepository.getUserProfileById(uploaderId);
+    result.when(
+      success: (value) {
+        state.copyWith(
+          uploader: value,
+        );
+      },
+      error: (message) {},
+    );
+  }
+
   void likeStory() {
     // TODO implement
-    repository.likeStory();
+    storyRepository.likeStory();
   }
 
   void requestAiFeedback(BuildContext context) async {
     final int rank =
         ref.watch(currentUserProvider.select((value) => value.rank));
     if (rank == 0) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const AiFeedbackAdsScreen()));
-      return;
+      context.push(aiAdsPageSubRoute);
     }
-    final result = await repository.putAiFeedback(state.storyId);
+    final result = await storyRepository.putAiFeedback(state.story.storyId);
     result.when(
       success: (value) {
-        state = state.copyWith(aiStatus: FeedbackStatus.waiting);
+        state = state.copyWith(
+          story: state.story.copyWith(
+            aiStatus: FeedbackStatus.waiting,
+          ),
+        );
         customShowDialog(
                 context: context,
                 title: 'AI 피드백 요청 성공',
@@ -73,6 +93,6 @@ class StoryViewModel extends StateNotifier<Story> {
   }
 
   String getStoryVideoPath() {
-    return repository.getStoryVideoPathById(state.storyId);
+    return storyRepository.getStoryVideoPathById(state.story.storyId);
   }
 }

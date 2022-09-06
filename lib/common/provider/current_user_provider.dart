@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CurrentUserNotifier extends StateNotifier<User> {
   final ref;
+
+  // TODO by repository
   final StorageService storageService;
   final UserServerHelper server;
 

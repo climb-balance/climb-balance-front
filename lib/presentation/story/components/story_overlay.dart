@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../domain/model/user.dart';
 import '../../../domain/util/feedback_status.dart';
 import '../../common/components/user_profile_info.dart';
 import '../story_view_model.dart';
@@ -28,7 +27,10 @@ class StoryOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final story = ref.watch(storyViewModelProvider(storyId));
+    final story = ref
+        .watch(storyViewModelProvider(storyId).select((value) => value.story));
+    final uploader = ref.watch(
+        storyViewModelProvider(storyId).select((value) => value.uploader));
     return GestureDetector(
       onTapUp: (_) {
         if (!videoPlayerController.value.isInitialized) return;
@@ -66,7 +68,7 @@ class StoryOverlay extends ConsumerWidget {
                 ),
               ),
               BottomUserProfile(
-                user: genRandomUser(),
+                user: uploader,
                 description: story.description,
               ),
             ],
@@ -106,7 +108,8 @@ class StoryButtons extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final curUserId =
         ref.watch(currentUserProvider.select((value) => value.userId));
-    final story = ref.watch(storyViewModelProvider(storyId));
+    final story = ref
+        .watch(storyViewModelProvider(storyId).select((value) => value.story));
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,

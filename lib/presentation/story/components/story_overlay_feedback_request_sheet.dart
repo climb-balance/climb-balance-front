@@ -13,7 +13,8 @@ class StoryOverlayFeedbackRequestSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final story = ref.watch(storyViewModelProvider(storyId));
+    final story = ref
+        .watch(storyViewModelProvider(storyId).select((value) => value.story));
     final notifier = ref.read(storyViewModelProvider(storyId).notifier);
     return ListView(
       shrinkWrap: true,
