@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:climb_balance/models/expert_profile.dart';
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user.freezed.dart';
@@ -17,7 +16,6 @@ class UserProfile with _$UserProfile {
         String profileImage,
     @Default('') String description,
     @Default('') String token,
-    @Default(1234) int uniqueTag,
     @Default(-1) int height,
     @Default(-1) int weight,
     @Default(false) bool isExpert,
@@ -36,7 +34,6 @@ UserProfile genRandomUser({bool isExpert = true}) {
     return const UserProfile(
       nickName: '심규진',
       profileImage: 'https://i.ibb.co/d6SZN17/20220320-214742.jpg',
-      uniqueTag: 1234,
       height: 160,
       weight: 50,
       description: '안녕하세요. 즐거운 클라이밍해요!!',
@@ -47,7 +44,6 @@ UserProfile genRandomUser({bool isExpert = true}) {
   return UserProfile(
     nickName: '심규진',
     profileImage: 'https://i.ibb.co/d6SZN17/20220320-214742.jpg',
-    uniqueTag: 1234,
     height: 160,
     weight: 50,
     description: '안녕하세요. 즐거운 클라이밍해요!!',

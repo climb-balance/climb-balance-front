@@ -7,7 +7,6 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../domain/model/story.dart';
 import '../../../providers/tag_selector_provider.dart';
-import '../../story/story_screen.dart';
 
 // TODO rollback to stateless
 class StoryPreview extends ConsumerStatefulWidget {
@@ -45,16 +44,7 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.surfaceVariant,
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => StoryScreen(
-                story: widget.story,
-                handleBack: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          );
+          // TODO move to story
         },
         child: Stack(
           children: [

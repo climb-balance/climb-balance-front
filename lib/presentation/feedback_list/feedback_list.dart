@@ -1,13 +1,13 @@
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/services/server_service.dart';
-import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
-import 'package:climb_balance/ui/widgets/commons/stars.dart';
-import 'package:climb_balance/ui/widgets/commons/waiting_progress.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../widgets/story/tags.dart';
+import '../../../../presentation/common/components/tags.dart';
+import '../common/components/bot_navigation_bar.dart';
+import '../common/components/stars.dart';
+import '../common/components/waiting_progress.dart';
 
 class FeedbackList extends ConsumerStatefulWidget {
   const FeedbackList({Key? key}) : super(key: key);
@@ -57,7 +57,7 @@ class _FeedbackCardState extends State<FeedbackCard> {
   @override
   void initState() {
     super.initState();
-    _controller = ServerService.tmpStoryVideo(widget.story.storyId!);
+    _controller = ServerService.tmpStoryVideo(widget.story.storyId);
     _controller.initialize().then((value) {
       _controller.play();
       _controller.setLooping(true);
@@ -146,7 +146,7 @@ class FeedbackWrite extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => WaitingProgress(),
+                        builder: (context) => const WaitingProgress(),
                         fullscreenDialog: true,
                       ),
                     );

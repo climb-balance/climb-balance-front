@@ -4,6 +4,7 @@ import '../../data/data_source/result.dart';
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
+import '../../domain/util/feedback_status.dart';
 import '../../domain/util/stories_filter.dart';
 import 'diary_event.dart';
 import 'diary_state.dart';
@@ -46,10 +47,10 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
     for (final story in stories) {
       final String key = _makeStoryKey(story);
       if (storyFilter == const StoriesFilter.aiOnly() &&
-          story.aiAvailable != 3) {
+          story.aiStatus != FeedbackStatus.complete) {
         continue;
       } else if (storyFilter == const StoriesFilter.expertOnly() &&
-          story.expertAvailable != 3) {
+          story.expertStatus != FeedbackStatus.complete) {
         continue;
       }
       if (classifiedStories.containsKey(key)) {

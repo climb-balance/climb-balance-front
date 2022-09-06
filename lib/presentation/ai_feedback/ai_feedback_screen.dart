@@ -1,53 +1,26 @@
 import 'dart:math';
 
-import 'package:climb_balance/models/ai_feedback_detail.dart';
-import 'package:climb_balance/services/server_service.dart';
+import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../domain/model/story.dart';
-import '../../../../utils/durations.dart';
-import '../../../theme/specific_theme.dart';
-import '../../../widgets/commons/stars.dart';
+import '../../domain/util/duration_time.dart';
+import '../../ui/theme/specific_theme.dart';
+import '../common/components/stars.dart';
+import 'ai_feedback_state.dart';
 
-class AiFeedback extends StatefulWidget {
-  final Story story;
+class AiFeedbackScreen extends ConsumerStatefulWidget {
+  final int storyId;
 
-  const AiFeedback({Key? key, required this.story}) : super(key: key);
+  const AiFeedbackScreen({Key? key, required this.storyId}) : super(key: key);
 
   @override
-  State<AiFeedback> createState() => _AiFeedbackState();
+  ConsumerState<AiFeedbackScreen> createState() => _AiFeedbackScreenState();
 }
 
-class _AiFeedbackState extends State<AiFeedback> {
+class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen> {
   late final VideoPlayerController _controller;
-  AiFeedbackDetail detail = const AiFeedbackDetail(value: [0]);
-
-  @override
-  void initState() {
-    super.initState();
-
-    final path =
-        ServerService.getStoryVideoPath(widget.story.storyId!, isAi: true);
-    debugPrint(path);
-    _controller = VideoPlayerController.network(
-      path,
-      formatHint: VideoFormat.hls,
-    )..initialize().then((value) {
-        _controller.setLooping(true);
-        _controller.play();
-        setState(() {});
-      });
-    ServerService.getStoryAiDetail(widget.story.storyId!).then(
-      (result) => result.when(
-        success: (value) {
-          detail = value;
-          setState(() {});
-        },
-        error: (_) {},
-      ),
-    );
-  }
 
   @override
   void dispose() {
@@ -57,6 +30,17 @@ class _AiFeedbackState extends State<AiFeedback> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = ref.watch(aiFeedbackViewModelProvider(widget.storyId));
+    final notifier =
+        ref.read(aiFeedbackViewModelProvider(widget.storyId).notifier);
+    _controller = VideoPlayerController.network(
+      notifier.getStoryAiVideoPath(),
+      formatHint: VideoFormat.hls,
+    )..initialize().then((value) {
+        _controller.setLooping(true);
+        _controller.play();
+        setState(() {});
+      });
     final size = MediaQuery.of(context).size;
     return StoryViewTheme(
       child: SafeArea(
@@ -81,7 +65,7 @@ class _AiFeedbackState extends State<AiFeedback> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AiFeedbackProgressBar(
-                  detail: detail,
+                  detail: provider,
                   controller: _controller,
                 ),
               ),
@@ -93,7 +77,7 @@ class _AiFeedbackState extends State<AiFeedback> {
 }
 
 class AiFeedbackInformation extends StatelessWidget {
-  final AiFeedbackDetail detail;
+  final AiFeedbackState detail;
 
   const AiFeedbackInformation({Key? key, required this.detail})
       : super(key: key);
@@ -146,7 +130,7 @@ class AiFeedbackInformation extends StatelessWidget {
 }
 
 class AiFeedbackProgressBar extends StatefulWidget {
-  final AiFeedbackDetail detail;
+  final AiFeedbackState detail;
   final VideoPlayerController controller;
 
   const AiFeedbackProgressBar(

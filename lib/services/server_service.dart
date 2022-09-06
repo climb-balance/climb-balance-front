@@ -5,9 +5,9 @@ import 'package:climb_balance/services/server_request.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../models/ai_feedback_detail.dart';
 import '../models/result.dart';
 import '../models/story_upload.dart';
+import '../presentation/ai_feedback/ai_feedback_state.dart';
 import 'server_config.dart';
 
 // TODO remove
@@ -93,12 +93,12 @@ class ServerService {
     return '${ServerRequest.serverUrl}$ServerStoryPath/$storyId$serverVideoPath?type=thumbnail';
   }
 
-  static Future<Result<AiFeedbackDetail>> getStoryAiDetail(int storyId) async {
+  static Future<Result<AiFeedbackState>> getStoryAiDetail(int storyId) async {
     try {
       final body = await ServerRequest.get(
           '$ServerStoryPath/$storyId$serverVideoPath?type=json');
       debugPrint('a');
-      return Result.success(AiFeedbackDetail(
+      return Result.success(AiFeedbackState(
           value: List.from(
         body.cast<int>(),
       )));

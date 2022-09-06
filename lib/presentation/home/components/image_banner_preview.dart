@@ -1,46 +1,46 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ImageBanner extends ConsumerStatefulWidget {
-  const ImageBanner({Key? key}) : super(key: key);
+class ImageBannerPreview extends ConsumerStatefulWidget {
+  final double imageHeight;
+
+  const ImageBannerPreview({Key? key, this.imageHeight = 200})
+      : super(key: key);
 
   @override
-  ConsumerState<ImageBanner> createState() => _ImageBannerState();
+  ConsumerState<ImageBannerPreview> createState() => _ImageBannerPreviewState();
 }
 
-class _ImageBannerState extends ConsumerState<ImageBanner> {
-  static const double _height = 200;
-  final List<String> images = [
-    'https://i.ibb.co/QDQ2VKN/banner2.png',
-    'https://i.ibb.co/z7qX2Lt/banner1.png',
-    'https://img.freepik.com/free-vector/modern-website-banner-template-with-abstract-shapes_1361-3311.jpg?w=2000'
-  ];
-  int current = 0;
+class _ImageBannerPreviewState extends ConsumerState<ImageBannerPreview> {
+  int currentImageBannerIdx = 0;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final imageBanners =
+        ref.watch(homeViewModelProvider.select((value) => value.imageBanners));
     return Stack(
       children: [
         CarouselSlider(
-          items: images
+          items: imageBanners
               .map(
-                (image) => ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(_height / 8),
+                (imageBanner) => ClipRRect(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(widget.imageHeight / 8),
                   ),
-                  child: Image.network(image, fit: BoxFit.fill),
+                  child: Image.network(imageBanner.imageUrl, fit: BoxFit.fill),
                 ),
               )
               .toList(),
           options: CarouselOptions(
-            height: _height,
+            height: widget.imageHeight,
             autoPlay: true,
             viewportFraction: 1,
             onPageChanged: (index, _) {
               setState(() {
-                current = index;
+                currentImageBannerIdx = index;
               });
             },
           ),
@@ -50,9 +50,9 @@ class _ImageBannerState extends ConsumerState<ImageBanner> {
             alignment: AlignmentDirectional.bottomCenter,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: images.map(
-                (image) {
-                  int index = images.indexOf(image);
+              children: imageBanners.map(
+                (imageBanner) {
+                  int index = imageBanners.indexOf(imageBanner);
                   return Container(
                     width: 10,
                     height: 10,
@@ -63,7 +63,7 @@ class _ImageBannerState extends ConsumerState<ImageBanner> {
                         color: theme.colorScheme.surface,
                       ),
                       shape: BoxShape.circle,
-                      color: current == index
+                      color: currentImageBannerIdx == index
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurface,
                     ),

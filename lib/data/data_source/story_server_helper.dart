@@ -21,8 +21,8 @@ class StoryServerHelper {
   Future<Result<void>> createStory(
     Story story,
     String videoPath,
-    double start,
-    double end,
+    double? start,
+    double? end,
   ) async {
     int storyId;
     try {
@@ -77,6 +77,16 @@ class StoryServerHelper {
       return Result.success(jsonDecode(result)["url"]);
     } catch (e) {
       return const Result.error('썸네일 불러오기 오류');
+    }
+  }
+
+  Future<Result<Iterable>> getStoryAiDetailById(int storyId) async {
+    try {
+      final body = await server
+          .get('$serverStoryPath/$storyId$serverVideoPath?type=json');
+      return Result.success(jsonDecode(body));
+    } catch (e) {
+      return const Result.error('영상 불러오기 오류');
     }
   }
 

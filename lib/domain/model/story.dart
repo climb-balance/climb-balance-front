@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../util/feedback_status.dart';
 import 'story_tag.dart';
 
 part 'story.freezed.dart';
@@ -10,18 +11,17 @@ part 'story.g.dart';
 
 @freezed
 class Story with _$Story {
-  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Story({
-    required StoryTags tags,
+    @Default(StoryTags()) StoryTags tags,
     @Default(0) int likes,
     @Default('') String description,
     @Default(0) int comments,
-    @Default(0) int aiAvailable,
-    @Default(0) int expertAvailable,
+    @Default(FeedbackStatus.waiting) FeedbackStatus aiStatus,
+    @Default(FeedbackStatus.waiting) FeedbackStatus expertStatus,
     @Default(0) int uploadTimestamp,
     @Default('https://static-cse.canva.com/blob/651263/youtube.jpg')
         String thumbnailUrl,
-    required int uploaderId,
+    @Default(-1) int uploaderId,
     @Default(-1) int storyId,
   }) = _Story;
 
@@ -41,8 +41,8 @@ Story genRandomStory() {
     likes: random.nextInt(100),
     description: '안녕하세요',
     comments: random.nextInt(100),
-    aiAvailable: random.nextInt(3) + 1,
-    expertAvailable: random.nextInt(3) + 1,
+    aiStatus: FeedbackStatus.values[random.nextInt(3)],
+    expertStatus: FeedbackStatus.values[random.nextInt(3)],
     uploadTimestamp: DateTime.now().millisecondsSinceEpoch,
     thumbnailUrl: 'https://i.imgur.com/IAhL4iA.jpeg',
     uploaderId: 2,

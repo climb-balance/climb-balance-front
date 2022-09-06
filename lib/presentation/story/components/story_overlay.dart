@@ -1,13 +1,14 @@
+import 'package:climb_balance/common/const/route_config.dart';
 import 'package:climb_balance/presentation/story/story_event.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../domain/model/story.dart';
+import '../../../domain/util/feedback_status.dart';
 import '../../../models/user.dart';
 import '../../../providers/user_provider.dart';
-import '../../../ui/pages/feedback_page/ai_feedback/ai_feedback.dart';
 import '../../../ui/widgets/user_profile_info.dart';
 import '../story_view_model.dart';
 import 'progress_bar.dart';
@@ -16,21 +17,19 @@ import 'story_overlay_feedback_request_sheet.dart';
 
 class StoryOverlay extends ConsumerWidget {
   final VideoPlayerController videoPlayerController;
-  final AutoDisposeStateNotifierProvider<StoryViewModel, Story> provider;
-  final void Function() handleBack;
   final void Function() toggleCommentOpen;
+  final int storyId;
 
   const StoryOverlay({
     Key? key,
-    required this.provider,
-    required this.handleBack,
     required this.videoPlayerController,
     required this.toggleCommentOpen,
+    required this.storyId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final story = ref.watch(provider);
+    final story = ref.watch(storyViewModelProvider(storyId));
     return GestureDetector(
       onTapUp: (_) {
         if (!videoPlayerController.value.isInitialized) return;
@@ -40,14 +39,13 @@ class StoryOverlay extends ConsumerWidget {
       },
       child: Scaffold(
         floatingActionButton: StoryButtons(
-          provider: provider,
+          storyId: storyId,
           toggleCommentOpen: toggleCommentOpen,
         ),
         floatingActionButtonLocation: CustomFabLoc(),
         backgroundColor: Colors.transparent,
         appBar: StoryOverlayAppBar(
           tags: story.tags,
-          handleBack: handleBack,
         ),
         body: SafeArea(
           minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -96,32 +94,27 @@ class CustomFabLoc extends FloatingActionButtonLocation {
 }
 
 class StoryButtons extends ConsumerWidget {
-  final AutoDisposeStateNotifierProvider<StoryViewModel, Story> provider;
   final void Function() toggleCommentOpen;
+  final int storyId;
 
-  const StoryButtons(
-      {Key? key, required this.provider, required this.toggleCommentOpen})
-      : super(key: key);
+  const StoryButtons({
+    Key? key,
+    required this.toggleCommentOpen,
+    required this.storyId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final curUserId = ref.watch(userProvider.select((value) => value.userId));
-    final story = ref.watch(provider);
+    final story = ref.watch(storyViewModelProvider(storyId));
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (curUserId == curUserId && story.aiAvailable == 3)
+        if (curUserId == curUserId && story.aiStatus == FeedbackStatus.complete)
           TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AiFeedback(
-                    story: story,
-                  ),
-                ),
-              );
+              context.push(aiPageSubRoute);
             },
             child: Column(
               children: const [
@@ -134,7 +127,9 @@ class StoryButtons extends ConsumerWidget {
           ),
         TextButton(
           onPressed: () {
-            ref.read(provider.notifier).onEvent(const StoryEvent.likeStory());
+            ref
+                .read(storyViewModelProvider(storyId).notifier)
+                .onEvent(const StoryEvent.likeStory());
           },
           child: Column(
             children: [
@@ -174,14 +169,15 @@ class StoryButtons extends ConsumerWidget {
           ),
         ),
         if (curUserId == curUserId &&
-            (story.aiAvailable == 1 || story.expertAvailable == 1))
+            (story.aiStatus == FeedbackStatus.possible ||
+                story.expertStatus == FeedbackStatus.possible))
           TextButton(
             onPressed: () {
               showModalBottomSheet(
                 enableDrag: true,
                 context: context,
                 builder: (context) => StoryOverlayFeedbackRequestSheet(
-                  provider: provider,
+                  storyId: storyId,
                 ),
               );
             },

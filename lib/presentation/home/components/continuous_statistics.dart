@@ -1,26 +1,13 @@
+import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ContinuousStatistics extends StatefulWidget {
-  final List<int> datas;
+class ContinuousStatistics extends ConsumerWidget {
+  const ContinuousStatistics({Key? key}) : super(key: key);
 
-  const ContinuousStatistics({Key? key, required this.datas}) : super(key: key);
-
-  @override
-  State<ContinuousStatistics> createState() => _ContinuousStatisticsState();
-}
-
-class _ContinuousStatisticsState extends State<ContinuousStatistics> {
-  late final int cont;
-
-  @override
-  void initState() {
-    cont = getCont();
-    super.initState();
-  }
-
-  int getCont() {
-    for (int i = 1; i < widget.datas.length + 1; i++) {
-      if (widget.datas[widget.datas.length - i] > 0) {
+  int _getCont(datas) {
+    for (int i = 1; i < datas.length + 1; i++) {
+      if (datas[datas.length - i] > 0) {
         continue;
       }
       return i - 1;
@@ -29,7 +16,9 @@ class _ContinuousStatisticsState extends State<ContinuousStatistics> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cont = _getCont(ref
+        .watch(homeViewModelProvider.select((value) => value.climbingDatas)));
     final theme = Theme.of(context);
     return Flexible(
       fit: FlexFit.tight,
@@ -43,7 +32,7 @@ class _ContinuousStatisticsState extends State<ContinuousStatistics> {
               color: theme.colorScheme.tertiary.withOpacity(cont / 30),
               size: 75,
             ),
-            Text('연속 클라이밍'),
+            const Text('연속 클라이밍'),
           ],
         ),
       ),

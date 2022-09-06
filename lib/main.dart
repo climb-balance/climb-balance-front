@@ -32,14 +32,11 @@ class MyApp extends ConsumerWidget {
       ref.read(feedbackStatusProvider.notifier).clearTimer();
       final result = await ServerService.getStory(data['video_id'] ?? 1);
       result.when(
-        success: (story) {
+        success: (storyId) {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => StoryScreen(
-                story: story,
-                handleBack: () {
-                  Navigator.of(context).pop();
-                },
+                storyId: storyId,
               ),
             ),
           );

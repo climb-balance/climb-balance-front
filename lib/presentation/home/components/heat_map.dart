@@ -1,15 +1,17 @@
 import 'dart:math';
 
+import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HeatMap extends StatelessWidget {
-  final List<int> datas;
-
-  const HeatMap({Key? key, required this.datas}) : super(key: key);
+class HeatMap extends ConsumerWidget {
+  const HeatMap({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final datas =
+        ref.watch(homeViewModelProvider.select((value) => value.climbingDatas));
     final List<FlSpot> spotDatas = [];
     for (int i = 0; i < datas.length; i++) {
       spotDatas.add(FlSpot(i.toDouble(), datas[i].toDouble()));

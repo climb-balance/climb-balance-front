@@ -1,12 +1,13 @@
 import '../../data/data_source/result.dart';
+import '../../presentation/ai_feedback/ai_feedback_state.dart';
 import '../model/story.dart';
 
 abstract class StoryRepository {
   Future<Result<void>> createStory({
     required Story story,
     required String videoPath,
-    required double start,
-    required double end,
+    double? start,
+    double? end,
   });
 
   Future<Result<Story>> getRecommendStory();
@@ -17,6 +18,7 @@ abstract class StoryRepository {
 
   String getStoryVideoPathById(int storyId, {bool isAi = false});
 
+  Future<Result<AiFeedbackState>> getStoryAiDetailById(int storyId);
   Future<Result<Story>> getStoryById(int storyId);
 
   Future<void> updateStory(Story story);

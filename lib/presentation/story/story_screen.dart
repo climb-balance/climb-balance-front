@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../domain/model/story.dart';
 import '../../ui/theme/specific_theme.dart';
 import 'components/story_comments.dart';
 import 'components/story_overlay.dart';
 
 class StoryScreen extends ConsumerStatefulWidget {
-  final Story story;
-  final void Function() handleBack;
+  final int storyId;
 
-  const StoryScreen({Key? key, required this.story, required this.handleBack})
-      : super(key: key);
+  const StoryScreen({
+    Key? key,
+    required this.storyId,
+  }) : super(key: key);
 
   @override
   ConsumerState<StoryScreen> createState() => _StoryScreenState();
@@ -38,9 +38,10 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
   @override
   Widget build(BuildContext context) {
     const themeColor = ColorScheme.dark();
-    final provider = storyViewModelProvider(widget.story);
     _videoPlayerController = VideoPlayerController.network(
-      ref.read(provider.notifier).getStoryVideoPath(),
+      ref
+          .read(storyViewModelProvider(widget.storyId).notifier)
+          .getStoryVideoPath(),
       formatHint: VideoFormat.hls,
     );
     _videoPlayerController.initialize().then((_) {
@@ -78,8 +79,7 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
             ),
             if (!isCommentOpen)
               StoryOverlay(
-                provider: provider,
-                handleBack: widget.handleBack,
+                storyId: widget.storyId,
                 videoPlayerController: _videoPlayerController,
                 toggleCommentOpen: toggleCommentOpen,
               ),

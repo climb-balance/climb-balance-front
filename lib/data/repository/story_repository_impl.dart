@@ -1,6 +1,7 @@
 import 'package:climb_balance/data/data_source/story_server_helper.dart';
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
+import 'package:climb_balance/presentation/ai_feedback/ai_feedback_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/const/data.dart';
@@ -21,8 +22,8 @@ class StoryRepositoryImpl implements StoryRepository {
   Future<Result<void>> createStory({
     required Story story,
     required String videoPath,
-    required double start,
-    required double end,
+    double? start,
+    double? end,
   }) async {
     return await server.createStory(story, videoPath, start, end);
   }
@@ -68,6 +69,19 @@ class StoryRepositoryImpl implements StoryRepository {
     return result.when(
       success: (iterable) => Result.success(
           StoryList.fromJson({"story_list": iterable}).storyList),
+      error: (message) => Result.error(message),
+    );
+  }
+
+  @override
+  Future<Result<AiFeedbackState>> getStoryAiDetailById(int storyId) async {
+    final result = await server.getStoryAiDetailById(storyId);
+
+    return result.when(
+      success: (iterable) => Result.success(AiFeedbackState(
+          value: List.from(
+        iterable.cast<int>(),
+      ))),
       error: (message) => Result.error(message),
     );
   }

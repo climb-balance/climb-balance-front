@@ -3,20 +3,20 @@ import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:climb_balance/presentation/story/story_event.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../domain/util/feedback_status.dart';
 import '../../providers/user_provider.dart';
 import '../ai_feedback/ai_feedback_ads_screen.dart';
 import '../common/custom_dialog.dart';
 
 final storyViewModelProvider = StateNotifierProvider.family
-    .autoDispose<StoryViewModel, Story, Story>((ref, Story story) {
+    .autoDispose<StoryViewModel, Story, int>((ref, storyId) {
   StoryViewModel notifier = StoryViewModel(
-    story: story,
     ref: ref,
     repository: ref.watch(storyRepositoryImplProvider),
   );
+  notifier._init(storyId);
   return notifier;
 });
 
@@ -24,9 +24,18 @@ class StoryViewModel extends StateNotifier<Story> {
   final AutoDisposeStateNotifierProviderRef<StoryViewModel, Story> ref;
   final StoryRepository repository;
 
-  StoryViewModel(
-      {required Story story, required this.ref, required this.repository})
-      : super(story);
+  StoryViewModel({required this.ref, required this.repository})
+      : super(const Story());
+
+  void _init(int storyId) async {
+    final result = await repository.getStoryById(storyId);
+    result.when(
+      success: (value) {
+        state = value;
+      },
+      error: (message) => {},
+    );
+  }
 
   void onEvent(StoryEvent event) {
     event.when(
@@ -54,7 +63,7 @@ class StoryViewModel extends StateNotifier<Story> {
     final result = await repository.putAiFeedback(state.storyId);
     result.when(
       success: (value) {
-        state = state.copyWith(aiAvailable: 1);
+        state = state.copyWith(aiStatus: FeedbackStatus.waiting);
         customShowDialog(
                 context: context,
                 title: 'AI 피드백 요청 성공',

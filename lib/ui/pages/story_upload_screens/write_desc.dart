@@ -1,12 +1,12 @@
 import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
-import 'package:climb_balance/ui/widgets/commons/global_dialog.dart';
-import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
-import 'package:climb_balance/ui/widgets/commons/waiting_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/result.dart';
+import '../../../presentation/common/components/safe_area.dart';
+import '../../../presentation/common/components/waiting_progress.dart';
+import '../../../presentation/common/custom_dialog.dart';
 import 'bottom_step_bar.dart';
 
 class WriteDesc extends ConsumerStatefulWidget {

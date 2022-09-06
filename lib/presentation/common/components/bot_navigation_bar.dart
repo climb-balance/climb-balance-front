@@ -17,11 +17,11 @@ class BotNavigationBar extends ConsumerWidget {
     final bool isExpert =
         ref.watch(settingsProvider.select((value) => value.expertMode));
     final List<String> paths = [
-      HOME_PAGE_PATH,
-      COMMUNITY_PAGE_PATH,
+      homePageRoute,
+      communityPageRoute,
       '',
-      isExpert ? FEEDBACK_PAGE_PATH : DIARY_PAGE_PATH,
-      ACCOUNT_PAGE_PATH
+      isExpert ? feedbackPageRoute : diaryPageRoute,
+      accountPageRoute
     ];
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,

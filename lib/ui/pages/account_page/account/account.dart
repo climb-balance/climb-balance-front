@@ -1,8 +1,8 @@
 import 'package:climb_balance/ui/pages/account_page/account/setting_card.dart';
-import 'package:climb_balance/ui/widgets/bot_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../presentation/common/components/bot_navigation_bar.dart';
 import '../../../../providers/user_provider.dart';
 import 'account_settings.dart';
 

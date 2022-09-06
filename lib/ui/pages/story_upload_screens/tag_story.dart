@@ -2,11 +2,11 @@ import 'package:climb_balance/providers/story_upload_provider.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/modal_picker.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
-import 'package:climb_balance/ui/widgets/commons/safe_area.dart';
-import 'package:climb_balance/ui/widgets/story/tags.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../presentation/common/components/safe_area.dart';
+import '../../../presentation/common/components/tags.dart';
 import '../../../providers/tag_selector_provider.dart';
 import 'bottom_step_bar.dart';
 
