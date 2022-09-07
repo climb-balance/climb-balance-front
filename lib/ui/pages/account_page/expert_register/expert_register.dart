@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/models/expert_profile.dart';
+import 'package:climb_balance/presentation/common/components/avatarPicker.dart';
 import 'package:climb_balance/providers/expert_register.dart';
-import 'package:climb_balance/ui/widgets/avatarPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

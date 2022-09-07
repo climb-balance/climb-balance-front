@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/tag_selector.dart';
+import '../../../common/models/tag_selector.dart';
 
 class PickItem extends StatelessWidget {
   final Selector data;

@@ -5,13 +5,13 @@ abstract class Selector {
   String name;
   Color? color;
 
-  Selector({this.id = -1, this.name = '', this.color});
+  Selector({this.id = 0, this.name = '', this.color});
 }
 
 class LocationSelector extends Selector {
-  LocationSelector({super.id = -1, super.name = ''});
+  LocationSelector({super.id = 0, super.name = ''});
 }
 
 class DifficultySelector extends Selector {
-  DifficultySelector({super.id = -1, super.name = '', required super.color});
+  DifficultySelector({super.id = 0, super.name = '', required super.color});
 }

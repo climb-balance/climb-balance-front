@@ -1,10 +1,10 @@
+import 'package:climb_balance/presentation/common/components/search.dart';
 import 'package:climb_balance/ui/pages/story_upload_screens/pick_item.dart';
-import 'package:climb_balance/ui/widgets/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../models/tag_selector.dart';
-import '../../../providers/tag_selector_provider.dart';
+import '../../../common/models/tag_selector.dart';
+import '../../../common/provider/tag_selector_provider.dart';
 
 class ModalPicker extends ConsumerWidget {
   final AutoDisposeStateNotifierProvider<SelectorNotifier, List<Selector>>

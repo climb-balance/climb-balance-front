@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../ui/theme/specific_theme.dart';
+import '../ui/theme/specific_theme.dart';
 import 'components/story_comments.dart';
 import 'components/story_overlay.dart';
 

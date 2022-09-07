@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../../../common/provider/tag_selector_provider.dart';
 import '../../../domain/model/story.dart';
-import '../../../providers/tag_selector_provider.dart';
 
 // TODO rollback to stateless
 class StoryPreview extends ConsumerStatefulWidget {

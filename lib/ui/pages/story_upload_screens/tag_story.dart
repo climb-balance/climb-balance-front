@@ -5,9 +5,9 @@ import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../common/provider/tag_selector_provider.dart';
 import '../../../presentation/common/components/safe_area.dart';
 import '../../../presentation/common/components/tags.dart';
-import '../../../providers/tag_selector_provider.dart';
 import 'bottom_step_bar.dart';
 
 class TagStory extends ConsumerWidget {

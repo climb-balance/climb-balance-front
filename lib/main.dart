@@ -1,5 +1,5 @@
 import 'package:climb_balance/common/provider/router_provider.dart';
-import 'package:climb_balance/ui/theme/main_theme.dart';
+import 'package:climb_balance/presentation/ui/theme/main_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

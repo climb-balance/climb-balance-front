@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../domain/util/duration_time.dart';
-import '../../ui/theme/specific_theme.dart';
 import '../common/components/stars.dart';
+import '../ui/theme/specific_theme.dart';
 import 'ai_feedback_state.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {

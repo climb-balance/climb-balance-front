@@ -44,7 +44,7 @@ class _SearchTextInputState extends State<SearchTextInput> {
         onChanged: widget.handleQuery,
         style: Theme.of(context).textTheme.subtitle2,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
           labelText: widget.searchLabel,
         ),
       ),
