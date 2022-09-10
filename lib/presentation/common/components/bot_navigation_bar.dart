@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../common/provider/settings_provider.dart';
-import '../../../ui/pages/story_upload_screens/pick_video.dart';
+import '../../story_upload_screens/pick_video_screen.dart';
 
 class BotNavigationBar extends ConsumerWidget {
   final int currentIdx;
@@ -55,7 +55,7 @@ class BotNavigationBar extends ConsumerWidget {
     debugPrint(GoRouter.of(context).location);
     if (index == 2) {
       showModalBottomSheet(
-          context: context, builder: (context) => const PickVideo());
+          context: context, builder: (context) => const PickVideoScreen());
     } else {
       GoRouter.of(context).go(paths[index]);
     }

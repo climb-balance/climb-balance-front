@@ -1,5 +1,4 @@
 import 'package:climb_balance/domain/model/story.dart';
-import 'package:climb_balance/services/server_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -57,12 +56,12 @@ class _FeedbackCardState extends State<FeedbackCard> {
   @override
   void initState() {
     super.initState();
-    _controller = ServerService.tmpStoryVideo(widget.story.storyId);
-    _controller.initialize().then((value) {
-      _controller.play();
-      _controller.setLooping(true);
-      setState(() {});
-    });
+    // _controller = ServerService.tmpStoryVideo(widget.story.storyId);
+    // _controller.initialize().then((value) {
+    //   _controller.play();
+    //   _controller.setLooping(true);
+    //   setState(() {});
+    // });
   }
 
   @override

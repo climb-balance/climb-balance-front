@@ -2,6 +2,7 @@ import 'package:climb_balance/data/data_source/story_server_helper.dart';
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_state.dart';
+import 'package:climb_balance/presentation/story_upload_screens/story_upload_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/const/server_config.dart';
@@ -20,12 +21,9 @@ class StoryRepositoryImpl implements StoryRepository {
 
   @override
   Future<Result<void>> createStory({
-    required Story story,
-    required String videoPath,
-    double? start,
-    double? end,
+    required StoryUploadState storyUpload,
   }) async {
-    return await server.createStory(story, videoPath, start, end);
+    return await server.createStory(storyUpload);
   }
 
   @override

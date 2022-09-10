@@ -1,14 +1,10 @@
 import '../../common/models/result.dart';
 import '../../presentation/ai_feedback/ai_feedback_state.dart';
+import '../../presentation/story_upload_screens/story_upload_state.dart';
 import '../model/story.dart';
 
 abstract class StoryRepository {
-  Future<Result<void>> createStory({
-    required Story story,
-    required String videoPath,
-    double? start,
-    double? end,
-  });
+  Future<Result<void>> createStory({required StoryUploadState storyUpload});
 
   Future<Result<Story>> getRecommendStory();
 

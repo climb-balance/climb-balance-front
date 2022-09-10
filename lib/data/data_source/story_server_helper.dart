@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../common/const/server_config.dart';
 import '../../common/models/result.dart';
 import '../../domain/model/story.dart';
+import '../../presentation/story_upload_screens/story_upload_state.dart';
 
 // TODO move to di
 final storyServerHelperProvider = Provider<StoryServerHelper>((ref) {
@@ -18,27 +19,22 @@ class StoryServerHelper {
 
   const StoryServerHelper(this.server);
 
-  Future<Result<void>> createStory(
-    Story story,
-    String videoPath,
-    double? start,
-    double? end,
-  ) async {
+  Future<Result<void>> createStory(StoryUploadState storyUpload) async {
     int storyId;
     try {
-      final result = await server.post(serverStoryPath, story);
+      final result = await server.post(serverStoryPath, storyUpload);
       storyId = jsonDecode(result)['story_id'];
     } catch (e) {
       return const Result.error('스토리 업로드 오류');
     }
 
-    return await uploadVideo(storyId, videoPath);
+    return await uploadVideo(storyId, storyUpload.videoPath);
   }
 
-  Future<Result<void>> uploadVideo(int storyId, String videoPath) async {
+  Future<Result<void>> uploadVideo(int storyId, String? videoPath) async {
     try {
       server.multiPartUpload(
-          '$serverStoryPath/$storyId$serverVideoPath', videoPath);
+          '$serverStoryPath/$storyId$serverVideoPath', videoPath!);
     } catch (e) {
       return const Result.error('영상 업로드 오류');
     }

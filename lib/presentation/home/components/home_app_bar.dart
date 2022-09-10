@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
   const HomeAppBar({Key? key}) : super(key: key);
@@ -34,13 +35,28 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       actions: [
-        Icon(
-          Icons.notifications,
-          color: theme.colorScheme.primary,
+        InkWell(
+          onTap: () {
+            context.go('/');
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+            child: Icon(
+              Icons.add_photo_alternate_outlined,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+          child: Icon(
+            Icons.notifications,
+            color: theme.colorScheme.primary,
+          ),
         ),
         const SizedBox(
-          width: 20,
-        )
+          width: 10,
+        ),
       ],
     );
   }

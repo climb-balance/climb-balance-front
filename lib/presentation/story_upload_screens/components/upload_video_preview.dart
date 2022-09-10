@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../../../providers/story_upload_provider.dart';
+import '../story_upload_view_model.dart';
 
 class UploadVideoPreview extends ConsumerWidget {
   const UploadVideoPreview({
@@ -20,7 +20,7 @@ class UploadVideoPreview extends ConsumerWidget {
           height: size,
           color: theme.colorScheme.secondaryContainer,
           child: VideoViewer(
-            trimmer: ref.watch(storyUploadProvider.notifier).trimmer,
+            trimmer: ref.watch(storyUploadViewModelProvider.notifier).trimmer,
           ),
         );
       },

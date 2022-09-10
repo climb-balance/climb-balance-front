@@ -1,19 +1,21 @@
-import 'package:climb_balance/providers/story_upload_provider.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/tag_story.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
+import 'package:climb_balance/presentation/story_upload_screens/story_upload_view_model.dart';
+import 'package:climb_balance/presentation/story_upload_screens/tag_story_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import 'bottom_step_bar.dart';
+import 'components/bottom_step_bar.dart';
+import 'components/upload_video_preview.dart';
 
-class EditVideo extends ConsumerWidget {
-  const EditVideo({Key? key}) : super(key: key);
+class EditVideoScreen extends ConsumerWidget {
+  const EditVideoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final trimmer = ref.watch(storyUploadProvider.notifier).loadTrimmer();
-    final handleEdit = ref.watch(storyUploadProvider.notifier).handleEditNext;
+    final trimmer =
+        ref.watch(storyUploadViewModelProvider.notifier).loadTrimmer();
+    final handleEdit =
+        ref.watch(storyUploadViewModelProvider.notifier).handleEditNext;
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +31,7 @@ class EditVideo extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            UploadVideoPreview(),
+            const UploadVideoPreview(),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Column(
@@ -60,7 +62,7 @@ class EditVideo extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const TagStory(),
+              builder: (BuildContext context) => const TagStoryScreen(),
             ),
           );
         },

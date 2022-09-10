@@ -1,5 +1,4 @@
-import 'package:climb_balance/providers/story_upload_provider.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
+import 'package:climb_balance/presentation/story_upload_screens/story_upload_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,22 +6,24 @@ import '../../../common/models/result.dart';
 import '../../../presentation/common/components/safe_area.dart';
 import '../../../presentation/common/components/waiting_progress.dart';
 import '../../../presentation/common/custom_dialog.dart';
-import 'bottom_step_bar.dart';
+import 'components/bottom_step_bar.dart';
+import 'components/upload_video_preview.dart';
 
-class WriteDesc extends ConsumerStatefulWidget {
-  const WriteDesc({Key? key}) : super(key: key);
+class DescStoryScreen extends ConsumerStatefulWidget {
+  const DescStoryScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<WriteDesc> createState() => _DetailVideoState();
+  ConsumerState<DescStoryScreen> createState() => _DescStoryScreenState();
 }
 
-class _DetailVideoState extends ConsumerState<WriteDesc> {
+class _DescStoryScreenState extends ConsumerState<DescStoryScreen> {
   bool isWaiting = false;
 
   void handleUpload() async {
     isWaiting = true;
     setState(() {});
-    Result<bool> result = await ref.read(storyUploadProvider.notifier).upload();
+    Result<void> result =
+        await ref.read(storyUploadViewModelProvider.notifier).upload();
     result.when(
       success: (value) {
         // TODO : fix route
@@ -82,7 +83,7 @@ class WriteDescription extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final updateDetail =
-        ref.read(storyUploadProvider.notifier).updateDescription;
+        ref.read(storyUploadViewModelProvider.notifier).updateDescription;
     return TextField(
       maxLines: 4,
       decoration: const InputDecoration(

@@ -1,20 +1,36 @@
 import 'dart:io';
 
-import 'package:climb_balance/services/server_service.dart';
+import 'package:climb_balance/data/repository/story_repository_impl.dart';
+import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../common/models/result.dart';
-import '../models/story_upload.dart';
+import '../../common/models/result.dart';
+import 'story_upload_state.dart';
 
-class StoryUploadNotifier extends StateNotifier<StoryUpload> {
-  StoryUploadNotifier() : super(const StoryUpload());
+final storyUploadViewModelProvider =
+    StateNotifierProvider.autoDispose<StoryUploadViewModel, StoryUploadState>(
+        (ref) {
+  StoryUploadViewModel notifier = StoryUploadViewModel(
+    ref: ref,
+    repository: ref.watch(storyRepositoryImplProvider),
+  );
+  return notifier;
+});
+
+class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
+  final ref;
+  final StoryRepository repository;
+
+  StoryUploadViewModel({required this.repository, required this.ref})
+      : super(const StoryUploadState());
 
   final Trimmer _trimmer = Trimmer();
 
   Future<void> handlePick({required bool isCam}) async {
-    state = StoryUpload(videoDate: DateTime.now());
+    state =
+        StoryUploadState(videoTimestamp: DateTime.now().millisecondsSinceEpoch);
 
     final ImagePicker picker = ImagePicker();
     final image = isCam
@@ -23,13 +39,10 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     if (image == null) {
       throw '에러';
     }
-    state = state.copyWith(
-      file: File(image.path),
-    );
   }
 
   Trimmer loadTrimmer() {
-    return _trimmer..loadVideo(videoFile: state.file!);
+    return _trimmer..loadVideo(videoFile: File(state.videoPath!));
   }
 
   get trimmer => _trimmer;
@@ -46,10 +59,8 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     );
   }
 
-  void handleDatePick(DateTime? newDate) async {
-    if (newDate == null) return;
-
-    state = state.copyWith(videoDate: newDate);
+  void handleDatePick(int newTimestamp) async {
+    state = state.copyWith(videoTimestamp: newTimestamp);
   }
 
   void updateLocation({int? location}) {
@@ -71,8 +82,9 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     state = state.copyWith(success: value);
   }
 
-  Future<Result<bool>> upload() async {
-    final Result<bool> result = await ServerService.storyUpload(state);
+  Future<Result<void>> upload() async {
+    final Result<void> result =
+        await repository.createStory(storyUpload: state);
     return result;
   }
 
@@ -82,9 +94,3 @@ class StoryUploadNotifier extends StateNotifier<StoryUpload> {
     _trimmer.dispose();
   }
 }
-
-final storyUploadProvider =
-    StateNotifierProvider.autoDispose<StoryUploadNotifier, StoryUpload>((ref) {
-  StoryUploadNotifier notifier = StoryUploadNotifier();
-  return notifier;
-});

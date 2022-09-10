@@ -1,15 +1,15 @@
-import 'package:climb_balance/services/server_service.dart';
+import 'package:climb_balance/common/models/result.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../services/web_view.dart';
+import '../data/data_source/web_view.dart';
 
 class AuthNotifier extends StateNotifier<bool> {
   AuthNotifier() : super(false);
 
   void onNaverLogin(
       BuildContext context, WidgetRef ref, bool toRegisterd) async {
-    final result = await ServerService.getLoginHtml();
+    final result = Result.success('d');
     result.when(
       success: (value) async {
         await Navigator.push(

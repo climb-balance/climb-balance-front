@@ -1,25 +1,26 @@
-import 'package:climb_balance/providers/story_upload_provider.dart';
+import 'package:climb_balance/presentation/story_upload_screens/story_upload_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'edit_video.dart';
+import 'edit_video_screen.dart';
 
-class PickVideo extends ConsumerWidget {
-  const PickVideo({Key? key}) : super(key: key);
+class PickVideoScreen extends ConsumerWidget {
+  const PickVideoScreen({Key? key}) : super(key: key);
 
   void handleNext(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => const EditVideo(),
+        builder: (context) => const EditVideoScreen(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final handlePick = ref.watch(storyUploadProvider.notifier).handlePick;
+    final handlePick =
+        ref.watch(storyUploadViewModelProvider.notifier).handlePick;
     return ListView(
       shrinkWrap: true,
       children: [

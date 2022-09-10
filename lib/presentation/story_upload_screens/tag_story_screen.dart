@@ -1,28 +1,28 @@
-import 'package:climb_balance/providers/story_upload_provider.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/modal_picker.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/upload_video_preview.dart';
-import 'package:climb_balance/ui/pages/story_upload_screens/write_desc.dart';
+import 'package:climb_balance/presentation/story_upload_screens/desc_story_screen.dart';
+import 'package:climb_balance/presentation/story_upload_screens/story_upload_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../common/provider/tag_selector_provider.dart';
 import '../../../presentation/common/components/safe_area.dart';
 import '../../../presentation/common/components/tags.dart';
-import 'bottom_step_bar.dart';
+import 'components/bottom_step_bar.dart';
+import 'components/modal_picker.dart';
+import 'components/upload_video_preview.dart';
 
-class TagStory extends ConsumerWidget {
-  const TagStory({Key? key}) : super(key: key);
+class TagStoryScreen extends ConsumerWidget {
+  const TagStoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final success =
-        ref.watch(storyUploadProvider.select((value) => value.success));
-    final date =
-        ref.watch(storyUploadProvider.select((value) => value.videoDate));
-    final location =
-        ref.watch(storyUploadProvider.select((value) => value.location));
-    final difficulty =
-        ref.watch(storyUploadProvider.select((value) => value.difficulty));
+    final success = ref
+        .watch(storyUploadViewModelProvider.select((value) => value.success));
+    final date = ref.watch(
+        storyUploadViewModelProvider.select((value) => value.videoTimestamp));
+    final location = ref
+        .watch(storyUploadViewModelProvider.select((value) => value.location));
+    final difficulty = ref.watch(
+        storyUploadViewModelProvider.select((value) => value.difficulty));
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +48,7 @@ class TagStory extends ConsumerWidget {
                       Switch(
                         value: success,
                         onChanged: ref
-                            .read(storyUploadProvider.notifier)
+                            .read(storyUploadViewModelProvider.notifier)
                             .handleSuccess,
                       ),
                     ],
@@ -60,18 +60,23 @@ class TagStory extends ConsumerWidget {
                         onPressed: () {
                           showDatePicker(
                             context: context,
-                            initialDate: date!,
+                            initialDate:
+                                DateTime.fromMillisecondsSinceEpoch(date),
                             firstDate: DateTime(2010),
                             lastDate: DateTime.now(),
                             locale: const Locale('ko', "KR"),
                           ).then(
                             (value) => ref
-                                .read(storyUploadProvider.notifier)
-                                .handleDatePick(value),
+                                .read(storyUploadViewModelProvider.notifier)
+                                .handleDatePick(
+                                  value == null
+                                      ? DateTime.now().millisecondsSinceEpoch
+                                      : value!.millisecondsSinceEpoch,
+                                ),
                           );
                         },
                         child: DateTag(
-                          date: date!,
+                          date: DateTime.fromMillisecondsSinceEpoch(date),
                         ),
                       ),
                     ],
@@ -89,7 +94,7 @@ class TagStory extends ConsumerWidget {
                             ),
                           ).then(
                             (value) => ref
-                                .read(storyUploadProvider.notifier)
+                                .read(storyUploadViewModelProvider.notifier)
                                 .updateLocation(
                                   location: value,
                                 ),
@@ -114,7 +119,7 @@ class TagStory extends ConsumerWidget {
                             ),
                           ).then(
                             (value) => ref
-                                .read(storyUploadProvider.notifier)
+                                .read(storyUploadViewModelProvider.notifier)
                                 .updateDifficulty(
                                   difficulty: value,
                                 ),
@@ -137,7 +142,7 @@ class TagStory extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const WriteDesc(),
+              builder: (context) => const DescStoryScreen(),
             ),
           );
         },
