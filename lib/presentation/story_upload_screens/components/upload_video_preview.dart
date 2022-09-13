@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../story_upload_view_model.dart';
-
 class UploadVideoPreview extends ConsumerWidget {
+  final Trimmer? trimmer;
+
   const UploadVideoPreview({
     Key? key,
+    required this.trimmer,
   }) : super(key: key);
 
   @override
@@ -19,9 +20,11 @@ class UploadVideoPreview extends ConsumerWidget {
           width: size,
           height: size,
           color: theme.colorScheme.secondaryContainer,
-          child: VideoViewer(
-            trimmer: ref.watch(storyUploadViewModelProvider.notifier).trimmer,
-          ),
+          child: trimmer == null
+              ? Container()
+              : VideoViewer(
+                  trimmer: trimmer!,
+                ),
         );
       },
     );

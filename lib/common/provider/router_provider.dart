@@ -2,6 +2,7 @@ import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
 import 'package:climb_balance/presentation/community/community_screen.dart';
+import 'package:climb_balance/presentation/story_upload_screens/story_upload_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,6 +19,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final token = ref.watch(currentUserProvider.select((value) => value.token));
 
   return GoRouter(
+    debugLogDiagnostics: true,
     initialLocation: token == '' ? homePageRoute : homePageRoute,
     routes: <GoRoute>[
       GoRoute(
@@ -44,7 +46,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: storyPageSubRoute,
-            name: diaryStoryName,
+            name: diaryStoryRouteName,
             builder: (context, state) {
               final storyId = int.parse(state.params['sid']!);
 
@@ -85,6 +87,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => const MaterialPage<void>(
           child: FeedbackList(),
         ),
+      ),
+      GoRoute(
+        path: storyUploadRoute,
+        pageBuilder: (context, state) => const MaterialPage<void>(
+          child: StoryUploadScreen(),
+        ),
+        name: storyUploadRouteName,
       ),
     ],
   );

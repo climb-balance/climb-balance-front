@@ -1,1 +1,2 @@
-const diaryStoryName = 'diary-story';
+const diaryStoryRouteName = 'diary-story';
+const storyUploadRouteName = 'story-upload';

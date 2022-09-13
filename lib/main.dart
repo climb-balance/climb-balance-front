@@ -29,7 +29,7 @@ class MyApp extends ConsumerWidget {
 
       if (data['notification_id'] == 'AI_COMPLETE') {
         final storyId = data['video_id'] ?? '1';
-        context.goNamed(diaryStoryName, params: {'sid': storyId});
+        context.goNamed(diaryStoryRouteName, params: {'sid': storyId});
       }
     });
     final router = ref.watch(routerProvider);
