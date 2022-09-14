@@ -3,15 +3,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'components/naver_login.dart';
 
-class Auth extends ConsumerStatefulWidget {
-  const Auth({Key? key}) : super(key: key);
+class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
   AuthState createState() => AuthState();
 }
 
-class AuthState extends ConsumerState<Auth> {
-  bool toRegisterd = false;
+class AuthState extends ConsumerState<AuthScreen> {
+  bool toRegister = false;
 
   @override
   void initState() {
@@ -28,11 +28,11 @@ class AuthState extends ConsumerState<Auth> {
           children: [
             ElevatedButton(
               onPressed: () {
-                setState(() => {toRegisterd = !toRegisterd});
+                setState(() => {toRegister = !toRegister});
               },
-              child: Text('to register : $toRegisterd'),
+              child: Text('to register : $toRegister'),
             ),
-            NaverLogin(toRegisterd: toRegisterd),
+            NaverLogin(toRegisterd: toRegister),
           ],
         ),
       ),
