@@ -1,4 +1,4 @@
-import 'package:climb_balance/presentation/ui/theme/text_theme.dart';
+import 'package:climb_balance/presentation/common/ui/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'color_schema.dart';
