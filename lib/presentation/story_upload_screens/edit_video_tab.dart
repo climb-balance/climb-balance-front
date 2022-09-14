@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-class EditVideoTab extends ConsumerWidget {
+class EditVideoTab extends ConsumerStatefulWidget {
   final Trimmer trimmer;
 
   const EditVideoTab({
@@ -12,7 +12,31 @@ class EditVideoTab extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _EditVideoTabState();
+}
+
+class _EditVideoTabState extends ConsumerState<EditVideoTab> {
+  bool isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.trimmer.isInitialized) {
+      isLoaded = true;
+      setState(() {});
+    } else {
+      Stream<TrimmerEvent> _stream = widget.trimmer.eventStream;
+      _stream.listen((event) {
+        if (event == TrimmerEvent.initialized) {
+          isLoaded = true;
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final updateVideoTrim =
         ref.read(storyUploadViewModelProvider.notifier).updateVideoTrim;
     return SizedBox(
@@ -23,24 +47,25 @@ class EditVideoTab extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TrimEditor(
-              circlePaintColor: Theme.of(context).colorScheme.tertiary,
-              borderPaintColor: Theme.of(context).colorScheme.tertiary,
-              scrubberPaintColor: Theme.of(context).colorScheme.primary,
-              durationTextStyle: Theme.of(context).textTheme.bodyText2!,
-              scrubberWidth: 5,
-              trimmer: trimmer!,
-              maxVideoLength: const Duration(minutes: 2),
-              viewerWidth: MediaQuery.of(context).size.width - 20,
-              thumbnailQuality: 15,
-              onChangeEnd: (value) {
-                updateVideoTrim(context, trimmer!);
-              },
-              onChangeStart: (value) {
-                updateVideoTrim(context, trimmer!);
-              },
-              onChangePlaybackState: (value) {},
-            ),
+            if (isLoaded)
+              TrimEditor(
+                circlePaintColor: Theme.of(context).colorScheme.tertiary,
+                borderPaintColor: Theme.of(context).colorScheme.tertiary,
+                scrubberPaintColor: Theme.of(context).colorScheme.primary,
+                durationTextStyle: Theme.of(context).textTheme.bodyText2!,
+                scrubberWidth: 5,
+                trimmer: widget.trimmer,
+                maxVideoLength: const Duration(minutes: 2),
+                viewerWidth: MediaQuery.of(context).size.width - 20,
+                thumbnailQuality: 15,
+                onChangeEnd: (value) {
+                  updateVideoTrim(context, widget.trimmer);
+                },
+                onChangeStart: (value) {
+                  updateVideoTrim(context, widget.trimmer);
+                },
+                onChangePlaybackState: (value) {},
+              ),
           ],
         ),
       ),
