@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:climb_balance/common/provider/current_user_provider.dart';
-import 'package:climb_balance/models/expert_profile.dart';
-import 'package:climb_balance/presentation/common/components/avatarPicker.dart';
-import 'package:climb_balance/providers/expert_register.dart';
+import 'package:climb_balance/presentation/common/components/avatar_picker.dart';
+import 'package:climb_balance/presentation/expert_register/expert_register_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../presentation/common/components/safe_area.dart';
-import 'expert_register_text_input.dart';
+import '../../domain/model/expert_profile.dart';
+import 'components/expert_register_text_input.dart';
 
 class ExpertRegister extends StatefulWidget {
   const ExpertRegister({Key? key}) : super(key: key);
@@ -65,11 +65,11 @@ class _ExpertFormState extends ConsumerState<ExpertForm> {
                 child: AvatarPicker(
                   updateFile: (File image) {
                     ref
-                        .read(expertRegisterProvider.notifier)
+                        .read(expertRegisterViewModelProvider.notifier)
                         .updateProfilePicture(image);
                   },
-                  image: ref.watch(
-                      expertRegisterProvider.select((value) => value.tmpImage)),
+                  image: ref.watch(expertRegisterViewModelProvider
+                      .select((value) => value.tmpImage)),
                 ),
               ),
               const SizedBox(
@@ -113,14 +113,14 @@ class ExpertRegisterButton extends ConsumerWidget {
               const SnackBar(content: Text('성공')),
             );
 
-            final expertProfile = ref.watch(expertRegisterProvider);
+            final expertProfile = ref.watch(expertRegisterViewModelProvider);
             ref
                 .read(currentUserProvider.notifier)
                 .updateExpertInfo(ExpertProfile(
                   nickname: expertProfile.nickname,
                   description: expertProfile.description,
                 ));
-            ref.read(expertRegisterProvider.notifier).clear();
+            ref.read(expertRegisterViewModelProvider.notifier).clear();
             debugPrint('여기까진 온다');
             Navigator.of(context).pop();
             return;

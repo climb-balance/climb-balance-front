@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'expert_profile.freezed.dart';
@@ -7,7 +6,6 @@ part 'expert_profile.g.dart';
 
 @freezed
 class ExpertProfile with _$ExpertProfile {
-  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ExpertProfile({
     @Default('default') String nickname,
     @Default('https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg')

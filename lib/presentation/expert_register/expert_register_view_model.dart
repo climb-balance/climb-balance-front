@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/expert_register_info.dart';
+import 'expert_register_state.dart';
 
-class ExpertRegisterNotifier extends StateNotifier<ExpertRegisterInfo> {
-  ExpertRegisterNotifier() : super(const ExpertRegisterInfo());
+class ExpertRegisterViewModel extends StateNotifier<ExpertRegisterState> {
+  ExpertRegisterViewModel() : super(const ExpertRegisterState());
 
   void updateProfilePicture(File image) {
     state = state.copyWith(tmpImage: image);
@@ -28,12 +28,12 @@ class ExpertRegisterNotifier extends StateNotifier<ExpertRegisterInfo> {
   }
 
   void clear() {
-    state = const ExpertRegisterInfo();
+    state = const ExpertRegisterState();
   }
 }
 
-final expertRegisterProvider = StateNotifierProvider.autoDispose<
-    ExpertRegisterNotifier, ExpertRegisterInfo>((ref) {
-  ExpertRegisterNotifier notifier = ExpertRegisterNotifier();
+final expertRegisterViewModelProvider = StateNotifierProvider.autoDispose<
+    ExpertRegisterViewModel, ExpertRegisterState>((ref) {
+  ExpertRegisterViewModel notifier = ExpertRegisterViewModel();
   return notifier;
 });

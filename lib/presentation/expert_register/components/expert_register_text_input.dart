@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../providers/expert_register.dart';
+import '../expert_register_view_model.dart';
 
 class CodeTextInput extends ConsumerStatefulWidget {
   const CodeTextInput({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _CodeTextInputState extends ConsumerState<CodeTextInput> {
     super.initState();
     _controller.addListener(() {
       ref
-          .read(expertRegisterProvider.notifier)
+          .read(expertRegisterViewModelProvider.notifier)
           .updateClimbingCode(_controller.text);
     });
   }
@@ -61,7 +61,7 @@ class _NickNameTextInputState extends ConsumerState<NickNameTextInput> {
     super.initState();
     _controller.addListener(() {
       ref
-          .read(expertRegisterProvider.notifier)
+          .read(expertRegisterViewModelProvider.notifier)
           .updateNickname(_controller.text);
     });
   }
@@ -106,7 +106,7 @@ class _IntroduceTextInputState extends ConsumerState<IntroduceTextInput> {
     super.initState();
     _controller.addListener(() {
       ref
-          .read(expertRegisterProvider.notifier)
+          .read(expertRegisterViewModelProvider.notifier)
           .updateDescription(_controller.text);
     });
   }

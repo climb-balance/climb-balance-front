@@ -2,8 +2,8 @@ import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/provider/settings_provider.dart';
-import '../../ui/pages/account_page/expert_register/expert_register.dart';
+import '../../../common/provider/settings_provider.dart';
+import '../../expert_register/expert_register.dart';
 
 class RegisterExpert extends StatelessWidget {
   const RegisterExpert({Key? key}) : super(key: key);

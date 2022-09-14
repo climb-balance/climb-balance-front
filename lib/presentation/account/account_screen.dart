@@ -1,19 +1,19 @@
 import 'package:climb_balance/common/provider/current_user_provider.dart';
-import 'package:climb_balance/presentation/account/setting_card.dart';
+import 'package:climb_balance/presentation/account/components/setting_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../presentation/common/components/bot_navigation_bar.dart';
-import 'account_settings.dart';
+import 'components/account_settings.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<AccountScreen> createState() => AccountState();
+  ConsumerState<AccountScreen> createState() => _AccountScreenState();
 }
 
-class AccountState extends ConsumerState<AccountScreen> {
+class _AccountScreenState extends ConsumerState<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     final isExpert =

@@ -2,7 +2,7 @@ import 'package:climb_balance/common/models/result.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/data_source/web_view.dart';
+import '../../data/data_source/web_view.dart';
 
 class AuthNotifier extends StateNotifier<bool> {
   AuthNotifier() : super(false);

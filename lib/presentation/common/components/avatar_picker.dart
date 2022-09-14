@@ -27,7 +27,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     return InkWell(
       onTap: getImage,
       child: widget.image == null
-          ? NoAvatar()
+          ? const NoAvatar()
           : CircleAvatar(
               radius: 60,
               backgroundColor: Colors.white,

@@ -6,7 +6,6 @@ part 'expert_feedback.g.dart';
 
 @freezed
 class ExpertFeedback with _$ExpertFeedback {
-  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ExpertFeedback({
     @Default('') String comment,
     @Default(1) int stars,

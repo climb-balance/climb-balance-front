@@ -1,43 +1,7 @@
-import 'package:climb_balance/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Auth extends ConsumerStatefulWidget {
-  const Auth({Key? key}) : super(key: key);
-
-  @override
-  AuthState createState() => AuthState();
-}
-
-class AuthState extends ConsumerState<Auth> {
-  bool toRegisterd = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() => {toRegisterd = !toRegisterd});
-              },
-              child: Text('to register : $toRegisterd'),
-            ),
-            NaverLogin(toRegisterd: toRegisterd),
-          ],
-        ),
-      ),
-    );
-  }
-}
+import '../auth_provider.dart';
 
 class NaverLogin extends ConsumerWidget {
   final bool toRegisterd;

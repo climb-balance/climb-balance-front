@@ -1,12 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/register_user.dart';
+import 'register_state.dart';
 
-class RegisterNotifier extends StateNotifier<RegisterType> {
-  RegisterNotifier() : super(RegisterType());
+class RegisterViewModel extends StateNotifier<RegisterState> {
+  RegisterViewModel() : super(RegisterState());
 
   void updateHeight(int value) {
-    state = RegisterType(
+    state = RegisterState(
         height: value,
         weight: state.weight,
         sex: state.sex,
@@ -14,7 +14,7 @@ class RegisterNotifier extends StateNotifier<RegisterType> {
   }
 
   void updateWeight(int value) {
-    state = RegisterType(
+    state = RegisterState(
         height: state.height,
         weight: value,
         sex: state.sex,
@@ -22,7 +22,7 @@ class RegisterNotifier extends StateNotifier<RegisterType> {
   }
 
   void updateSex(bool value) {
-    state = RegisterType(
+    state = RegisterState(
         height: state.height,
         weight: state.weight,
         sex: value,
@@ -30,7 +30,7 @@ class RegisterNotifier extends StateNotifier<RegisterType> {
   }
 
   void nextPage() {
-    state = RegisterType(
+    state = RegisterState(
         height: state.height,
         weight: state.weight,
         sex: state.sex,
@@ -38,7 +38,7 @@ class RegisterNotifier extends StateNotifier<RegisterType> {
   }
 
   void lastPage() {
-    state = RegisterType(
+    state = RegisterState(
         height: state.height,
         weight: state.weight,
         sex: state.sex,
@@ -46,8 +46,8 @@ class RegisterNotifier extends StateNotifier<RegisterType> {
   }
 }
 
-final registerProvider =
-    StateNotifierProvider<RegisterNotifier, RegisterType>((ref) {
-  RegisterNotifier notifier = RegisterNotifier();
+final registerViewModelProvider =
+    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
+  RegisterViewModel notifier = RegisterViewModel();
   return notifier;
 });

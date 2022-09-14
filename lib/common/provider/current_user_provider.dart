@@ -1,8 +1,9 @@
 import 'package:climb_balance/data/data_source/service/storage_service.dart';
 import 'package:climb_balance/data/data_source/user_server_helpder.dart';
 import 'package:climb_balance/domain/model/user.dart';
-import 'package:climb_balance/models/expert_profile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../domain/model/expert_profile.dart';
 
 class CurrentUserNotifier extends StateNotifier<User> {
   final ref;
