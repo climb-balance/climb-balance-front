@@ -4,6 +4,7 @@ import 'package:climb_balance/presentation/story_upload_screens/edit_video_tab.d
 import 'package:climb_balance/presentation/story_upload_screens/story_upload_view_model.dart';
 import 'package:climb_balance/presentation/story_upload_screens/tag_story_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
@@ -20,21 +21,43 @@ class StoryUploadScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _StoryUploadScreenState();
 }
 
-class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen> {
+class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen>
+    with SingleTickerProviderStateMixin {
   Trimmer trimmer = Trimmer();
+  late TabController _tabController;
+  int _index = 0;
+
+  void _initVideo() {
+    Future.microtask(() {
+      trimmer.loadVideo(
+          videoFile: File(ref.watch(storyUploadViewModelProvider
+              .select((value) => value.videoPath!))));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _initVideo();
+    _tabController.addListener(() {
+      _index = _tabController.index;
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
     trimmer.dispose();
+    _tabController.removeListener(() {});
+    _tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    trimmer.loadVideo(
-        videoFile: File(ref.watch(
-            storyUploadViewModelProvider.select((value) => value.videoPath!))));
     final theme = Theme.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -42,18 +65,39 @@ class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen> {
             UploadVideoPreview(
               trimmer: trimmer,
             ),
-            TabBar(
-              tabs: [
-                EditVideoTab(trimmer: trimmer),
-                const TagStoryTab(),
-                const DescStoryTab(),
-              ],
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _tabController,
+                children: [
+                  EditVideoTab(
+                    trimmer: trimmer,
+                  ),
+                  const TagStoryTab(),
+                  const DescStoryTab(),
+                ],
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomStepBar(
-        handleNext: () {},
+        handleNext: () {
+          debugPrint(_index.toString());
+          if (_index < 2) {
+            _tabController.animateTo(_index + 1);
+          } else {
+            ref.read(storyUploadViewModelProvider.notifier).upload(context);
+          }
+        },
+        handleBack: () {
+          if (_index == 0) {
+            context.pop();
+          } else {
+            _tabController.animateTo(_index - 1);
+          }
+        },
+        next: _index == 2 ? '업로드' : '다음',
       ),
     );
   }

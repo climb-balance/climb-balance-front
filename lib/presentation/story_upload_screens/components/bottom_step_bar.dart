@@ -4,9 +4,14 @@ import '../../../../presentation/common/components/button.dart';
 
 class BottomStepBar extends StatelessWidget {
   final void Function() handleNext;
+  final void Function() handleBack;
   final String next;
 
-  const BottomStepBar({Key? key, required this.handleNext, this.next = "다음"})
+  const BottomStepBar(
+      {Key? key,
+      required this.handleNext,
+      required this.handleBack,
+      this.next = "다음"})
       : super(key: key);
 
   @override
@@ -18,9 +23,7 @@ class BottomStepBar extends StatelessWidget {
         children: [
           Expanded(
             child: CustomBtn(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: handleBack,
               type: BtnType.secondary,
               child: const Text('이전'),
             ),

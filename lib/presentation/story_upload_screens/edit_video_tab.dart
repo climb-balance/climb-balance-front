@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
 class EditVideoTab extends ConsumerWidget {
-  final Trimmer? trimmer;
+  final Trimmer trimmer;
 
   const EditVideoTab({
     Key? key,
@@ -15,11 +15,14 @@ class EditVideoTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final updateVideoTrim =
         ref.read(storyUploadViewModelProvider.notifier).updateVideoTrim;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Column(
-        children: [
-          if (trimmer != null)
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 300,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             TrimEditor(
               circlePaintColor: Theme.of(context).colorScheme.tertiary,
               borderPaintColor: Theme.of(context).colorScheme.tertiary,
@@ -38,7 +41,8 @@ class EditVideoTab extends ConsumerWidget {
               },
               onChangePlaybackState: (value) {},
             ),
-        ],
+          ],
+        ),
       ),
     );
   }

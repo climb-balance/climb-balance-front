@@ -46,7 +46,12 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         return;
       }
       state = state.copyWith(videoPath: image.path);
-      Future.microtask(() => context.pushNamed(storyUploadRouteName));
+      Future.microtask(
+        () {
+          Navigator.of(context).pop();
+          context.pushNamed(storyUploadRouteName);
+        },
+      );
     });
   }
 
@@ -60,7 +65,6 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
           ? null
           : trimmer.videoEndPos / 1000,
     );
-    context.pushNamed(storyUploadRouteName);
   }
 
   void pickTimestamp(BuildContext context) async {
@@ -116,19 +120,12 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         await repository.createStory(storyUpload: state);
     result.when(
       success: (value) {
-        // TODO : fix route
-        Navigator.popUntil(context, ModalRoute.withName("/"));
+        context.pop();
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);
       },
     );
     dispose();
-  }
-
-  @override
-  void dispose() {
-    debugPrint('디버그 ');
-    super.dispose();
   }
 }
