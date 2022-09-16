@@ -1,24 +1,24 @@
 import 'package:climb_balance/data/data_source/service/storage_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/settings.dart';
+import 'account_state.dart';
 
-final settingsProvider =
-    StateNotifierProvider<SettingsNotifier, Settings>((ref) {
-  SettingsNotifier notifier = SettingsNotifier(
+final accountViewModelProvider =
+    StateNotifierProvider<AccountViewModel, AccountState>((ref) {
+  AccountViewModel notifier = AccountViewModel(
       ref: ref, storageService: ref.watch(storageServiceProvider));
   notifier.loadSettingFromStorage();
   return notifier;
 });
 
-class SettingsNotifier extends StateNotifier<Settings> {
+class AccountViewModel extends StateNotifier<AccountState> {
   final ref;
   final StorageService storageService;
 
-  SettingsNotifier({
+  AccountViewModel({
     required this.ref,
     required this.storageService,
-  }) : super(const Settings());
+  }) : super(const AccountState());
 
   void loadSettingFromStorage() async {
     state = await storageService.getStoredSettings();
@@ -27,7 +27,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
   void updateSetting({bool? darkMode, bool? expertMode}) {
     darkMode ??= state.darkMode;
     expertMode ??= state.expertMode;
-    Settings settings =
+    AccountState settings =
         state.copyWith(darkMode: darkMode, expertMode: expertMode);
     state = settings;
     storageService.storeSettings(settings);

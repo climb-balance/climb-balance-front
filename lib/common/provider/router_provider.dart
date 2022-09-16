@@ -1,4 +1,5 @@
 import 'package:climb_balance/common/provider/current_user_provider.dart';
+import 'package:climb_balance/data/data_source/web_view.dart';
 import 'package:climb_balance/presentation/account/account_screen.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
 import 'package:climb_balance/presentation/auth/auth_screen.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../presentation/diary/diary_screen.dart';
+import '../../presentation/expert_register/expert_register_screen.dart';
 import '../../presentation/feedback_list/feedback_list.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/story/story_screen.dart';
@@ -81,6 +83,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => const MaterialPage<void>(
           child: AccountScreen(),
         ),
+        routes: [
+          GoRoute(
+            path: expertRegisterPageSubRoute,
+            pageBuilder: (context, state) => const MaterialPage<void>(
+              child: ExpertRegisterScreen(),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: feedbackPageRoute,
@@ -94,6 +104,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: StoryUploadScreen(),
         ),
         name: storyUploadRouteName,
+      ),
+      GoRoute(
+        path: storyUploadRoute,
+        pageBuilder: (context, state) => const MaterialPage<void>(
+          child: NaverWebView(),
+        ),
+        name: authNaverRouteName,
       ),
     ],
   );

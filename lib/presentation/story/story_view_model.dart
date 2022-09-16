@@ -76,12 +76,9 @@ class StoryViewModel extends StateNotifier<StoryState> {
           ),
         );
         customShowDialog(
-                context: context,
-                title: 'AI 피드백 요청 성공',
-                content: 'AI 피드백 요청에 성공하셨습니다. 메인 화면에서 진행 상태를 확인하실 수 있습니다.')
-            .then(
-          (value) => Navigator.pop(context),
-        );
+            context: context,
+            title: 'AI 피드백 요청 성공',
+            content: 'AI 피드백 요청에 성공하셨습니다. 메인 화면에서 진행 상태를 확인하실 수 있습니다.');
       },
       error: (message) {
         customShowDialog(

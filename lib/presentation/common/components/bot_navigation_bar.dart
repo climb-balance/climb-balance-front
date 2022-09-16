@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/provider/settings_provider.dart';
+import '../../account/account_view_model.dart';
 import '../../story_upload_screens/pick_video_screen.dart';
 
 class BotNavigationBar extends ConsumerWidget {
@@ -15,7 +15,7 @@ class BotNavigationBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isExpert =
-        ref.watch(settingsProvider.select((value) => value.expertMode));
+        ref.watch(accountViewModelProvider.select((value) => value.expertMode));
     final List<String> paths = [
       homePageRoute,
       communityPageRoute,

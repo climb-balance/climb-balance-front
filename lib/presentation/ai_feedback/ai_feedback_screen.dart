@@ -121,7 +121,7 @@ class AiFeedbackInformation extends StatelessWidget {
           children: [
             AiFeedbackScore(
                 precision: longestGoodLength(), balance: goodCount()),
-            Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.')
+            const Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.')
           ],
         ),
       ),

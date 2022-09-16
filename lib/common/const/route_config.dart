@@ -1,10 +1,13 @@
 const homePageRoute = '/';
 const communityPageRoute = '/community';
 const diaryPageRoute = '/diary';
-const accountPageRoute = '/account';
-const feedbackPageRoute = '/feedback';
-const authPagePath = '/auth';
 const storyPageSubRoute = 'story/:sid';
 const aiAdsPageSubRoute = 'ai-ads';
 const aiPageSubRoute = 'ai';
+const accountPageRoute = '/account';
+const expertRegisterPageSubRoute = 'expert-register';
+const feedbackPageRoute = '/feedback';
+const authPagePath = '/auth';
+const authNaverPageSubRoute = '/auth/naver';
+
 const storyUploadRoute = '/upload';

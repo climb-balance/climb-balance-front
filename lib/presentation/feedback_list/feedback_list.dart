@@ -6,7 +6,6 @@ import 'package:video_player/video_player.dart';
 import '../../../../presentation/common/components/tags.dart';
 import '../common/components/bot_navigation_bar.dart';
 import '../common/components/stars.dart';
-import '../common/components/waiting_progress.dart';
 
 class FeedbackList extends ConsumerStatefulWidget {
   const FeedbackList({Key? key}) : super(key: key);
@@ -142,20 +141,7 @@ class FeedbackWrite extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WaitingProgress(),
-                        fullscreenDialog: true,
-                      ),
-                    );
-                    await Future.delayed(
-                      Duration(milliseconds: 500),
-                    );
-                    Navigator.popUntil(context, (route) {
-                      debugPrint(ModalRoute.of(context)?.settings.name);
-                      return false;
-                    });
+                    // TODO connect server logic
                   },
                   child: const Text('제출하기'),
                 ),

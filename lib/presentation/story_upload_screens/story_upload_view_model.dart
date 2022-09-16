@@ -48,7 +48,8 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
       state = state.copyWith(videoPath: image.path);
       Future.microtask(
         () {
-          Navigator.of(context).pop();
+          // TODO check
+          context.pop();
           context.pushNamed(storyUploadRouteName);
         },
       );

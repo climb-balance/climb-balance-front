@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../auth_provider.dart';
+import '../auth_view_model.dart';
 
 class NaverLogin extends ConsumerWidget {
   final bool toRegisterd;
@@ -16,7 +16,9 @@ class NaverLogin extends ConsumerWidget {
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
       onPressed: () {
-        ref.read(authProvider.notifier).onNaverLogin(context, ref, toRegisterd);
+        ref
+            .read(authViewModelProvider.notifier)
+            .onNaverLogin(context, ref, toRegisterd);
       },
       child: SizedBox(
         width: 150,

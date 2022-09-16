@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NaverWebView extends ConsumerStatefulWidget {
-  final String html;
-
-  const NaverWebView({Key? key, required this.html}) : super(key: key);
+  const NaverWebView({Key? key}) : super(key: key);
 
   @override
   NaverWebViewState createState() => NaverWebViewState();
@@ -29,7 +28,7 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
         javascriptMode: JavascriptMode.unrestricted,
         initialUrl: 'about:blank',
         onWebViewCreated: (WebViewController webViewController) {
-          webViewController.loadHtmlString(widget.html);
+          webViewController.loadHtmlString(widget.toString());
         },
         onPageFinished: (url) {
           debugPrint(url);
@@ -43,7 +42,8 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
             }).catchError((_) {
               debugPrint("assa");
             });
-            Navigator.pop(context, 'success');
+            // TODO auth viewModel connect
+            context.pop();
           }
         },
       ),

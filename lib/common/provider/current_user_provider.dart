@@ -1,5 +1,5 @@
 import 'package:climb_balance/data/data_source/service/storage_service.dart';
-import 'package:climb_balance/data/data_source/user_server_helpder.dart';
+import 'package:climb_balance/data/data_source/user_server_helper.dart';
 import 'package:climb_balance/domain/model/user.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

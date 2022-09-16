@@ -1,5 +1,6 @@
 import 'package:climb_balance/presentation/register/register_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
@@ -50,14 +51,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             color: Theme.of(context).primaryColorDark,
           ),
           onPressed: () {
-            if (curPage == 0) Navigator.pop(context);
+            if (curPage == 0) context.pop();
             ref.read(registerViewModelProvider.notifier).lastPage();
           },
         ),
       ),
       body: MySafeArea(
         child: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: registerTabs,
         ),

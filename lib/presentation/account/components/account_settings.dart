@@ -1,9 +1,10 @@
 import 'package:climb_balance/common/provider/current_user_provider.dart';
+import 'package:climb_balance/presentation/account/account_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/provider/settings_provider.dart';
-import '../../expert_register/expert_register.dart';
+import '../../../common/const/route_name.dart';
 
 class RegisterExpert extends StatelessWidget {
   const RegisterExpert({Key? key}) : super(key: key);
@@ -19,12 +20,7 @@ class RegisterExpert extends StatelessWidget {
             '등록하기',
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ExpertRegister(),
-              ),
-            );
+            context.pushNamed(accountExpertRegisterRouteName);
           },
         ),
       ],
@@ -38,7 +34,7 @@ class ExpertSwap extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final expertMode =
-        ref.watch(settingsProvider.select((value) => value.expertMode));
+        ref.watch(accountViewModelProvider.select((value) => value.expertMode));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -47,7 +43,7 @@ class ExpertSwap extends ConsumerWidget {
           value: expertMode,
           onChanged: (bool value) {
             ref
-                .read(settingsProvider.notifier)
+                .read(accountViewModelProvider.notifier)
                 .updateSetting(expertMode: value);
           },
         ),
@@ -75,7 +71,7 @@ class DarkModeSetting extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool darkMode =
-        ref.watch(settingsProvider.select((value) => value.darkMode));
+        ref.watch(accountViewModelProvider.select((value) => value.darkMode));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -83,7 +79,9 @@ class DarkModeSetting extends ConsumerWidget {
         Switch(
           value: darkMode,
           onChanged: (bool value) {
-            ref.read(settingsProvider.notifier).updateSetting(darkMode: value);
+            ref
+                .read(accountViewModelProvider.notifier)
+                .updateSetting(darkMode: value);
           },
         ),
       ],
@@ -116,8 +114,6 @@ class LogoutSetting extends ConsumerWidget {
           ),
           onPressed: () {
             ref.read(currentUserProvider.notifier).clearToken();
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/auth', (route) => false);
           },
         ),
       ],
