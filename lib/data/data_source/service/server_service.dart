@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../common/const/server_config.dart';
+import '../../../domain/const/server_config.dart';
 
 final serverServiceProvider = Provider<ServerService>((ref) {
   return ServerService();

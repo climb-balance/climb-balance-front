@@ -1,4 +1,4 @@
-import 'package:climb_balance/common/provider/current_user_provider.dart';
+import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/components/setting_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

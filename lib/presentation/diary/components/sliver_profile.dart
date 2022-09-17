@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/provider/current_user_provider.dart';
+import '../../../domain/common/current_user_provider.dart';
 import '../../common/components/user_profile_info.dart';
 
 class SliverProfile extends ConsumerWidget {

@@ -1,7 +1,8 @@
-import 'package:climb_balance/common/const/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../domain/const/route_name.dart';
 
 class AuthViewModel extends StateNotifier<bool> {
   AuthViewModel() : super(false);

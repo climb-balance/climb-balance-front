@@ -5,7 +5,7 @@ import 'package:climb_balance/presentation/ai_feedback/ai_feedback_state.dart';
 import 'package:climb_balance/presentation/story_upload_screens/story_upload_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/const/server_config.dart';
+import '../../domain/const/server_config.dart';
 import '../../domain/model/result.dart';
 
 // TODO move to di

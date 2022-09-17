@@ -1,10 +1,10 @@
-import 'package:climb_balance/common/provider/current_user_provider.dart';
+import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/const/route_name.dart';
+import '../../../domain/const/route_name.dart';
 
 class RegisterExpert extends StatelessWidget {
   const RegisterExpert({Key? key}) : super(key: key);

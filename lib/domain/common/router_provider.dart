@@ -1,5 +1,5 @@
-import 'package:climb_balance/common/provider/current_user_provider.dart';
 import 'package:climb_balance/data/data_source/web_view.dart';
+import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account_screen.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
 import 'package:climb_balance/presentation/auth/auth_screen.dart';

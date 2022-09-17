@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:climb_balance/common/const/server_config.dart';
 import 'package:climb_balance/data/data_source/service/server_service.dart';
+import 'package:climb_balance/domain/const/server_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/model/result.dart';

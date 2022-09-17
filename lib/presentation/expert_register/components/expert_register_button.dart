@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/provider/current_user_provider.dart';
+import '../../../domain/common/current_user_provider.dart';
 import '../../../domain/model/expert_profile.dart';
 import '../expert_register_view_model.dart';
 

@@ -1,4 +1,4 @@
-import 'package:climb_balance/common/provider/router_provider.dart';
+import 'package:climb_balance/domain/common/router_provider.dart';
 import 'package:climb_balance/presentation/account/account_view_model.dart';
 import 'package:climb_balance/presentation/common/ui/theme/main_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,8 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'common/const/route_name.dart';
-import 'common/provider/firebase_provider.dart';
+import 'domain/common/firebase_provider.dart';
+import 'domain/const/route_name.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));

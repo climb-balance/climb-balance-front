@@ -1,4 +1,3 @@
-import 'package:climb_balance/common/const/route_name.dart';
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../../common/provider/tag_selector_provider.dart';
+import '../../domain/common/tag_selector_provider.dart';
+import '../../domain/const/route_name.dart';
 import '../../domain/model/result.dart';
 import '../common/custom_dialog.dart';
 import 'components/modal_picker.dart';

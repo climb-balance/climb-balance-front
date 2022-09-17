@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/const/server_config.dart';
+import '../../domain/const/server_config.dart';
 import '../../domain/model/result.dart';
 import '../../domain/model/story.dart';
 import '../../presentation/story_upload_screens/story_upload_state.dart';
