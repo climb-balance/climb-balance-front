@@ -7,10 +7,10 @@ class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  AuthState createState() => AuthState();
+  _AuthScreenState createState() => _AuthScreenState();
 }
 
-class AuthState extends ConsumerState<AuthScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   bool toRegister = false;
 
   @override

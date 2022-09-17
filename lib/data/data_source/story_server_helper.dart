@@ -23,7 +23,7 @@ class StoryServerHelper {
     int storyId;
     try {
       final result = await server.post(serverStoryPath, storyUpload);
-      storyId = jsonDecode(result)['story_id'];
+      storyId = jsonDecode(result)['storyId'];
     } catch (e) {
       return const Result.error('스토리 업로드 오류');
     }
@@ -58,7 +58,6 @@ class StoryServerHelper {
   Future<Result<Iterable>> getStories() async {
     try {
       final result = await server.get(serverStoryPath);
-      // TODO : 임시로 버그 막음 임 원래 result["stories"]
       return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');

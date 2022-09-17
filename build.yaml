@@ -7,5 +7,5 @@ targets:
           # `@JsonSerializable`-annotated class in the package.
           #
           # The default value for each is listed.
-          field_rename: snake
+          field_rename: none
           include_if_null: false

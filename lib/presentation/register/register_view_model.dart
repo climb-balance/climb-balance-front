@@ -2,52 +2,39 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'register_state.dart';
 
-class RegisterViewModel extends StateNotifier<RegisterState> {
-  RegisterViewModel() : super(RegisterState());
-
-  void updateHeight(int value) {
-    state = RegisterState(
-        height: value,
-        weight: state.weight,
-        sex: state.sex,
-        curPage: state.curPage);
-  }
-
-  void updateWeight(int value) {
-    state = RegisterState(
-        height: state.height,
-        weight: value,
-        sex: state.sex,
-        curPage: state.curPage);
-  }
-
-  void updateSex(bool value) {
-    state = RegisterState(
-        height: state.height,
-        weight: state.weight,
-        sex: value,
-        curPage: state.curPage);
-  }
-
-  void nextPage() {
-    state = RegisterState(
-        height: state.height,
-        weight: state.weight,
-        sex: state.sex,
-        curPage: (state.curPage + 1) % 2);
-  }
-
-  void lastPage() {
-    state = RegisterState(
-        height: state.height,
-        weight: state.weight,
-        sex: state.sex,
-        curPage: (state.curPage - 1) % 2);
-  }
-}
-
 final registerViewModelProvider =
-    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
+    StateNotifierProvider.autoDispose<RegisterViewModel, RegisterState>((ref) {
   RegisterViewModel notifier = RegisterViewModel();
   return notifier;
 });
+
+class RegisterViewModel extends StateNotifier<RegisterState> {
+  RegisterViewModel() : super(const RegisterState());
+  void updateAccessToken(String accessToken) {
+    state = state.copyWith(accessToken: accessToken);
+  }
+
+  void updateHeight(int height) {
+    state = state.copyWith(height: height);
+  }
+
+  void updateWeight(int weight) {
+    state = state.copyWith(weight: weight);
+  }
+
+  void updateSex(bool value) {
+    String ch = 'F';
+    if (value) {
+      ch = 'M';
+    }
+    state = state.copyWith(sex: ch);
+  }
+
+  void nextPage() {
+    state = state.copyWith(curPage: (state.curPage + 1) % 2);
+  }
+
+  void lastPage() {
+    state = state.copyWith(curPage: (state.curPage - 1) % 2);
+  }
+}

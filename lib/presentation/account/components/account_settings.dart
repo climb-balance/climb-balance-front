@@ -113,7 +113,7 @@ class LogoutSetting extends ConsumerWidget {
             ),
           ),
           onPressed: () {
-            ref.read(currentUserProvider.notifier).clearToken();
+            ref.read(currentUserProvider.notifier).logout(context);
           },
         ),
       ],

@@ -4,6 +4,8 @@ import 'package:climb_balance/domain/model/user.dart';
 import 'package:climb_balance/domain/repository/user_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../domain/const/server_config.dart';
+
 final userRepositoryImplProvider = Provider<UserRepositoryImpl>((ref) {
   final notifier =
       UserRepositoryImpl(ref: ref, server: ref.watch(userServerHelperProvider));
@@ -33,5 +35,10 @@ class UserRepositoryImpl implements UserRepository {
     return result.when(
         success: (value) => Result.success(User.fromJson(value)),
         error: (message) => Result.error(message));
+  }
+
+  @override
+  String getAuthUrl() {
+    return '$serverUrl$serverNaverPath';
   }
 }

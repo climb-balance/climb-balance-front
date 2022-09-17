@@ -1,8 +1,11 @@
 import 'package:climb_balance/data/data_source/service/storage_service.dart';
 import 'package:climb_balance/data/data_source/user_server_helper.dart';
 import 'package:climb_balance/domain/model/user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../const/route_name.dart';
 import '../model/expert_profile.dart';
 
 class CurrentUserNotifier extends StateNotifier<User> {
@@ -27,9 +30,10 @@ class CurrentUserNotifier extends StateNotifier<User> {
     storageService.storeStoredToken(token: token);
   }
 
-  void clearToken() {
+  void logout(BuildContext context) {
     state = state.copyWith(token: '');
     storageService.clearStoredToken();
+    context.goNamed(authPageRouteName);
   }
 
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values

@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:climb_balance/presentation/auth/auth_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -28,22 +28,15 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
         javascriptMode: JavascriptMode.unrestricted,
         initialUrl: 'about:blank',
         onWebViewCreated: (WebViewController webViewController) {
-          webViewController.loadHtmlString(widget.toString());
+          webViewController
+              .loadUrl(ref.read(authViewModelProvider.notifier).getAuthUrl());
+          _controller = webViewController;
         },
         onPageFinished: (url) {
-          debugPrint(url);
-          debugPrint(url.contains('/user/auth/callback?code').toString());
           if (url.contains('/user/auth/callback?code')) {
-            _controller
-                .runJavascriptReturningResult(
-                    "window.document.getElementsByTagName('html')[0].innerText;")
-                .then((html) {
-              debugPrint(html);
-            }).catchError((_) {
-              debugPrint("assa");
-            });
-            // TODO auth viewModel connect
-            context.pop();
+            ref
+                .read(authViewModelProvider.notifier)
+                .authComplete(_controller, context);
           }
         },
       ),

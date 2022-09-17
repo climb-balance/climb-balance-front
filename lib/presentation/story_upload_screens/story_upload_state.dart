@@ -14,7 +14,7 @@ class StoryUploadState with _$StoryUploadState {
     @Default(false) bool success,
     @Default('empty') String description,
     @Default(0) int videoTimestamp,
-    String? videoPath,
+    @JsonKey(ignore: true) String? videoPath,
   }) = _StoryUploadState;
 
   factory StoryUploadState.fromJson(Map<String, dynamic> json) =>
