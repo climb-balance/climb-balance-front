@@ -1,4 +1,4 @@
-import '../../common/models/result.dart';
+import '../model/result.dart';
 import '../model/user.dart';
 
 abstract class UserRepository {

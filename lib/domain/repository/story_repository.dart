@@ -1,6 +1,6 @@
-import '../../common/models/result.dart';
 import '../../presentation/ai_feedback/ai_feedback_state.dart';
 import '../../presentation/story_upload_screens/story_upload_state.dart';
+import '../model/result.dart';
 import '../model/story.dart';
 
 abstract class StoryRepository {

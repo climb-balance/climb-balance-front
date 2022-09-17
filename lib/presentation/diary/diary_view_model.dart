@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/models/result.dart';
 import '../../data/repository/story_repository_impl.dart';
+import '../../domain/model/result.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
 import '../../domain/util/feedback_status.dart';

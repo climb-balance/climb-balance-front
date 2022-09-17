@@ -4,7 +4,7 @@ import 'package:climb_balance/common/const/server_config.dart';
 import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/models/result.dart';
+import '../../domain/model/result.dart';
 
 final userServerHelperProvider = Provider((ref) {
   return UserServerHelper(ref, ref.watch(serverServiceProvider));

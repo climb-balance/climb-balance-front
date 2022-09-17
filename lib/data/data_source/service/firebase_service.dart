@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/models/result.dart';
+import '../../../domain/model/result.dart';
 
 final firebaseServiceProvider = Provider<FirebaseService>((ref) {
   return FirebaseService();

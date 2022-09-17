@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/tag_selector.dart';
+import '../../domain/model/tag_selector.dart';
 
 List<DifficultySelector> difficultyData = [
   DifficultySelector(name: '난이도 정보 없음', color: Colors.white),

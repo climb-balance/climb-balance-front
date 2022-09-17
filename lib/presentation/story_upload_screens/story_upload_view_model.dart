@@ -7,8 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../../common/models/result.dart';
 import '../../common/provider/tag_selector_provider.dart';
+import '../../domain/model/result.dart';
 import '../common/custom_dialog.dart';
 import 'components/modal_picker.dart';
 import 'story_upload_state.dart';

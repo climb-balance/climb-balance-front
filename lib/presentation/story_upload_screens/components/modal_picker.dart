@@ -2,8 +2,8 @@ import 'package:climb_balance/presentation/common/components/search.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../common/models/tag_selector.dart';
 import '../../../../common/provider/tag_selector_provider.dart';
+import '../../../domain/model/tag_selector.dart';
 import 'pick_item.dart';
 
 class ModalPicker extends ConsumerWidget {

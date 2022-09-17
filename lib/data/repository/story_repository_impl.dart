@@ -6,7 +6,7 @@ import 'package:climb_balance/presentation/story_upload_screens/story_upload_sta
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/const/server_config.dart';
-import '../../common/models/result.dart';
+import '../../domain/model/result.dart';
 
 // TODO move to di
 final storyRepositoryImplProvider = Provider<StoryRepositoryImpl>((ref) {
