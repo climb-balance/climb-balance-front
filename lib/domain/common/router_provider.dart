@@ -21,7 +21,6 @@ import '../const/route_name.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   final token =
       ref.watch(currentUserProvider.select((value) => value.accessToken));
-
   return GoRouter(
     debugLogDiagnostics: true,
     initialLocation: token == '' ? authPagePath : homePageRoute,

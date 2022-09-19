@@ -8,6 +8,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../const/route_name.dart';
 import '../model/expert_profile.dart';
 
+final currentUserProvider =
+    StateNotifierProvider<CurrentUserNotifier, User>((ref) {
+  CurrentUserNotifier notifier = CurrentUserNotifier(
+    ref: ref,
+    storageService: ref.watch(storageServiceProvider),
+    server: ref.watch(userServerHelperProvider),
+  );
+  notifier.loadTokenFromStorage();
+  return notifier;
+});
+
 class CurrentUserNotifier extends StateNotifier<User> {
   final ref;
 
@@ -39,8 +50,9 @@ class CurrentUserNotifier extends StateNotifier<User> {
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
   void loadTokenFromStorage() {
     storageService.getStoredToken().then((value) {
-      loadUserInfo(value['token'] ?? '');
+      loadUserInfo(value);
     });
+    debugPrint(state.accessToken);
   }
 
   void loadUserInfo(String token) async {
@@ -63,14 +75,3 @@ class CurrentUserNotifier extends StateNotifier<User> {
     state = state.copyWith(expertProfile: profile, isExpert: true);
   }
 }
-
-final currentUserProvider =
-    StateNotifierProvider<CurrentUserNotifier, User>((ref) {
-  CurrentUserNotifier notifier = CurrentUserNotifier(
-    ref: ref,
-    storageService: ref.watch(storageServiceProvider),
-    server: ref.watch(userServerHelperProvider),
-  );
-  notifier.loadTokenFromStorage();
-  return notifier;
-});

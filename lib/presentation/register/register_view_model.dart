@@ -8,14 +8,14 @@ import '../../domain/repository/user_repository.dart';
 import 'register_state.dart';
 
 final registerViewModelProvider =
-    StateNotifierProvider.autoDispose<RegisterViewModel, RegisterState>((ref) {
+    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
   RegisterViewModel notifier = RegisterViewModel(
       ref: ref, repository: ref.watch(userRepositoryImplProvider));
   return notifier;
 });
 
 class RegisterViewModel extends StateNotifier<RegisterState> {
-  AutoDisposeStateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
+  StateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
   UserRepository repository;
 
   RegisterViewModel({required this.ref, required this.repository})
@@ -37,9 +37,13 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
     state = state.copyWith(weight: weight);
   }
 
-  void updateSex(bool value) {
+  void updateDescription(String value) {
+    state = state.copyWith(description: value);
+  }
+
+  void updateSex(bool isMale) {
     String ch = 'F';
-    if (value) {
+    if (isMale) {
       ch = 'M';
     }
     state = state.copyWith(sex: ch);
@@ -62,6 +66,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   /// 성공시 토큰을 업데이트하고 pop한다.
   /// 실패시 알려준다.
   void _register(BuildContext context) async {
+    debugPrint(state.toString());
     repository.createUser(state).then(
           (result) => result.when(
             success: (value) {

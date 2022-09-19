@@ -44,7 +44,7 @@ class NoAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return CircleAvatar(
-      backgroundColor: theme.colorScheme.secondary,
+      backgroundColor: theme.colorScheme.primary,
       radius: 60,
       child: const Icon(Icons.photo_sharp, size: 60),
     );

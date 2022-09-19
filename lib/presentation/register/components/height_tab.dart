@@ -5,18 +5,11 @@ import 'package:numberpicker/numberpicker.dart';
 import '../register_view_model.dart';
 import 'information.dart';
 
-class HeightInfo extends ConsumerStatefulWidget {
-  const HeightInfo({Key? key}) : super(key: key);
+class HeightTab extends ConsumerWidget {
+  const HeightTab({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<HeightInfo> createState() => _HeightInfoState();
-}
-
-class _HeightInfoState extends ConsumerState<HeightInfo> {
-  int height = 165;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     return Center(
       child: Column(
@@ -35,14 +28,10 @@ class _HeightInfoState extends ConsumerState<HeightInfo> {
             itemHeight: 50,
             minValue: 100,
             maxValue: 200,
-            value: height,
+            value: ref.watch(
+                registerViewModelProvider.select((value) => value.height)),
             onChanged: (value) {
-              setState(() {
-                height = value;
-                ref
-                    .read(registerViewModelProvider.notifier)
-                    .updateHeight(value);
-              });
+              ref.read(registerViewModelProvider.notifier).updateHeight(value);
             },
           ),
         ],

@@ -7,17 +7,24 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/components/avatar_picker.dart';
 
-class RegisterForm extends ConsumerWidget {
+class RegisterFormTab extends ConsumerWidget {
   final GlobalKey<FormState> formKey;
 
-  const RegisterForm({Key? key, required this.formKey}) : super(key: key);
+  const RegisterFormTab({Key? key, required this.formKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     return Form(
       key: formKey,
       child: Column(
         children: [
+          Text(
+            '성별',
+            style: theme.textTheme.subtitle1,
+          ),
+          const SexPicker(),
+          Divider(),
           Row(
             children: [
               Flexible(
@@ -59,10 +66,64 @@ class RegisterForm extends ConsumerWidget {
               ),
             ],
           ),
-          // const IntroduceTextInput(),
-          // ExpertRegisterButton(formKey: _formKey)
+          Divider(),
+          CustomTextInput(
+            handleUpdate:
+                ref.read(registerViewModelProvider.notifier).updateDescription,
+            checkValue: (String? value) {
+              return null;
+            },
+            maxLines: 3,
+            label: '자기소개',
+          ),
         ],
       ),
+    );
+  }
+}
+
+class SexPicker extends ConsumerWidget {
+  const SexPicker({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sex =
+        ref.watch(registerViewModelProvider.select((value) => value.sex));
+    final theme = Theme.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        InkWell(
+          child: Flexible(
+            child: Icon(
+              Icons.male,
+              size: 100,
+              color: sex == 'M'
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.secondary,
+            ),
+          ),
+          onTap: () {
+            ref.read(registerViewModelProvider.notifier).updateSex(true);
+          },
+        ),
+        InkWell(
+          child: Flexible(
+            child: Icon(
+              Icons.female,
+              size: 100,
+              color: sex == 'F'
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.secondary,
+            ),
+          ),
+          onTap: () {
+            ref.read(registerViewModelProvider.notifier).updateSex(false);
+          },
+        ),
+      ],
     );
   }
 }

@@ -8,10 +8,10 @@ final storageServiceProvider = Provider<StorageService>((ref) {
 });
 
 class StorageService {
-  Future<Map<String, String>> getStoredToken() async {
+  Future<String> getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
-    return {'token': token};
+    return token;
   }
 
   Future<void> storeStoredToken({required String token}) async {

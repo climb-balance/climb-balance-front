@@ -5,9 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
 import '../common/components/button.dart';
-import 'components/height_info.dart';
-import 'components/register_form.dart';
-import 'components/weight_info.dart';
+import 'components/height_tab.dart';
+import 'components/register_form_tab.dart';
+import 'components/weight_tab.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -26,9 +26,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   @override
   void initState() {
     registerTabs = [
-      const HeightInfo(),
-      const WeightInfo(),
-      RegisterForm(formKey: formKey),
+      const HeightTab(),
+      const WeightTab(),
+      RegisterFormTab(formKey: formKey),
     ];
     _tabController = TabController(length: registerTabs.length, vsync: this);
     super.initState();
@@ -38,6 +38,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    ref.read(registerViewModelProvider.notifier).dispose();
   }
 
   @override
@@ -86,7 +87,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             curPage += 1;
             setState(() {});
           },
-          text: '완료',
+          text: curPage == registerTabs.length - 1 ? '완료' : '다음',
         ),
       ),
     );

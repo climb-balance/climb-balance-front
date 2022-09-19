@@ -39,15 +39,14 @@ class UserServerHelper {
     }
   }
 
-  Future<Result<Map<String, dynamic>>> createUser(
-      RegisterState registerState) async {
+  Future<Result<void>> createUser(RegisterState registerState) async {
     try {
       final result = await server.post(
         url: serverAuthPath,
         data: registerState,
         accessToken: registerState.accessToken,
       );
-      return Result.success(jsonDecode(result));
+      return Result.success(null);
     } catch (e) {
       return Result.error('회원가입 오류 ${e.toString()}');
     }

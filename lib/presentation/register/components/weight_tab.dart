@@ -5,18 +5,11 @@ import 'package:numberpicker/numberpicker.dart';
 import '../register_view_model.dart';
 import 'information.dart';
 
-class WeightInfo extends ConsumerStatefulWidget {
-  const WeightInfo({Key? key}) : super(key: key);
+class WeightTab extends ConsumerWidget {
+  const WeightTab({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<WeightInfo> createState() => _WeightInfoState();
-}
-
-class _WeightInfoState extends ConsumerState<WeightInfo> {
-  int weight = 65;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     return Center(
       child: Column(
@@ -35,14 +28,10 @@ class _WeightInfoState extends ConsumerState<WeightInfo> {
             itemHeight: 50,
             minValue: 25,
             maxValue: 150,
-            value: weight,
+            value: ref.watch(
+                registerViewModelProvider.select((value) => value.weight)),
             onChanged: (value) {
-              setState(() {
-                weight = value;
-                ref
-                    .read(registerViewModelProvider.notifier)
-                    .updateWeight(value);
-              });
+              ref.read(registerViewModelProvider.notifier).updateWeight(value);
             },
           ),
         ],

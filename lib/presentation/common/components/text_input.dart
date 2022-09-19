@@ -5,12 +5,14 @@ class CustomTextInput extends ConsumerStatefulWidget {
   final void Function(String) handleUpdate;
   final String? Function(String?) checkValue;
   final String label;
+  final int maxLines;
 
   const CustomTextInput({
     Key? key,
     required this.handleUpdate,
     required this.checkValue,
     required this.label,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class _CustomTextInput extends ConsumerState<CustomTextInput> {
       decoration: InputDecoration(
         labelText: widget.label,
       ),
+      maxLines: widget.maxLines,
     );
   }
 }
