@@ -16,7 +16,10 @@ class RegisterScreen extends ConsumerStatefulWidget {
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen>
     with SingleTickerProviderStateMixin {
-  static const registerTabs = [HeightInfo(), WeightInfo()];
+  static const registerTabs = [
+    HeightInfo(),
+    WeightInfo(),
+  ];
   late TabController _tabController;
 
   @override

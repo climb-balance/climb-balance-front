@@ -7,4 +7,6 @@ abstract class UserRepository {
   Future<Result<User>> getUserProfileById(int userId);
 
   String getAuthUrl();
+
+  Future<Result<void>> createUser();
 }

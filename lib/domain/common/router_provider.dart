@@ -19,26 +19,13 @@ import '../const/route_config.dart';
 import '../const/route_name.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final token = ref.watch(currentUserProvider.select((value) => value.token));
+  final token =
+      ref.watch(currentUserProvider.select((value) => value.accessToken));
 
   return GoRouter(
     debugLogDiagnostics: true,
     initialLocation: token == '' ? authPagePath : homePageRoute,
     routes: <GoRoute>[
-      GoRoute(
-        path: authPagePath,
-        builder: (context, state) => const AuthScreen(),
-        name: authPageRouteName,
-        routes: [
-          GoRoute(
-            path: authNaverPageSubRoute,
-            pageBuilder: (context, state) => const MaterialPage<void>(
-              child: NaverWebView(),
-            ),
-            name: authNaverRouteName,
-          ),
-        ],
-      ),
       GoRoute(
         path: registerPageRoute,
         pageBuilder: (context, state) => const MaterialPage<void>(

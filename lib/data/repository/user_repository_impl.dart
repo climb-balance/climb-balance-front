@@ -41,4 +41,9 @@ class UserRepositoryImpl implements UserRepository {
   String getAuthUrl() {
     return '$serverUrl$serverNaverPath';
   }
+
+  @override
+  Future<Result<void>> createUser() async {
+    return Result.success(null);
+  }
 }

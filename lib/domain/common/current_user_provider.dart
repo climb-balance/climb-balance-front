@@ -22,16 +22,16 @@ class CurrentUserNotifier extends StateNotifier<User> {
   }) : super(const User());
 
   bool isEmpty() {
-    return state.token == '';
+    return state.accessToken == '';
   }
 
-  void updateToken({required String token}) {
-    state = state.copyWith(token: token);
-    storageService.storeStoredToken(token: token);
+  void updateToken({required String accessToken}) {
+    state = state.copyWith(accessToken: accessToken);
+    storageService.storeStoredToken(token: accessToken);
   }
 
   void logout(BuildContext context) {
-    state = state.copyWith(token: '');
+    state = state.copyWith(accessToken: '');
     storageService.clearStoredToken();
     context.goNamed(authPageRouteName);
   }

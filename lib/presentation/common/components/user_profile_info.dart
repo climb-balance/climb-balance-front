@@ -42,7 +42,7 @@ class TopProfileInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      user.nickName,
+                      user.nickname,
                       style: theme.textTheme.headline5,
                     ),
                     const SizedBox(
@@ -87,7 +87,7 @@ class BottomUserProfile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(user.nickName),
+                Text(user.nickname),
               ],
             ),
             Text(

@@ -11,11 +11,11 @@ part 'user.g.dart';
 @freezed
 class User with _$User {
   const factory User({
-    @Default('default') String nickName,
+    @Default('default') String nickname,
     @Default('https://i.ibb.co/d6SZN17/20220320-214742.jpg')
         String profileImage,
     @Default('') String description,
-    @Default('') String token,
+    @Default('') String accessToken,
     @Default(-1) int height,
     @Default(-1) int weight,
     @Default(false) bool isExpert,
@@ -31,7 +31,7 @@ User genRandomUser({bool isExpert = true}) {
   Random random = Random(1);
   if (isExpert) {
     return const User(
-      nickName: '심규진',
+      nickname: '심규진',
       profileImage: 'https://i.ibb.co/d6SZN17/20220320-214742.jpg',
       height: 160,
       weight: 50,
@@ -41,7 +41,7 @@ User genRandomUser({bool isExpert = true}) {
     );
   }
   return User(
-    nickName: '심규진',
+    nickname: '심규진',
     profileImage: 'https://i.ibb.co/d6SZN17/20220320-214742.jpg',
     height: 160,
     weight: 50,

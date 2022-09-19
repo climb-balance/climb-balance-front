@@ -33,4 +33,8 @@ class UserServerHelper {
       return const Result.error('유저 정보 불러오기 오류');
     }
   }
+
+  Future<Result<Map<String, dynamic>>> createUser() async {
+    return Result.success({"": 1});
+  }
 }
