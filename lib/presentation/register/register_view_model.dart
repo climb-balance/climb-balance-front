@@ -66,17 +66,17 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   /// 성공시 토큰을 업데이트하고 pop한다.
   /// 실패시 알려준다.
   void _register(BuildContext context) async {
-    debugPrint(state.toString());
     repository.createUser(state).then(
           (result) => result.when(
             success: (value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('성공')),
-              );
               ref
                   .read(currentUserProvider.notifier)
                   .updateToken(accessToken: state.accessToken);
               context.pop();
+              context.pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('성공')),
+              );
             },
             error: (message) {
               ScaffoldMessenger.of(context).showSnackBar(

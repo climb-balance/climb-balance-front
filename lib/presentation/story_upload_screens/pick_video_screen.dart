@@ -7,7 +7,6 @@ class PickVideoScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pickVideo = ref.read(storyUploadViewModelProvider.notifier).pickVideo;
     return ListView(
       shrinkWrap: true,
       children: [
@@ -15,7 +14,9 @@ class PickVideoScreen extends ConsumerWidget {
           height: 60,
           child: TextButton(
             onPressed: () {
-              pickVideo(isFromCam: true, context: context);
+              ref
+                  .watch(storyUploadViewModelProvider.notifier)
+                  .pickVideo(isFromCam: true, context: context);
             },
             child: const Text('직접 촬영하기'),
           ),
@@ -24,7 +25,9 @@ class PickVideoScreen extends ConsumerWidget {
           height: 60,
           child: TextButton(
             onPressed: () {
-              pickVideo(isFromCam: false, context: context);
+              ref
+                  .watch(storyUploadViewModelProvider.notifier)
+                  .pickVideo(isFromCam: false, context: context);
             },
             child: const Text('갤러리에서 선택하기'),
           ),

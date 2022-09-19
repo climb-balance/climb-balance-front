@@ -12,7 +12,7 @@ class StoryUploadState with _$StoryUploadState {
     @Default(0) int location,
     @Default(0) int difficulty,
     @Default(false) bool success,
-    @Default('empty') String description,
+    @Default('') String description,
     @Default(0) int videoTimestamp,
     @JsonKey(ignore: true) String? videoPath,
   }) = _StoryUploadState;

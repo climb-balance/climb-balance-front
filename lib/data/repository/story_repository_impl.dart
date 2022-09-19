@@ -65,8 +65,8 @@ class StoryRepositoryImpl implements StoryRepository {
   Future<Result<List<Story>>> getStories() async {
     final result = await server.getStories();
     return result.when(
-      success: (iterable) => Result.success(
-          StoryList.fromJson({"story_list": iterable}).storyList),
+      success: (iterable) =>
+          Result.success(StoryList.fromJson({"storyList": iterable}).storyList),
       error: (message) => Result.error(message),
     );
   }

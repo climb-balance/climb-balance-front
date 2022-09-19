@@ -14,7 +14,8 @@ import 'components/modal_picker.dart';
 import 'story_upload_state.dart';
 
 final storyUploadViewModelProvider =
-    StateNotifierProvider<StoryUploadViewModel, StoryUploadState>((ref) {
+    StateNotifierProvider.autoDispose<StoryUploadViewModel, StoryUploadState>(
+        (ref) {
   StoryUploadViewModel notifier = StoryUploadViewModel(
     ref: ref,
     repository: ref.watch(storyRepositoryImplProvider),
@@ -24,7 +25,8 @@ final storyUploadViewModelProvider =
 });
 
 class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
-  final ref;
+  final AutoDisposeStateNotifierProviderRef<StoryUploadViewModel,
+      StoryUploadState> ref;
   final StoryRepository repository;
 
   StoryUploadViewModel({required this.repository, required this.ref})
@@ -39,9 +41,11 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
       {required bool isFromCam, required BuildContext context}) async {
     final ImagePicker picker = ImagePicker();
     _init();
+    KeepAliveLink link = ref.keepAlive();
     picker
         .pickVideo(source: isFromCam ? ImageSource.camera : ImageSource.gallery)
         .then((image) async {
+      link.close();
       if (image == null) {
         return;
       }
