@@ -5,6 +5,7 @@ import 'package:climb_balance/domain/repository/user_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/const/server_config.dart';
+import '../../presentation/register/register_state.dart';
 
 final userRepositoryImplProvider = Provider<UserRepositoryImpl>((ref) {
   final notifier =
@@ -43,7 +44,11 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Result<void>> createUser() async {
-    return Result.success(null);
+  Future<Result<void>> createUser(RegisterState registerState) async {
+    final result = await server.createUser(registerState);
+    return result.when(
+      success: (value) => const Result.success(null),
+      error: (message) => Result.error(message),
+    );
   }
 }
