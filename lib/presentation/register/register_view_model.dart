@@ -81,12 +81,4 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
           ),
         );
   }
-
-  void nextPage() {
-    state = state.copyWith(curPage: (state.curPage + 1) % 2);
-  }
-
-  void lastPage() {
-    state = state.copyWith(curPage: (state.curPage - 1) % 2);
-  }
 }

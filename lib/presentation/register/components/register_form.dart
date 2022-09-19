@@ -7,20 +7,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/components/avatar_picker.dart';
 
-class RegisterForm extends ConsumerStatefulWidget {
-  const RegisterForm({Key? key}) : super(key: key);
+class RegisterForm extends ConsumerWidget {
+  final GlobalKey<FormState> formKey;
+
+  const RegisterForm({Key? key, required this.formKey}) : super(key: key);
 
   @override
-  ConsumerState<RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends ConsumerState<RegisterForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Column(
         children: [
           Row(

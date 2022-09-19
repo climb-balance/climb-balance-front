@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
+import '../common/components/button.dart';
 import 'components/height_info.dart';
+import 'components/register_form.dart';
 import 'components/weight_info.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -16,14 +18,18 @@ class RegisterScreen extends ConsumerStatefulWidget {
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen>
     with SingleTickerProviderStateMixin {
-  static const registerTabs = [
-    HeightInfo(),
-    WeightInfo(),
-  ];
+  int curPage = 0;
+  final formKey = GlobalKey<FormState>();
   late TabController _tabController;
+  late final List<Widget> registerTabs;
 
   @override
   void initState() {
+    registerTabs = [
+      const HeightInfo(),
+      const WeightInfo(),
+      RegisterForm(formKey: formKey),
+    ];
     _tabController = TabController(length: registerTabs.length, vsync: this);
     super.initState();
   }
@@ -36,9 +42,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
   @override
   Widget build(BuildContext context) {
-    final curPage =
-        ref.watch(registerViewModelProvider.select((value) => value.curPage));
+    final size = MediaQuery.of(context).size;
     _tabController.animateTo(curPage);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -55,7 +61,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           ),
           onPressed: () {
             if (curPage == 0) context.pop();
-            ref.read(registerViewModelProvider.notifier).lastPage();
+            curPage -= 1;
+            setState(() {});
           },
         ),
       ),
@@ -64,6 +71,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           physics: const NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: registerTabs,
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10),
+        child: FullSizeBtn(
+          onPressed: () {
+            if (curPage == registerTabs.length - 1) {
+              ref
+                  .read(registerViewModelProvider.notifier)
+                  .validate(formKey, context);
+              return;
+            }
+            curPage += 1;
+            setState(() {});
+          },
+          text: '완료',
         ),
       ),
     );

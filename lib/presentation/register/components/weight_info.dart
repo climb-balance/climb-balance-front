@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../common/components/button.dart';
 import '../register_view_model.dart';
 import 'information.dart';
 
@@ -40,18 +39,12 @@ class _WeightInfoState extends ConsumerState<WeightInfo> {
             onChanged: (value) {
               setState(() {
                 weight = value;
+                ref
+                    .read(registerViewModelProvider.notifier)
+                    .updateWeight(value);
               });
             },
           ),
-          FullSizeBtn(
-            onPressed: () {
-              final regiRef = ref.read(registerViewModelProvider.notifier);
-              regiRef.updateWeight(weight);
-              regiRef.nextPage();
-            },
-            text: '완료',
-          ),
-          FullSizeBtn(onPressed: () {}, text: '비밀로 할래요', type: 1),
         ],
       ),
     );

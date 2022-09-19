@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../common/components/button.dart';
 import '../register_view_model.dart';
 import 'information.dart';
 
@@ -40,17 +39,12 @@ class _HeightInfoState extends ConsumerState<HeightInfo> {
             onChanged: (value) {
               setState(() {
                 height = value;
+                ref
+                    .read(registerViewModelProvider.notifier)
+                    .updateHeight(value);
               });
             },
           ),
-          FullSizeBtn(
-            onPressed: () {
-              ref.read(registerViewModelProvider.notifier).updateHeight(height);
-              ref.read(registerViewModelProvider.notifier).nextPage();
-            },
-            text: '완료',
-          ),
-          FullSizeBtn(onPressed: () {}, text: '비밀로 할래요', type: 1),
         ],
       ),
     );
