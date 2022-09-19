@@ -1,4 +1,5 @@
 import 'package:climb_balance/data/repository/user_repository_impl.dart';
+import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,6 +17,7 @@ final registerViewModelProvider =
 class RegisterViewModel extends StateNotifier<RegisterState> {
   AutoDisposeStateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
   UserRepository repository;
+
   RegisterViewModel({required this.ref, required this.repository})
       : super(const RegisterState());
 
@@ -49,19 +51,36 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   /// form을 검증하는 함수
   /// 이후 _register를 호출해 업로드한다.
-  void validate(GlobalKey<FormState> formKey, BuildContext context) async {
+  void validate(GlobalKey<FormState> formKey, BuildContext context) {
     if (!formKey.currentState!.validate()) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('성공')),
-    );
-
-    context.pop();
-    return;
+    _register(context);
   }
 
-  void _register() async {}
+  /// 회원가입을 진행하는 함수
+  /// 성공시 토큰을 업데이트하고 pop한다.
+  /// 실패시 알려준다.
+  void _register(BuildContext context) async {
+    repository.createUser(state).then(
+          (result) => result.when(
+            success: (value) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('성공')),
+              );
+              ref
+                  .read(currentUserProvider.notifier)
+                  .updateToken(accessToken: state.accessToken);
+              context.pop();
+            },
+            error: (message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('회원가입 실패 $message')),
+              );
+            },
+          ),
+        );
+  }
 
   void nextPage() {
     state = state.copyWith(curPage: (state.curPage + 1) % 2);

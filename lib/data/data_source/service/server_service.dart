@@ -12,20 +12,24 @@ final serverServiceProvider = Provider<ServerService>((ref) {
 });
 
 class ServerService {
-  // TODO auth change
-  final Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Accpet': 'application/json',
-    'Authorization':
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzbnNfaWQiOjEsImVtYWlsIjoicGluZWRlbHRhQGljbG91ZC5jb20iLCJpYXQiOjE2NjEyMzQ0MzMsImV4cCI6MTY5Mjc5MjAzM30.BilNsIT7wxUTyEL1PK4dSzkjCReg54YgsIqQZyuo0N8',
-  };
+  Map<String, String> makeHeaders(String? accessToken) {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accpet': 'application/json',
+    };
+    if (accessToken != null) {
+      headers['Authorization'] = 'Bearer $accessToken';
+    }
+    return headers;
+  }
+
   final _timeOutDuration = const Duration(
     seconds: 5,
   );
 
-  Future<dynamic> get(String url) async {
+  Future<dynamic> get({required String url, String? accessToken}) async {
     http.Response res = await http
-        .get(Uri.parse(serverUrl + url), headers: headers)
+        .get(Uri.parse(serverUrl + url), headers: makeHeaders(accessToken))
         .timeout(_timeOutDuration)
         .catchError((err) => throw err)
         .whenComplete(() {});
@@ -37,12 +41,13 @@ class ServerService {
     return body;
   }
 
-  Future<dynamic> post(String url, dynamic data) async {
+  Future<dynamic> post(
+      {required String url, required dynamic data, String? accessToken}) async {
     http.Response res = await http
         .post(
           Uri.parse(serverUrl + url),
           body: jsonEncode(data),
-          headers: headers,
+          headers: makeHeaders(accessToken),
         )
         .timeout(_timeOutDuration)
         .catchError((err) => throw err)
@@ -55,12 +60,13 @@ class ServerService {
     return body;
   }
 
-  Future<dynamic> put(String url, dynamic data) async {
+  Future<dynamic> put(
+      {required String url, required dynamic data, String? accessToken}) async {
     http.Response res = await http
         .put(
           Uri.parse(serverUrl + url),
           body: jsonEncode(data),
-          headers: headers,
+          headers: makeHeaders(accessToken),
         )
         .timeout(_timeOutDuration)
         .catchError((err) => throw err)
@@ -74,7 +80,7 @@ class ServerService {
   }
 
   Future<dynamic> multiPartUpload(String url, String videoPath) async {
-    Uri uri = Uri.parse('${serverUrl}${url}');
+    Uri uri = Uri.parse('$serverUrl$url');
     final req = http.MultipartRequest('POST', uri);
     try {
       final multiPartFile = await http.MultipartFile.fromPath('file', videoPath)

@@ -22,7 +22,10 @@ class StoryServerHelper {
   Future<Result<void>> createStory(StoryUploadState storyUpload) async {
     int storyId;
     try {
-      final result = await server.post(serverStoryPath, storyUpload);
+      final result = await server.post(
+        url: serverStoryPath,
+        data: storyUpload,
+      );
       storyId = jsonDecode(result)['storyId'];
     } catch (e) {
       return const Result.error('스토리 업로드 오류');
@@ -43,7 +46,7 @@ class StoryServerHelper {
 
   Future<Result<Map<String, dynamic>>> getStoryById(int storyId) async {
     try {
-      final result = await server.get('$serverStoryPath/$storyId');
+      final result = await server.get(url: '$serverStoryPath/$storyId');
       return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
@@ -57,7 +60,7 @@ class StoryServerHelper {
 
   Future<Result<Iterable>> getStories() async {
     try {
-      final result = await server.get(serverStoryPath);
+      final result = await server.get(url: serverStoryPath);
       return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
@@ -66,8 +69,8 @@ class StoryServerHelper {
 
   Future<Result<String>> getStoryThumbnailPathById(int storyId) async {
     try {
-      final result = await server
-          .get('$serverStoryPath/$storyId$serverVideoPath?type=thumbnail');
+      final result = await server.get(
+          url: '$serverStoryPath/$storyId$serverVideoPath?type=thumbnail');
 
       return Result.success(jsonDecode(result)["url"]);
     } catch (e) {
@@ -77,8 +80,8 @@ class StoryServerHelper {
 
   Future<Result<Iterable>> getStoryAiDetailById(int storyId) async {
     try {
-      final body = await server
-          .get('$serverStoryPath/$storyId$serverVideoPath?type=json');
+      final body = await server.get(
+          url: '$serverStoryPath/$storyId$serverVideoPath?type=json');
       return Result.success(jsonDecode(body));
     } catch (e) {
       return const Result.error('영상 불러오기 오류');
@@ -108,8 +111,8 @@ class StoryServerHelper {
   Future<Result<void>> putAiFeedback(int storyId, String pushToken) async {
     try {
       final result = await server.put(
-        '$serverStoryPath/$storyId$serverAiFeedbackPath',
-        {
+        url: '$serverStoryPath/$storyId$serverAiFeedbackPath',
+        data: {
           'token': pushToken,
         },
       );
