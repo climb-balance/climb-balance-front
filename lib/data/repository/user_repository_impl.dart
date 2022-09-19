@@ -39,7 +39,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   String getAuthUrl() {
-    return '$serverUrl$serverNaverPath';
+    return '$serverUrl$serverAuthPath';
   }
 
   @override

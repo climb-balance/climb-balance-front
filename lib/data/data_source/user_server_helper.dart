@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:climb_balance/domain/const/server_config.dart';
+import 'package:climb_balance/presentation/register/register_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/model/result.dart';
@@ -34,7 +35,13 @@ class UserServerHelper {
     }
   }
 
-  Future<Result<Map<String, dynamic>>> createUser() async {
-    return Result.success({"": 1});
+  Future<Result<Map<String, dynamic>>> createUser(
+      RegisterState registerState) async {
+    try {
+      final result = await server.post(serverAuthPath, registerState);
+      return Result.success(jsonDecode(result));
+    } catch (e) {
+      return Result.error('회원가입 오류 ${e.toString()}');
+    }
   }
 }
