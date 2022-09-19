@@ -34,7 +34,7 @@ class ServerService {
         .catchError((err) => throw err)
         .whenComplete(() {});
     final statusCode = res.statusCode;
-    final body = res.bodyBytes;
+    final body = res.body;
     if (statusCode < 200 || statusCode >= 400) {
       throw const HttpException('요청 에러');
     }
@@ -53,7 +53,7 @@ class ServerService {
         .catchError((err) => throw err)
         .whenComplete(() {});
     final statusCode = res.statusCode;
-    final body = res.bodyBytes;
+    final body = res.body;
     if (statusCode < 200 || statusCode >= 400) {
       throw const HttpException('요청 에러');
     }
@@ -72,7 +72,7 @@ class ServerService {
         .catchError((err) => throw err)
         .whenComplete(() {});
     final statusCode = res.statusCode;
-    final body = res.bodyBytes;
+    final body = res.body;
     if (statusCode < 200 || statusCode >= 400) {
       throw const HttpException('요청 에러');
     }

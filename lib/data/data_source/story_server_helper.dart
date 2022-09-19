@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:climb_balance/data/data_source/service/server_service.dart';
+import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/const/server_config.dart';
@@ -11,13 +12,14 @@ import '../../presentation/story_upload_screens/story_upload_state.dart';
 // TODO move to di
 final storyServerHelperProvider = Provider<StoryServerHelper>((ref) {
   final server = ref.watch(serverServiceProvider);
-  return StoryServerHelper(server);
+  return StoryServerHelper(server, ref);
 });
 
 class StoryServerHelper {
   final ServerService server;
+  final ProviderRef<StoryServerHelper> ref;
 
-  const StoryServerHelper(this.server);
+  const StoryServerHelper(this.server, this.ref);
 
   Future<Result<void>> createStory(StoryUploadState storyUpload) async {
     int storyId;
@@ -25,6 +27,8 @@ class StoryServerHelper {
       final result = await server.post(
         url: serverStoryPath,
         data: storyUpload,
+        accessToken:
+            ref.watch(currentUserProvider.select((value) => value.accessToken)),
       );
       storyId = jsonDecode(result)['storyId'];
     } catch (e) {
@@ -60,7 +64,10 @@ class StoryServerHelper {
 
   Future<Result<Iterable>> getStories() async {
     try {
-      final result = await server.get(url: serverStoryPath);
+      final result = await server.get(
+          url: serverStoryPath,
+          accessToken: ref
+              .watch(currentUserProvider.select((value) => value.accessToken)));
       return Result.success(jsonDecode(result));
     } catch (e) {
       return const Result.error('네트워크 에러');
