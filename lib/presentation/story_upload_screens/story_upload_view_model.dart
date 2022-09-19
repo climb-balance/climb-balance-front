@@ -127,7 +127,6 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         context.pop();
         customShowDialog(
             context: context, title: '업로드 성공', content: '스토리 업로드 완료');
-        dispose();
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);
