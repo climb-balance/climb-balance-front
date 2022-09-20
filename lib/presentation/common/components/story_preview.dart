@@ -1,50 +1,31 @@
-import 'dart:typed_data';
-
-import 'package:climb_balance/data/repository/story_repository_impl.dart';
+import 'package:climb_balance/presentation/diary/diary_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../domain/common/tag_selector_provider.dart';
+import '../../../domain/const/route_name.dart';
 import '../../../domain/model/story.dart';
 
-// TODO rollback to stateless
-class StoryPreview extends ConsumerStatefulWidget {
+class StoryPreview extends ConsumerWidget {
   final Story story;
 
   const StoryPreview({Key? key, required this.story}) : super(key: key);
 
   @override
-  ConsumerState<StoryPreview> createState() => _StoryPreviewState();
-}
-
-class _StoryPreviewState extends ConsumerState<StoryPreview> {
-  Uint8List? data;
-
-  void getThumbnail() async {
-    final repository = ref.watch(storyRepositoryImplProvider);
-    data = await VideoThumbnail.thumbnailData(
-      video: repository.getStoryThumbnailPath(widget.story.storyId),
-      imageFormat: ImageFormat.JPEG,
-      quality: 100,
-    );
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getThumbnail();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final image = ref
+        .watch(diaryViewModelProvider.notifier)
+        .getThumbnailUrl(story.storyId);
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.surfaceVariant,
         onTap: () {
-          // TODO move to story
+          context.pushNamed(
+            diaryStoryRouteName,
+            queryParams: {'sid': story.storyId},
+          );
         },
         child: Stack(
           children: [
@@ -52,14 +33,10 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: (data == null
-                      ? const NetworkImage('https://i.imgur.com/wJuxMJU.jpeg')
-                      : MemoryImage(data!) as ImageProvider),
-                ),
+                    fit: BoxFit.cover, image: NetworkImage(image)),
               ),
             ),
-            StoryPreviewIcon(story: widget.story)
+            StoryPreviewIcon(story: story)
           ],
         ),
       ),
