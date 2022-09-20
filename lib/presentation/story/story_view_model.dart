@@ -1,6 +1,6 @@
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
-import 'package:climb_balance/domain/const/route_config.dart';
+import 'package:climb_balance/domain/const/route_name.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:climb_balance/presentation/story/story_state.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class StoryViewModel extends StateNotifier<StoryState> {
     final result = await userRepository.getUserProfileById(uploaderId);
     result.when(
       success: (value) {
-        state.copyWith(
+        state = state.copyWith(
           uploader: value,
         );
       },
@@ -65,7 +65,8 @@ class StoryViewModel extends StateNotifier<StoryState> {
     final int rank =
         ref.watch(currentUserProvider.select((value) => value.rank));
     if (rank == 0) {
-      context.push(aiAdsPageSubRoute);
+      context.pushNamed(aiAdsRouteName);
+      return;
     }
     final result = await storyRepository.putAiFeedback(state.story.storyId);
     result.when(

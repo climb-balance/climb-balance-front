@@ -29,8 +29,7 @@ class StoryOverlay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final story = ref
         .watch(storyViewModelProvider(storyId).select((value) => value.story));
-    final uploader = ref.watch(
-        storyViewModelProvider(storyId).select((value) => value.uploader));
+
     return GestureDetector(
       onTapUp: (_) {
         if (!videoPlayerController.value.isInitialized) return;
@@ -68,7 +67,8 @@ class StoryOverlay extends ConsumerWidget {
                 ),
               ),
               BottomUserProfile(
-                user: uploader,
+                user: ref.watch(storyViewModelProvider(storyId)
+                    .select((value) => value.uploader)),
                 description: story.description,
               ),
             ],
@@ -119,6 +119,7 @@ class StoryButtons extends ConsumerWidget {
         if (curUserId == curUserId && story.aiStatus == FeedbackStatus.complete)
           TextButton(
             onPressed: () {
+              // TODO named로
               context.push(aiPageSubRoute);
             },
             child: Column(
