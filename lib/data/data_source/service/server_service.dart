@@ -36,7 +36,7 @@ class ServerService {
     final statusCode = res.statusCode;
     final body = res.body;
     if (statusCode < 200 || statusCode >= 400) {
-      throw const HttpException('요청 에러');
+      throw HttpException(res.body);
     }
     return body;
   }
@@ -55,7 +55,7 @@ class ServerService {
     final statusCode = res.statusCode;
     final body = res.body;
     if (statusCode < 200 || statusCode >= 400) {
-      throw const HttpException('요청 에러');
+      throw HttpException(res.body);
     }
     return body;
   }
@@ -74,7 +74,7 @@ class ServerService {
     final statusCode = res.statusCode;
     final body = res.body;
     if (statusCode < 200 || statusCode >= 400) {
-      throw const HttpException('요청 에러');
+      throw HttpException(res.body);
     }
     return body;
   }
