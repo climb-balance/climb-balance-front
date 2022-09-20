@@ -50,8 +50,10 @@ class StoryRepositoryImpl implements StoryRepository {
     );
   }
 
-  // TODO this function must be removed
-  // this is tmp
+  /// TODO this function must be removed
+  /// 임시 함수입니다.
+  /// 스토리 경로를 만들어서 가져옵니다.
+  @override
   String getStoryThumbnailPath(int storyId) {
     return '$serverUrl$serverStoryPath/$storyId$serverVideoPath?type=thumbnail';
   }

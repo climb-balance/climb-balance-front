@@ -7,7 +7,7 @@ import '../common/ui/theme/specific_theme.dart';
 import 'components/story_comments.dart';
 import 'components/story_overlay.dart';
 
-class StoryScreen extends ConsumerStatefulWidget {
+class StoryScreen extends ConsumerWidget {
   final int storyId;
 
   const StoryScreen({
@@ -16,16 +16,51 @@ class StoryScreen extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<StoryScreen> createState() => _StoryScreenState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(storyViewModelProvider(storyId)
+            .select((value) => value.story.storyId)) ==
+        storyId) {
+      return _Story(storyId: storyId);
+    }
+    return Container();
+  }
 }
 
-class _StoryScreenState extends ConsumerState<StoryScreen> {
+class _Story extends ConsumerStatefulWidget {
+  final int storyId;
+
+  const _Story({
+    Key? key,
+    required this.storyId,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<_Story> createState() => _StoryState();
+}
+
+class _StoryState extends ConsumerState<_Story> {
   late final VideoPlayerController _videoPlayerController;
   bool isCommentOpen = false;
 
   void toggleCommentOpen() {
     setState(() {
       isCommentOpen = !isCommentOpen;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.network(
+      ref
+          .read(storyViewModelProvider(widget.storyId).notifier)
+          .getStoryVideoPath(),
+      formatHint: VideoFormat.hls,
+    );
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+      _videoPlayerController.setLooping(true);
+      setState(() {});
     });
   }
 
@@ -38,17 +73,6 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
   @override
   Widget build(BuildContext context) {
     const themeColor = ColorScheme.dark();
-    _videoPlayerController = VideoPlayerController.network(
-      ref
-          .read(storyViewModelProvider(widget.storyId).notifier)
-          .getStoryVideoPath(),
-      formatHint: VideoFormat.hls,
-    );
-    _videoPlayerController.initialize().then((_) {
-      _videoPlayerController.play();
-      _videoPlayerController.setLooping(true);
-      setState(() {});
-    });
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(

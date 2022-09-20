@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../domain/common/tag_selector_provider.dart';
-import '../../../domain/const/route_name.dart';
 import '../../../domain/model/story.dart';
 
 class StoryPreview extends ConsumerWidget {
@@ -22,9 +21,9 @@ class StoryPreview extends ConsumerWidget {
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.surfaceVariant,
         onTap: () {
-          context.pushNamed(
-            diaryStoryRouteName,
-            queryParams: {'sid': story.storyId},
+          // TODO named push not working
+          context.push(
+            '/diary/story/${story.storyId}',
           );
         },
         child: Stack(

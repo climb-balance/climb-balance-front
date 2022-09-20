@@ -12,6 +12,8 @@ abstract class StoryRepository {
 
   Future<Result<String>> getStoryThumbnailPathById(int storyId);
 
+  String getStoryThumbnailPath(int storyId);
+
   String getStoryVideoPathById(int storyId, {bool isAi = false});
 
   Future<Result<AiFeedbackState>> getStoryAiDetailById(int storyId);

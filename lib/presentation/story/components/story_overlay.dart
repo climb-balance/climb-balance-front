@@ -74,9 +74,11 @@ class StoryOverlay extends ConsumerWidget {
             ],
           ),
         ),
-        bottomNavigationBar: ProgressBar(
-          videoPlayerController: videoPlayerController,
-        ),
+        bottomNavigationBar: videoPlayerController.value.isInitialized
+            ? ProgressBar(
+                videoPlayerController: videoPlayerController,
+              )
+            : Container(),
       ),
     );
   }
