@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:climb_balance/data/data_source/service/server_service.dart';
-import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/const/server_config.dart';
 import 'package:climb_balance/presentation/register/register_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,15 +17,17 @@ class UserServerHelper {
 
   const UserServerHelper(this.ref, this.server);
 
-  Future<Result<Map<String, dynamic>>> getCurrentUserProfile() async {
+  /// circular denpedency 홰결을 위해 직접 받도록
+  Future<Result<Map<String, dynamic>>> getCurrentUserProfile(
+      String accessToken) async {
     try {
       final result = await server.get(
-          url: serverProfilePath,
-          accessToken: ref
-              .watch(currentUserProvider.select((value) => value.accessToken)));
+        url: serverProfilePath,
+        accessToken: accessToken,
+      );
       return Result.success(jsonDecode(result));
     } catch (e) {
-      return const Result.error('내 정보 불러오기 오류');
+      return Result.error('내 정보 불러오기 오류 $e');
     }
   }
 
@@ -35,7 +36,7 @@ class UserServerHelper {
       final result = await server.get(url: '$serverProfilePath/$userId');
       return Result.success(jsonDecode(result));
     } catch (e) {
-      return const Result.error('유저 정보 불러오기 오류');
+      return Result.error('유저 정보 불러오기 오류 $e');
     }
   }
 

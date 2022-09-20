@@ -3,7 +3,7 @@ import '../model/result.dart';
 import '../model/user.dart';
 
 abstract class UserRepository {
-  Future<Result<User>> getCurrentUserProfile();
+  Future<Result<User>> getCurrentUserProfile(String accessToken);
 
   Future<Result<User>> getUserProfileById(int userId);
 

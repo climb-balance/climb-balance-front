@@ -23,8 +23,8 @@ class UserRepositoryImpl implements UserRepository {
   });
 
   @override
-  Future<Result<User>> getCurrentUserProfile() async {
-    final result = await server.getCurrentUserProfile();
+  Future<Result<User>> getCurrentUserProfile(String accessToken) async {
+    final result = await server.getCurrentUserProfile(accessToken);
     return result.when(
         success: (value) => Result.success(User.fromJson(value)),
         error: (message) => Result.error(message));

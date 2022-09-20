@@ -1,6 +1,7 @@
 import 'package:climb_balance/data/data_source/service/storage_service.dart';
-import 'package:climb_balance/data/data_source/user_server_helper.dart';
+import 'package:climb_balance/data/repository/user_repository_impl.dart';
 import 'package:climb_balance/domain/model/user.dart';
+import 'package:climb_balance/domain/repository/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,7 +14,7 @@ final currentUserProvider =
   CurrentUserNotifier notifier = CurrentUserNotifier(
     ref: ref,
     storageService: ref.watch(storageServiceProvider),
-    server: ref.watch(userServerHelperProvider),
+    repository: ref.watch(userRepositoryImplProvider),
   );
   notifier.loadTokenFromStorage();
   return notifier;
@@ -24,12 +25,12 @@ class CurrentUserNotifier extends StateNotifier<User> {
 
   // TODO by repository
   final StorageService storageService;
-  final UserServerHelper server;
+  final UserRepository repository;
 
   CurrentUserNotifier({
     required this.ref,
     required this.storageService,
-    required this.server,
+    required this.repository,
   }) : super(const User());
 
   bool isEmpty() {
@@ -49,21 +50,16 @@ class CurrentUserNotifier extends StateNotifier<User> {
 
   // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
   void loadTokenFromStorage() {
-    storageService.getStoredToken().then((value) {
-      loadUserInfo(value);
+    storageService.getStoredToken().then((token) {
+      loadUserInfo(token);
     });
-    debugPrint(state.accessToken);
   }
 
   void loadUserInfo(String token) async {
-    if (token == '') {
-      // TODO logout -> page move
-      return;
-    }
-    final result = await server.getCurrentUserProfile();
+    final result = await repository.getCurrentUserProfile(token);
     result.when(
       success: (value) {
-        state = value.copyWith(token: token);
+        state = value.copyWith(accessToken: token);
       },
       error: (message) {
         // TODO logout -> page move

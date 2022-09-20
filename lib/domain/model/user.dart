@@ -27,6 +27,7 @@ class User with _$User {
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
 }
 
+// TODO REMOVE
 User genRandomUser({bool isExpert = true}) {
   Random random = Random(1);
   if (isExpert) {
