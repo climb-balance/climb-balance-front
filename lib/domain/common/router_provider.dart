@@ -86,12 +86,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                   );
                 },
               ),
-              GoRoute(
-                path: aiAdsPageSubRoute,
-                builder: (context, state) {
-                  return const AiFeedbackAdsScreen();
-                },
-              ),
             ],
           ),
         ],
@@ -122,6 +116,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: StoryUploadScreen(),
         ),
         name: storyUploadRouteName,
+      ),
+      GoRoute(
+        path: aiAdsPageRoute,
+        builder: (context, state) {
+          return const AiFeedbackAdsScreen();
+        },
+        name: aiAdsRouteName,
       ),
     ],
   );

@@ -38,7 +38,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   void dispose() {
     super.dispose();
     _tabController.dispose();
-    ref.read(registerViewModelProvider.notifier).dispose();
   }
 
   @override
@@ -61,7 +60,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             color: Theme.of(context).primaryColorDark,
           ),
           onPressed: () {
-            if (curPage == 0) context.pop();
+            if (curPage == 0) {
+              context.pop();
+              return;
+            }
             curPage -= 1;
             setState(() {});
           },

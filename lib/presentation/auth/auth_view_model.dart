@@ -13,7 +13,7 @@ import '../../domain/repository/user_repository.dart';
 import 'auth_state.dart';
 
 final authViewModelProvider =
-    StateNotifierProvider<AuthViewModel, AuthState>((ref) {
+    StateNotifierProvider.autoDispose<AuthViewModel, AuthState>((ref) {
   final notifier = AuthViewModel(
       repository: ref.watch(userRepositoryImplProvider), ref: ref);
   return notifier;
@@ -21,7 +21,7 @@ final authViewModelProvider =
 
 class AuthViewModel extends StateNotifier<AuthState> {
   final UserRepository repository;
-  final StateNotifierProviderRef<AuthViewModel, AuthState> ref;
+  final AutoDisposeStateNotifierProviderRef<AuthViewModel, AuthState> ref;
 
   AuthViewModel({required this.repository, required this.ref})
       : super(const AuthState());
@@ -41,16 +41,16 @@ class AuthViewModel extends StateNotifier<AuthState> {
             "window.document.getElementsByTagName('html')[0].innerText;")
         .then((html) {
       state = AuthState.fromJson(jsonDecode(jsonDecode(html)));
-      context.pop();
       if (state.needsRegister) {
-        context.pushNamed(registerRouteName);
         ref
-            .read(registerViewModelProvider.notifier)
+            .watch(registerViewModelProvider.notifier)
             .updateAccessToken(state.accessToken);
+        context.goNamed(registerRouteName);
       } else {
-        ref
+        () => ref
             .read(currentUserProvider.notifier)
             .updateToken(accessToken: state.accessToken);
+        context.go('/');
       }
     }).catchError((_) {
       context.pop();

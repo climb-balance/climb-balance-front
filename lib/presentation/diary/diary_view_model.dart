@@ -55,6 +55,10 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
         storyFilter: storyFilter);
   }
 
+  String getThumbnailUrl(int storyId) {
+    return repository.getStoryThumbnailPath(storyId);
+  }
+
   String _makeStoryKey(Story story) {
     return story.tags.videoTimestamp.toString() +
         story.tags.location.toString();
