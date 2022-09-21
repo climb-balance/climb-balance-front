@@ -42,11 +42,11 @@ class AuthViewModel extends StateNotifier<AuthState> {
         .then((html) {
       state = AuthState.fromJson(jsonDecode(jsonDecode(html)));
       if (state.needsRegister) {
+        context.pop();
+        context.pushNamed(registerRouteName);
         ref
             .watch(registerViewModelProvider.notifier)
             .updateAccessToken(state.accessToken);
-        context.pop();
-        context.pushNamed(registerRouteName);
       } else {
         () => ref
             .read(currentUserProvider.notifier)

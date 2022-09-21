@@ -8,20 +8,22 @@ import '../../domain/repository/user_repository.dart';
 import 'register_state.dart';
 
 final registerViewModelProvider =
-    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
+    StateNotifierProvider.autoDispose<RegisterViewModel, RegisterState>((ref) {
   RegisterViewModel notifier = RegisterViewModel(
       ref: ref, repository: ref.watch(userRepositoryImplProvider));
   return notifier;
 });
 
 class RegisterViewModel extends StateNotifier<RegisterState> {
-  StateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
+  AutoDisposeStateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
   UserRepository repository;
+  KeepAliveLink? link;
 
   RegisterViewModel({required this.ref, required this.repository})
       : super(const RegisterState());
 
   void updateAccessToken(String accessToken) {
+    link ??= ref.keepAlive();
     state = state.copyWith(accessToken: accessToken);
   }
 
@@ -85,5 +87,6 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             },
           ),
         );
+    link?.close();
   }
 }
