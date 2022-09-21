@@ -1,3 +1,4 @@
+import 'package:climb_balance/presentation/common/components/checkbox_formfield.dart';
 import 'package:climb_balance/presentation/common/components/text_input.dart';
 import 'package:climb_balance/presentation/register/components/sex_picker.dart';
 import 'package:climb_balance/presentation/register/register_view_model.dart';
@@ -75,32 +76,100 @@ class RegisterFormTab extends ConsumerWidget {
             maxLines: 3,
             label: '자기소개',
           ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('여기 동의하시면 필수 약관어쩌구'),
-                    Checkbox(
-                      value: false,
-                      onChanged: (_) {},
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('여기 동의하시면 선택 약관어쩌구'),
-                    Checkbox(
-                      value: false,
-                      onChanged: (_) {},
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          CheckBoxes(formKey: formKey),
+        ],
+      ),
+    );
+  }
+}
+
+class CheckBoxes extends ConsumerStatefulWidget {
+  final GlobalKey<FormState> formKey;
+
+  const CheckBoxes({
+    Key? key,
+    required this.formKey,
+  }) : super(key: key);
+
+  @override
+  ConsumerState createState() => _CheckBoxesState();
+}
+
+class _CheckBoxesState extends ConsumerState<CheckBoxes> {
+  List<bool> values = [false, false, false, false];
+
+  void updateValue(int idx) {
+    if (idx == 0) {
+      bool nxtVal = !values[0];
+      values = values.map((value) => nxtVal).toList();
+    } else {
+      values[idx] = !values[idx];
+    }
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('모두 동의하기'),
+              Checkbox(
+                value: values[0],
+                onChanged: (_) {
+                  updateValue(0);
+                },
+              ),
+            ],
+          ),
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('여기 동의하시면 필수 약관어쩌구'),
+              CheckBoxFormField(
+                onChanged: (value) {
+                  updateValue(1);
+                },
+                value: values[1],
+                label: Container(),
+                validator: (bool? value) {
+                  if (values[1] == false) {
+                    return '필수입니다.';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('여기 동의하시면 선택 약관어쩌구'),
+              Checkbox(
+                value: values[2],
+                onChanged: (_) {
+                  updateValue(2);
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('여기 동의하시면 광고 선택 약관어쩌구'),
+              Checkbox(
+                value: values[3],
+                onChanged: (_) {
+                  updateValue(3);
+                },
+              ),
+            ],
           ),
         ],
       ),

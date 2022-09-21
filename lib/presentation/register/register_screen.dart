@@ -89,6 +89,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             curPage += 1;
             setState(() {});
           },
+          type: curPage != registerTabs.length - 1 ||
+                  formKey.currentState != null &&
+                      formKey.currentState!.validate()
+              ? 0
+              : 1,
           text: curPage == registerTabs.length - 1 ? '완료' : '다음',
         ),
       ),
