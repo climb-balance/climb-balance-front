@@ -36,6 +36,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   }
 
   void authComplete(WebViewController controller, BuildContext context) async {
+    final link = ref.keepAlive();
     await controller
         .runJavascriptReturningResult(
             "window.document.getElementsByTagName('html')[0].innerText;")
@@ -58,5 +59,6 @@ class AuthViewModel extends StateNotifier<AuthState> {
     }).catchError((_) {
       context.pop();
     });
+    link.close();
   }
 }
