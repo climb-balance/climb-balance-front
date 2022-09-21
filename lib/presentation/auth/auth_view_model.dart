@@ -26,8 +26,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   AuthViewModel({required this.repository, required this.ref})
       : super(const AuthState());
 
-  void onNaverLogin(
-      BuildContext context, WidgetRef ref, bool toRegister) async {
+  void onNaverLogin(BuildContext context) async {
     context.pushNamed(authNaverRouteName);
   }
 
