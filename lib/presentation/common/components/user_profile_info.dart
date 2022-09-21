@@ -9,7 +9,6 @@ class TopProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(user.profileImage);
     final theme = Theme.of(context);
     return Container(
       height: 150,
