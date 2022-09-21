@@ -45,11 +45,14 @@ class AuthViewModel extends StateNotifier<AuthState> {
         ref
             .watch(registerViewModelProvider.notifier)
             .updateAccessToken(state.accessToken);
-        context.goNamed(registerRouteName);
+        context.pop();
+        context.pushNamed(registerRouteName);
       } else {
         () => ref
             .read(currentUserProvider.notifier)
             .updateToken(accessToken: state.accessToken);
+        // TODO update>?
+        context.pop();
         context.go('/');
       }
     }).catchError((_) {
