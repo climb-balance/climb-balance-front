@@ -48,9 +48,14 @@ class RegisterFormTab extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CustomTextInput(
-                      handleUpdate: ref
-                          .read(registerViewModelProvider.notifier)
-                          .updateNickname,
+                      handleUpdate: (value) {
+                        ref
+                            .read(registerViewModelProvider.notifier)
+                            .updateNickname(value);
+                        ref
+                            .read(registerViewModelProvider.notifier)
+                            .valid(formKey);
+                      },
                       checkValue: (String? value) {
                         if (value == null) {
                           return '입력해주세요';
@@ -68,8 +73,12 @@ class RegisterFormTab extends ConsumerWidget {
           ),
           const Divider(),
           CustomTextInput(
-            handleUpdate:
-                ref.read(registerViewModelProvider.notifier).updateDescription,
+            handleUpdate: (value) {
+              ref
+                  .read(registerViewModelProvider.notifier)
+                  .updateDescription(value);
+              ref.read(registerViewModelProvider.notifier).valid(formKey);
+            },
             checkValue: (String? value) {
               return null;
             },
@@ -96,17 +105,16 @@ class CheckBoxes extends ConsumerStatefulWidget {
 }
 
 class _CheckBoxesState extends ConsumerState<CheckBoxes> {
-  List<bool> values = [false, false, false, false];
+  bool allCheck = false;
 
-  void updateValue(int idx) {
-    if (idx == 0) {
-      bool nxtVal = !values[0];
-      values = values.map((value) => nxtVal).toList();
-    } else {
-      values[idx] = !values[idx];
-    }
+  void updateValue() {
+    allCheck = !allCheck;
+    ref.read(registerViewModelProvider.notifier).updatePersonalCheck(allCheck);
+    ref.read(registerViewModelProvider.notifier).updatePromotionCheck(allCheck);
+    ref.read(registerViewModelProvider.notifier).updateRequiredCheck(allCheck);
 
     setState(() {});
+    ref.read(registerViewModelProvider.notifier).valid(widget.formKey);
   }
 
   @override
@@ -120,9 +128,9 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
             children: [
               const Text('모두 동의하기'),
               Checkbox(
-                value: values[0],
+                value: allCheck,
                 onChanged: (_) {
-                  updateValue(0);
+                  updateValue();
                 },
               ),
             ],
@@ -134,12 +142,19 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
               const Text('여기 동의하시면 필수 약관어쩌구'),
               CheckBoxFormField(
                 onChanged: (value) {
-                  updateValue(1);
+                  if (value == null) return;
+                  ref
+                      .read(registerViewModelProvider.notifier)
+                      .updateRequiredCheck(value);
+                  ref
+                      .read(registerViewModelProvider.notifier)
+                      .valid(widget.formKey);
                 },
-                value: values[1],
+                value: ref.watch(registerViewModelProvider
+                    .select((value) => value.requiredCheck)),
                 label: Container(),
                 validator: (bool? value) {
-                  if (values[1] == false) {
+                  if (value == null || value == false) {
                     return '필수입니다.';
                   }
                   return null;
@@ -152,9 +167,13 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
             children: [
               const Text('여기 동의하시면 선택 약관어쩌구'),
               Checkbox(
-                value: values[2],
-                onChanged: (_) {
-                  updateValue(2);
+                value: ref.watch(registerViewModelProvider
+                    .select((value) => value.personalCheck)),
+                onChanged: (value) {
+                  if (value == null) return;
+                  ref
+                      .watch(registerViewModelProvider.notifier)
+                      .updatePersonalCheck(value);
                 },
               ),
             ],
@@ -164,9 +183,13 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
             children: [
               const Text('여기 동의하시면 광고 선택 약관어쩌구'),
               Checkbox(
-                value: values[3],
-                onChanged: (_) {
-                  updateValue(3);
+                value: ref.watch(registerViewModelProvider
+                    .select((value) => value.promotionCheck)),
+                onChanged: (value) {
+                  if (value == null) return;
+                  ref
+                      .watch(registerViewModelProvider.notifier)
+                      .updatePromotionCheck(value);
                 },
               ),
             ],

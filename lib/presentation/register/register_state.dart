@@ -12,6 +12,10 @@ class RegisterState with _$RegisterState {
     @Default('M') String sex,
     @Default('') String description,
     @Default('') String nickname,
+    @JsonKey(ignore: true) @Default(false) bool promotionCheck,
+    @JsonKey(ignore: true) @Default(false) bool personalCheck,
+    @JsonKey(ignore: true) @Default(false) bool requiredCheck,
+    @JsonKey(ignore: true) @Default(false) bool isValid,
     @JsonKey(ignore: true) @Default('') String accessToken,
     @JsonKey(ignore: true) String? profileImage,
   }) = _RegisterState;
