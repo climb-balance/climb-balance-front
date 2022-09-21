@@ -77,6 +77,33 @@ class RegisterFormTab extends ConsumerWidget {
             maxLines: 3,
             label: '자기소개',
           ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('여기 동의하시면 필수 약관어쩌구'),
+                    Checkbox(
+                      value: false,
+                      onChanged: (_) {},
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('여기 동의하시면 선택 약관어쩌구'),
+                    Checkbox(
+                      value: false,
+                      onChanged: (_) {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
