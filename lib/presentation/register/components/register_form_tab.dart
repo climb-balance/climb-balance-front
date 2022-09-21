@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:climb_balance/presentation/common/components/text_input.dart';
+import 'package:climb_balance/presentation/register/components/sex_picker.dart';
 import 'package:climb_balance/presentation/register/register_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -24,7 +25,7 @@ class RegisterFormTab extends ConsumerWidget {
             style: theme.textTheme.subtitle1,
           ),
           const SexPicker(),
-          Divider(),
+          const Divider(),
           Row(
             children: [
               Flexible(
@@ -66,7 +67,7 @@ class RegisterFormTab extends ConsumerWidget {
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           CustomTextInput(
             handleUpdate:
                 ref.read(registerViewModelProvider.notifier).updateDescription,
@@ -78,52 +79,6 @@ class RegisterFormTab extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class SexPicker extends ConsumerWidget {
-  const SexPicker({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final sex =
-        ref.watch(registerViewModelProvider.select((value) => value.sex));
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        InkWell(
-          child: Flexible(
-            child: Icon(
-              Icons.male,
-              size: 100,
-              color: sex == 'M'
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.secondary,
-            ),
-          ),
-          onTap: () {
-            ref.read(registerViewModelProvider.notifier).updateSex(true);
-          },
-        ),
-        InkWell(
-          child: Flexible(
-            child: Icon(
-              Icons.female,
-              size: 100,
-              color: sex == 'F'
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.secondary,
-            ),
-          ),
-          onTap: () {
-            ref.read(registerViewModelProvider.notifier).updateSex(false);
-          },
-        ),
-      ],
     );
   }
 }
