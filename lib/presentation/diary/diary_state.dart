@@ -1,0 +1,14 @@
+import 'package:climb_balance/domain/util/stories_filter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../domain/model/story.dart';
+
+part 'diary_state.freezed.dart';
+
+@freezed
+class DiaryState with _$DiaryState {
+  const factory DiaryState({
+    @Default([]) List<List<Story>> classifiedStories,
+    @Default(StoriesFilter.noFilter()) StoriesFilter storyFilter,
+  }) = _DiaryState;
+}
