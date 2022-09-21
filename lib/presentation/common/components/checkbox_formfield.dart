@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// This was originally written before Flutter 2 and null safety
 ///
@@ -10,7 +9,7 @@ class CheckBoxFormField extends FormField<bool> {
   final void Function(bool?) onChanged;
 
   CheckBoxFormField({
-    super.key,
+    Key? key,
     required this.value,
     required this.label,
     required this.onChanged,
@@ -18,6 +17,7 @@ class CheckBoxFormField extends FormField<bool> {
   }) : super(
           initialValue: value,
           validator: validator,
+          key: key,
           builder: (field) {
             void onChangedHandler(bool? value) {
               field.didChange(value);
@@ -34,7 +34,7 @@ class CheckBoxFormField extends FormField<bool> {
                         value: value,
                         onChanged: onChangedHandler,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       label,
