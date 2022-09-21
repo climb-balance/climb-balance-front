@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -28,13 +26,13 @@ class _ExpertFormState extends ConsumerState<ExpertForm> {
             children: [
               Flexible(
                 child: AvatarPicker(
-                  updateFile: (File image) {
+                  updateImagePath: (String imagePath) {
                     ref
                         .read(expertRegisterViewModelProvider.notifier)
-                        .updateProfilePicture(image);
+                        .updateProfilePicture(imagePath);
                   },
-                  image: ref.watch(expertRegisterViewModelProvider
-                      .select((value) => value.tmpImage)),
+                  imagePath: ref.watch(expertRegisterViewModelProvider
+                      .select((value) => value.profileImagePath)),
                 ),
               ),
               const SizedBox(

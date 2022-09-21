@@ -13,7 +13,7 @@ class RegisterState with _$RegisterState {
     @Default('') String description,
     @Default('') String nickname,
     @JsonKey(ignore: true) @Default('') String accessToken,
-    @Default('https://unsplash.com/photos/T0t72_3yIIY') String profileImage,
+    @JsonKey(ignore: true) String? profileImage,
   }) = _RegisterState;
 
   factory RegisterState.fromJson(Map<String, dynamic> json) =>

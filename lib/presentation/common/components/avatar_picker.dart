@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AvatarPicker extends StatefulWidget {
-  final File? image;
-  final void Function(File) updateFile;
+  final String? imagePath;
+  final void Function(String) updateImagePath;
 
-  const AvatarPicker({Key? key, this.image, required this.updateFile})
+  const AvatarPicker({Key? key, this.imagePath, required this.updateImagePath})
       : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
   void getImage() {
     final picker = ImagePicker();
     picker.pickImage(source: ImageSource.gallery).then((image) {
-      widget.updateFile(File(image!.path));
+      widget.updateImagePath(image!.path);
     });
   }
 
@@ -26,12 +26,12 @@ class _AvatarPickerState extends State<AvatarPicker> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: getImage,
-      child: widget.image == null
+      child: widget.imagePath == null
           ? const NoAvatar()
           : CircleAvatar(
               radius: 60,
               backgroundColor: Colors.white,
-              backgroundImage: FileImage(widget.image!),
+              backgroundImage: FileImage(File(widget.imagePath!)),
             ),
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:climb_balance/presentation/common/components/text_input.dart';
 import 'package:climb_balance/presentation/register/components/sex_picker.dart';
 import 'package:climb_balance/presentation/register/register_view_model.dart';
@@ -30,14 +28,14 @@ class RegisterFormTab extends ConsumerWidget {
             children: [
               Flexible(
                 child: AvatarPicker(
-                  updateFile: (File image) {
+                  updateImagePath: (String imagePath) {
                     ref
                         .read(registerViewModelProvider.notifier)
-                        .updateProfileImage(image.path);
+                        .updateProfileImage(imagePath);
                   },
-                  image: ref.watch(
+                  imagePath: ref.watch(
                     registerViewModelProvider
-                        .select((value) => File(value.profileImage)),
+                        .select((value) => value.profileImage),
                   ),
                 ),
               ),
