@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../common/ui/theme/specific_theme.dart';
+import 'components/pose_test.dart';
 import 'components/story_comments.dart';
 import 'components/story_overlay.dart';
 
@@ -38,8 +39,10 @@ class _Story extends ConsumerStatefulWidget {
   ConsumerState<_Story> createState() => _StoryState();
 }
 
-class _StoryState extends ConsumerState<_Story> {
+class _StoryState extends ConsumerState<_Story>
+    with SingleTickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
+  AnimationController? _animationController;
   bool isCommentOpen = false;
 
   void toggleCommentOpen() {
@@ -61,6 +64,8 @@ class _StoryState extends ConsumerState<_Story> {
       _videoPlayerController.play();
       _videoPlayerController.setLooping(true);
       setState(() {});
+      _animationController = AnimationController(
+          duration: _videoPlayerController.value.duration, vsync: this);
     });
   }
 
@@ -107,6 +112,10 @@ class _StoryState extends ConsumerState<_Story> {
                 videoPlayerController: _videoPlayerController,
                 toggleCommentOpen: toggleCommentOpen,
               ),
+            PoseTest(
+              animationController: _animationController,
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+            ),
           ],
         ),
       ),
