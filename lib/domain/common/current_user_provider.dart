@@ -40,6 +40,7 @@ class CurrentUserNotifier extends StateNotifier<User> {
   void updateToken({required String accessToken}) {
     state = state.copyWith(accessToken: accessToken);
     storageService.storeStoredToken(token: accessToken);
+    loadUserInfo(accessToken);
   }
 
   void logout(BuildContext context) {

@@ -4,9 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../auth_view_model.dart';
 
 class NaverLogin extends ConsumerWidget {
-  final bool toRegisterd;
-
-  const NaverLogin({Key? key, required this.toRegisterd}) : super(key: key);
+  const NaverLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,9 +14,7 @@ class NaverLogin extends ConsumerWidget {
             MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
       ),
       onPressed: () {
-        ref
-            .read(authViewModelProvider.notifier)
-            .onNaverLogin(context, ref, toRegisterd);
+        ref.read(authViewModelProvider.notifier).onNaverLogin(context);
       },
       child: SizedBox(
         width: 150,

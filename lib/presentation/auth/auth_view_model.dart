@@ -26,8 +26,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   AuthViewModel({required this.repository, required this.ref})
       : super(const AuthState());
 
-  void onNaverLogin(
-      BuildContext context, WidgetRef ref, bool toRegister) async {
+  void onNaverLogin(BuildContext context) async {
     context.pushNamed(authNaverRouteName);
   }
 
@@ -36,24 +35,29 @@ class AuthViewModel extends StateNotifier<AuthState> {
   }
 
   void authComplete(WebViewController controller, BuildContext context) async {
+    final link = ref.keepAlive();
     await controller
         .runJavascriptReturningResult(
             "window.document.getElementsByTagName('html')[0].innerText;")
         .then((html) {
       state = AuthState.fromJson(jsonDecode(jsonDecode(html)));
       if (state.needsRegister) {
+        context.pop();
+        context.pushNamed(registerRouteName);
         ref
             .watch(registerViewModelProvider.notifier)
             .updateAccessToken(state.accessToken);
-        context.goNamed(registerRouteName);
       } else {
         () => ref
             .read(currentUserProvider.notifier)
             .updateToken(accessToken: state.accessToken);
+        // TODO update>?
+        context.pop();
         context.go('/');
       }
     }).catchError((_) {
       context.pop();
     });
+    link.close();
   }
 }

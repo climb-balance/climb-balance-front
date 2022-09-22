@@ -8,20 +8,22 @@ import '../../domain/repository/user_repository.dart';
 import 'register_state.dart';
 
 final registerViewModelProvider =
-    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
+    StateNotifierProvider.autoDispose<RegisterViewModel, RegisterState>((ref) {
   RegisterViewModel notifier = RegisterViewModel(
       ref: ref, repository: ref.watch(userRepositoryImplProvider));
   return notifier;
 });
 
 class RegisterViewModel extends StateNotifier<RegisterState> {
-  StateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
+  AutoDisposeStateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
   UserRepository repository;
+  KeepAliveLink? link;
 
   RegisterViewModel({required this.ref, required this.repository})
       : super(const RegisterState());
 
   void updateAccessToken(String accessToken) {
+    link ??= ref.keepAlive();
     state = state.copyWith(accessToken: accessToken);
   }
 
@@ -53,10 +55,32 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
     state = state.copyWith(profileImage: imagePath);
   }
 
+  void updatePromotionCheck(bool value) {
+    state = state.copyWith(promotionCheck: value);
+  }
+
+  void updatePersonalCheck(bool value) {
+    state = state.copyWith(personalCheck: value);
+  }
+
+  void updateRequiredCheck(bool value) {
+    state = state.copyWith(requiredCheck: value);
+  }
+
+  /// 매번 값이 갱신될때마다 업데이트하는 함수
+  void valid(GlobalKey<FormState> formKey) {
+    if (formKey.currentState == null || !state.requiredCheck) {
+      state = state.copyWith(isValid: false);
+    }
+
+    formKey.currentState!.validate();
+    state = state.copyWith(isValid: formKey.currentState!.validate());
+  }
+
   /// form을 검증하는 함수
   /// 이후 _register를 호출해 업로드한다.
-  void validate(GlobalKey<FormState> formKey, BuildContext context) {
-    if (!formKey.currentState!.validate()) {
+  void validate(BuildContext context) {
+    if (!state.isValid) {
       return;
     }
     _register(context);
@@ -85,5 +109,6 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             },
           ),
         );
+    link?.close();
   }
 }

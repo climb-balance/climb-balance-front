@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'expert_register_state.dart';
@@ -7,8 +5,8 @@ import 'expert_register_state.dart';
 class ExpertRegisterViewModel extends StateNotifier<ExpertRegisterState> {
   ExpertRegisterViewModel() : super(const ExpertRegisterState());
 
-  void updateProfilePicture(File image) {
-    state = state.copyWith(tmpImage: image);
+  void updateProfilePicture(String imagePath) {
+    state = state.copyWith(profileImagePath: imagePath);
   }
 
   Future<bool> updateClimbingCode(String code) async {

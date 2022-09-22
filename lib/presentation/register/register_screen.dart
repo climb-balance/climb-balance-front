@@ -81,14 +81,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         child: FullSizeBtn(
           onPressed: () {
             if (curPage == registerTabs.length - 1) {
-              ref
-                  .read(registerViewModelProvider.notifier)
-                  .validate(formKey, context);
+              ref.read(registerViewModelProvider.notifier).validate(context);
               return;
             }
             curPage += 1;
             setState(() {});
           },
+          type: curPage != registerTabs.length - 1 ||
+                  ref.watch(registerViewModelProvider
+                      .select((value) => value.isValid))
+              ? 0
+              : 1,
           text: curPage == registerTabs.length - 1 ? '완료' : '다음',
         ),
       ),
