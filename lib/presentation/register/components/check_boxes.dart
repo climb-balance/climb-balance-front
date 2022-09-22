@@ -27,8 +27,7 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
     ref.read(registerViewModelProvider.notifier).updateRequiredCheck(allCheck);
 
     setState(() {});
-    Future.microtask(() =>
-        ref.read(registerViewModelProvider.notifier).valid(widget.formKey));
+    ref.read(registerViewModelProvider.notifier).valid(widget.formKey);
   }
 
   @override

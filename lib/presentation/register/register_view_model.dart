@@ -69,8 +69,10 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   /// 매번 값이 갱신될때마다 업데이트하는 함수
   void valid(GlobalKey<FormState> formKey) {
-    if (formKey.currentState == null || !state.requiredCheck)
+    if (formKey.currentState == null || !state.requiredCheck) {
       state = state.copyWith(isValid: false);
+    }
+
     formKey.currentState!.validate();
     state = state.copyWith(isValid: formKey.currentState!.validate());
   }
