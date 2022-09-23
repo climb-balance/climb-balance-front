@@ -1,13 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 class PoseTest extends StatefulWidget {
-  final AnimationController? animationController;
+  final VideoPlayerController videoPlayerController;
+  final TickerProviderStateMixin ticker;
   final double aspectRatio;
 
   const PoseTest(
-      {Key? key, required this.animationController, required this.aspectRatio})
+      {Key? key,
+      required this.videoPlayerController,
+      required this.aspectRatio,
+      required this.ticker})
       : super(key: key);
 
   @override
@@ -15,23 +20,54 @@ class PoseTest extends StatefulWidget {
 }
 
 class _PoseTestState extends State<PoseTest> {
+  late final AnimationController? _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    final value = widget.videoPlayerController.value;
+    _animationController = AnimationController(
+      vsync: widget.ticker,
+      duration: value.duration,
+    )
+      ..forward()
+      ..repeat();
+    widget.videoPlayerController.addListener(() {
+      final value = widget.videoPlayerController.value;
+      final videoValue = value.position.inMicroseconds.toDouble() /
+          value.duration.inMicroseconds;
+      if (value.isPlaying) {
+        _animationController?.forward(from: videoValue);
+      } else {
+        _animationController?.stop();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController?.removeListener(() {});
+    _animationController?.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    debugPrint(widget.aspectRatio.toString());
     final size = MediaQuery.of(context).size;
-    if (widget.animationController == null) {
-      return Container();
-    }
+    final value = widget.videoPlayerController.value;
+    if (_animationController == null) return Container();
     return AnimatedBuilder(
-      animation: widget.animationController!,
+      animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
         return Center(
           child: Container(
             width: size.width,
             height: size.width * (1 / widget.aspectRatio),
             child: CustomPaint(
-              painter:
-                  _Painter(animationValue: widget.animationController!.value),
+              painter: _Painter(
+                animationValue: _animationController!.value,
+                context: context,
+              ),
             ),
           ),
         );
@@ -42,14 +78,13 @@ class _PoseTestState extends State<PoseTest> {
 
 class _Painter extends CustomPainter {
   final double animationValue;
+  final BuildContext context;
 
-  _Painter({required this.animationValue});
+  _Painter({required this.animationValue, required this.context});
 
   @override
   void paint(Canvas canvas, Size size) {
-    double heightParameter = 30;
-    double periodParameter = 0.5;
-
+    final size = MediaQuery.of(context);
     Paint linePaint = Paint()
       ..color = Colors.purple
       ..style = PaintingStyle.stroke
@@ -59,21 +94,19 @@ class _Painter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
       ..style = PaintingStyle.fill;
-    final random = Random();
-    for (int i = 0; i < 17; i++) {
-      Path path = Path();
-
-      double fromX = random.nextDouble() * 500;
-      double fromY = 10.0 * i;
-      double toX = random.nextDouble() * 500;
-      double toY = 20.0 * i;
-      path.moveTo(fromX, fromY);
-      path.lineTo(toX, toY);
-      path.close();
-      canvas.drawPath(path, linePaint);
-      canvas.drawCircle(Offset(fromX, fromY), 5, circlePaint);
-      canvas.drawCircle(Offset(toX, toY), 5, circlePaint);
-    }
+    Path path = Path();
+    final radian = 20 * pi * animationValue;
+    debugPrint('${cos(radian)}, ${sin(radian)}');
+    double fromX = 200;
+    double fromY = 110;
+    double toX = cos(radian) * 100 + 200;
+    double toY = sin(radian) * 100 + 110;
+    path.moveTo(fromX, fromY);
+    path.lineTo(toX, toY);
+    path.close();
+    canvas.drawPath(path, linePaint);
+    canvas.drawCircle(Offset(fromX, fromY), 5, circlePaint);
+    canvas.drawCircle(Offset(toX, toY), 5, circlePaint);
   }
 
   @override

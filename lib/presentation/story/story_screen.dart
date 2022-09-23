@@ -39,10 +39,8 @@ class _Story extends ConsumerStatefulWidget {
   ConsumerState<_Story> createState() => _StoryState();
 }
 
-class _StoryState extends ConsumerState<_Story>
-    with SingleTickerProviderStateMixin {
+class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
-  AnimationController? _animationController;
   bool isCommentOpen = false;
 
   void toggleCommentOpen() {
@@ -64,14 +62,13 @@ class _StoryState extends ConsumerState<_Story>
       _videoPlayerController.play();
       _videoPlayerController.setLooping(true);
       setState(() {});
-      _animationController = AnimationController(
-          duration: _videoPlayerController.value.duration, vsync: this);
     });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
   }
 
@@ -113,7 +110,8 @@ class _StoryState extends ConsumerState<_Story>
                 toggleCommentOpen: toggleCommentOpen,
               ),
             PoseTest(
-              animationController: _animationController,
+              videoPlayerController: _videoPlayerController,
+              ticker: this,
               aspectRatio: _videoPlayerController.value.aspectRatio,
             ),
           ],
