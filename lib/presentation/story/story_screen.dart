@@ -109,11 +109,12 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                 videoPlayerController: _videoPlayerController,
                 toggleCommentOpen: toggleCommentOpen,
               ),
-            PoseTest(
-              videoPlayerController: _videoPlayerController,
-              ticker: this,
-              aspectRatio: _videoPlayerController.value.aspectRatio,
-            ),
+            if (_videoPlayerController.value.isInitialized)
+              PoseTest(
+                videoPlayerController: _videoPlayerController,
+                ticker: this,
+                aspectRatio: _videoPlayerController.value.aspectRatio,
+              ),
           ],
         ),
       ),

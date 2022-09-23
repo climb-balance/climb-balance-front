@@ -46,9 +46,10 @@ class _PoseTestState extends State<PoseTest> {
 
   @override
   void dispose() {
-    super.dispose();
+    widget.videoPlayerController.removeListener(() {});
     _animationController?.removeListener(() {});
     _animationController?.dispose();
+    super.dispose();
   }
 
   @override
