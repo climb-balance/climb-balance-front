@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../common/ui/theme/specific_theme.dart';
-import 'components/pose_test.dart';
 import 'components/story_comments.dart';
 import 'components/story_overlay.dart';
 
@@ -108,12 +107,6 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                 storyId: widget.storyId,
                 videoPlayerController: _videoPlayerController,
                 toggleCommentOpen: toggleCommentOpen,
-              ),
-            if (_videoPlayerController.value.isInitialized)
-              PoseTest(
-                videoPlayerController: _videoPlayerController,
-                ticker: this,
-                aspectRatio: _videoPlayerController.value.aspectRatio,
               ),
           ],
         ),

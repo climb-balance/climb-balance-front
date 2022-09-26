@@ -96,8 +96,7 @@ class _Painter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.fill;
     Path path = Path();
-    final radian = 20 * pi * animationValue;
-    debugPrint('${cos(radian)}, ${sin(radian)}');
+    final radian = 20 * pi * animationValue + pi;
     double fromX = 200;
     double fromY = 110;
     double toX = cos(radian) * 100 + 200;
