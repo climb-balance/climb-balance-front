@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../ai_feedback_state.dart';
+import '../models/ai_feedback_state.dart';
 import 'ai_score.dart';
 
 class AiFeedbackInformation extends StatelessWidget {
@@ -14,8 +14,8 @@ class AiFeedbackInformation extends StatelessWidget {
   int longestGoodLength() {
     int maxLength = 0;
     int curLength = 0;
-    for (int i = 0; i < detail.value.length; i++) {
-      if (detail.value[i] == 1) {
+    for (int i = 0; i < detail.scores.length; i++) {
+      if (detail.scores[i] == 1) {
         curLength += 1;
         maxLength = max(maxLength, curLength);
       } else {
@@ -28,8 +28,8 @@ class AiFeedbackInformation extends StatelessWidget {
 
   int goodCount() {
     int curLength = 0;
-    for (int i = 0; i < detail.value.length; i++) {
-      if (detail.value[i] == 1) {
+    for (int i = 0; i < detail.scores.length; i++) {
+      if (detail.scores[i] == 1) {
         curLength += 1;
       }
     }

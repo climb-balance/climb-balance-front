@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../domain/util/duration_time.dart';
-import '../ai_feedback_state.dart';
+import '../models/ai_feedback_state.dart';
 
 class AiFeedbackProgressBar extends StatefulWidget {
   final AiFeedbackState detail;
@@ -24,7 +24,7 @@ class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
   @override
   void initState() {
     super.initState();
-    colors = widget.detail.value.map((val) {
+    colors = widget.detail.scores.map((val) {
       if (val == 0) {
         return Colors.grey;
       } else if (val == 1) {

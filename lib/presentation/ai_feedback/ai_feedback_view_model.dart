@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
-import 'ai_feedback_state.dart';
+import 'models/ai_feedback_state.dart';
 
 final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
     .family<AiFeedbackViewModel, AiFeedbackState, int>((ref, storyId) {
