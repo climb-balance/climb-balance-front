@@ -1,3 +1,4 @@
+import 'package:climb_balance/domain/const/route_name.dart';
 import 'package:climb_balance/presentation/story/components/story_overlay_feedback_request_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../domain/common/current_user_provider.dart';
-import '../../../domain/const/route_config.dart';
 import '../../../domain/util/feedback_status.dart';
 import '../story_view_model.dart';
 
@@ -29,11 +29,12 @@ class StoryActions extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (curUserId == curUserId && story.aiStatus == FeedbackStatus.complete)
+        if (curUserId == curUserId && story.aiStatus == FeedbackStatus.waiting)
           TextButton(
             onPressed: () {
               // TODO named로
-              context.push(aiPageSubRoute);
+              context
+                  .pushNamed(aiFeedbackRouteName, params: {'sid': '$storyId'});
             },
             child: Column(
               children: const [

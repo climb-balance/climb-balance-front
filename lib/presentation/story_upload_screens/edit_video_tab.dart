@@ -25,8 +25,8 @@ class _EditVideoTabState extends ConsumerState<EditVideoTab> {
       isLoaded = true;
       setState(() {});
     } else {
-      Stream<TrimmerEvent> _stream = widget.trimmer.eventStream;
-      _stream.listen((event) {
+      Stream<TrimmerEvent> stream = widget.trimmer.eventStream;
+      stream.listen((event) {
         if (event == TrimmerEvent.initialized) {
           isLoaded = true;
           setState(() {});

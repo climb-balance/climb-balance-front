@@ -102,8 +102,8 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<void>> putAiFeedback(int storyId) async {
-    final result = await server.putAiFeedback(storyId, 'pushToken');
+  Future<Result<void>> putAiFeedback(int storyId, String pushToken) async {
+    final result = await server.putAiFeedback(storyId, pushToken);
     return result.when(
       success: (value) {
         return const Result.success(null);

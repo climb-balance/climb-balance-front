@@ -26,5 +26,5 @@ abstract class StoryRepository {
 
   Future<Result<int>> likeStory();
 
-  Future<Result<void>> putAiFeedback(int storyId);
+  Future<Result<void>> putAiFeedback(int storyId, String pushToken);
 }

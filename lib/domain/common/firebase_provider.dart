@@ -12,6 +12,7 @@ final firebaseProvider = StateNotifierProvider<FirebaseNotifier, String>((ref) {
   return notifier;
 });
 
+/// firebase 토큰을 state로 가진다.
 class FirebaseNotifier extends StateNotifier<String> {
   final StateNotifierProviderRef<FirebaseNotifier, String> ref;
   final FirebaseService firebaseService;

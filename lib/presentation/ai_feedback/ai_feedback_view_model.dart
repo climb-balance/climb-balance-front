@@ -34,6 +34,6 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   }
 
   String getStoryAiVideoPath() {
-    return repository.getStoryVideoPathById(story.storyId);
+    return repository.getStoryVideoPathById(story.storyId, isAi: true);
   }
 }
