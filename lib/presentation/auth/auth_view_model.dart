@@ -48,7 +48,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
             .watch(registerViewModelProvider.notifier)
             .updateAccessToken(state.accessToken);
       } else {
-        () => ref
+        ref
             .read(currentUserProvider.notifier)
             .updateToken(accessToken: state.accessToken);
         // TODO update>?
