@@ -26,10 +26,11 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   void _loadDatas() async {
     final result = await repository.getStoryAiDetailById(story.storyId);
     result.when(
-        success: (value) {
-          state = value;
-        },
-        error: (message) {});
+      success: (value) {
+        state = value;
+      },
+      error: (message) {},
+    );
   }
 
   String getStoryAiVideoPath() {
