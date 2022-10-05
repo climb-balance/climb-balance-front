@@ -57,7 +57,7 @@ class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    ref.watch(storyUploadViewModelProvider);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -83,7 +83,6 @@ class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen>
       ),
       bottomNavigationBar: BottomStepBar(
         handleNext: () {
-          debugPrint(_index.toString());
           if (_index < 2) {
             _tabController.animateTo(_index + 1);
           } else {
