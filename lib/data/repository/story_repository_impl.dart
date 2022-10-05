@@ -1,7 +1,7 @@
 import 'package:climb_balance/data/data_source/story_server_helper.dart';
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
-import 'package:climb_balance/presentation/ai_feedback/ai_feedback_state.dart';
+import 'package:climb_balance/presentation/ai_feedback/models/ai_feedback_state.dart';
 import 'package:climb_balance/presentation/story_upload_screens/story_upload_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -78,10 +78,7 @@ class StoryRepositoryImpl implements StoryRepository {
     final result = await server.getStoryAiDetailById(storyId);
 
     return result.when(
-      success: (iterable) => Result.success(AiFeedbackState(
-          value: List.from(
-        iterable.cast<int>(),
-      ))),
+      success: (value) => Result.success(AiFeedbackState.fromJson(value)),
       error: (message) => Result.error(message),
     );
   }
@@ -105,8 +102,8 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<void>> putAiFeedback(int storyId) async {
-    final result = await server.putAiFeedback(storyId, 'pushToken');
+  Future<Result<void>> putAiFeedback(int storyId, String pushToken) async {
+    final result = await server.putAiFeedback(storyId, pushToken);
     return result.when(
       success: (value) {
         return const Result.success(null);

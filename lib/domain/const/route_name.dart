@@ -5,3 +5,4 @@ const authNaverRouteName = 'auth-naver';
 const authPageRouteName = 'auth';
 const registerRouteName = 'register';
 const aiAdsRouteName = 'ai-ads';
+const aiFeedbackRouteName = 'ai';

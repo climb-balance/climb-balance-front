@@ -1,71 +1,9 @@
-import 'dart:convert';
-
+import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../ai_feedback/models/ai_feedback_state.dart';
-
-class CommunityScreen extends StatefulWidget {
-  const CommunityScreen({Key? key}) : super(key: key);
-
-  @override
-  State<CommunityScreen> createState() => _CommunityScreenState();
-}
-
-class _CommunityScreenState extends State<CommunityScreen>
-    with TickerProviderStateMixin {
-  late final VideoPlayerController _videoPlayerController;
-
-  @override
-  void initState() {
-    super.initState();
-    _videoPlayerController =
-        VideoPlayerController.asset('assets/ai/sample.mp4');
-    _videoPlayerController.initialize().then((_) {
-      _videoPlayerController.play();
-      _videoPlayerController.setLooping(true);
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoPlayerController.removeListener(() {});
-    _videoPlayerController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: _videoPlayerController.value.isInitialized
-            ? Expanded(
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: _videoPlayerController.value.aspectRatio,
-                    child: Stack(
-                      children: [
-                        VideoPlayer(
-                          _videoPlayerController,
-                        ),
-                        AiFeedbackOverlay(
-                          videoPlayerController: _videoPlayerController,
-                          ticker: this,
-                          storyId: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : CircularProgressIndicator(),
-      ),
-    );
-  }
-}
-
-class AiFeedbackOverlay extends StatefulWidget {
+class AiFeedbackOverlay extends ConsumerStatefulWidget {
   final VideoPlayerController videoPlayerController;
   final TickerProviderStateMixin ticker;
   final int storyId;
@@ -78,23 +16,15 @@ class AiFeedbackOverlay extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AiFeedbackOverlay> createState() => _AiFeedbackOverlayState();
+  ConsumerState<AiFeedbackOverlay> createState() => _AiFeedbackOverlayState();
 }
 
-class _AiFeedbackOverlayState extends State<AiFeedbackOverlay> {
+class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   late final AnimationController? _animationController;
-  AiFeedbackState _state = const AiFeedbackState();
 
   @override
   void initState() {
     super.initState();
-    DefaultAssetBundle.of(context)
-        .loadString("assets/ai/ai_overlay.json")
-        .then((value) {
-      _state = AiFeedbackState.fromJson(jsonDecode(value));
-      setState(() {});
-    });
-
     final value = widget.videoPlayerController.value;
     _animationController = AnimationController(
       vsync: widget.ticker,
@@ -130,31 +60,20 @@ class _AiFeedbackOverlayState extends State<AiFeedbackOverlay> {
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
-        return InkWell(
-          onTap: () {
-            if (value.isPlaying) {
-              widget.videoPlayerController
-                  .pause()
-                  .then((value) => _animationController?.stop());
-            } else {
-              _animationController?.forward();
-              widget.videoPlayerController.play();
-            }
-
-            setState(() {});
-          },
-          child: Center(
-            child: Container(
-              width: size.width,
-              height: size.width * (1 / value.aspectRatio),
-              child: CustomPaint(
-                painter: _Painter(
-                  animationValue: _animationController!.value,
-                  scores: _state.scores,
-                  joints: _state.joints,
-                  frames: _state.frames,
-                ),
+        return SizedBox(
+          width: size.width,
+          height: size.width * (1 / value.aspectRatio),
+          child: CustomPaint(
+            painter: _Painter(
+              animationValue: _animationController!.value,
+              scores: ref.watch(
+                aiFeedbackViewModelProvider(widget.storyId)
+                    .select((value) => value.scores),
               ),
+              joints: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
+                  .select((value) => value.joints)),
+              frames: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
+                  .select((value) => value.frames)),
             ),
           ),
         );

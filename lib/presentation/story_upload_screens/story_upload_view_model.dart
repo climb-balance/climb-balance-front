@@ -49,6 +49,7 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
       if (image == null) {
         return;
       }
+      Navigator.pop(context);
       state = state.copyWith(videoPath: image.path);
       Future.microtask(
         () {
@@ -124,9 +125,9 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         await repository.createStory(storyUpload: state);
     result.when(
       success: (value) {
-        context.pop();
         customShowDialog(
             context: context, title: '업로드 성공', content: '스토리 업로드 완료');
+        context.pop();
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);

@@ -1,6 +1,7 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account_screen.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
+import 'package:climb_balance/presentation/ai_feedback/ai_feedback_screen.dart';
 import 'package:climb_balance/presentation/auth/auth_screen.dart';
 import 'package:climb_balance/presentation/auth/components/web_view.dart';
 import 'package:climb_balance/presentation/community/community_screen.dart';
@@ -77,11 +78,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: aiPageSubRoute,
+                name: aiFeedbackRouteName,
                 builder: (context, state) {
                   final storyId = int.parse(state.params['sid']!);
-                  // TODO connect
 
-                  return StoryScreen(
+                  return AiFeedbackScreen(
                     storyId: storyId,
                   );
                 },

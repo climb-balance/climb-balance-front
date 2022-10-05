@@ -38,7 +38,7 @@ class _Story extends ConsumerStatefulWidget {
   ConsumerState<_Story> createState() => _StoryState();
 }
 
-class _StoryState extends ConsumerState<_Story> {
+class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
   bool isCommentOpen = false;
 
@@ -67,6 +67,7 @@ class _StoryState extends ConsumerState<_Story> {
   @override
   void dispose() {
     super.dispose();
+    _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
   }
 
