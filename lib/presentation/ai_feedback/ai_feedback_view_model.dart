@@ -36,4 +36,19 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   String getStoryAiVideoPath() {
     return repository.getStoryVideoPathById(story.storyId, isAi: true);
   }
+
+  void toggleLineOverlay() {
+    state = state.copyWith(lineOverlay: !state.lineOverlay);
+  }
+
+  void toggleSquareOverlay() {
+    state = state.copyWith(squareOverlay: !state.squareOverlay);
+  }
+
+  void togglePlayingStatus() {
+    state = state.copyWith(isStatusChanging: true);
+    Future.delayed(const Duration(milliseconds: 300), () {
+      state = state.copyWith(isStatusChanging: false);
+    });
+  }
 }

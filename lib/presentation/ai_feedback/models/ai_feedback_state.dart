@@ -12,7 +12,10 @@ class AiFeedbackState with _$AiFeedbackState {
     @Default(0) int frames,
     @Default([]) List<double?> joints,
     @Default([]) List<double?> scores,
-    @JsonKey(ignore: true) @Default(false) bool overlay,
+    @JsonKey(ignore: true) @Default(true) bool squareOverlay,
+    @JsonKey(ignore: true) @Default(true) bool lineOverlay,
+    @JsonKey(ignore: true) @Default(false) bool isInformOpen,
+    @JsonKey(ignore: true) @Default(false) bool isStatusChanging,
   }) = _AiFeedbackDetail;
 
   factory AiFeedbackState.fromJson(Map<String, dynamic> json) =>

@@ -1,10 +1,11 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/components/ai_feedback_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../common/ui/theme/specific_theme.dart';
-import '../community/community_screen.dart';
+import 'components/ai_feedback_overlay.dart';
 import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
@@ -19,28 +20,12 @@ class AiFeedbackScreen extends ConsumerStatefulWidget {
 class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
     with TickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
-  bool isInformOpen = false;
-  bool isStatusChanging = false;
-
-  void toggleInformOpen() {
-    setState(() {
-      isInformOpen = !isInformOpen;
-    });
-  }
 
   void togglePlaying() {
     if (!_videoPlayerController.value.isInitialized) return;
-    setState(() {
-      isStatusChanging = true;
-    });
     _videoPlayerController.value.isPlaying
         ? _videoPlayerController.pause()
         : _videoPlayerController.play();
-    Future.delayed(Duration(milliseconds: 300), () {
-      setState(() {
-        isStatusChanging = false;
-      });
-    });
   }
 
   @override
@@ -66,8 +51,15 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
     _videoPlayerController.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final provider = ref.watch(aiFeedbackViewModelProvider(widget.storyId));
+    final bool isStatusChanging = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isStatusChanging));
+    final bool isInformOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isInformOpen));
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
@@ -110,9 +102,16 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                 ),
               ),
             ],
+            AiFeedbackActions(
+              togglePlaying: togglePlaying,
+              storyId: widget.storyId,
+            ),
             GestureDetector(
               onTap: () {
                 togglePlaying();
+                ref
+                    .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+                    .togglePlayingStatus();
               },
               child: AnimatedOpacity(
                 opacity: isStatusChanging ? 0.5 : 0.0,
