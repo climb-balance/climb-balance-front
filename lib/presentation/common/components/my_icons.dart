@@ -31,3 +31,68 @@ class GradientIcon extends StatelessWidget {
     );
   }
 }
+
+class ToggleIcon extends StatelessWidget {
+  final IconData icon;
+  final double size;
+  final bool isEnable;
+  final String detail;
+
+  const ToggleIcon({
+    Key? key,
+    required this.icon,
+    this.size = 35,
+    required this.isEnable,
+    this.detail = '',
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Icon(
+              icon,
+              size: 35,
+            ),
+            if (isEnable)
+              Icon(
+                Icons.close,
+                size: 35,
+                color: color.tertiary,
+              ),
+          ],
+        ),
+        Text(detail),
+      ],
+    );
+  }
+}
+
+class ColIconDetail extends StatelessWidget {
+  final IconData icon;
+  final String detail;
+  final double size;
+
+  const ColIconDetail({
+    Key? key,
+    required this.icon,
+    this.detail = '',
+    this.size = 35.0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(
+          icon,
+          size: size,
+        ),
+        Text(detail),
+      ],
+    );
+  }
+}

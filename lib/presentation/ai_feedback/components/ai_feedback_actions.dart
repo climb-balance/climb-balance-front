@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../common/components/my_icons.dart';
+
 class AiFeedbackActions extends ConsumerWidget {
   final void Function() togglePlaying;
   final int storyId;
@@ -24,7 +26,7 @@ class AiFeedbackActions extends ConsumerWidget {
       onTap: togglePlaying,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('asd'),
+          backgroundColor: Colors.transparent,
         ),
         backgroundColor: Colors.transparent,
         floatingActionButtonAnimator: NoFabScalingAnimation(),
@@ -39,23 +41,10 @@ class AiFeedbackActions extends ConsumerWidget {
                     .read(aiFeedbackViewModelProvider(storyId).notifier)
                     .toggleLineOverlay();
               },
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Icon(
-                        Icons.border_color,
-                        size: 35,
-                      ),
-                      if (lineOverlay)
-                        Icon(
-                          Icons.close,
-                          size: 35,
-                        ),
-                    ],
-                  ),
-                  Text('직선'),
-                ],
+              child: ToggleIcon(
+                icon: Icons.edit_rounded,
+                isEnable: lineOverlay,
+                detail: '직선',
               ),
             ),
             TextButton(
@@ -64,23 +53,10 @@ class AiFeedbackActions extends ConsumerWidget {
                     .read(aiFeedbackViewModelProvider(storyId).notifier)
                     .toggleSquareOverlay();
               },
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Icon(
-                        Icons.filter,
-                        size: 35,
-                      ),
-                      if (squareOverlay)
-                        Icon(
-                          Icons.close,
-                          size: 35,
-                        ),
-                    ],
-                  ),
-                  Text('사각형'),
-                ],
+              child: ToggleIcon(
+                icon: Icons.filter,
+                isEnable: squareOverlay,
+                detail: '사각형',
               ),
             ),
             TextButton(
@@ -88,14 +64,16 @@ class AiFeedbackActions extends ConsumerWidget {
                 Share.share(
                     '클라임 밸런스에서 다양한 클라이밍 영상과 AI 자세 분석, 맞춤 강습 매칭을 만나보세요!! https://climb-balance.com/video/123124');
               },
-              child: Column(
-                children: const [
-                  Icon(
-                    Icons.share,
-                    size: 35,
-                  ),
-                  Text('공유'),
-                ],
+              child: const ColIconDetail(
+                icon: Icons.share,
+                detail: '공유',
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const ColIconDetail(
+                icon: Icons.mode_comment,
+                detail: '정보',
               ),
             ),
           ],

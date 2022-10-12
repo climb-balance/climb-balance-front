@@ -109,7 +109,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                                 _videoPlayerController.value.aspectRatio,
                             child: VideoPlayer(_videoPlayerController),
                           )
-                        : const CircularProgressIndicator(),
+                        : const Center(child: CircularProgressIndicator()),
                   ),
                 ),
                 if (isCommentOpen)
