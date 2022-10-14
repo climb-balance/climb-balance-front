@@ -78,7 +78,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(10),
-        child: FullSizeBtn(
+        child: FullSizeBtnDeprecated(
           onPressed: () {
             if (curPage == registerTabs.length - 1) {
               ref.read(registerViewModelProvider.notifier).validate(context);

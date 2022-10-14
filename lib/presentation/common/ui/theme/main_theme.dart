@@ -17,6 +17,7 @@ ThemeData mainLightTheme() {
 ThemeData mainDarkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
+    fontFamily: 'text',
   ).copyWith(
     colorScheme: darkColorScheme,
     extensions: <ThemeExtension<dynamic>>[],

@@ -10,13 +10,22 @@ TextTheme customTextTheme(TextTheme base, ColorScheme color) {
     ),
     subtitle1: base.subtitle1!.copyWith(
       fontSize: 20,
-      color: color.secondary,
+      color: color.onBackground,
       fontWeight: FontWeight.w600,
     ),
     subtitle2: base.subtitle2!.copyWith(
-      color: color.secondary,
+      color: color.onBackground,
       fontWeight: FontWeight.w400,
     ),
-    bodyText1: base.bodyText1!.copyWith(),
+    bodyText1: base.bodyText1!.copyWith(
+      fontWeight: FontWeight.w600,
+      fontSize: 16,
+      color: color.onBackground,
+    ),
+    bodyText2: base.bodyText1!.copyWith(
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+      color: color.onBackground,
+    ),
   );
 }

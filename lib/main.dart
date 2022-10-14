@@ -40,7 +40,7 @@ class MyApp extends ConsumerWidget {
       scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       title: 'Climb Balance',
-      theme: darkMode ? mainDarkTheme() : mainLightTheme(),
+      theme: mainDarkTheme(),
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('ko')],
       routerDelegate: router.routerDelegate,

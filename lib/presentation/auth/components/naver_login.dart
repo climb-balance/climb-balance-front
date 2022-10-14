@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../common/components/button.dart';
 import '../auth_view_model.dart';
 
 class NaverLogin extends ConsumerWidget {
@@ -8,30 +9,35 @@ class NaverLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return TextButton(
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(const Color.fromRGBO(3, 199, 90, 1)),
-      ),
+    final size = MediaQuery.of(context).size;
+    final color = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    return FullSizeBtn(
+      color: const Color.fromRGBO(3, 199, 90, 1),
       onPressed: () {
         ref.read(authViewModelProvider.notifier).onNaverLogin(context);
       },
       child: SizedBox(
-        width: 150,
+        width: size.width,
+        height: 50,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: const [
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             Text(
               'N',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 16),
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
+                color: color.onBackground,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
             ),
             Text(
               '네이버로 시작하기',
-              style: TextStyle(color: Colors.white),
+              style: text.bodyText1,
             ),
           ],
         ),

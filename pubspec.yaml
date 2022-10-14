@@ -88,8 +88,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/ai/ai_overlay.json
-    - assets/ai/sample.mp4
+    - assets/
+    - assets/img/bg_img.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -101,23 +101,28 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  #  fonts:
-  #    - family: text
-  #      fonts:
-  #        - asset: assets/fonts/NotoSerifKR-Black.otf
-  #          weight: 900
-  #        - asset: assets/fonts/NotoSerifKR-Bold.otf
-  #          weight: 700
-  #        - asset: assets/fonts/NotoSerifKR-SemiBold.otf
-  #          weight: 600
-  #        - asset: assets/fonts/NotoSerifKR-Medium.otf
-  #          weight: 500
-  #        - asset: assets/fonts/NotoSerifKR-Regular.otf
-  #          weight: 400
-  #        - asset: assets/fonts/NotoSerifKR-Light.otf
-  #          weight: 300
-  #        - asset: assets/fonts/NotoSerifKR-ExtraLight.otf
-  #          weight: 200
+  fonts:
+    - family: text
+      fonts:
+        - asset: assets/fonts/Pretendard-Black.otf
+          weight: 900
+        - asset: assets/fonts/Pretendard-ExtraBold.otf
+          weight: 800
+        - asset: assets/fonts/Pretendard-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Pretendard-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Pretendard-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Light.otf
+          weight: 300
+        - asset: assets/fonts/Pretendard-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/Pretendard-Thin.otf
+          weight: 100
+
 
   #   - family: Trajan Pro
   #     fonts:

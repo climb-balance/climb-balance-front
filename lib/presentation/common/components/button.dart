@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class FullSizeBtn extends StatelessWidget {
+class FullSizeBtnDeprecated extends StatelessWidget {
   final void Function() onPressed;
   final String text;
   final int type;
 
-  const FullSizeBtn(
+  const FullSizeBtnDeprecated(
       {Key? key, required this.onPressed, required this.text, this.type = 0})
       : super(key: key);
 
@@ -29,6 +29,36 @@ class FullSizeBtn extends StatelessWidget {
   }
 }
 
+class FullSizeBtn extends StatelessWidget {
+  final void Function() onPressed;
+  final Widget child;
+  final Color color;
+
+  const FullSizeBtn({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    this.color = Colors.tealAccent,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(color),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
 enum BtnType { primary, secondary, tertiary }
 
 class CustomBtn extends StatelessWidget {
@@ -36,6 +66,7 @@ class CustomBtn extends StatelessWidget {
   final Widget child;
   final BtnType type;
   final double height;
+
   const CustomBtn(
       {Key? key,
       required this.onPressed,
