@@ -27,7 +27,7 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
     ref.read(registerViewModelProvider.notifier).updateRequiredCheck(allCheck);
 
     setState(() {});
-    ref.read(registerViewModelProvider.notifier).valid(widget.formKey);
+    ref.read(registerViewModelProvider.notifier).validateLast(widget.formKey);
   }
 
   @override
@@ -63,7 +63,7 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
                       .updateRequiredCheck(value);
                   ref
                       .read(registerViewModelProvider.notifier)
-                      .valid(widget.formKey);
+                      .validateLast(widget.formKey);
                 },
                 value: ref.watch(registerViewModelProvider
                     .select((value) => value.requiredCheck)),

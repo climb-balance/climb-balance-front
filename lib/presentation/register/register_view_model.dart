@@ -22,6 +22,25 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   RegisterViewModel({required this.ref, required this.repository})
       : super(const RegisterState());
 
+  void goBack(BuildContext context) {
+    if (state.curPage == 0) {
+      context.pop();
+      return;
+    }
+
+    state = state.copyWith(curPage: state.curPage - 1);
+    validateWeightHeight();
+  }
+
+  void goNext(BuildContext context) {
+    if (state.curPage == 2) {
+      _register(context);
+      return;
+    }
+    state = state.copyWith(curPage: state.curPage + 1);
+    validateWeightHeight();
+  }
+
   void updateAccessToken(String accessToken) {
     link ??= ref.keepAlive();
     state = state.copyWith(accessToken: accessToken);
@@ -29,14 +48,16 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   void updateHeight(int height) {
     state = state.copyWith(height: height);
-  }
-
-  void updateNickname(String nickname) {
-    state = state.copyWith(nickname: nickname);
+    validateWeightHeight();
   }
 
   void updateWeight(int weight) {
     state = state.copyWith(weight: weight);
+    validateWeightHeight();
+  }
+
+  void updateNickname(String nickname) {
+    state = state.copyWith(nickname: nickname);
   }
 
   void updateDescription(String value) {
@@ -67,23 +88,25 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
     state = state.copyWith(requiredCheck: value);
   }
 
-  /// 매번 값이 갱신될때마다 업데이트하는 함수
-  void valid(GlobalKey<FormState> formKey) {
-    if (formKey.currentState == null || !state.requiredCheck) {
-      state = state.copyWith(isValid: false);
+  void validateWeightHeight() {
+    bool result = false;
+    if (state.curPage == 0) {
+      if (state.height >= 100 && state.height <= 200) result = true;
+    } else if (state.curPage == 1) {
+      if (state.weight >= 30 && state.weight <= 120) result = true;
     }
-
-    formKey.currentState!.validate();
-    state = state.copyWith(isValid: formKey.currentState!.validate());
+    state = state.copyWith(isValid: result);
   }
 
-  /// form을 검증하는 함수
-  /// 이후 _register를 호출해 업로드한다.
-  void validate(BuildContext context) {
-    if (!state.isValid) {
-      return;
+  /// 마지막에 값이 갱신될때마다 업데이트하는 함수
+  void validateLast(GlobalKey<FormState> formKey) {
+    bool result = false;
+    if (formKey.currentState == null || !state.requiredCheck) {
+      result = false;
+    } else {
+      result = formKey.currentState!.validate();
     }
-    _register(context);
+    state = state.copyWith(isValid: result);
   }
 
   /// 회원가입을 진행하는 함수

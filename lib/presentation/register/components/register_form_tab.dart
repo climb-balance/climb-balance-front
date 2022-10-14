@@ -55,7 +55,7 @@ class RegisterFormTab extends ConsumerWidget {
                             .updateNickname(value);
                         ref
                             .read(registerViewModelProvider.notifier)
-                            .valid(formKey);
+                            .validateLast(formKey);
                       },
                       checkValue: (String? value) {
                         if (value == null) {
@@ -78,7 +78,9 @@ class RegisterFormTab extends ConsumerWidget {
               ref
                   .read(registerViewModelProvider.notifier)
                   .updateDescription(value);
-              ref.read(registerViewModelProvider.notifier).valid(formKey);
+              ref
+                  .read(registerViewModelProvider.notifier)
+                  .validateLast(formKey);
             },
             checkValue: (String? value) {
               return null;

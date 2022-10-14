@@ -8,7 +8,7 @@ class MySafeArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      minimum: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: child,
     );
   }
