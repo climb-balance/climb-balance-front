@@ -1,11 +1,12 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/components/ai_feedback_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../common/ui/theme/specific_theme.dart';
+import 'components/ai_feedback_information.dart';
 import 'components/ai_feedback_overlay.dart';
-import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
   final int storyId;
@@ -19,6 +20,13 @@ class AiFeedbackScreen extends ConsumerStatefulWidget {
 class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
     with TickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
+
+  void togglePlaying() {
+    if (!_videoPlayerController.value.isInitialized) return;
+    _videoPlayerController.value.isPlaying
+        ? _videoPlayerController.pause()
+        : _videoPlayerController.play();
+  }
 
   @override
   void initState() {
@@ -45,19 +53,22 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
 
   @override
   Widget build(BuildContext context) {
-    final provider = ref.watch(aiFeedbackViewModelProvider(widget.storyId));
-    final notifier =
-        ref.read(aiFeedbackViewModelProvider(widget.storyId).notifier);
     final size = MediaQuery.of(context).size;
+    final bool isStatusChanging = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isStatusChanging));
+    final bool isInformOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isInformOpen));
     return StoryViewTheme(
       child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: Stack(
           children: [
             _videoPlayerController.value.isInitialized
-                ? Expanded(
-                    child: Center(
-                      child: AspectRatio(
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      AspectRatio(
                         aspectRatio: _videoPlayerController.value.aspectRatio,
                         child: Stack(
                           children: [
@@ -72,19 +83,45 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                           ],
                         ),
                       ),
-                    ),
+                      if (!isInformOpen)
+                        Expanded(
+                          child: AiFeedbackInformation(
+                            storyId: widget.storyId,
+                          ),
+                        ),
+                    ],
                   )
                 : const Center(
                     child: CircularProgressIndicator(),
                   ),
-            if (_videoPlayerController.value.isInitialized)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AiFeedbackProgressBar(
-                  detail: provider,
-                  controller: _videoPlayerController,
+            if (isInformOpen)
+              AiFeedbackActions(
+                togglePlaying: togglePlaying,
+                storyId: widget.storyId,
+                videoPlayerController: _videoPlayerController,
+              ),
+            GestureDetector(
+              onTap: () {
+                ref
+                    .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+                    .togglePlayingStatus();
+              },
+              child: AnimatedOpacity(
+                opacity: isStatusChanging ? 0.5 : 0.0,
+                duration: const Duration(milliseconds: 250),
+                child: Center(
+                  child: _videoPlayerController.value.isPlaying
+                      ? Icon(
+                          Icons.play_arrow,
+                          size: 100,
+                        )
+                      : Icon(
+                          Icons.pause,
+                          size: 100,
+                        ),
                 ),
               ),
+            ),
           ],
         ),
       ),

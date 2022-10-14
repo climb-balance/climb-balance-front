@@ -32,7 +32,7 @@ class StoryServerHelper {
       );
       storyId = jsonDecode(result)['storyId'];
     } catch (e) {
-      return const Result.error('스토리 업로드 오류');
+      return Result.error('스토리 업로드 오류. 원인 : ${e.toString()}');
     }
 
     return await uploadVideo(storyId, storyUpload.videoPath);
@@ -43,7 +43,7 @@ class StoryServerHelper {
       server.multiPartUpload(
           '$serverStoryPath/$storyId$serverVideoPath', videoPath!);
     } catch (e) {
-      return const Result.error('영상 업로드 오류');
+      return Result.error('영상 업로드 오류. 원인 : ${e.toString()}');
     }
     return const Result.success(null);
   }
@@ -85,10 +85,10 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<Iterable>> getStoryAiDetailById(int storyId) async {
+  Future<Result<dynamic>> getStoryAiDetailById(int storyId) async {
     try {
       final body = await server.get(
-          url: '$serverStoryPath/$storyId$serverVideoPath?type=json');
+          url: '$serverStoryPath/$storyId$serverVideoPath?type=overlay');
       return Result.success(jsonDecode(body));
     } catch (e) {
       return const Result.error('영상 불러오기 오류');

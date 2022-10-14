@@ -1,24 +1,22 @@
 import 'package:climb_balance/presentation/story/components/story_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../common/components/user_profile_info.dart';
-import '../../common/custom_fab_loc.dart';
+import '../../common/custom_fab.dart';
 import '../story_view_model.dart';
-import 'progress_bar.dart';
 import 'story_overlay_appbar.dart';
 
 class StoryOverlay extends ConsumerWidget {
-  final VideoPlayerController videoPlayerController;
   final void Function() toggleCommentOpen;
+  final void Function() togglePlaying;
   final int storyId;
 
   const StoryOverlay({
     Key? key,
-    required this.videoPlayerController,
     required this.toggleCommentOpen,
     required this.storyId,
+    required this.togglePlaying,
   }) : super(key: key);
 
   @override
@@ -27,17 +25,15 @@ class StoryOverlay extends ConsumerWidget {
         .watch(storyViewModelProvider(storyId).select((value) => value.story));
 
     return GestureDetector(
-      onTapUp: (_) {
-        if (!videoPlayerController.value.isInitialized) return;
-        videoPlayerController.value.isPlaying
-            ? videoPlayerController.pause()
-            : videoPlayerController.play();
+      onTap: () {
+        togglePlaying();
       },
       child: Scaffold(
         floatingActionButton: StoryActions(
           storyId: storyId,
           toggleCommentOpen: toggleCommentOpen,
         ),
+        floatingActionButtonAnimator: NoFabScalingAnimation(),
         floatingActionButtonLocation: CustomFabLoc(),
         backgroundColor: Colors.transparent,
         appBar: StoryOverlayAppBar(
@@ -67,14 +63,12 @@ class StoryOverlay extends ConsumerWidget {
                     .select((value) => value.uploader)),
                 description: story.description,
               ),
+              SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),
-        bottomNavigationBar: videoPlayerController.value.isInitialized
-            ? ProgressBar(
-                videoPlayerController: videoPlayerController,
-              )
-            : Container(),
       ),
     );
   }

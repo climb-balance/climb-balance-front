@@ -74,6 +74,11 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
                   .select((value) => value.joints)),
               frames: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
                   .select((value) => value.frames)),
+              lineOverlay: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
+                  .select((value) => value.lineOverlay)),
+              squareOverlay: ref.watch(
+                  aiFeedbackViewModelProvider(widget.storyId)
+                      .select((value) => value.squareOverlay)),
             ),
           ),
         );
@@ -87,6 +92,8 @@ class _Painter extends CustomPainter {
   final List<double?> scores;
   final List<double?> joints;
   final int frames;
+  final bool lineOverlay;
+  final bool squareOverlay;
   final List<int> rightIndexes = [20, 16, 12, 24, 28, 32];
   final List<int> leftIndexes = [18, 14, 10, 22, 26, 30];
   final List<int> rlPair1Indexes = [10, 12];
@@ -98,6 +105,8 @@ class _Painter extends CustomPainter {
     required this.scores,
     required this.joints,
     required this.frames,
+    required this.lineOverlay,
+    required this.squareOverlay,
   });
 
   final Paint linePaint = Paint()
@@ -169,31 +178,33 @@ class _Painter extends CustomPainter {
     int currentIdx = (animationValue * frames).toInt() * 34;
     List<double?> currentJoints = joints.sublist(currentIdx, currentIdx + 35);
 
-    /// draw lines
-    drawNearLine(
-      size: size,
-      canvas: canvas,
-      values: currentJoints,
-      lineIndexes: rightIndexes,
-    );
-    drawNearLine(
-      size: size,
-      canvas: canvas,
-      values: currentJoints,
-      lineIndexes: leftIndexes,
-    );
-    drawNearLine(
-      size: size,
-      canvas: canvas,
-      values: currentJoints,
-      lineIndexes: rlPair1Indexes,
-    );
-    drawNearLine(
-      size: size,
-      canvas: canvas,
-      values: currentJoints,
-      lineIndexes: rlPair2Indexes,
-    );
+    if (lineOverlay) {
+      /// draw lines
+      drawNearLine(
+        size: size,
+        canvas: canvas,
+        values: currentJoints,
+        lineIndexes: rightIndexes,
+      );
+      drawNearLine(
+        size: size,
+        canvas: canvas,
+        values: currentJoints,
+        lineIndexes: leftIndexes,
+      );
+      drawNearLine(
+        size: size,
+        canvas: canvas,
+        values: currentJoints,
+        lineIndexes: rlPair1Indexes,
+      );
+      drawNearLine(
+        size: size,
+        canvas: canvas,
+        values: currentJoints,
+        lineIndexes: rlPair2Indexes,
+      );
+    }
 
     /// draw circles
     /// 0~9는 머리이므로 제외
@@ -208,7 +219,7 @@ class _Painter extends CustomPainter {
         circlePaint,
       );
     }
-    if (scores[currentIdx ~/ 34] == null) {
+    if (scores[currentIdx ~/ 34] == null || !squareOverlay) {
       return;
     }
     drawQuad(

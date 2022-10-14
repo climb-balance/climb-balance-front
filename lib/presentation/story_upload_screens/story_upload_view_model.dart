@@ -45,18 +45,16 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
     picker
         .pickVideo(source: isFromCam ? ImageSource.camera : ImageSource.gallery)
         .then((image) async {
-      link.close();
       if (image == null) {
+        link.close();
         return;
       }
-      Navigator.pop(context);
+
       state = state.copyWith(videoPath: image.path);
-      Future.microtask(
-        () {
-          // TODO check
-          context.pushNamed(storyUploadRouteName);
-        },
-      );
+      Navigator.pop(context);
+      context.pushNamed(storyUploadRouteName);
+
+      Future.microtask(() => link.close());
     });
   }
 
@@ -133,5 +131,10 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         customShowDialog(context: context, title: '에러', content: message);
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
