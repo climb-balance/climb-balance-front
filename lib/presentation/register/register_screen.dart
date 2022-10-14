@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
 import '../common/components/button.dart';
+import '../common/components/my_icons.dart';
 import 'components/height_tab.dart';
 import 'components/register_form_tab.dart';
 import 'components/register_status.dart';
@@ -59,9 +60,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-          ),
+          icon: BackIcon(),
           onPressed: () {
             ref.read(registerViewModelProvider.notifier).goBack(context);
           },

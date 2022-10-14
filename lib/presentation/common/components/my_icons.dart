@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GradientIcon extends StatelessWidget {
   final IconData icon;
@@ -93,6 +94,17 @@ class ColIconDetail extends StatelessWidget {
         ),
         Text(detail),
       ],
+    );
+  }
+}
+
+class BackIcon extends StatelessWidget {
+  const BackIcon({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      'assets/svg/back.svg',
     );
   }
 }
