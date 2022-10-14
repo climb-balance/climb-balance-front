@@ -1,19 +1,24 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/models/ai_feedback_state.dart';
 import 'package:climb_balance/presentation/common/custom_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../common/components/my_icons.dart';
+import 'ai_feedback_progress_bar.dart';
 
 class AiFeedbackActions extends ConsumerWidget {
   final void Function() togglePlaying;
   final int storyId;
+  final VideoPlayerController videoPlayerController;
 
   const AiFeedbackActions({
     Key? key,
     required this.storyId,
     required this.togglePlaying,
+    required this.videoPlayerController,
   }) : super(key: key);
 
   @override
@@ -22,13 +27,16 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.lineOverlay));
     final bool squareOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.squareOverlay));
+    final AiFeedbackState detail =
+        ref.watch(aiFeedbackViewModelProvider(storyId));
     return GestureDetector(
       onTap: togglePlaying,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-        ),
         backgroundColor: Colors.transparent,
+        bottomNavigationBar: AiFeedbackProgressBar(
+          detail: detail,
+          controller: videoPlayerController,
+        ),
         floatingActionButtonAnimator: NoFabScalingAnimation(),
         floatingActionButtonLocation: CustomFabLoc(),
         floatingActionButton: Column(
@@ -70,11 +78,18 @@ class AiFeedbackActions extends ConsumerWidget {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                ref
+                    .read(aiFeedbackViewModelProvider(storyId).notifier)
+                    .toggleInformation();
+              },
               child: const ColIconDetail(
                 icon: Icons.mode_comment,
                 detail: '정보',
               ),
+            ),
+            SizedBox(
+              height: 20,
             ),
           ],
         ),

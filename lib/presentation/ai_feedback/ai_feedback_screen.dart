@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../common/ui/theme/specific_theme.dart';
+import 'components/ai_feedback_information.dart';
 import 'components/ai_feedback_overlay.dart';
-import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
   final int storyId;
@@ -53,7 +53,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
 
   @override
   Widget build(BuildContext context) {
-    final provider = ref.watch(aiFeedbackViewModelProvider(widget.storyId));
+    final size = MediaQuery.of(context).size;
     final bool isStatusChanging = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
             .select((value) => value.isStatusChanging));
@@ -66,49 +66,42 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
           children: [
             _videoPlayerController.value.isInitialized
                 ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Center(
-                          child: AspectRatio(
-                            aspectRatio:
-                                _videoPlayerController.value.aspectRatio,
-                            child: Stack(
-                              children: [
-                                VideoPlayer(
-                                  _videoPlayerController,
-                                ),
-                                AiFeedbackOverlay(
-                                  videoPlayerController: _videoPlayerController,
-                                  ticker: this,
-                                  storyId: widget.storyId,
-                                ),
-                              ],
+                      AspectRatio(
+                        aspectRatio: _videoPlayerController.value.aspectRatio,
+                        child: Stack(
+                          children: [
+                            VideoPlayer(
+                              _videoPlayerController,
                             ),
-                          ),
+                            AiFeedbackOverlay(
+                              videoPlayerController: _videoPlayerController,
+                              ticker: this,
+                              storyId: widget.storyId,
+                            ),
+                          ],
                         ),
                       ),
+                      if (!isInformOpen)
+                        Expanded(
+                          child: AiFeedbackInformation(
+                            storyId: widget.storyId,
+                          ),
+                        ),
                     ],
                   )
                 : const Center(
                     child: CircularProgressIndicator(),
                   ),
-            if (!isInformOpen) ...[
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AiFeedbackProgressBar(
-                  detail: provider,
-                  controller: _videoPlayerController,
-                ),
+            if (isInformOpen)
+              AiFeedbackActions(
+                togglePlaying: togglePlaying,
+                storyId: widget.storyId,
+                videoPlayerController: _videoPlayerController,
               ),
-            ],
-            AiFeedbackActions(
-              togglePlaying: togglePlaying,
-              storyId: widget.storyId,
-            ),
             GestureDetector(
               onTap: () {
-                togglePlaying();
                 ref
                     .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
                     .togglePlayingStatus();

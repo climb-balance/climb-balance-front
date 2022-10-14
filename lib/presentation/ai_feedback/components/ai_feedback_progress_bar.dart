@@ -55,7 +55,7 @@ class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 10),
+          padding: EdgeInsets.only(top: 20, bottom: 5),
           child: Container(
             height: 5,
             decoration: BoxDecoration(

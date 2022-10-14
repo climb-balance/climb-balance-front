@@ -85,10 +85,10 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<Iterable>> getStoryAiDetailById(int storyId) async {
+  Future<Result<dynamic>> getStoryAiDetailById(int storyId) async {
     try {
       final body = await server.get(
-          url: '$serverStoryPath/$storyId$serverVideoPath?type=json');
+          url: '$serverStoryPath/$storyId$serverVideoPath?type=overlay');
       return Result.success(jsonDecode(body));
     } catch (e) {
       return const Result.error('영상 불러오기 오류');

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -37,6 +39,10 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     return repository.getStoryVideoPathById(story.storyId, isAi: true);
   }
 
+  void toggleInformation() {
+    state = state.copyWith(isInformOpen: !state.isInformOpen);
+  }
+
   void toggleLineOverlay() {
     state = state.copyWith(lineOverlay: !state.lineOverlay);
   }
@@ -50,5 +56,30 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     Future.delayed(const Duration(milliseconds: 300), () {
       state = state.copyWith(isStatusChanging: false);
     });
+  }
+
+  int longestGoodLength() {
+    int maxLength = 0;
+    int curLength = 0;
+    for (int i = 0; i < state.scores.length; i++) {
+      if (state.scores[i] == 1) {
+        curLength += 1;
+        maxLength = max(maxLength, curLength);
+      } else {
+        curLength = 0;
+      }
+    }
+
+    return maxLength;
+  }
+
+  int goodCount() {
+    int curLength = 0;
+    for (int i = 0; i < state.scores.length; i++) {
+      if (state.scores[i] == 1) {
+        curLength += 1;
+      }
+    }
+    return curLength;
   }
 }
