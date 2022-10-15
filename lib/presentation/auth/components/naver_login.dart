@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../common/components/button.dart';
+import '../../common/components/buttons.dart';
 import '../auth_view_model.dart';
 
 class NaverLogin extends ConsumerWidget {

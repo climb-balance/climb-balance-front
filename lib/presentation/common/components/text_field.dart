@@ -41,6 +41,7 @@ class _CustomTextInput extends ConsumerState<CustomTextInput> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: _controller,
       validator: widget.checkValue,
       decoration: InputDecoration(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
-import '../common/components/button.dart';
+import '../common/components/buttons.dart';
 import '../common/components/my_icons.dart';
 import 'components/height_tab.dart';
 import 'components/register_form_tab.dart';
@@ -23,7 +23,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   final List<Widget> registerTabs = [
     const HeightTab(),
     const WeightTab(),
-    RegisterFormTab(formKey: GlobalKey<FormState>()),
+    RegisterFormTab(),
   ];
   bool valueCheck = false;
 
@@ -91,7 +91,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
               ref.read(registerViewModelProvider.notifier).goNext(context);
             }
           },
-          color: isValid ? color.primary : color.surface,
+          color: isValid ? color.primary : color.primaryContainer,
           child: SizedBox(
             height: 56,
             child: Center(

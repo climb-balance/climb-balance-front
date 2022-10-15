@@ -82,6 +82,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   void updateRequiredCheck(bool value) {
     state = state.copyWith(requiredCheck: value);
+    validateLast();
   }
 
   void validateWeightHeight() {
@@ -95,13 +96,11 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   }
 
   /// 마지막에 값이 갱신될때마다 업데이트하는 함수
-  void validateLast(GlobalKey<FormState> formKey) {
+  void validateLast() {
     bool result = false;
-    if (formKey.currentState == null || !state.requiredCheck) {
-      result = false;
-    } else {
-      result = formKey.currentState!.validate();
-    }
+    if (state.requiredCheck &&
+        state.nickname.length >= 2 &&
+        state.description.isNotEmpty) result = true;
     state = state.copyWith(isValid: result);
   }
 
