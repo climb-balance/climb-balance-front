@@ -65,6 +65,9 @@ class RegisterFormTab extends ConsumerWidget {
                       .select((value) => value.profileImage),
                 ),
               ),
+              SizedBox(
+                height: 36,
+              ),
               Text(
                 '성별',
                 style: theme.textTheme.subtitle2,
