@@ -1,4 +1,3 @@
-import 'package:climb_balance/presentation/common/components/my_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../common/components/bot_navigation_bar.dart';
@@ -6,7 +5,6 @@ import '../common/components/safe_area.dart';
 import 'components/ai_feedback_status.dart';
 import 'components/expert_feedback_status.dart';
 import 'components/home_app_bar.dart';
-import 'components/image_banner_preview.dart';
 import 'components/main_statistics.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,15 +12,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final text = Theme.of(context).textTheme;
+    final color = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: const HomeAppBar(),
+      backgroundColor: color.background,
+      appBar: HomeAppBar(),
       body: MySafeArea(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const ImageBannerPreview(),
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
               child: Row(
@@ -30,11 +28,11 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     '통계',
-                    style: theme.textTheme.headline6,
+                    style: text.headline6,
                   ),
                   Icon(
                     Icons.more_horiz,
-                    color: theme.colorScheme.primary,
+                    color: color.primary,
                   ),
                 ],
               ),
@@ -47,11 +45,11 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     '피드백',
-                    style: theme.textTheme.headline6,
+                    style: text.headline6,
                   ),
                   Icon(
                     Icons.more_horiz,
-                    color: theme.colorScheme.primary,
+                    color: color.primary,
                   ),
                 ],
               ),
@@ -61,23 +59,6 @@ class HomeScreen extends StatelessWidget {
                 AiFeedbackStatus(),
                 ExpertFeedbackStatus(),
               ],
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: GradientIcon(
-                  icon: Icons.keyboard_double_arrow_up,
-                  size: 50,
-                  gradient: LinearGradient(
-                    colors: [
-                      theme.colorScheme.secondary,
-                      theme.colorScheme.tertiary,
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-              ),
             ),
           ],
         ),

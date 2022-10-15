@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
+import '../../common/components/logo.dart';
 
 class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
   const HomeAppBar({Key? key}) : super(key: key);
@@ -9,42 +10,30 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
     final theme = Theme.of(context);
     return AppBar(
       backgroundColor: Colors.transparent,
+      toolbarHeight: 100,
       elevation: 0,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 5,
-          ),
-          Container(
-            height: 25,
-            width: 25,
-            child: SvgPicture.asset(
-              'assets/logo.svg',
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          Text(
-            '클라임밸런스',
-            style: TextStyle(
-              color: theme.colorScheme.onBackground,
-            ),
-          ),
-        ],
+      title: SizedBox(
+        child: Logo(),
+        width: 24,
       ),
+      centerTitle: true,
       actions: [
-        Icon(
-          Icons.notifications,
-          color: theme.colorScheme.primary,
-        ),
-        const SizedBox(
-          width: 20,
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 4,
+          ),
+          child: IconButton(
+            icon: Icon(
+              Icons.notifications_outlined,
+              size: 24,
+            ),
+            onPressed: () {},
+          ),
         ),
       ],
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(100);
 }
