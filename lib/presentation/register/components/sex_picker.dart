@@ -12,37 +12,35 @@ class SexPicker extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sex =
         ref.watch(registerViewModelProvider.select((value) => value.sex));
-    final theme = Theme.of(context);
+    final color = Theme.of(context).colorScheme;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        InkWell(
-          child: Flexible(
-            child: Icon(
-              Icons.male,
-              size: 100,
-              color: sex == 'M'
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.secondary,
-            ),
+        SizedBox(
+          width: 125,
+          child: RadioListTile<String>(
+            contentPadding: EdgeInsets.zero,
+            value: 'M',
+            groupValue: sex,
+            onChanged: (value) {
+              ref.read(registerViewModelProvider.notifier).updateSex(value!);
+            },
+            title: Text('남성'),
+            activeColor: color.primary,
           ),
-          onTap: () {
-            ref.read(registerViewModelProvider.notifier).updateSex(true);
-          },
         ),
-        InkWell(
-          child: Flexible(
-            child: Icon(
-              Icons.female,
-              size: 100,
-              color: sex == 'F'
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.secondary,
-            ),
+        SizedBox(
+          width: 125,
+          child: RadioListTile<String>(
+            contentPadding: EdgeInsets.zero,
+            value: 'W',
+            groupValue: sex,
+            onChanged: (value) {
+              ref.read(registerViewModelProvider.notifier).updateSex(value!);
+            },
+            title: Text('여성'),
+            activeColor: color.primary,
           ),
-          onTap: () {
-            ref.read(registerViewModelProvider.notifier).updateSex(false);
-          },
         ),
       ],
     );

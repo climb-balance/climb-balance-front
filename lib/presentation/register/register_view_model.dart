@@ -64,12 +64,8 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
     state = state.copyWith(description: value);
   }
 
-  void updateSex(bool isMale) {
-    String ch = 'F';
-    if (isMale) {
-      ch = 'M';
-    }
-    state = state.copyWith(sex: ch);
+  void updateSex(String sex) {
+    state = state.copyWith(sex: sex);
   }
 
   void updateProfileImage(String imagePath) {

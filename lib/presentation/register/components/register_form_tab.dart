@@ -1,4 +1,4 @@
-import 'package:climb_balance/presentation/common/components/text_input.dart';
+import 'package:climb_balance/presentation/common/components/text_field.dart';
 import 'package:climb_balance/presentation/register/components/sex_picker.dart';
 import 'package:climb_balance/presentation/register/register_view_model.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +18,50 @@ class RegisterFormTab extends ConsumerWidget {
     return Form(
       key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: Column(
-        children: [
-          Text(
-            '성별',
-            style: theme.textTheme.subtitle1,
-          ),
-          const SexPicker(),
-          const Divider(),
-          Row(
-            children: [
-              Flexible(
-                child: AvatarPicker(
+      child: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                SizedBox(
+                  height: 36,
+                ),
+                Text(
+                  '닉네임',
+                  style: theme.textTheme.subtitle2,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                CustomTextInput(
+                  onChanged: (value) {
+                    ref
+                        .read(registerViewModelProvider.notifier)
+                        .updateNickname(value);
+                    ref
+                        .read(registerViewModelProvider.notifier)
+                        .validateLast(formKey);
+                  },
+                  checkValue: (String? value) {
+                    if (value == null) {
+                      return '입력해주세요';
+                    } else if (value.length < 2) {
+                      return '2글자 이상 이여야 합니다.';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 36,
+                ),
+                Text(
+                  '프로필 사진',
+                  style: theme.textTheme.subtitle2,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                AvatarPicker(
                   updateImagePath: (String imagePath) {
                     ref
                         .read(registerViewModelProvider.notifier)
@@ -40,55 +72,39 @@ class RegisterFormTab extends ConsumerWidget {
                         .select((value) => value.profileImage),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomTextInput(
-                      handleUpdate: (value) {
-                        ref
-                            .read(registerViewModelProvider.notifier)
-                            .updateNickname(value);
-                        ref
-                            .read(registerViewModelProvider.notifier)
-                            .validateLast(formKey);
-                      },
-                      checkValue: (String? value) {
-                        if (value == null) {
-                          return '입력해주세요';
-                        } else if (value.length < 2) {
-                          return '2글자 이상 이여야 합니다.';
-                        }
-                        return null;
-                      },
-                      label: '닉네임',
-                    ),
-                  ],
+                SizedBox(
+                  height: 36,
                 ),
-              ),
-            ],
+                Text(
+                  '성별',
+                  style: theme.textTheme.subtitle2,
+                ),
+                const SexPicker(),
+                Text(
+                  '자기 소개',
+                  style: theme.textTheme.subtitle2,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                CustomTextInput(
+                  onChanged: (value) {
+                    ref
+                        .read(registerViewModelProvider.notifier)
+                        .updateDescription(value);
+                    ref
+                        .read(registerViewModelProvider.notifier)
+                        .validateLast(formKey);
+                  },
+                  checkValue: (String? value) {
+                    return null;
+                  },
+                  maxLines: 3,
+                ),
+                CheckBoxes(formKey: formKey),
+              ],
+            ),
           ),
-          const Divider(),
-          CustomTextInput(
-            handleUpdate: (value) {
-              ref
-                  .read(registerViewModelProvider.notifier)
-                  .updateDescription(value);
-              ref
-                  .read(registerViewModelProvider.notifier)
-                  .validateLast(formKey);
-            },
-            checkValue: (String? value) {
-              return null;
-            },
-            maxLines: 3,
-            label: '자기소개',
-          ),
-          CheckBoxes(formKey: formKey),
         ],
       ),
     );

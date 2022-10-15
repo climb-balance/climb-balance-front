@@ -24,15 +24,21 @@ class _AvatarPickerState extends State<AvatarPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: getImage,
-      child: widget.imagePath == null
-          ? const NoAvatar()
-          : CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.white,
-              backgroundImage: FileImage(File(widget.imagePath!)),
-            ),
+    final color = Theme.of(context).colorScheme;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: getImage,
+          child: widget.imagePath == null
+              ? const NoAvatar()
+              : CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  backgroundImage: FileImage(File(widget.imagePath!)),
+                ),
+        ),
+      ],
     );
   }
 }
@@ -42,11 +48,19 @@ class NoAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return CircleAvatar(
-      backgroundColor: theme.colorScheme.primary,
-      radius: 60,
-      child: const Icon(Icons.photo_sharp, size: 60),
+    final color = Theme.of(context).colorScheme;
+    return Container(
+      height: 100,
+      width: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: color.surface,
+      ),
+      child: Icon(
+        Icons.image_search,
+        size: 60,
+        color: color.surfaceVariant,
+      ),
     );
   }
 }

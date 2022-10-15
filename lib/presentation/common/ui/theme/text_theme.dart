@@ -28,6 +28,7 @@ TextTheme customTextTheme(TextTheme base, ColorScheme color) {
     ),
     subtitle2: base.subtitle2!.copyWith(
       color: color.onBackground,
+      fontSize: 16,
       fontWeight: FontWeight.w400,
     ),
     bodyText1: base.bodyText1!.copyWith(

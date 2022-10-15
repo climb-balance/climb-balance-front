@@ -1,6 +1,63 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class CustomTextInput extends ConsumerStatefulWidget {
+  final void Function(String) onChanged;
+  final String? Function(String?) checkValue;
+  final int maxLines;
+
+  const CustomTextInput({
+    Key? key,
+    required this.onChanged,
+    required this.checkValue,
+    this.maxLines = 1,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<CustomTextInput> createState() => _CustomTextInput();
+}
+
+class _CustomTextInput extends ConsumerState<CustomTextInput> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      widget.onChanged(_controller.value.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.removeListener(() {});
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return TextFormField(
+      controller: _controller,
+      validator: widget.checkValue,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: color.surface,
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      maxLines: widget.maxLines,
+    );
+  }
+}
 
 class CustomRangeTextInputFormatter extends TextInputFormatter {
   @override

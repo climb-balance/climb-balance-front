@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../common/components/text_field.dart';
 import '../register_view_model.dart';
-import 'customRangeNumberField.dart';
 import 'information.dart';
 
 class HeightTab extends ConsumerWidget {
