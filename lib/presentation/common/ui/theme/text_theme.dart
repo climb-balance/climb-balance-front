@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 TextTheme customTextTheme(TextTheme base, ColorScheme color) {
   return base.copyWith(
+    headline2: base.headline2!.copyWith(
+      fontWeight: FontWeight.w900,
+      fontSize: 40,
+      color: color.onBackground,
+    ),
     headline3: base.headline3!.copyWith(
       fontWeight: FontWeight.w400,
       fontSize: 36,

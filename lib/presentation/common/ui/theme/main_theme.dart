@@ -17,11 +17,15 @@ ThemeData mainLightTheme() {
 ThemeData mainDarkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
-    fontFamily: 'text',
   ).copyWith(
     colorScheme: darkColorScheme,
     extensions: <ThemeExtension<dynamic>>[],
-    textTheme: customTextTheme(ThemeData.dark().textTheme, darkColorScheme),
+    textTheme: customTextTheme(
+      ThemeData(
+        fontFamily: 'text',
+      ).textTheme.copyWith(),
+      darkColorScheme,
+    ),
     scaffoldBackgroundColor: darkColorScheme.surface,
   );
 }

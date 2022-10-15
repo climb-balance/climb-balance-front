@@ -1,11 +1,9 @@
+import 'package:climb_balance/presentation/home/components/continuous_statistics.dart';
 import 'package:flutter/material.dart';
 
 import '../common/components/bot_navigation_bar.dart';
 import '../common/components/safe_area.dart';
-import 'components/ai_feedback_status.dart';
-import 'components/expert_feedback_status.dart';
 import 'components/home_app_bar.dart';
-import 'components/main_statistics.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,44 +18,39 @@ class HomeScreen extends StatelessWidget {
       body: MySafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '통계',
-                    style: text.headline6,
-                  ),
-                  Icon(
-                    Icons.more_horiz,
-                    color: color.primary,
-                  ),
-                ],
-              ),
-            ),
-            const MainStatistics(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '피드백',
-                    style: text.headline6,
-                  ),
-                  Icon(
-                    Icons.more_horiz,
-                    color: color.primary,
-                  ),
-                ],
-              ),
+            Text(
+              '최근 AI 평가',
+              style: text.bodyText1,
             ),
             Row(
-              children: const [
-                AiFeedbackStatus(),
-                ExpertFeedbackStatus(),
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '최근 5주',
+                        style: text.bodyText1,
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '현재 상태',
+                        style: text.bodyText1,
+                      ),
+                      ContinuousStatistics(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],

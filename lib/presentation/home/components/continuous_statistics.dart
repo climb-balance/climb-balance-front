@@ -19,17 +19,25 @@ class ContinuousStatistics extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cont = _getCont(ref
         .watch(homeViewModelProvider.select((value) => value.climbingDatas)));
-    final theme = Theme.of(context);
-    return Flexible(
-      fit: FlexFit.tight,
-      child: Card(
+    final text = Theme.of(context).textTheme;
+    final color = Theme.of(context).colorScheme;
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.surface,
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('$cont회', style: theme.textTheme.headline6),
+            Text(
+              '12회',
+              style: text.headline2,
+            ),
             Icon(
               Icons.local_fire_department,
-              color: theme.colorScheme.tertiary.withOpacity(cont / 30),
+              color: color.tertiary.withOpacity(cont / 30),
               size: 75,
             ),
             const Text('연속 클라이밍'),
