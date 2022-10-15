@@ -16,14 +16,6 @@ class BotNavigationBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isExpert =
         ref.watch(accountViewModelProvider.select((value) => value.expertMode));
-    final List<String> paths = [
-      homePageRoute,
-      communityPageRoute,
-      '',
-      isExpert ? feedbackPageRoute : diaryPageRoute,
-      accountPageRoute
-    ];
-    final color = Theme.of(context).colorScheme;
     final goRouter = GoRouter.of(context);
     return SizedBox(
       height: 100,
