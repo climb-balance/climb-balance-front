@@ -42,11 +42,9 @@ dependencies:
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.0.0-dev.9
   webview_flutter: ^3.0.4
-  numberpicker: ^2.1.1
   image_picker: ^0.8.5+3
   video_player: ^2.4.5
   video_thumbnail: ^0.5.2
-  carousel_slider:
   video_trimmer:
     git:
       url: https://github.com/bluejoyq/video_trimmer.git
