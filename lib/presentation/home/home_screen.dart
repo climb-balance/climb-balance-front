@@ -1,4 +1,5 @@
 import 'package:climb_balance/presentation/home/components/continuous_statistics.dart';
+import 'package:climb_balance/presentation/home/components/recent_ai_stat.dart';
 import 'package:flutter/material.dart';
 
 import '../common/components/bot_navigation_bar.dart';
@@ -24,6 +25,13 @@ class HomeScreen extends StatelessWidget {
             Text(
               '최근 AI 평가',
               style: text.bodyText1,
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            RecentAiStat(),
+            SizedBox(
+              height: 36,
             ),
             Row(
               children: [

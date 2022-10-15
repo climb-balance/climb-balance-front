@@ -18,7 +18,8 @@ TextTheme customTextTheme(TextTheme base, ColorScheme color) {
       color: color.onBackground,
     ),
     headline5: base.headline5!.copyWith(
-      fontWeight: FontWeight.w900,
+      fontSize: 24,
+      fontWeight: FontWeight.w700,
       color: color.onBackground,
     ),
     headline6: base.headline6!.copyWith(
