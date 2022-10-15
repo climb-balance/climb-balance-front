@@ -47,6 +47,9 @@ class HomeScreen extends StatelessWidget {
                         '현재 상태',
                         style: text.bodyText1,
                       ),
+                      SizedBox(
+                        height: 16,
+                      ),
                       ContinuousStatistics(),
                     ],
                   ),

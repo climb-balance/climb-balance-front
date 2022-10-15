@@ -26,6 +26,6 @@ ThemeData mainDarkTheme() {
       ).textTheme.copyWith(),
       darkColorScheme,
     ),
-    scaffoldBackgroundColor: darkColorScheme.surface,
+    scaffoldBackgroundColor: darkColorScheme.background,
   );
 }

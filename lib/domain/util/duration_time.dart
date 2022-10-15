@@ -18,3 +18,11 @@ String formatDatetimeToYYMMDD(DateTime datetime) {
   String twoDigitMonth = twoDigits(datetime.month);
   return "${datetime.year}-$twoDigitMonth-$twoDigitDay";
 }
+
+String formatDatetimeToAll(DateTime datetime) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitDay = twoDigits(datetime.day);
+  String twoDigitMonth = twoDigits(datetime.month);
+  String twoDigitMinutes = twoDigits(datetime.minute.remainder(60));
+  return "${datetime.year}.$twoDigitMonth.$twoDigitDay ${datetime.hour > 11 ? 'AM' : 'PM'} ${twoDigits(datetime.hour % 12)}:$twoDigitMinutes";
+}
