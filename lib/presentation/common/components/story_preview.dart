@@ -16,10 +16,11 @@ class StoryPreview extends ConsumerWidget {
     final image = ref
         .watch(diaryViewModelProvider.notifier)
         .getThumbnailUrl(story.storyId);
+    final color = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
-        splashColor: Theme.of(context).colorScheme.surfaceVariant,
+        splashColor: color.surfaceVariant,
         onTap: () {
           // TODO named push not working
           context.push(
@@ -28,11 +29,32 @@ class StoryPreview extends ConsumerWidget {
         },
         child: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage(image)),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Image.network(
+                  image,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    color: color.errorContainer,
+                    child: Icon(
+                      Icons.error,
+                      color: color.error,
+                    ),
+                  ),
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: color.surface,
+                      child: Transform.scale(
+                        scale: 0.5,
+                        child: const CircularProgressIndicator(),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             StoryPreviewIcon(story: story)
