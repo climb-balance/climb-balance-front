@@ -1,5 +1,7 @@
+import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/common/router_provider.dart';
 import 'package:climb_balance/presentation/account/account_view_model.dart';
+import 'package:climb_balance/presentation/common/components/waiting_progress.dart';
 import 'package:climb_balance/presentation/common/ui/theme/main_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -34,7 +36,7 @@ class MyApp extends ConsumerWidget {
     bool darkMode =
         ref.watch(accountViewModelProvider.select((value) => value.darkMode));
     ref.read(firebaseProvider.notifier).initFirebase(context);
-
+    final bool loading = ref.watch(loadingProvider);
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
@@ -46,6 +48,14 @@ class MyApp extends ConsumerWidget {
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
+      builder: (context, widget) {
+        return Stack(
+          children: [
+            if (widget != null) widget,
+            if (loading) const WaitingProgress()
+          ],
+        );
+      },
     );
   }
 }

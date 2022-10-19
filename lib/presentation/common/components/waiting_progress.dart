@@ -5,11 +5,16 @@ class WaitingProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: Theme.of(context).shadowColor.withOpacity(0.2),
-        child: Center(
-          child: CircularProgressIndicator(),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Expanded(
+        child: Container(
+          color: Colors.black.withOpacity(0.5),
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
       ),
     );
