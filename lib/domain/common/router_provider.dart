@@ -18,12 +18,15 @@ import '../../presentation/register/register_screen.dart';
 import '../../presentation/story/story_screen.dart';
 import '../const/route_config.dart';
 import '../const/route_name.dart';
+import 'loading_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final token =
       ref.watch(currentUserProvider.select((value) => value.accessToken));
+  final bool loading = ref.watch(loadingProvider);
   return GoRouter(
     debugLogDiagnostics: true,
+    // TODO splash
     initialLocation: token == '' ? authPagePath : homePageRoute,
     routes: <GoRoute>[
       GoRoute(

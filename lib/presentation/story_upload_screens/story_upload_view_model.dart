@@ -1,4 +1,5 @@
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
+import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -119,6 +120,7 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
   }
 
   void upload(BuildContext context) async {
+    ref.read(loadingProvider.notifier).openLoading();
     final Result<void> result =
         await repository.createStory(storyUpload: state);
     result.when(
@@ -131,6 +133,7 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         customShowDialog(context: context, title: '에러', content: message);
       },
     );
+    ref.read(loadingProvider.notifier).closeLoading();
   }
 
   @override
