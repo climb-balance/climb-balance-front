@@ -43,38 +43,40 @@ class StoryOverlay extends ConsumerWidget {
             floatingActionButtonAnimator: NoFabScalingAnimation(),
             floatingActionButtonLocation: CustomFabLoc(),
             backgroundColor: Colors.transparent,
-            appBar: StoryOverlayAppBar(
-              tags: story.tags,
-            ),
-            body: SafeArea(
-              minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      color: Colors.transparent,
-                    ),
+            body: Column(
+              children: [
+                StoryOverlayAppBar(
+                  tags: story.tags,
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                SafeArea(
+                  minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(story.description),
+                          ],
+                        ),
+                      ),
+                      BottomUserProfile(
+                        user: ref.watch(storyViewModelProvider(storyId)
+                            .select((value) => value.uploader)),
+                        description: story.description,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(story.description),
-                      ],
-                    ),
-                  ),
-                  BottomUserProfile(
-                    user: ref.watch(storyViewModelProvider(storyId)
-                        .select((value) => value.uploader)),
-                    description: story.description,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

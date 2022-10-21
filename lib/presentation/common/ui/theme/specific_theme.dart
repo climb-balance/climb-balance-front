@@ -4,6 +4,7 @@ import 'main_theme.dart';
 
 class StoryViewTheme extends StatelessWidget {
   final Widget child;
+
   const StoryViewTheme({Key? key, required this.child}) : super(key: key);
 
   @override
@@ -34,14 +35,15 @@ class StoryViewTheme extends StatelessWidget {
             ),
           ),
         ),
-        textTheme: TextTheme(
-          bodyText2: TextStyle(
-            color: mainWhite,
-            shadows: [
-              Shadow(color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
-            ],
-          ),
-        ),
+        textTheme: mainDarkTheme().textTheme.copyWith(
+              bodyText2: TextStyle(
+                color: mainWhite,
+                shadows: [
+                  Shadow(
+                      color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+                ],
+              ),
+            ),
       ),
       child: Material(
         color: Colors.transparent,

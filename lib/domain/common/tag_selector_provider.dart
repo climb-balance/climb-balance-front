@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../model/tag_selector.dart';
 
 List<DifficultySelector> difficultyData = [
-  DifficultySelector(name: '난이도 정보 없음', color: Colors.white),
+  DifficultySelector(id: 0, name: '난이도 X', color: Colors.white),
   DifficultySelector(id: 1, name: '빨강', color: Colors.red),
   DifficultySelector(id: 2, name: '파랑', color: Colors.blue),
   DifficultySelector(id: 3, name: '남색', color: Colors.indigo),
@@ -20,7 +20,7 @@ List<DifficultySelector> difficultyData = [
 ];
 
 List<LocationSelector> locationData = [
-  LocationSelector(name: '위치 정보 없음'),
+  LocationSelector(id: 0, name: '위치 정보 X'),
   LocationSelector(id: 1, name: '강남 클라이밍파크'),
   LocationSelector(id: 2, name: '신논현 더클라이밍'),
   LocationSelector(id: 3, name: '수원 클라임바운스'),

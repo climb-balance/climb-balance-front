@@ -64,7 +64,6 @@ class StoryViewModel extends StateNotifier<StoryState> {
   }
 
   void toggleOverlayOpen() {
-    debugPrint(state.overlayOpen.toString());
     if (state.overlayOpen) {
       state = state.copyWith(overlayOpen: false);
       overlayCloseTimer?.cancel();

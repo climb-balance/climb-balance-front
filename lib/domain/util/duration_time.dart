@@ -16,7 +16,7 @@ String formatDatetimeToYYMMDD(DateTime datetime) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
   String twoDigitDay = twoDigits(datetime.day);
   String twoDigitMonth = twoDigits(datetime.month);
-  return "${datetime.year}-$twoDigitMonth-$twoDigitDay";
+  return "${datetime.year} $twoDigitMonth $twoDigitDay";
 }
 
 String formatDatetimeToAll(DateTime datetime) {
