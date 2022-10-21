@@ -29,7 +29,8 @@ class StoryActions extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (curUserId == curUserId && story.aiStatus == FeedbackStatus.complete)
+        // TODO fix
+        if (curUserId == curUserId && story.aiStatus == FeedbackStatus.waiting)
           TextButton(
             onPressed: () {
               // TODO named로

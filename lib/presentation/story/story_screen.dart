@@ -53,17 +53,17 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     _videoPlayerController = VideoPlayerController.network(
       ref
           .read(storyViewModelProvider(widget.storyId).notifier)
           .getStoryVideoPath(),
       formatHint: VideoFormat.hls,
-    );
-    _videoPlayerController.initialize().then((_) {
-      _videoPlayerController.play();
-      _videoPlayerController.setLooping(true);
-      setState(() {});
-    });
+    )..initialize().then((value) {
+        _videoPlayerController.play();
+        _videoPlayerController.setLooping(true);
+        setState(() {});
+      });
   }
 
   @override
@@ -90,19 +90,22 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final overlayOpen = ref.watch(storyViewModelProvider(widget.storyId)
+        .select((value) => value.overlayOpen));
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (isCommentOpen) toggleCommentOpen();
-                    },
-                    // TODO 가운데만 클릭된다.
+            GestureDetector(
+              onTap: () {
+                ref
+                    .read(storyViewModelProvider(widget.storyId).notifier)
+                    .toggleOverlayOpen();
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
                     child: _videoPlayerController.value.isInitialized
                         ? AspectRatio(
                             aspectRatio:
@@ -111,42 +114,23 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                           )
                         : const Center(child: CircularProgressIndicator()),
                   ),
-                ),
-                if (isCommentOpen)
-                  StoryComments(toggleCommentOpen: toggleCommentOpen)
-              ],
+                  if (isCommentOpen)
+                    StoryComments(toggleCommentOpen: toggleCommentOpen)
+                ],
+              ),
             ),
-            if (!isCommentOpen) ...[
+            if (overlayOpen) ...[
               StoryOverlay(
                 storyId: widget.storyId,
                 toggleCommentOpen: toggleCommentOpen,
                 togglePlaying: togglePlaying,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ProgressBar(
-                  videoPlayerController: _videoPlayerController,
-                ),
+                videoPlayerController: _videoPlayerController,
               ),
             ],
-            GestureDetector(
-              onTap: () {
-                togglePlaying();
-              },
-              child: AnimatedOpacity(
-                opacity: isStatusChanging ? 0.5 : 0.0,
-                duration: const Duration(milliseconds: 250),
-                child: Center(
-                  child: _videoPlayerController.value.isPlaying
-                      ? Icon(
-                          Icons.play_arrow,
-                          size: 100,
-                        )
-                      : Icon(
-                          Icons.pause,
-                          size: 100,
-                        ),
-                ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ProgressBar(
+                videoPlayerController: _videoPlayerController,
               ),
             ),
           ],
