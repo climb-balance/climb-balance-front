@@ -6,6 +6,7 @@ import 'package:video_player/video_player.dart';
 import '../../common/components/user_profile_info.dart';
 import '../../common/custom_fab.dart';
 import '../story_view_model.dart';
+import 'overlay_bottom_gradient.dart';
 import 'story_overlay_appbar.dart';
 
 class StoryOverlay extends ConsumerWidget {
@@ -29,11 +30,12 @@ class StoryOverlay extends ConsumerWidget {
 
     return Stack(
       children: [
+        OverlayBottomGradient(),
         GestureDetector(
           onTap: () {
             ref
                 .read(storyViewModelProvider(storyId).notifier)
-                .toggleOverlayOpen();
+                .toggleOverlayOpen(videoPlayerController.value.isPlaying);
           },
           child: Scaffold(
             floatingActionButton: StoryActions(
@@ -51,29 +53,15 @@ class StoryOverlay extends ConsumerWidget {
                 Expanded(
                   child: Container(),
                 ),
-                SafeArea(
-                  minimum: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(story.description),
-                          ],
-                        ),
-                      ),
-                      BottomUserProfile(
-                        user: ref.watch(storyViewModelProvider(storyId)
-                            .select((value) => value.uploader)),
-                        description: story.description,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 20,
+                    left: 20,
+                  ),
+                  child: BottomUserProfile(
+                    user: ref.watch(storyViewModelProvider(storyId)
+                        .select((value) => value.uploader)),
+                    description: story.description,
                   ),
                 ),
               ],
@@ -85,17 +73,17 @@ class StoryOverlay extends ConsumerWidget {
             togglePlaying();
           },
           child: AnimatedOpacity(
-            opacity: 0.5,
+            opacity: 0.75,
             duration: const Duration(milliseconds: 250),
             child: Center(
               child: videoPlayerController.value.isPlaying
                   ? Icon(
-                      Icons.play_arrow,
-                      size: 100,
+                      Icons.pause_circle,
+                      size: 75,
                     )
                   : Icon(
-                      Icons.pause,
-                      size: 100,
+                      Icons.play_circle,
+                      size: 75,
                     ),
             ),
           ),

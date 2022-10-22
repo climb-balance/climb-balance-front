@@ -12,6 +12,7 @@ import '../story_view_model.dart';
 class StoryActions extends ConsumerWidget {
   final void Function() toggleCommentOpen;
   final int storyId;
+  static const double iconSize = 28;
 
   const StoryActions({
     Key? key,
@@ -41,7 +42,7 @@ class StoryActions extends ConsumerWidget {
               children: const [
                 Icon(
                   Icons.android,
-                  size: 35,
+                  size: iconSize,
                 ),
               ],
             ),
@@ -54,7 +55,7 @@ class StoryActions extends ConsumerWidget {
             children: [
               const Icon(
                 Icons.thumb_up,
-                size: 35,
+                size: iconSize,
               ),
               Text('${story.likes}'),
             ],
@@ -66,7 +67,7 @@ class StoryActions extends ConsumerWidget {
             children: [
               const Icon(
                 Icons.comment,
-                size: 35,
+                size: iconSize,
               ),
               Text('${story.comments}'),
             ],
@@ -81,7 +82,7 @@ class StoryActions extends ConsumerWidget {
             children: const [
               Icon(
                 Icons.share,
-                size: 35,
+                size: iconSize,
               ),
               Text('공유'),
             ],
@@ -104,7 +105,7 @@ class StoryActions extends ConsumerWidget {
               children: const [
                 Icon(
                   Icons.more,
-                  size: 35,
+                  size: iconSize,
                 ),
                 Text('피드백'),
               ],

@@ -42,20 +42,30 @@ class _ProgressBarState extends State<ProgressBar> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final color = Theme.of(context).colorScheme;
     return SizedBox(
       width: size.width,
       child: Padding(
         padding: const EdgeInsets.only(
           top: 10,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            AnimatedContainer(
-              height: 2,
-              width: progressDegree * size.width,
-              color: const ColorScheme.dark().onSurface,
-              duration: Duration(milliseconds: progressDuration),
+            Container(
+              height: 4,
+              width: size.width,
+              color: color.surface,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedContainer(
+                  height: 4,
+                  width: progressDegree * size.width,
+                  color: color.primary,
+                  duration: Duration(milliseconds: progressDuration),
+                ),
+              ],
             ),
           ],
         ),

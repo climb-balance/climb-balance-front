@@ -63,19 +63,25 @@ class StoryViewModel extends StateNotifier<StoryState> {
     storyRepository.likeStory();
   }
 
-  void toggleOverlayOpen() {
+  void toggleOverlayOpen(bool isPlaying) {
     if (state.overlayOpen) {
       state = state.copyWith(overlayOpen: false);
       overlayCloseTimer?.cancel();
     } else {
       state = state.copyWith(overlayOpen: true);
-      overlayCloseTimer = Timer(
-        Duration(seconds: 3),
-        () {
-          state = state.copyWith(overlayOpen: false);
-        },
-      );
+      if (isPlaying) {
+        overlayCloseTimer = Timer(
+          Duration(seconds: 3),
+          () {
+            state = state.copyWith(overlayOpen: false);
+          },
+        );
+      }
     }
+  }
+
+  void cancelOverlayCloseTimer() {
+    overlayCloseTimer?.cancel();
   }
 
   void requestAiFeedback(BuildContext context) async {

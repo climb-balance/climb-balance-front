@@ -71,31 +71,39 @@ class BottomUserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final color = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
           backgroundImage: Image.network(user.profileImage).image,
-          radius: 20,
+          radius: 30,
         ),
         const SizedBox(
           width: 10,
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(user.nickname),
-              ],
-            ),
             Text(
-              '${user.height}cm/${user.weight}kg',
-              style: theme.textTheme.bodyText2?.copyWith(
-                color: theme.colorScheme.secondary,
+              user.nickname,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
               ),
             ),
+            SizedBox(
+              height: 6,
+            ),
+            Text(
+              '${user.height}cm | ${user.weight}kg',
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(description),
           ],
         ),
       ],

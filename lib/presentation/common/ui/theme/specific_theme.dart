@@ -29,7 +29,9 @@ class StoryViewTheme extends StatelessWidget {
                 color: mainWhite,
                 shadows: [
                   Shadow(
-                      color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+                    color: themeColor.shadow.withOpacity(0.5),
+                    blurRadius: 20,
+                  ),
                 ],
               ),
             ),
@@ -40,7 +42,9 @@ class StoryViewTheme extends StatelessWidget {
                 color: mainWhite,
                 shadows: [
                   Shadow(
-                      color: themeColor.shadow.withOpacity(0.5), blurRadius: 5),
+                    color: themeColor.shadow.withOpacity(0.5),
+                    blurRadius: 20,
+                  ),
                 ],
               ),
             ),

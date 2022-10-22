@@ -100,7 +100,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
               onTap: () {
                 ref
                     .read(storyViewModelProvider(widget.storyId).notifier)
-                    .toggleOverlayOpen();
+                    .toggleOverlayOpen(_videoPlayerController.value.isPlaying);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
