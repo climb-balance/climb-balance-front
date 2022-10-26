@@ -10,52 +10,41 @@ class TopProfileInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      height: 150,
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
+    return Row(
+      children: [
+        Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            image: DecorationImage(
+              image: NetworkImage(user.profileImage),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(100)),
-                image: DecorationImage(
-                  image: NetworkImage(user.profileImage),
-                  fit: BoxFit.cover,
-                ),
-                boxShadow: kElevationToShadow[4],
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      user.nickname,
-                      style: theme.textTheme.headline5,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ],
+                Text(
+                  user.nickname,
+                  style: theme.textTheme.headline5,
                 ),
-                Text(user.description),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
               ],
             ),
+            Text(user.description),
+            Text('${user.height}cm | ${user.weight}kg'),
           ],
         ),
-      ),
+      ],
     );
   }
 }

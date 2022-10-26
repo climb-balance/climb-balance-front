@@ -8,9 +8,9 @@ class FilterTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final color = Theme.of(context).colorScheme;
     return SliverAppBar(
-      backgroundColor: theme.cardColor,
+      backgroundColor: color.background,
       shape: const ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30),
@@ -18,15 +18,16 @@ class FilterTabBar extends StatelessWidget {
         ),
       ),
       pinned: true,
-      elevation: 1,
+      elevation: 0,
       forceElevated: true,
-      toolbarHeight: 40,
+      toolbarHeight: 48,
       flexibleSpace: FlexibleSpaceBar(
         background: Row(
           children: const [
-            FilterItem(filterTitle: '전체', filter: StoriesFilter.noFilter()),
+            FilterItem(filterTitle: 'ALL', filter: StoriesFilter.noFilter()),
             FilterItem(filterTitle: 'AI', filter: StoriesFilter.aiOnly()),
-            FilterItem(filterTitle: '전문가', filter: StoriesFilter.expertOnly()),
+            FilterItem(
+                filterTitle: 'EXPERT', filter: StoriesFilter.expertOnly()),
           ],
         ),
       ),
@@ -49,19 +50,32 @@ class FilterItem extends ConsumerWidget {
     final currentFilter =
         ref.watch(diaryViewModelProvider.select((value) => value.storyFilter));
     final theme = Theme.of(context);
+    final text = Theme.of(context).textTheme;
     return Flexible(
       fit: FlexFit.tight,
       child: InkWell(
         onTap: () {
           ref.read(diaryViewModelProvider.notifier).filterStories(filter);
         },
-        child: Center(
-          child: Text(
-            filterTitle,
-            style: TextStyle(
-              color: currentFilter == filter
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurface,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: currentFilter == filter
+                    ? theme.colorScheme.primary
+                    : Colors.transparent,
+                width: 3,
+              ),
+            ),
+          ),
+          child: Center(
+            child: Text(
+              filterTitle,
+              style: text.bodyText1?.copyWith(
+                color: currentFilter == filter
+                    ? theme.colorScheme.onBackground
+                    : theme.colorScheme.surfaceVariant,
+              ),
             ),
           ),
         ),

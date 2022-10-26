@@ -13,7 +13,7 @@ class ClassifiedStories extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),

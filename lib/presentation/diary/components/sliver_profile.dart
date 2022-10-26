@@ -10,6 +10,7 @@ class SliverProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
+      backgroundColor: Colors.transparent,
       actions: [
         Padding(
           padding: const EdgeInsets.all(10),
@@ -20,7 +21,7 @@ class SliverProfile extends ConsumerWidget {
           ),
         ),
       ],
-      toolbarHeight: 150,
+      toolbarHeight: 120,
       flexibleSpace: TopProfileInfo(user: ref.watch(currentUserProvider)),
     );
   }
@@ -36,7 +37,7 @@ class ProfileOptions extends StatelessWidget {
       alignment: Alignment.topRight,
       child: PopupMenuButton<int>(
         icon: Icon(
-          Icons.more_vert,
+          Icons.filter_alt,
           color: theme.colorScheme.onBackground,
         ),
         itemBuilder: (context) => [
@@ -47,7 +48,7 @@ class ProfileOptions extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.edit,
+                  Icons.filter_alt,
                   color: theme.colorScheme.onBackground,
                 ),
                 const SizedBox(

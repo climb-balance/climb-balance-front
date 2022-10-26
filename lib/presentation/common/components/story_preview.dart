@@ -100,7 +100,7 @@ class StoryPreviewIcon extends ConsumerWidget {
                 success ? 'SUCCESS' : 'FAILED',
                 style: TextStyle(
                   color: success ? Colors.greenAccent : color.error,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w800,
                   fontSize: 12,
                 ),
               ),
