@@ -1,3 +1,4 @@
+import 'package:climb_balance/presentation/diary/components/triangle.dart';
 import 'package:climb_balance/presentation/diary/diary_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,47 +18,44 @@ class StoryPreview extends ConsumerWidget {
         .watch(diaryViewModelProvider.notifier)
         .getThumbnailUrl(story.storyId);
     final color = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: InkWell(
-        splashColor: color.surfaceVariant,
-        onTap: () {
-          // TODO named push not working
-          context.push(
-            '/diary/story/${story.storyId}',
-          );
-        },
+    return InkWell(
+      splashColor: color.surfaceVariant,
+      onTap: () {
+        // TODO named push not working
+        context.push(
+          '/diary/story/${story.storyId}',
+        );
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
         child: Stack(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Image.network(
-                  image,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    color: color.errorContainer,
-                    child: Icon(
-                      Icons.error,
-                      color: color.error,
-                    ),
+            AspectRatio(
+              aspectRatio: 1,
+              child: Image.network(
+                image,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  color: color.errorContainer,
+                  child: Icon(
+                    Icons.error,
+                    color: color.error,
                   ),
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: color.surface,
-                      child: Transform.scale(
-                        scale: 0.5,
-                        child: const CircularProgressIndicator(),
-                      ),
-                    );
-                  },
                 ),
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    color: color.surface,
+                    child: Transform.scale(
+                      scale: 0.5,
+                      child: const CircularProgressIndicator(),
+                    ),
+                  );
+                },
               ),
             ),
-            StoryPreviewIcon(story: story)
+            StoryPreviewIcon(story: story),
           ],
         ),
       ),
@@ -72,34 +70,42 @@ class StoryPreviewIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final color = Theme.of(context).colorScheme;
     final difficultyColor = ref
             .read(difficultySelectorProvider.notifier)
             .getSelector(story.tags.difficulty)
             .color ??
         Colors.white;
-    return Stack(
+    final success = story.tags.success;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(
-          Icons.bookmark,
-          color: difficultyColor,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TrainglePainter(
+              color: difficultyColor,
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 5,
-            left: 6,
-          ),
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 7,
+                bottom: 3,
               ),
-              color: Colors.white,
+              child: Text(
+                success ? 'SUCCESS' : 'FAILED',
+                style: TextStyle(
+                  color: success ? Colors.greenAccent : color.error,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
             ),
-            child: Icon(
-              story.tags.success ? Icons.check_circle : Icons.change_circle,
-              size: 12,
-            ),
-          ),
+          ],
         ),
       ],
     );
