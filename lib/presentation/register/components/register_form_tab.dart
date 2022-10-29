@@ -62,7 +62,7 @@ class RegisterFormTab extends ConsumerWidget {
                 },
                 imagePath: ref.watch(
                   registerViewModelProvider
-                      .select((value) => value.profileImage),
+                      .select((value) => value.profileImagePath),
                 ),
               ),
               SizedBox(

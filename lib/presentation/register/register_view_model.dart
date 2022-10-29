@@ -69,7 +69,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   }
 
   void updateProfileImage(String imagePath) {
-    state = state.copyWith(profileImage: imagePath);
+    state = state.copyWith(profileImagePath: imagePath);
   }
 
   void updatePromotionCheck(bool value) {
