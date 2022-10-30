@@ -66,7 +66,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
           children: [
             _videoPlayerController.value.isInitialized
                 ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       AspectRatio(
                         aspectRatio: _videoPlayerController.value.aspectRatio,
@@ -83,7 +83,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                           ],
                         ),
                       ),
-                      if (!isInformOpen)
+                      if (isInformOpen)
                         Expanded(
                           child: AiFeedbackInformation(
                             storyId: widget.storyId,
@@ -94,7 +94,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                 : const Center(
                     child: CircularProgressIndicator(),
                   ),
-            if (isInformOpen)
+            if (!isInformOpen)
               AiFeedbackActions(
                 togglePlaying: togglePlaying,
                 storyId: widget.storyId,

@@ -1,5 +1,4 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
-import 'package:climb_balance/presentation/ai_feedback/models/ai_feedback_state.dart';
 import 'package:climb_balance/presentation/common/custom_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -27,14 +26,13 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.lineOverlay));
     final bool squareOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.squareOverlay));
-    final AiFeedbackState detail =
-        ref.watch(aiFeedbackViewModelProvider(storyId));
+
     return GestureDetector(
       onTap: togglePlaying,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: AiFeedbackProgressBar(
-          detail: detail,
+          storyId: storyId,
           controller: videoPlayerController,
         ),
         floatingActionButtonAnimator: NoFabScalingAnimation(),

@@ -1,57 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../domain/util/duration_time.dart';
+import '../ai_feedback_view_model.dart';
 import '../models/ai_feedback_state.dart';
 
-class AiFeedbackProgressBar extends StatefulWidget {
-  final AiFeedbackState detail;
+class AiFeedbackProgressBar extends ConsumerStatefulWidget {
+  final int storyId;
   final VideoPlayerController controller;
 
   const AiFeedbackProgressBar(
-      {Key? key, required this.controller, required this.detail})
+      {Key? key, required this.controller, required this.storyId})
       : super(key: key);
 
   @override
-  State<AiFeedbackProgressBar> createState() => _AiFeedbackProgressBarState();
+  ConsumerState<AiFeedbackProgressBar> createState() =>
+      _AiFeedbackProgressBarState();
 }
 
-class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
+class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
   double progress = 0.0;
-  String progressText = "00:00";
-  late final List<Color> colors;
 
   @override
   void initState() {
     super.initState();
-    colors = widget.detail.scores.map((val) {
-      if (val == 0) {
-        return Colors.grey;
-      } else if (val == 1) {
-        return Colors.green;
-      } else {
-        return Colors.red;
-      }
-    }).toList();
-    setState(() {});
     widget.controller.addListener(() {
       final value = widget.controller.value;
       progress = value.position.inMilliseconds / value.duration.inMilliseconds;
-      progressText = formatDuration(value.position).substring(3);
       setState(() {});
     });
   }
 
   @override
   void dispose() {
-    super.dispose();
     widget.controller.removeListener(() {});
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final AiFeedbackState detail =
+        ref.watch(aiFeedbackViewModelProvider(widget.storyId));
     final size = MediaQuery.of(context).size;
-
     return Stack(
       children: [
         Padding(
@@ -59,29 +49,28 @@ class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
           child: Container(
             height: 5,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: colors),
+              gradient: LinearGradient(
+                colors: detail.scores.map((score) {
+                  if (score == null) {
+                    return Colors.transparent;
+                  }
+                  return HSVColor.fromAHSV(0.5, 125 * (score * 0.5 + 0.5), 1, 1)
+                      .toColor();
+                }).toList(),
+              ),
             ),
           ),
         ),
         AnimatedPositioned(
           left: size.width * progress,
+          bottom: 5,
           duration: Duration(
-            seconds: 1,
+            milliseconds: 500,
           ),
-          child: Column(
-            children: [
-              Text(
-                progressText,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 12,
-                  width: 3,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+          child: Container(
+            height: 5,
+            width: 5,
+            color: Colors.white,
           ),
         ),
       ],
