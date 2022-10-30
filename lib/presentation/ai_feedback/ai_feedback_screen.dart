@@ -67,13 +67,17 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
             _videoPlayerController.value.isInitialized
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      AspectRatio(
-                        aspectRatio: _videoPlayerController.value.aspectRatio,
+                      Expanded(
                         child: Stack(
                           children: [
-                            VideoPlayer(
-                              _videoPlayerController,
+                            AspectRatio(
+                              aspectRatio:
+                                  _videoPlayerController.value.aspectRatio,
+                              child: VideoPlayer(
+                                _videoPlayerController,
+                              ),
                             ),
                             AiFeedbackOverlay(
                               videoPlayerController: _videoPlayerController,
@@ -84,10 +88,8 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                         ),
                       ),
                       if (isInformOpen)
-                        Expanded(
-                          child: AiFeedbackInformation(
-                            storyId: widget.storyId,
-                          ),
+                        AiFeedbackInformation(
+                          storyId: widget.storyId,
                         ),
                     ],
                   )

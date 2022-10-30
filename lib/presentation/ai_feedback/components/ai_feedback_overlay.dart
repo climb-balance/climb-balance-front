@@ -60,9 +60,8 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
-        return SizedBox(
-          width: size.width,
-          height: size.width * (1 / value.aspectRatio),
+        return AspectRatio(
+          aspectRatio: value.aspectRatio,
           child: CustomPaint(
             painter: _Painter(
               animationValue: _animationController!.value,
@@ -204,21 +203,22 @@ class _Painter extends CustomPainter {
         values: currentJoints,
         lineIndexes: rlPair2Indexes,
       );
+
+      /// draw circles
+      /// 0~9는 머리이므로 제외
+      for (int i = 10; i < currentJoints.length - 2; i += 2) {
+        if (currentJoints[i] == null) continue;
+        canvas.drawCircle(
+          Offset(
+            currentJoints[i]! * size.width,
+            currentJoints[i + 1]! * size.height,
+          ),
+          5,
+          circlePaint,
+        );
+      }
     }
 
-    /// draw circles
-    /// 0~9는 머리이므로 제외
-    for (int i = 10; i < currentJoints.length - 2; i += 2) {
-      if (currentJoints[i] == null) continue;
-      canvas.drawCircle(
-        Offset(
-          currentJoints[i]! * size.width,
-          currentJoints[i + 1]! * size.height,
-        ),
-        5,
-        circlePaint,
-      );
-    }
     if (scores[currentIdx ~/ 34] == null || !squareOverlay) {
       return;
     }

@@ -63,14 +63,17 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
         ),
         AnimatedPositioned(
           left: size.width * progress,
-          bottom: 5,
+          bottom: 3,
           duration: Duration(
             milliseconds: 500,
           ),
           child: Container(
-            height: 5,
-            width: 5,
-            color: Colors.white,
+            height: 10,
+            width: 3,
+            decoration: BoxDecoration(
+              boxShadow: kElevationToShadow[3],
+              color: Colors.white,
+            ),
           ),
         ),
       ],

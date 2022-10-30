@@ -23,41 +23,39 @@ class AiFeedbackInformation extends ConsumerWidget {
     final balance =
         ref.read(aiFeedbackViewModelProvider(storyId).notifier).goodCount();
     return Container(
-      color: theme.colorScheme.surface,
-      height: size.height * 0.6,
-      width: size.width,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              IconButton(
-                onPressed: () {
-                  ref
-                      .read(aiFeedbackViewModelProvider(storyId).notifier)
-                      .toggleInformation();
-                },
-                icon: Icon(Icons.close),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        color: theme.colorScheme.surface,
+        height: size.height * 0.6,
+        width: size.width,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               children: [
-                AiScore(
-                  precision: precision,
-                  balance: balance,
+                IconButton(
+                  onPressed: () {
+                    ref
+                        .read(aiFeedbackViewModelProvider(storyId).notifier)
+                        .toggleInformation();
+                  },
+                  icon: Icon(Icons.close),
                 ),
-                const Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.'),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AiScore(
+                    precision: precision,
+                    balance: balance,
+                  ),
+                  const Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.'),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }
