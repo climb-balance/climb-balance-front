@@ -104,7 +104,7 @@ class ServerService {
   }) async {
     Uri uri = Uri.parse('$serverUrl$url');
     final req = http.MultipartRequest('POST', uri);
-    req.headers['Authorization'] = data.accessToken;
+    req.headers['Authorization'] = 'Bearer ${data.accessToken}';
     try {
       if (filePath != null) {
         final multiPartFile =
@@ -123,10 +123,11 @@ class ServerService {
         'personalCheck': data.personalCheck,
       };
       req.fields['data'] = jsonEncode(mapData);
+
       final res = await req.send();
       final statusCode = res.statusCode;
       if (statusCode < 200 || statusCode >= 400) {
-        throw const HttpException('요청 에러');
+        throw HttpException('요청 에러 ${res.reasonPhrase ?? ''}');
       }
     } catch (e) {
       rethrow;
