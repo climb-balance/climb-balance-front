@@ -26,71 +26,91 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.lineOverlay));
     final bool squareOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.squareOverlay));
-
+    final bool isStatusChanging = ref.watch(aiFeedbackViewModelProvider(storyId)
+        .select((value) => value.isStatusChanging));
     return GestureDetector(
       onTap: togglePlaying,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: AiFeedbackProgressBar(
-          storyId: storyId,
-          controller: videoPlayerController,
-        ),
-        floatingActionButtonAnimator: NoFabScalingAnimation(),
-        floatingActionButtonLocation: CustomFabLoc(),
-        floatingActionButton: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextButton(
-              onPressed: () {
-                ref
-                    .read(aiFeedbackViewModelProvider(storyId).notifier)
-                    .toggleLineOverlay();
-              },
-              child: ToggleIcon(
-                icon: Icons.edit_rounded,
-                isEnable: lineOverlay,
-                detail: '직선',
-              ),
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            bottomNavigationBar: AiFeedbackProgressBar(
+              storyId: storyId,
+              controller: videoPlayerController,
             ),
-            TextButton(
-              onPressed: () {
-                ref
-                    .read(aiFeedbackViewModelProvider(storyId).notifier)
-                    .toggleSquareOverlay();
-              },
-              child: ToggleIcon(
-                icon: Icons.filter,
-                isEnable: squareOverlay,
-                detail: '사각형',
-              ),
+            floatingActionButtonAnimator: NoFabScalingAnimation(),
+            floatingActionButtonLocation: CustomFabLoc(),
+            floatingActionButton: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    ref
+                        .read(aiFeedbackViewModelProvider(storyId).notifier)
+                        .toggleLineOverlay();
+                  },
+                  child: ToggleIcon(
+                    icon: Icons.edit_rounded,
+                    isEnable: lineOverlay,
+                    detail: '직선',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ref
+                        .read(aiFeedbackViewModelProvider(storyId).notifier)
+                        .toggleSquareOverlay();
+                  },
+                  child: ToggleIcon(
+                    icon: Icons.filter,
+                    isEnable: squareOverlay,
+                    detail: '사각형',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Share.share(
+                        '클라임 밸런스에서 다양한 클라이밍 영상과 AI 자세 분석, 맞춤 강습 매칭을 만나보세요!! https://climb-balance.com/video/123124');
+                  },
+                  child: const ColIconDetail(
+                    icon: Icons.share,
+                    detail: '공유',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ref
+                        .read(aiFeedbackViewModelProvider(storyId).notifier)
+                        .toggleInformation();
+                  },
+                  child: const ColIconDetail(
+                    icon: Icons.mode_comment,
+                    detail: '정보',
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Share.share(
-                    '클라임 밸런스에서 다양한 클라이밍 영상과 AI 자세 분석, 맞춤 강습 매칭을 만나보세요!! https://climb-balance.com/video/123124');
-              },
-              child: const ColIconDetail(
-                icon: Icons.share,
-                detail: '공유',
-              ),
+          ),
+          AnimatedOpacity(
+            opacity: isStatusChanging ? 0.5 : 0.0,
+            duration: const Duration(milliseconds: 250),
+            child: Center(
+              child: videoPlayerController.value.isPlaying
+                  ? Icon(
+                      Icons.play_arrow,
+                      size: 100,
+                    )
+                  : Icon(
+                      Icons.pause,
+                      size: 100,
+                    ),
             ),
-            TextButton(
-              onPressed: () {
-                ref
-                    .read(aiFeedbackViewModelProvider(storyId).notifier)
-                    .toggleInformation();
-              },
-              child: const ColIconDetail(
-                icon: Icons.mode_comment,
-                detail: '정보',
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

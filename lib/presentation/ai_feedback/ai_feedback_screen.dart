@@ -54,9 +54,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final bool isStatusChanging = ref.watch(
-        aiFeedbackViewModelProvider(widget.storyId)
-            .select((value) => value.isStatusChanging));
+
     final bool isInformOpen = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
             .select((value) => value.isInformOpen));
@@ -70,21 +68,33 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
-                        child: Stack(
-                          children: [
-                            AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(
-                                _videoPlayerController,
-                              ),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (!isInformOpen) return;
+                            ref
+                                .read(
+                                    aiFeedbackViewModelProvider(widget.storyId)
+                                        .notifier)
+                                .toggleInformation();
+                          },
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio:
+                                      _videoPlayerController.value.aspectRatio,
+                                  child: VideoPlayer(
+                                    _videoPlayerController,
+                                  ),
+                                ),
+                                AiFeedbackOverlay(
+                                  videoPlayerController: _videoPlayerController,
+                                  ticker: this,
+                                  storyId: widget.storyId,
+                                ),
+                              ],
                             ),
-                            AiFeedbackOverlay(
-                              videoPlayerController: _videoPlayerController,
-                              ticker: this,
-                              storyId: widget.storyId,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                       if (isInformOpen)
@@ -102,28 +112,6 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                 storyId: widget.storyId,
                 videoPlayerController: _videoPlayerController,
               ),
-            GestureDetector(
-              onTap: () {
-                ref
-                    .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
-                    .togglePlayingStatus();
-              },
-              child: AnimatedOpacity(
-                opacity: isStatusChanging ? 0.5 : 0.0,
-                duration: const Duration(milliseconds: 250),
-                child: Center(
-                  child: _videoPlayerController.value.isPlaying
-                      ? Icon(
-                          Icons.play_arrow,
-                          size: 100,
-                        )
-                      : Icon(
-                          Icons.pause,
-                          size: 100,
-                        ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

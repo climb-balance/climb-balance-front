@@ -111,7 +111,7 @@ class _Painter extends CustomPainter {
   final Paint linePaint = Paint()
     ..color = Colors.purple
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 1;
+    ..strokeWidth = 2;
   final Paint circlePaint = Paint()
     ..color = Colors.blue
     ..style = PaintingStyle.stroke
@@ -213,7 +213,7 @@ class _Painter extends CustomPainter {
             currentJoints[i]! * size.width,
             currentJoints[i + 1]! * size.height,
           ),
-          5,
+          3,
           circlePaint,
         );
       }

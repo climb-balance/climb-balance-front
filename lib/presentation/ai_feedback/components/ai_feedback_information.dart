@@ -14,7 +14,7 @@ class AiFeedbackInformation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+    final color = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
 
     final precision = ref
@@ -23,39 +23,80 @@ class AiFeedbackInformation extends ConsumerWidget {
     final balance =
         ref.read(aiFeedbackViewModelProvider(storyId).notifier).goodCount();
     return Container(
-        color: theme.colorScheme.surface,
-        height: size.height * 0.6,
-        width: size.width,
+      height: size.height * 0.6,
+      width: size.width,
+      color: color.background,
+      child: DefaultTabController(
+        length: 3,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    ref
-                        .read(aiFeedbackViewModelProvider(storyId).notifier)
-                        .toggleInformation();
-                  },
-                  icon: Icon(Icons.close),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            AiInformationActionBar(storyId: storyId),
+            AiInformationTabBar(),
+            Expanded(
+              child: TabBarView(
                 children: [
                   AiScore(
                     precision: precision,
                     balance: balance,
                   ),
-                  const Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.'),
+                  Text('sdsd'),
+                  Text('sd'),
                 ],
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
+  }
+}
+
+class AiInformationActionBar extends ConsumerWidget {
+  const AiInformationActionBar({
+    Key? key,
+    required this.storyId,
+  }) : super(key: key);
+
+  final int storyId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final color = Theme.of(context).colorScheme;
+    return Container(
+      color: color.surface,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () {
+              ref
+                  .read(aiFeedbackViewModelProvider(storyId).notifier)
+                  .toggleInformation();
+            },
+            icon: Icon(Icons.close),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AiInformationTabBar extends StatelessWidget {
+  const AiInformationTabBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Container(
+      color: color.surface,
+      child: TabBar(
+        labelPadding: EdgeInsets.all(10),
+        tabs: [Text('점수'), Text('분석'), Text('통계')],
+      ),
+    );
   }
 }
