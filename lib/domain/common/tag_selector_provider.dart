@@ -304,22 +304,17 @@ List<LocationSelector> locationData = [
       id: 135, name: "DoDream 클라이밍센터", location: "경기 동두천시 정장로 53-3"),
   LocationSelector(
       id: 136,
-      name: "성남 락페이스클라이밍센터입니다.",
+      name: "성남 락페이스클라이밍센터",
       location: "경기도 성남시 중원구 산성대로 340-1 범원빌딩 8층"),
   LocationSelector(
-      id: 137,
-      name: "경기 파주시 교하동에 위치한 교하클라이밍센터를 소개합니다.",
-      location: "기도 파주시 문발동 602-7 2층 (두일중학교 앞)"),
+      id: 137, name: "파주 교하클라이밍센터", location: "기도 파주시 문발동 602-7 2층 (두일중학교 앞)"),
   LocationSelector(
       id: 138,
-      name: "경기 파주시 운정동에 위치한 정글짐을 소개합니다.",
+      name: "파주 정글짐",
       location: "경기도 파주시 청암로 17번길 53 월드타워 2차 8층 (구주소 : 파주시 목동동 939-2번지)"),
   LocationSelector(
-      id: 139,
-      name: "경기 파주시 운정동에 위치한 운정애스트로맨을 소개합니다.",
-      location: "기도 파주시 동패동 1758 (10층)"),
-  LocationSelector(
-      id: 140, name: "경기 파주시 금촌동에 위치한 파주클라이밍을 소개합니다.", location: "X"),
+      id: 139, name: "파주 운정애스트로맨", location: "기도 파주시 동패동 1758 (10층)"),
+  LocationSelector(id: 140, name: "파주클라이밍", location: "X"),
   LocationSelector(id: 141, name: "태백실내클라이밍센터", location: "강원도 태백시 황지로 99 2층"),
   LocationSelector(id: 142, name: "클라이밍강릉", location: "강원도 강릉시 정원로 42 3층"),
   LocationSelector(id: 143, name: "볼트락암벽장", location: "강원도 원주시 남원로 568 3층"),

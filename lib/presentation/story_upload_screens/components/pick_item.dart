@@ -33,15 +33,19 @@ class PickItem extends StatelessWidget {
             Navigator.of(context).pop(data.id);
           },
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 10,
-                width: 10,
+                height: 15,
+                width: 15,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: data.selectColors ?? [Colors.transparent],
+                    colors: data.selectColors,
                   ),
                 ),
+              ),
+              SizedBox(
+                width: 5,
               ),
               Text(
                 data.name,
