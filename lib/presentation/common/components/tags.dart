@@ -132,7 +132,9 @@ class DifficultyTag extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     return Container(
       decoration: BoxDecoration(
-        color: difficultyValue.color,
+        gradient: LinearGradient(
+          colors: difficultyValue.selectColors,
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: EdgeInsets.symmetric(
@@ -142,7 +144,7 @@ class DifficultyTag extends ConsumerWidget {
       child: Text(
         difficultyValue.name,
         style: text.bodyText1?.copyWith(
-          color: difficultyValue.color!.computeLuminance() > 0.5
+          color: difficultyValue.selectColors![0].computeLuminance() > 0.5
               ? Colors.black
               : Colors.white,
           shadows: [],

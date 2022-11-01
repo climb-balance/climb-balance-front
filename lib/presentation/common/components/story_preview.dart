@@ -71,11 +71,10 @@ class StoryPreviewIcon extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = Theme.of(context).colorScheme;
-    final difficultyColor = ref
-            .read(difficultySelectorProvider.notifier)
-            .getSelector(story.tags.difficulty)
-            .color ??
-        Colors.white;
+    final difficultyColors = ref
+        .read(difficultySelectorProvider.notifier)
+        .getSelector(story.tags.difficulty)
+        .selectColors;
     final success = story.tags.success;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +83,7 @@ class StoryPreviewIcon extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TrainglePainter(
-              color: difficultyColor,
+              colors: difficultyColors,
             ),
           ],
         ),

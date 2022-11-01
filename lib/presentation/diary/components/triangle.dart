@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TrainglePainter extends StatelessWidget {
-  final Color color;
+  final List<Color> colors;
 
-  const TrainglePainter({Key? key, required this.color}) : super(key: key);
+  const TrainglePainter({Key? key, required this.colors}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class TrainglePainter extends StatelessWidget {
         35,
       ),
       painter: DrawTriangleShape(
-        color: color,
+        colors: colors,
       ),
     );
   }
@@ -21,22 +21,25 @@ class TrainglePainter extends StatelessWidget {
 
 class DrawTriangleShape extends CustomPainter {
   late final Paint painter;
-  final Color color;
+  final List<Color> colors;
 
-  DrawTriangleShape({required this.color}) {
+  DrawTriangleShape({required this.colors}) {
     painter = Paint()
-      ..color = color
+      ..shader = LinearGradient(
+        colors: colors,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(Offset.zero & Size(35, 35))
       ..style = PaintingStyle.fill;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    var path = Path();
-
-    path.lineTo(size.width, 0);
+    Path path = Path();
     path.lineTo(size.width, size.height);
-    path.close();
+    path.lineTo(size.width, 0);
 
+    path.lineTo(0, 0);
     canvas.drawPath(path, painter);
   }
 
