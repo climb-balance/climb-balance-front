@@ -1,6 +1,5 @@
 import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/common/router_provider.dart';
-import 'package:climb_balance/presentation/account/account_view_model.dart';
 import 'package:climb_balance/presentation/common/components/waiting_progress.dart';
 import 'package:climb_balance/presentation/common/ui/theme/main_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'domain/common/firebase_provider.dart';
+import 'domain/common/local_notification_provider.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -24,7 +24,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+  await Firebase.initializeApp();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -33,15 +33,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool darkMode =
-        ref.watch(accountViewModelProvider.select((value) => value.darkMode));
     ref.read(firebaseProvider.notifier).initFirebase(context);
+    ref.watch(localNotificationProvider);
     final bool loading = ref.watch(loadingProvider);
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
-      title: 'Climb Balance',
+      title: '클라임밸런스',
       theme: mainDarkTheme(),
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('ko')],

@@ -39,19 +39,10 @@ class StoryTagInfo extends StatelessWidget {
           DateTag(
             date: DateTime.fromMillisecondsSinceEpoch(tags.videoTimestamp),
           ),
-          SizedBox(
-            width: 8,
-          ),
           LocationTag(
             location: tags.location,
           ),
-          SizedBox(
-            width: 8,
-          ),
           SuccessTag(success: tags.success),
-          SizedBox(
-            width: 8,
-          ),
           DifficultyTag(
             difficulty: tags.difficulty,
           ),
@@ -139,11 +130,11 @@ class DifficultyTag extends ConsumerWidget {
       ),
       padding: EdgeInsets.symmetric(
         vertical: 6,
-        horizontal: 12,
+        horizontal: 6,
       ),
       child: Text(
         difficultyValue.name,
-        style: text.bodyText1?.copyWith(
+        style: text.bodyText2?.copyWith(
           color: difficultyValue.selectColors![0].computeLuminance() > 0.5
               ? Colors.black
               : Colors.white,

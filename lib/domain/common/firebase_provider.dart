@@ -1,3 +1,4 @@
+import 'package:climb_balance/domain/common/local_notification_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -26,16 +27,27 @@ class FirebaseNotifier extends StateNotifier<String> {
     final result = await firebaseService.getFirebaseMessagingToken();
     result.when(success: (value) {
       state = value;
+      debugPrint('firebase init success token : ${value}');
     }, error: (message) {
+      debugPrint(message);
       return;
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-      final data = message.data;
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((message) => _openBackGroundMessage(context, message));
+    FirebaseMessaging.onMessage
+        .listen((message) => _foregroundMessageHandler(context, message));
+  }
 
-      if (data['notification_id'] == 'AI_COMPLETE') {
-        final storyId = data['video_id'] ?? '1';
-        context.pushNamed(diaryStoryRouteName, params: {'sid': storyId});
-      }
-    });
+  void _openBackGroundMessage(
+      BuildContext context, RemoteMessage message) async {
+    final data = message.data;
+    if (data['notification_id'] == 'AI_COMPLETE') {
+      final storyId = data['video_id'] ?? '1';
+      context.pushNamed(diaryStoryRouteName, params: {'sid': storyId});
+    }
+  }
+
+  void _foregroundMessageHandler(BuildContext context, RemoteMessage message) {
+    ref.read(localNotificationProvider.notifier).showNotification(message);
   }
 }

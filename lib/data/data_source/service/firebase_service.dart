@@ -13,7 +13,7 @@ class FirebaseService {
       final result = await FirebaseMessaging.instance.getToken();
       return Result.success(result!);
     } catch (e) {
-      return Result.error('메세지 토큰 에러');
+      return Result.error('메세지 토큰 에러 ${e}');
     }
   }
 }
