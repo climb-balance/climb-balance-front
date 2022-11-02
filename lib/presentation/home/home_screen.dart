@@ -18,61 +18,63 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: color.background,
       appBar: const HomeAppBar(),
       body: MySafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '최근 AI 평가',
-              style: text.bodyText1,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            RecentAiStat(),
-            SizedBox(
-              height: 36,
-            ),
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '최근 5주',
-                        style: text.bodyText1,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const RecentStat(),
-                    ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '최근 AI 평가',
+                style: text.bodyText1,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              RecentAiStat(),
+              SizedBox(
+                height: 36,
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '최근 5주',
+                          style: text.bodyText1,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const RecentStat(),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '현재 상태',
-                        style: text.bodyText1,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const ContinuousStatistics(),
-                    ],
+                  const SizedBox(
+                    width: 10,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '현재 상태',
+                          style: text.bodyText1,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const ContinuousStatistics(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const BotNavigationBar(currentIdx: 0),

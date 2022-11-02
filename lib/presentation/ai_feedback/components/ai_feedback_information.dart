@@ -93,7 +93,7 @@ class AiInformationTabBar extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     return Container(
       color: color.surface,
-      child: TabBar(
+      child: const TabBar(
         labelPadding: EdgeInsets.all(10),
         tabs: [Text('점수'), Text('분석'), Text('통계')],
       ),
