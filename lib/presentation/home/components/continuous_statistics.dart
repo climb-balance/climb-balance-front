@@ -1,5 +1,4 @@
 import 'package:climb_balance/domain/util/duration_time.dart';
-import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,8 +17,6 @@ class ContinuousStatistics extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cont = _getCont(ref
-        .watch(homeViewModelProvider.select((value) => value.climbingDatas)));
     final text = Theme.of(context).textTheme;
     final color = Theme.of(context).colorScheme;
     return AspectRatio(

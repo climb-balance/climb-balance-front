@@ -1,4 +1,4 @@
-import 'package:climb_balance/presentation/home/home_state.dart';
+import 'package:climb_balance/presentation/home/models/home_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final homeViewModelProvider =
