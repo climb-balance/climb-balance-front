@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -39,8 +38,6 @@ class LocalNotificationNotifier extends StateNotifier<String> {
   void showNotification(RemoteMessage message) async {
     String title = message.notification?.title ?? '';
     String body = message.notification?.body ?? '';
-    debugPrint(title);
-    debugPrint(body);
     AndroidNotificationDetails androidNotiDetails = AndroidNotificationDetails(
       'dexterous.com.flutter.local_notifications',
       title,
