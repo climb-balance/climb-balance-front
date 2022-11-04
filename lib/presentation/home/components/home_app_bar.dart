@@ -65,16 +65,13 @@ class NotificationIcon extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: color.primary,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Center(
-                  child: Text(
-                    unread.toString(),
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: color.onPrimary,
-                    ),
+              child: Center(
+                child: Text(
+                  unread.toString(),
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: color.onPrimary,
                   ),
                 ),
               ),
