@@ -90,6 +90,8 @@ flutter:
     - assets/svg/back.svg
     - assets/svg/logo.svg
     - assets/img/bg_img.png
+    - assets/img/aft.png
+    - assets/img/bef.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
