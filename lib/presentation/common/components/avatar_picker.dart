@@ -3,6 +3,28 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+class AvatarPickerNetwork extends StatelessWidget {
+  final String? imagePath;
+  final void Function() getImage;
+
+  const AvatarPickerNetwork({Key? key, this.imagePath, required this.getImage})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: getImage,
+          child: FlexAvatar(imagePath: imagePath),
+        ),
+      ],
+    );
+  }
+}
+
 class AvatarPicker extends StatefulWidget {
   final String? imagePath;
   final void Function(String) updateImagePath;
@@ -30,16 +52,32 @@ class _AvatarPickerState extends State<AvatarPicker> {
       children: [
         InkWell(
           onTap: getImage,
-          child: widget.imagePath == null
-              ? const NoAvatar()
-              : CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  backgroundImage: FileImage(File(widget.imagePath!)),
-                ),
+          child: FlexAvatar(
+            imagePath: widget.imagePath,
+          ),
         ),
       ],
     );
+  }
+}
+
+class FlexAvatar extends StatelessWidget {
+  final String? imagePath;
+
+  const FlexAvatar({Key? key, required this.imagePath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return imagePath == null
+        ? const NoAvatar()
+        : CircleAvatar(
+            radius: 50,
+            backgroundImage: NetworkImage(imagePath!),
+            foregroundImage: FileImage(
+              File(imagePath!),
+            ),
+            foregroundColor: Colors.transparent,
+          );
   }
 }
 

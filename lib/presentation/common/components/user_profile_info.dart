@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../../../domain/model/user.dart';
+import 'avatar_picker.dart';
 
 class TopProfileInfo extends StatelessWidget {
   final User user;
+  final void Function() onEdit;
 
-  const TopProfileInfo({Key? key, required this.user}) : super(key: key);
+  const TopProfileInfo({
+    Key? key,
+    required this.user,
+    required this.onEdit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
       children: [
-        Container(
-          width: 90,
-          height: 90,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            image: DecorationImage(
-              image: NetworkImage(user.profileImage),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        FlexAvatar(imagePath: user.profileImage),
         const SizedBox(
           width: 16,
         ),
@@ -37,7 +33,7 @@ class TopProfileInfo extends StatelessWidget {
                   user.nickname,
                   style: theme.textTheme.headline5,
                 ),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
+                IconButton(onPressed: onEdit, icon: const Icon(Icons.edit)),
               ],
             ),
             Text(user.description),
