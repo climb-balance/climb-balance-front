@@ -1,7 +1,7 @@
 import 'package:climb_balance/domain/util/stories_filter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/model/story.dart';
+import '../../../domain/model/story.dart';
 
 part 'diary_state.freezed.dart';
 

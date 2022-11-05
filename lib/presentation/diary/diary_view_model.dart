@@ -6,7 +6,7 @@ import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
 import '../../domain/util/feedback_status.dart';
 import '../../domain/util/stories_filter.dart';
-import 'diary_state.dart';
+import 'models/diary_state.dart';
 
 final diaryViewModelProvider =
     StateNotifierProvider.autoDispose<DiaryViewModel, DiaryState>((ref) {

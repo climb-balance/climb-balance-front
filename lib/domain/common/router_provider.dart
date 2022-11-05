@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../presentation/diary/diary_screen.dart';
+import '../../presentation/diary/screens/diary_screen.dart';
 import '../../presentation/expert_register/expert_register_screen.dart';
 import '../../presentation/feedback_list/feedback_list.dart';
 import '../../presentation/home/home_screen.dart';

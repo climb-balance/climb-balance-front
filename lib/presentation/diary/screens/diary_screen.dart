@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../common/components/bot_navigation_bar.dart';
-import '../common/components/safe_area.dart';
-import '../common/scroll_behavior.dart';
-import 'components/classified_story.dart';
-import 'components/filter_tab_bar.dart';
-import 'components/sliver_profile.dart';
-import 'diary_view_model.dart';
+import '../../common/components/bot_navigation_bar.dart';
+import '../../common/components/safe_area.dart';
+import '../../common/scroll_behavior.dart';
+import '../components/classified_story.dart';
+import '../components/filter_tab_bar.dart';
+import '../components/sliver_profile.dart';
+import '../diary_view_model.dart';
 
 class DiaryScreen extends ConsumerWidget {
   const DiaryScreen({Key? key}) : super(key: key);
