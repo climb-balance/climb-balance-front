@@ -27,9 +27,10 @@ class ContinuousStatistics extends ConsumerWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 20,
+          padding: const EdgeInsets.only(
+            top: 12,
+            bottom: 12,
+            left: 20,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

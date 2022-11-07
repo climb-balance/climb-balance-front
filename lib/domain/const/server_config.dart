@@ -5,3 +5,4 @@ const String serverStoryPath = '/story';
 const String serverVideoPath = '/video';
 const String serverAiFeedbackPath = '/feedback?type=ai';
 const String serverUrl = 'http://10.0.2.2:3000';
+const String serverMainPath = '/main';

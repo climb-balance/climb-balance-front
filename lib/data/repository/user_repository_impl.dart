@@ -2,6 +2,7 @@ import 'package:climb_balance/data/data_source/user_server_helper.dart';
 import 'package:climb_balance/domain/model/result.dart';
 import 'package:climb_balance/domain/model/user.dart';
 import 'package:climb_balance/domain/repository/user_repository.dart';
+import 'package:climb_balance/presentation/home/models/home_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/const/server_config.dart';
@@ -14,8 +15,8 @@ final userRepositoryImplProvider = Provider<UserRepositoryImpl>((ref) {
 });
 
 class UserRepositoryImpl implements UserRepository {
-  final ProviderRef ref;
   final UserServerHelper server;
+  final ProviderRef<UserRepositoryImpl> ref;
 
   UserRepositoryImpl({
     required this.ref,
@@ -23,8 +24,8 @@ class UserRepositoryImpl implements UserRepository {
   });
 
   @override
-  Future<Result<User>> getCurrentUserProfile(String accessToken) async {
-    final result = await server.getCurrentUserProfile(accessToken);
+  Future<Result<User>> getCurrentUserProfile(String token) async {
+    final result = await server.getCurrentUserProfile(token);
     return result.when(
         success: (value) => Result.success(User.fromJson(value)),
         error: (message) => Result.error(message));
@@ -48,6 +49,15 @@ class UserRepositoryImpl implements UserRepository {
     final result = await server.createUser(registerState);
     return result.when(
       success: (value) => const Result.success(null),
+      error: (message) => Result.error(message),
+    );
+  }
+
+  @override
+  Future<Result<HomeState>> getMainStatistics(String accessToken) async {
+    final result = await server.getMainStatistics(accessToken);
+    return result.when(
+      success: (value) => Result.success(HomeState.fromJson(value)),
       error: (message) => Result.error(message),
     );
   }

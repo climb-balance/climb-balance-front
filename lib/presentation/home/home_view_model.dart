@@ -1,18 +1,38 @@
+import 'package:climb_balance/data/repository/user_repository_impl.dart';
+import 'package:climb_balance/domain/repository/user_repository.dart';
 import 'package:climb_balance/presentation/home/models/home_state.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../domain/common/current_user_provider.dart';
 
 final homeViewModelProvider =
     StateNotifierProvider.autoDispose<HomeViewModel, HomeState>((ref) {
-  // TODO home repo
-  HomeViewModel notifier = HomeViewModel(repository: null);
+  HomeViewModel notifier = HomeViewModel(
+      repository: ref.watch(userRepositoryImplProvider), ref: ref);
   notifier._loadDatas();
   return notifier;
 });
 
 class HomeViewModel extends StateNotifier<HomeState> {
-  final repository;
+  final UserRepository repository;
+  final AutoDisposeStateNotifierProviderRef<HomeViewModel, HomeState> ref;
 
-  HomeViewModel({required this.repository}) : super(const HomeState());
+  HomeViewModel({required this.repository, required this.ref})
+      : super(const HomeState());
 
-  void _loadDatas() {}
+  void _loadDatas() async {
+    Future.microtask(() async {
+      final result = await repository.getMainStatistics(
+          ref.watch(currentUserProvider.select((value) => value.accessToken)));
+      result.when(
+        success: (value) {
+          state = value;
+        },
+        error: (message) {
+          debugPrint(message);
+        },
+      );
+    });
+  }
 }
