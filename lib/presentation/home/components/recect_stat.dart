@@ -1,24 +1,23 @@
 import 'dart:math';
 
+import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RecentStat extends ConsumerWidget {
-  final datas = const [12, 12, 3, 25, 5];
-
   const RecentStat({Key? key}) : super(key: key);
 
-  BarChartGroupData makeBar(ColorScheme color, int x) {
+  BarChartGroupData makeBar(ColorScheme color, int x, int y, int maxData) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
           color: color.primary.withOpacity(
-            (datas[x] + 1) / (datas.reduce(max) + 1),
+            (y + 1) / maxData,
           ),
           width: 16,
-          toY: datas[x].toDouble(),
+          toY: y.toDouble(),
         ),
       ],
     );
@@ -26,6 +25,9 @@ class RecentStat extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final data =
+        ref.watch(homeViewModelProvider.select((value) => value.storyCount));
+    final int maxData = (data.reduce(max) + 1);
     final color = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     return AspectRatio(
@@ -61,7 +63,7 @@ class RecentStat extends ConsumerWidget {
                   getTitlesWidget: (value, meta) => Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: Text(
-                      '${datas[value.toInt()]}',
+                      '${data[value.toInt()]}',
                       style: text.subtitle2?.copyWith(
                         color: color.onBackground.withOpacity(0.7),
                         fontSize: 14,
@@ -71,7 +73,9 @@ class RecentStat extends ConsumerWidget {
                 ),
               ),
             ),
-            barGroups: [for (int i = 0; i < 5; i += 1) makeBar(color, i)],
+            barGroups: [
+              for (int i = 0; i < 5; i += 1) makeBar(color, i, data[i], maxData)
+            ],
             alignment: BarChartAlignment.spaceBetween,
           ),
         ),
