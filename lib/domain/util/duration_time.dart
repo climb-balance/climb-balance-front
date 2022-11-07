@@ -24,5 +24,5 @@ String formatDatetimeToAll(DateTime datetime) {
   String twoDigitDay = twoDigits(datetime.day);
   String twoDigitMonth = twoDigits(datetime.month);
   String twoDigitMinutes = twoDigits(datetime.minute.remainder(60));
-  return "${datetime.year}.$twoDigitMonth.$twoDigitDay ${datetime.hour > 11 ? 'AM' : 'PM'} ${twoDigits(datetime.hour % 12)}:$twoDigitMinutes";
+  return "${datetime.year}.$twoDigitMonth.$twoDigitDay ${twoDigits(datetime.hour)}:$twoDigitMinutes";
 }
