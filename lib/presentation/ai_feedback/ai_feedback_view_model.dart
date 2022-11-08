@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:climb_balance/presentation/story/story_view_model.dart';
+import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/repository/story_repository_impl.dart';
@@ -23,6 +25,7 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   final StoryRepository repository;
   final Story story;
   Timer? actionsCloseTimer;
+  AnimationController? _animationController;
 
   AiFeedbackViewModel(this.repository, this.story)
       : super(const AiFeedbackState());
@@ -35,6 +38,19 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
       },
       error: (message) {},
     );
+  }
+
+  void initAnimationController(AnimationController? animationController) {
+    _animationController = animationController;
+  }
+
+  void seekAnimation(Duration seekTime) {
+    if (_animationController == null) return;
+    bool isAnimating = _animationController!.isAnimating;
+    _animationController!.forward(
+        from: seekTime.inMilliseconds /
+            _animationController!.duration!.inMilliseconds);
+    if (!isAnimating) _animationController!.stop();
   }
 
   String getStoryAiVideoPath() {

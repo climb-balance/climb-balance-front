@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../../../domain/util/duration_time.dart';
 
 class VideoTimeText extends StatelessWidget {
-  final VideoPlayerController videoPlayerController;
+  final void Function() onTap;
   final String timeText;
 
-  const VideoTimeText(
-      {Key? key, required this.videoPlayerController, required this.timeText})
+  const VideoTimeText({Key? key, required this.onTap, required this.timeText})
       : super(key: key);
 
   @override
@@ -17,7 +15,7 @@ class VideoTimeText extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
-        videoPlayerController.seekTo(Duration(seconds: timeSecond));
+        onTap();
       },
       child: Text(
         timeText,

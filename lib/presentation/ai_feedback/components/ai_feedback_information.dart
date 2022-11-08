@@ -21,6 +21,7 @@ class AiFeedbackInformation extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
     final precision = ref
@@ -49,32 +50,51 @@ class AiFeedbackInformation extends ConsumerWidget {
                     precision: precision,
                     balance: balance,
                   ),
-                  SingleChildScrollView(
-                    child: Column(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        VideoTimeText(
-                          timeText: '00:30',
-                          videoPlayerController: videoPlayerController,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '1',
+                              style: text.headline4,
+                            ),
+                            VideoTimeTextWithAnimation(
+                              videoPlayerController: videoPlayerController,
+                              storyId: storyId,
+                              timeText: '00:10',
+                            ),
+                          ],
                         ),
-                        AspectRatio(
-                          aspectRatio: value.aspectRatio,
-                          child: CustomPaint(
-                            painter: AiFeedbackOverlayPainter(
-                              animationValue: formatTimeTextToSecond('00:30') /
-                                  value.duration.inSeconds,
-                              scores: ref.watch(
-                                aiFeedbackViewModelProvider(storyId)
-                                    .select((value) => value.scores),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: color.surface,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: AspectRatio(
+                            aspectRatio: value.aspectRatio,
+                            child: CustomPaint(
+                              painter: AiFeedbackOverlayPainter(
+                                animationValue:
+                                    formatTimeTextToSecond('00:10') /
+                                        value.duration.inSeconds,
+                                scores: ref.watch(
+                                  aiFeedbackViewModelProvider(storyId)
+                                      .select((value) => value.scores),
+                                ),
+                                joints: ref.watch(
+                                    aiFeedbackViewModelProvider(storyId)
+                                        .select((value) => value.joints)),
+                                frames: ref.watch(
+                                    aiFeedbackViewModelProvider(storyId)
+                                        .select((value) => value.frames)),
+                                lineOverlay: true,
+                                squareOverlay: true,
+                                squareOpacity: 0.2,
                               ),
-                              joints: ref.watch(
-                                  aiFeedbackViewModelProvider(storyId)
-                                      .select((value) => value.joints)),
-                              frames: ref.watch(
-                                  aiFeedbackViewModelProvider(storyId)
-                                      .select((value) => value.frames)),
-                              lineOverlay: true,
-                              squareOverlay: true,
-                              squareOpacity: 0.2,
                             ),
                           ),
                         ),
@@ -88,6 +108,34 @@ class AiFeedbackInformation extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class VideoTimeTextWithAnimation extends ConsumerWidget {
+  final String timeText;
+
+  const VideoTimeTextWithAnimation({
+    Key? key,
+    required this.videoPlayerController,
+    required this.storyId,
+    required this.timeText,
+  }) : super(key: key);
+
+  final VideoPlayerController videoPlayerController;
+  final int storyId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return VideoTimeText(
+      timeText: timeText,
+      onTap: () {
+        int timeSecond = formatTimeTextToSecond(timeText);
+        videoPlayerController.seekTo(Duration(seconds: timeSecond));
+        ref
+            .read(aiFeedbackViewModelProvider(storyId).notifier)
+            .seekAnimation(Duration(seconds: timeSecond));
+      },
     );
   }
 }
@@ -132,7 +180,8 @@ class AiInformationTabBar extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     return Container(
       color: color.surface,
-      child: const TabBar(
+      child: TabBar(
+        indicatorColor: color.primary,
         labelPadding: EdgeInsets.all(10),
         tabs: [Text('점수'), Text('분석'), Text('통계')],
       ),

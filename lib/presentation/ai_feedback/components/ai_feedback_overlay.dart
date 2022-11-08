@@ -32,6 +32,9 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
     )
       ..forward()
       ..repeat();
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .initAnimationController(_animationController!);
     widget.videoPlayerController.addListener(() {
       final value = widget.videoPlayerController.value;
       final videoValue = value.position.inMicroseconds.toDouble() /
@@ -48,6 +51,9 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   void dispose() {
     widget.videoPlayerController.removeListener(() {});
     _animationController?.removeListener(() {});
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .initAnimationController(null);
     _animationController?.dispose();
     super.dispose();
   }
