@@ -1,15 +1,19 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/common/components/videos/video_time_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:video_player/video_player.dart';
 
 import 'ai_score.dart';
 
 class AiFeedbackInformation extends ConsumerWidget {
   final int storyId;
+  final VideoPlayerController videoPlayerController;
 
   const AiFeedbackInformation({
     Key? key,
     required this.storyId,
+    required this.videoPlayerController,
   }) : super(key: key);
 
   @override
@@ -33,7 +37,7 @@ class AiFeedbackInformation extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AiInformationActionBar(storyId: storyId),
-            AiInformationTabBar(),
+            const AiInformationTabBar(),
             Expanded(
               child: TabBarView(
                 children: [
@@ -41,7 +45,10 @@ class AiFeedbackInformation extends ConsumerWidget {
                     precision: precision,
                     balance: balance,
                   ),
-                  Text('sdsd'),
+                  VideoTimeText(
+                    timeText: '00:30',
+                    videoPlayerController: videoPlayerController,
+                  ),
                   Text('sd'),
                 ],
               ),

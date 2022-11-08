@@ -110,6 +110,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                       if (isInformOpen)
                         AiFeedbackInformation(
                           storyId: widget.storyId,
+                          videoPlayerController: _videoPlayerController,
                         ),
                     ],
                   )

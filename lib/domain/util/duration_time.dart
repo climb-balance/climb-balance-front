@@ -26,3 +26,17 @@ String formatDatetimeToAll(DateTime datetime) {
   String twoDigitMinutes = twoDigits(datetime.minute.remainder(60));
   return "${datetime.year}.$twoDigitMonth.$twoDigitDay ${twoDigits(datetime.hour)}:$twoDigitMinutes";
 }
+
+int formatTimeTextToSecond(String timeText) {
+  List<String> tmp = timeText.split(':');
+  if (tmp.length != 2) return 0;
+
+  try {
+    int mm = int.parse(tmp[0]);
+    int ss = int.parse(tmp[1]);
+    if (ss > 59) throw Error;
+    return mm * 60 + ss;
+  } catch (_) {
+    return 0;
+  }
+}
