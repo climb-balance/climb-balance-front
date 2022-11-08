@@ -30,7 +30,7 @@ class StoryOverlay extends ConsumerWidget {
 
     return Stack(
       children: [
-        OverlayBottomGradient(),
+        const OverlayBottomGradient(),
         GestureDetector(
           onTap: () {
             ref
@@ -77,11 +77,11 @@ class StoryOverlay extends ConsumerWidget {
             duration: const Duration(milliseconds: 250),
             child: Center(
               child: videoPlayerController.value.isPlaying
-                  ? Icon(
+                  ? const Icon(
                       Icons.pause_circle,
                       size: 75,
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.play_circle,
                       size: 75,
                     ),

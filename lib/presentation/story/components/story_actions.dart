@@ -89,8 +89,9 @@ class StoryActions extends ConsumerWidget {
           ),
         ),
         if (curUserId == curUserId &&
-            (story.aiStatus == FeedbackStatus.possible ||
-                story.expertStatus == FeedbackStatus.possible))
+            (story.aiStatus ==
+                FeedbackStatus
+                    .possible)) //  || story.expertStatus == FeedbackStatus.possible
           TextButton(
             onPressed: () {
               showModalBottomSheet(
