@@ -63,7 +63,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
         return AspectRatio(
           aspectRatio: value.aspectRatio,
           child: CustomPaint(
-            painter: _Painter(
+            painter: AiFeedbackOverlayPainter(
               animationValue: _animationController!.value,
               scores: ref.watch(
                 aiFeedbackViewModelProvider(widget.storyId)
@@ -86,7 +86,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   }
 }
 
-class _Painter extends CustomPainter {
+class AiFeedbackOverlayPainter extends CustomPainter {
   final double animationValue;
   final List<double?> scores;
   final List<double?> joints;
@@ -98,14 +98,16 @@ class _Painter extends CustomPainter {
   final List<int> rlPair1Indexes = [10, 12];
   final List<int> rlPair2Indexes = [22, 24];
   final List<int> drawQuadIndexes = [18, 20, 30, 32];
+  final double squareOpacity;
 
-  _Painter({
+  AiFeedbackOverlayPainter({
     required this.animationValue,
     required this.scores,
     required this.joints,
     required this.frames,
     required this.lineOverlay,
     required this.squareOverlay,
+    this.squareOpacity = 0.5,
   });
 
   final Paint linePaint = Paint()
@@ -149,8 +151,9 @@ class _Painter extends CustomPainter {
     required double? currentScore,
   }) {
     final Paint quadPaint = Paint()
-      ..color = HSVColor.fromAHSV(0.5, 125 * (currentScore! * 0.5 + 0.5), 1, 1)
+      ..color = HSVColor.fromAHSV(1, 125 * (currentScore! * 0.5 + 0.5), 1, 1)
           .toColor()
+          .withOpacity(squareOpacity)
       ..style = PaintingStyle.fill;
     double x1 = values[lineIndexes[0]]! * size.width;
     double y1 = values[lineIndexes[0] + 1]! * size.height;
