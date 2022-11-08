@@ -24,6 +24,8 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
   @override
   void initState() {
     super.initState();
+    final value = widget.controller.value;
+    progress = value.position.inMilliseconds / value.duration.inMilliseconds;
     widget.controller.addListener(() {
       final value = widget.controller.value;
       progress = value.position.inMilliseconds / value.duration.inMilliseconds;
@@ -45,7 +47,7 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 5),
+          padding: const EdgeInsets.only(top: 20, bottom: 5),
           child: Container(
             height: 5,
             decoration: BoxDecoration(
@@ -64,7 +66,7 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
         AnimatedPositioned(
           left: size.width * progress,
           bottom: 3,
-          duration: Duration(
+          duration: const Duration(
             milliseconds: 500,
           ),
           child: Container(

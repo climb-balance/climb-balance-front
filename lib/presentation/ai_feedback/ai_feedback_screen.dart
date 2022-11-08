@@ -7,6 +7,7 @@ import 'package:video_player/video_player.dart';
 import '../common/ui/theme/specific_theme.dart';
 import 'components/ai_feedback_information.dart';
 import 'components/ai_feedback_overlay.dart';
+import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
   final int storyId;
@@ -58,25 +59,25 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
     final bool isInformOpen = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
             .select((value) => value.isInformOpen));
+    final bool actionsOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.actionsOpen));
     return StoryViewTheme(
-      child: SafeArea(
-        child: Stack(
-          children: [
-            _videoPlayerController.value.isInitialized
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!isInformOpen) return;
-                            ref
-                                .read(
-                                    aiFeedbackViewModelProvider(widget.storyId)
-                                        .notifier)
-                                .toggleInformation();
-                          },
+      child: GestureDetector(
+        onTap: () {
+          ref
+              .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+              .toggleActionOpen(_videoPlayerController.value.isPlaying);
+        },
+        child: SafeArea(
+          child: Stack(
+            children: [
+              _videoPlayerController.value.isInitialized
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
                           child: Center(
                             child: Stack(
                               children: [
@@ -96,23 +97,33 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                             ),
                           ),
                         ),
-                      ),
-                      if (isInformOpen)
-                        AiFeedbackInformation(
-                          storyId: widget.storyId,
-                        ),
-                    ],
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
+                        if (isInformOpen)
+                          AiFeedbackInformation(
+                            storyId: widget.storyId,
+                          ),
+                      ],
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+              if (actionsOpen && !isInformOpen)
+                AiFeedbackActions(
+                  togglePlaying: togglePlaying,
+                  storyId: widget.storyId,
+                  videoPlayerController: _videoPlayerController,
+                ),
+              if (!isInformOpen)
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: AiFeedbackProgressBar(
+                      storyId: widget.storyId,
+                      controller: _videoPlayerController,
+                    ),
                   ),
-            if (!isInformOpen)
-              AiFeedbackActions(
-                togglePlaying: togglePlaying,
-                storyId: widget.storyId,
-                videoPlayerController: _videoPlayerController,
-              ),
-          ],
+                ),
+            ],
+          ),
         ),
       ),
     );

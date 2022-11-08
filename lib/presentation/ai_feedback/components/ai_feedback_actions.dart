@@ -6,7 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../common/components/my_icons.dart';
-import 'ai_feedback_progress_bar.dart';
+import '../../common/components/videos/playing_status.dart';
 
 class AiFeedbackActions extends ConsumerWidget {
   final void Function() togglePlaying;
@@ -29,15 +29,15 @@ class AiFeedbackActions extends ConsumerWidget {
     final bool isStatusChanging = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.isStatusChanging));
     return GestureDetector(
-      onTap: togglePlaying,
+      onTap: () {
+        ref
+            .read(aiFeedbackViewModelProvider(storyId).notifier)
+            .toggleActionOpen(videoPlayerController.value.isPlaying);
+      },
       child: Stack(
         children: [
           Scaffold(
             backgroundColor: Colors.transparent,
-            bottomNavigationBar: AiFeedbackProgressBar(
-              storyId: storyId,
-              controller: videoPlayerController,
-            ),
             floatingActionButtonAnimator: NoFabScalingAnimation(),
             floatingActionButtonLocation: CustomFabLoc(),
             floatingActionButton: Column(
@@ -95,20 +95,9 @@ class AiFeedbackActions extends ConsumerWidget {
               ],
             ),
           ),
-          AnimatedOpacity(
-            opacity: isStatusChanging ? 0.5 : 0.0,
-            duration: const Duration(milliseconds: 250),
-            child: Center(
-              child: videoPlayerController.value.isPlaying
-                  ? Icon(
-                      Icons.play_arrow,
-                      size: 100,
-                    )
-                  : Icon(
-                      Icons.pause,
-                      size: 100,
-                    ),
-            ),
+          PlayingStatus(
+            togglePlaying: togglePlaying,
+            videoPlayerController: videoPlayerController,
           ),
         ],
       ),

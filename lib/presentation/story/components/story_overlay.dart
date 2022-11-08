@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../common/components/user_profile_info.dart';
+import '../../common/components/videos/playing_status.dart';
 import '../../common/custom_fab.dart';
 import '../story_view_model.dart';
 import 'overlay_bottom_gradient.dart';
@@ -68,25 +69,9 @@ class StoryOverlay extends ConsumerWidget {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            togglePlaying();
-          },
-          child: AnimatedOpacity(
-            opacity: 0.75,
-            duration: const Duration(milliseconds: 250),
-            child: Center(
-              child: videoPlayerController.value.isPlaying
-                  ? const Icon(
-                      Icons.pause_circle,
-                      size: 75,
-                    )
-                  : const Icon(
-                      Icons.play_circle,
-                      size: 75,
-                    ),
-            ),
-          ),
+        PlayingStatus(
+          togglePlaying: togglePlaying,
+          videoPlayerController: videoPlayerController,
         ),
       ],
     );

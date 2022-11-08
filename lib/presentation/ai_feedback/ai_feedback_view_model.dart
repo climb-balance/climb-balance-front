@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:climb_balance/presentation/story/story_view_model.dart';
@@ -21,6 +22,7 @@ final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
 class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   final StoryRepository repository;
   final Story story;
+  Timer? actionsCloseTimer;
 
   AiFeedbackViewModel(this.repository, this.story)
       : super(const AiFeedbackState());
@@ -49,6 +51,27 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
 
   void toggleSquareOverlay() {
     state = state.copyWith(squareOverlay: !state.squareOverlay);
+  }
+
+  void toggleActionOpen(bool isPlaying) {
+    if (state.actionsOpen) {
+      state = state.copyWith(actionsOpen: false);
+      actionsCloseTimer?.cancel();
+    } else {
+      state = state.copyWith(actionsOpen: true);
+      if (isPlaying) {
+        actionsCloseTimer = Timer(
+          Duration(seconds: 3),
+          () {
+            state = state.copyWith(actionsOpen: false);
+          },
+        );
+      }
+    }
+  }
+
+  void cancelOverlayCloseTimer() {
+    actionsCloseTimer?.cancel();
   }
 
   void togglePlayingStatus() {
