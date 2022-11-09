@@ -100,9 +100,13 @@ class StoryServerHelper {
     throw UnimplementedError();
   }
 
-  Future<void> deleteStory(int storyId) async {
-    // TODO: implement deleteStory
-    throw UnimplementedError();
+  Future<Result<void>> deleteStory(int storyId) async {
+    try {
+      final body = await server.delete(url: '$serverStoryPath/$storyId');
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('스토리 삭제 오류 ${e.toString()}');
+    }
   }
 
   Future<Result<List<String>>> getCommentById(int storyId) {

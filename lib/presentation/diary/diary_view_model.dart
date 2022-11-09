@@ -1,4 +1,6 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/presentation/common/custom_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -111,5 +113,17 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       editingProfile: null,
       isEditingMode: false,
     );
+  }
+
+  void deleteStory(
+      {required int storyId, required BuildContext context}) async {
+    await Future.microtask(() async {
+      final confirm = await customShowConfirm(
+          context: context, title: '경고', content: '정말로 삭제하시겠습니까?');
+      if (!confirm) return;
+    });
+
+    await repository.deleteStory(storyId);
+    loadStories();
   }
 }

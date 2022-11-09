@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/model/story.dart';
-import '../../common/components/story_preview.dart';
+import '../../story/components/story_preview.dart';
 import 'classified_story_tags.dart';
 
 class ClassifiedStories extends StatelessWidget {

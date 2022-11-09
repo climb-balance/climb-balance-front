@@ -90,9 +90,16 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<void> deleteStory(int storyId) {
-    // TODO: implement deleteStory
-    throw UnimplementedError();
+  Future<Result<void>> deleteStory(int storyId) async {
+    final result = await server.deleteStory(storyId);
+    return result.when(
+      success: (value) {
+        return const Result.success(null);
+      },
+      error: (message) {
+        return Result.error(message);
+      },
+    );
   }
 
   @override

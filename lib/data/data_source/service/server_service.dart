@@ -41,6 +41,20 @@ class ServerService {
     return body;
   }
 
+  Future<dynamic> delete({required String url, String? accessToken}) async {
+    http.Response res = await http
+        .delete(Uri.parse(serverUrl + url), headers: makeHeaders(accessToken))
+        .timeout(_timeOutDuration)
+        .catchError((err) => throw err)
+        .whenComplete(() {});
+    final statusCode = res.statusCode;
+    final body = res.body;
+    if (statusCode < 200 || statusCode >= 400) {
+      throw HttpException(res.body);
+    }
+    return body;
+  }
+
   Future<dynamic> post(
       {required String url, required dynamic data, String? accessToken}) async {
     http.Response res = await http

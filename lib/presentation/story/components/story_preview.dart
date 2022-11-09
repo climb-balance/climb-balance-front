@@ -7,23 +7,72 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../domain/common/tag_selector_provider.dart';
 import '../../../domain/model/story.dart';
 
-class StoryPreview extends ConsumerWidget {
+class StoryPreview extends ConsumerStatefulWidget {
   final Story story;
 
   const StoryPreview({Key? key, required this.story}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<StoryPreview> createState() => _StoryPreviewState();
+}
+
+class _StoryPreviewState extends ConsumerState<StoryPreview> {
+  Offset _tapPosition = Offset.zero;
+
+  void _storePosition(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final image = ref
         .watch(diaryViewModelProvider.notifier)
-        .getThumbnailUrl(story.storyId);
+        .getThumbnailUrl(widget.story.storyId);
     final color = Theme.of(context).colorScheme;
     return InkWell(
       splashColor: color.surfaceVariant,
       onTap: () {
         // TODO named push not working
         context.push(
-          '/diary/story/${story.storyId}',
+          '/diary/story/${widget.story.storyId}',
+        );
+      },
+      onTapDown: _storePosition,
+      onLongPress: () {
+        final RenderBox overlay =
+            Overlay.of(context)?.context.findRenderObject() as RenderBox;
+        showMenu(
+          context: context,
+          position: RelativeRect.fromRect(
+            _tapPosition & Size(40, 40),
+            Offset.zero & overlay.size,
+          ),
+          items: [
+            PopupMenuItem(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(Icons.edit),
+                  Text("수정하기"),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              onTap: () {
+                ref.read(diaryViewModelProvider.notifier).deleteStory(
+                      storyId: widget.story.storyId,
+                      context: context,
+                    );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(Icons.delete),
+                  Text("삭제하기"),
+                ],
+              ),
+            )
+          ],
         );
       },
       child: ClipRRect(
@@ -55,7 +104,7 @@ class StoryPreview extends ConsumerWidget {
                 },
               ),
             ),
-            StoryPreviewIcon(story: story),
+            StoryPreviewIcon(story: widget.story),
           ],
         ),
       ),
