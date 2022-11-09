@@ -35,14 +35,14 @@ class GradientIcon extends StatelessWidget {
 
 class ToggleIcon extends StatelessWidget {
   final IconData icon;
-  final double size;
+  final double iconSize;
   final bool isEnable;
   final String detail;
 
   const ToggleIcon({
     Key? key,
     required this.icon,
-    this.size = 35,
+    this.iconSize = 35,
     required this.isEnable,
     this.detail = '',
   }) : super(key: key);
@@ -56,14 +56,9 @@ class ToggleIcon extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 35,
+              size: iconSize,
+              color: isEnable ? color.primary : color.onBackground,
             ),
-            if (isEnable)
-              Icon(
-                Icons.close,
-                size: 35,
-                color: color.tertiary,
-              ),
           ],
         ),
         Text(detail),
@@ -75,13 +70,13 @@ class ToggleIcon extends StatelessWidget {
 class ColIconDetail extends StatelessWidget {
   final IconData icon;
   final String detail;
-  final double size;
+  final double iconSize;
 
   const ColIconDetail({
     Key? key,
     required this.icon,
     this.detail = '',
-    this.size = 35.0,
+    this.iconSize = 35.0,
   }) : super(key: key);
 
   @override
@@ -90,7 +85,7 @@ class ColIconDetail extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: size,
+          size: iconSize,
         ),
         Text(detail),
       ],

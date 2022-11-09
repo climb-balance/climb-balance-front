@@ -11,12 +11,14 @@ class AiFeedbackActions extends ConsumerWidget {
   final void Function() togglePlaying;
   final int storyId;
   final VideoPlayerController videoPlayerController;
+  final double iconSize;
 
   const AiFeedbackActions({
     Key? key,
     required this.storyId,
     required this.togglePlaying,
     required this.videoPlayerController,
+    this.iconSize = 28,
   }) : super(key: key);
 
   @override
@@ -25,8 +27,6 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.lineOverlay));
     final bool squareOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.squareOverlay));
-    final bool isStatusChanging = ref.watch(aiFeedbackViewModelProvider(storyId)
-        .select((value) => value.isStatusChanging));
     return GestureDetector(
       onTap: () {
         ref
@@ -53,6 +53,7 @@ class AiFeedbackActions extends ConsumerWidget {
                     icon: Icons.edit_rounded,
                     isEnable: lineOverlay,
                     detail: '직선',
+                    iconSize: iconSize,
                   ),
                 ),
                 TextButton(
@@ -65,17 +66,7 @@ class AiFeedbackActions extends ConsumerWidget {
                     icon: Icons.filter,
                     isEnable: squareOverlay,
                     detail: '사각형',
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    ref
-                        .read(aiFeedbackViewModelProvider(storyId).notifier)
-                        .saveAndShare();
-                  },
-                  child: const ColIconDetail(
-                    icon: Icons.share,
-                    detail: '공유',
+                    iconSize: iconSize,
                   ),
                 ),
                 TextButton(
@@ -84,14 +75,25 @@ class AiFeedbackActions extends ConsumerWidget {
                         .read(aiFeedbackViewModelProvider(storyId).notifier)
                         .toggleInformation();
                   },
-                  child: const ColIconDetail(
+                  child: ColIconDetail(
                     icon: Icons.mode_comment,
                     detail: '정보',
+                    iconSize: iconSize,
                   ),
                 ),
-                SizedBox(
-                  height: 20,
+                TextButton(
+                  onPressed: () {
+                    ref
+                        .read(aiFeedbackViewModelProvider(storyId).notifier)
+                        .saveAndShare();
+                  },
+                  child: ColIconDetail(
+                    icon: Icons.share,
+                    detail: '공유',
+                    iconSize: iconSize,
+                  ),
                 ),
+                const SizedBox(height: 8),
               ],
             ),
           ),
