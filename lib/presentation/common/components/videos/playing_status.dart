@@ -22,7 +22,6 @@ class _PlayingStatusState extends State<PlayingStatus> {
   void initState() {
     super.initState();
     _listener = () {
-      debugPrint('asdsd');
       setState(() {});
     };
 

@@ -64,6 +64,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final value = widget.videoPlayerController.value;
+
     if (_animationController == null) return Container();
     return AnimatedBuilder(
       animation: _animationController!,
@@ -240,8 +241,9 @@ class AiFeedbackOverlayPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     int currentIdx = (animationValue * frames).toInt() * 34;
+    if (currentIdx + 34 >= joints.length) return;
     List<double?> currentJoints = joints.sublist(currentIdx, currentIdx + 35);
-    if (currentIdx > currentJoints.length) return;
+
     if (lineOverlay) {
       /// draw lines
       drawNearLine(
