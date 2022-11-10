@@ -7,10 +7,10 @@ import '../models/ai_feedback_state.dart';
 
 class AiFeedbackProgressBar extends ConsumerStatefulWidget {
   final int storyId;
-  final VideoPlayerController controller;
+  final VideoPlayerController videoPlayerController;
 
   const AiFeedbackProgressBar(
-      {Key? key, required this.controller, required this.storyId})
+      {Key? key, required this.videoPlayerController, required this.storyId})
       : super(key: key);
 
   @override
@@ -20,22 +20,24 @@ class AiFeedbackProgressBar extends ConsumerStatefulWidget {
 
 class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
   double progress = 0.0;
+  late final void Function() _listener;
 
   @override
   void initState() {
     super.initState();
-    final value = widget.controller.value;
+    final value = widget.videoPlayerController.value;
     progress = value.position.inMilliseconds / value.duration.inMilliseconds;
-    widget.controller.addListener(() {
-      final value = widget.controller.value;
+    _listener = () {
+      final value = widget.videoPlayerController.value;
       progress = value.position.inMilliseconds / value.duration.inMilliseconds;
       setState(() {});
-    });
+    };
+    widget.videoPlayerController.addListener(_listener);
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(() {});
+    widget.videoPlayerController.removeListener(_listener);
     super.dispose();
   }
 

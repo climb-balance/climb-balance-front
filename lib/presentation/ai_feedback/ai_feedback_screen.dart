@@ -47,9 +47,9 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -129,7 +129,7 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                   alignment: Alignment.bottomCenter,
                   child: AiFeedbackProgressBar(
                     storyId: widget.storyId,
-                    controller: _videoPlayerController,
+                    videoPlayerController: _videoPlayerController,
                   ),
                 ),
               ),

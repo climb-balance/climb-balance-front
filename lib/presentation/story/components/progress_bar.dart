@@ -14,6 +14,7 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar> {
   double progressDegree = 0;
   int progressDuration = 500;
+  late final void Function() _listener;
 
   void initProgress() {
     progressDuration = 0;
@@ -24,19 +25,20 @@ class _ProgressBarState extends State<ProgressBar> {
   @override
   void initState() {
     super.initState();
-    widget.videoPlayerController.addListener(() {
+    _listener = () {
       final value = widget.videoPlayerController.value;
       progressDegree =
           (value.position.inMilliseconds / value.duration.inMilliseconds);
 
       setState(() {});
-    });
+    };
+    widget.videoPlayerController.addListener(_listener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.videoPlayerController.removeListener(() {});
+    widget.videoPlayerController.removeListener(_listener);
   }
 
   @override

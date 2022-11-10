@@ -32,6 +32,7 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
     return InkWell(
       splashColor: color.surfaceVariant,
       onTap: () {
+        if (widget.story.thumbnailUrl == "") return;
         // TODO named push not working
         context.push(
           '/diary/story/${widget.story.storyId}',
@@ -66,7 +67,7 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+                children: const <Widget>[
                   Icon(Icons.delete),
                   Text("삭제하기"),
                 ],

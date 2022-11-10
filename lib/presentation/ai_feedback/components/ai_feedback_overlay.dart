@@ -21,6 +21,7 @@ class AiFeedbackOverlay extends ConsumerStatefulWidget {
 
 class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   late final AnimationController? _animationController;
+  late final void Function() _listener;
 
   @override
   void initState() {
@@ -35,7 +36,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
     ref
         .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
         .initAnimationController(_animationController!);
-    widget.videoPlayerController.addListener(() {
+    _listener = () {
       final value = widget.videoPlayerController.value;
       final videoValue = value.position.inMicroseconds.toDouble() /
           value.duration.inMicroseconds;
@@ -44,13 +45,14 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
       } else {
         _animationController?.stop();
       }
-    });
+    };
+    widget.videoPlayerController.addListener(_listener);
   }
 
   @override
   void dispose() {
     widget.videoPlayerController.removeListener(() {});
-    _animationController?.removeListener(() {});
+    _animationController?.removeListener(_listener);
     ref
         .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
         .initAnimationController(null);
@@ -149,6 +151,56 @@ class AiFeedbackOverlayPainter extends CustomPainter {
     }
   }
 
+  Offset? makeOffset(List<double?> vals) {
+    if (vals[0] == null || vals[1] == null) return null;
+    return Offset(vals[0]!, vals[1]!);
+  }
+
+  bool triangleCCW(Offset a, Offset b, Offset c) {
+    double val = (a.dy - b.dy) * (c.dx - a.dx) + (b.dx - a.dx) * (c.dy - a.dy);
+    if (val.abs() < 1e-7) throw Error;
+    return val >= 0;
+  }
+
+  List<Offset>? hull(Offset a, Offset b, Offset c, Offset d) {
+    late bool abc, abd, bcd, cad;
+    try {
+      abc = triangleCCW(a, b, c);
+      abd = triangleCCW(a, b, d);
+      bcd = triangleCCW(b, c, d);
+      cad = triangleCCW(c, a, d);
+    } catch (_) {
+      return null;
+    }
+
+    int cntSamesign = 0;
+    if (abc == abd) cntSamesign += 1;
+    if (abc == bcd) cntSamesign += 1;
+    if (abc == cad) cntSamesign += 1;
+
+    if (cntSamesign == 3) {
+      return [a, b, c];
+    } else if (cntSamesign == 2) {
+      if (abc != abd) {
+        return [a, d, b, c];
+      } else if (abc != bcd) {
+        return [a, b, d, c];
+      } else {
+        return [a, b, c, d];
+      }
+    } else if (cntSamesign > 0) {
+      if (abc == abd) {
+        return [a, b, d];
+      } else if (abc == bcd) {
+        return [b, c, d];
+      } else if (abc == cad) {
+        return [c, a, d];
+      }
+    } else {
+      return null;
+    }
+  }
+
   void drawQuad({
     required Size size,
     required Canvas canvas,
@@ -161,22 +213,26 @@ class AiFeedbackOverlayPainter extends CustomPainter {
           .toColor()
           .withOpacity(squareOpacity)
       ..style = PaintingStyle.fill;
-    double x1 = values[lineIndexes[0]]! * size.width;
-    double y1 = values[lineIndexes[0] + 1]! * size.height;
-    double x2 = values[lineIndexes[1]]! * size.width;
-    double y2 = values[lineIndexes[1] + 1]! * size.height;
-    double x3 = values[lineIndexes[2]]! * size.width;
-    double y3 = values[lineIndexes[2] + 1]! * size.height;
-    double x4 = values[lineIndexes[3]]! * size.width;
-    double y4 = values[lineIndexes[3] + 1]! * size.height;
+    Offset a, b, c, d;
+    try {
+      a = makeOffset(values.sublist(lineIndexes[0], lineIndexes[0] + 2))!;
+      b = makeOffset(values.sublist(lineIndexes[1], lineIndexes[1] + 2))!;
+      c = makeOffset(values.sublist(lineIndexes[2], lineIndexes[2] + 2))!;
+      d = makeOffset(values.sublist(lineIndexes[3], lineIndexes[3] + 2))!;
+    } catch (_) {
+      return;
+    }
+    List<Offset>? drawValues = hull(a, b, c, d);
+    if (drawValues == null) return;
+    if (drawValues.length == 3) {
+      drawValues.add(drawValues[0]);
+    }
+    drawValues = drawValues
+        .map((e) => Offset(e.dx * size.width, e.dy * size.height))
+        .toList();
+
     canvas.drawPath(
-      Path()
-        ..addPolygon([
-          Offset(x1, y1),
-          Offset(x2, y2),
-          Offset(x4, y4),
-          Offset(x3, y3),
-        ], true),
+      Path()..addPolygon(drawValues, true),
       quadPaint,
     );
   }
@@ -185,7 +241,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     int currentIdx = (animationValue * frames).toInt() * 34;
     List<double?> currentJoints = joints.sublist(currentIdx, currentIdx + 35);
-
+    if (currentIdx > currentJoints.length) return;
     if (lineOverlay) {
       /// draw lines
       drawNearLine(
@@ -216,7 +272,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
       /// draw circles
       /// 0~9는 머리이므로 제외
       for (int i = 10; i < currentJoints.length - 2; i += 2) {
-        if (currentJoints[i] == null) continue;
+        if (currentJoints[i] == null || currentJoints[i + 1] == null) continue;
         canvas.drawCircle(
           Offset(
             currentJoints[i]! * size.width,

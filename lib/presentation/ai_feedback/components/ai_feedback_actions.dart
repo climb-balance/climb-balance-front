@@ -34,6 +34,7 @@ class AiFeedbackActions extends ConsumerWidget {
             .toggleActionOpen(videoPlayerController.value.isPlaying);
       },
       child: Stack(
+        fit: StackFit.expand,
         children: [
           Scaffold(
             backgroundColor: Colors.transparent,

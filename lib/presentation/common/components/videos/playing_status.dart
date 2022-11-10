@@ -16,17 +16,22 @@ class PlayingStatus extends StatefulWidget {
 }
 
 class _PlayingStatusState extends State<PlayingStatus> {
+  late final void Function() _listener;
+
   @override
   void initState() {
     super.initState();
-    widget.videoPlayerController.addListener(() {
+    _listener = () {
+      debugPrint('asdsd');
       setState(() {});
-    });
+    };
+
+    widget.videoPlayerController.addListener(_listener);
   }
 
   @override
   void dispose() {
-    widget.videoPlayerController.removeListener(() {});
+    widget.videoPlayerController.removeListener(_listener);
     super.dispose();
   }
 

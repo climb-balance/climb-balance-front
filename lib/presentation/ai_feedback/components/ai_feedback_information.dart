@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../common/components/ai/ai_score.dart';
 import 'ai_feedback_overlay.dart';
-import 'ai_score.dart';
 
 class AiFeedbackInformation extends ConsumerWidget {
   final int storyId;
@@ -46,10 +46,7 @@ class AiFeedbackInformation extends ConsumerWidget {
               child: TabBarView(
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  AiScore(
-                    precision: precision,
-                    balance: balance,
-                  ),
+                  AiScore(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(

@@ -49,7 +49,6 @@ class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen>
   @override
   void dispose() {
     trimmer.dispose();
-    _tabController.removeListener(() {});
     _tabController.dispose();
     super.dispose();
   }
