@@ -85,16 +85,29 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
               child: Image.network(
                 image,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: color.errorContainer,
-                  child: Icon(
-                    Icons.error,
-                    color: color.error,
-                  ),
-                ),
+                errorBuilder: (_, __, ___) {
+                  debugPrint(image);
+                  if (image == "") {
+                    return Container(
+                      color: color.surface,
+                      child: Transform.scale(
+                        scale: 0.5,
+                        child: const CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  return Container(
+                    color: color.errorContainer,
+                    child: Icon(
+                      Icons.error,
+                      color: color.error,
+                    ),
+                  );
+                },
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;
+
                   return Container(
                     color: color.surface,
                     child: Transform.scale(
