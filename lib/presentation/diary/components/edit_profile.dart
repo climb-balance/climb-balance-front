@@ -58,10 +58,6 @@ class EditProfile extends ConsumerWidget {
                         .updateNickname,
                   ),
                 ),
-                IconButton(
-                    onPressed:
-                        ref.read(diaryViewModelProvider.notifier).endEditMode,
-                    icon: const Icon(Icons.check)),
               ],
             ),
             SizedBox(

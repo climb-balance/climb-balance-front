@@ -5,12 +5,10 @@ import 'avatar_picker.dart';
 
 class TopProfileInfo extends StatelessWidget {
   final User user;
-  final void Function() onEdit;
 
   const TopProfileInfo({
     Key? key,
     required this.user,
-    required this.onEdit,
   }) : super(key: key);
 
   @override
@@ -26,15 +24,9 @@ class TopProfileInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  user.nickname,
-                  style: theme.textTheme.headline5,
-                ),
-                IconButton(onPressed: onEdit, icon: const Icon(Icons.edit)),
-              ],
+            Text(
+              user.nickname,
+              style: theme.textTheme.headline5,
             ),
             Text(user.description),
             Text('${user.height}cm | ${user.weight}kg'),
