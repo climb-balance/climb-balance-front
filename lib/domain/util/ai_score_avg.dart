@@ -1,5 +1,6 @@
 import 'package:climb_balance/presentation/ai_feedback/models/ai_score_per_frame.dart';
 
+// TODO 이게 여기가 맞나.
 double? perFrameScoreAvg({
   required AiScorePerFrame aiScorePerFrame,
   required int idx,
