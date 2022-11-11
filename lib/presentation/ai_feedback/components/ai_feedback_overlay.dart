@@ -102,12 +102,13 @@ class AiFeedbackOverlayPainter extends CustomPainter {
   final int frames;
   final bool lineOverlay;
   final bool squareOverlay;
-  final List<int> rightIndexes = [20, 16, 12, 24, 28, 32];
-  final List<int> leftIndexes = [18, 14, 10, 22, 26, 30];
-  final List<int> rlPair1Indexes = [10, 12];
-  final List<int> rlPair2Indexes = [22, 24];
-  final List<int> drawQuadIndexes = [18, 20, 30, 32];
+  final List<int> rightIndexes = [14, 16, 18, 20, 22, 24];
+  final List<int> leftIndexes = [2, 4, 6, 8, 10, 12];
+  final List<int> rlPair1Indexes = [6, 18];
+  final List<int> rlPair2Indexes = [8, 20];
+  final List<int> drawQuadIndexes = [2, 12, 14, 24];
   final double squareOpacity;
+  final int jointsLength = 26;
 
   AiFeedbackOverlayPainter({
     required this.animationValue,
@@ -240,9 +241,11 @@ class AiFeedbackOverlayPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    int currentIdx = (animationValue * frames).toInt() * 34;
-    if (currentIdx + 34 >= joints.length) return;
-    List<double?> currentJoints = joints.sublist(currentIdx, currentIdx + 35);
+    int currentFrame = (animationValue * frames).toInt();
+    int currentIdx = currentFrame * jointsLength;
+    if (currentIdx + jointsLength >= joints.length) return;
+    List<double?> currentJoints =
+        joints.sublist(currentIdx, currentIdx + jointsLength + 1);
 
     if (lineOverlay) {
       /// draw lines
@@ -273,7 +276,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
 
       /// draw circles
       /// 0~9는 머리이므로 제외
-      for (int i = 10; i < currentJoints.length - 2; i += 2) {
+      for (int i = 0; i < currentJoints.length - 2; i += 2) {
         if (currentJoints[i] == null || currentJoints[i + 1] == null) continue;
         canvas.drawCircle(
           Offset(
@@ -286,7 +289,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
       }
     }
 
-    if (scores[currentIdx ~/ 34] == null || !squareOverlay) {
+    if (scores[currentFrame] == null || !squareOverlay) {
       return;
     }
     drawQuad(
@@ -294,7 +297,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
       canvas: canvas,
       values: currentJoints,
       lineIndexes: drawQuadIndexes,
-      currentScore: scores[currentIdx ~/ 34],
+      currentScore: scores[currentFrame],
     );
   }
 
