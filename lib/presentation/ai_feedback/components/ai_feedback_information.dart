@@ -25,6 +25,9 @@ class AiFeedbackInformation extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     final value = videoPlayerController.value;
+    final totalScore = ref.watch(
+      aiFeedbackViewModelProvider(storyId).select((value) => value.totalScore),
+    );
     return Container(
       height: size.height * 0.6,
       width: size.width,
@@ -39,9 +42,11 @@ class AiFeedbackInformation extends ConsumerWidget {
             const AiInformationTabBar(),
             Expanded(
               child: TabBarView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  AiScore(),
+                  AiScore(
+                    aiScoreState: totalScore,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(

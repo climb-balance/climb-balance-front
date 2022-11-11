@@ -3,7 +3,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class AiScore extends StatelessWidget {
-  const AiScore({Key? key}) : super(key: key);
+  final AiScoreState aiScoreState;
+
+  const AiScore({Key? key, required this.aiScoreState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +13,7 @@ class AiScore extends StatelessWidget {
       width: 50,
       height: 50,
       child: PentagonRadarChart(
-        aiScoreState: AiScoreState(
-            balance: 0.5, inertia: 0.3, accuracy: 0.1, angle: 0.2, moment: 0.5),
+        aiScoreState: aiScoreState,
       ),
     );
   }
