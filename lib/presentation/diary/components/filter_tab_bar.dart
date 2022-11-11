@@ -26,8 +26,8 @@ class FilterTabBar extends StatelessWidget {
           children: const [
             FilterItem(filterTitle: 'ALL', filter: StoriesFilter.noFilter()),
             FilterItem(filterTitle: 'AI', filter: StoriesFilter.aiOnly()),
-            FilterItem(
-                filterTitle: 'EXPERT', filter: StoriesFilter.expertOnly()),
+            // FilterItem(
+            //     filterTitle: 'EXPERT', filter: StoriesFilter.expertOnly()),
           ],
         ),
       ),

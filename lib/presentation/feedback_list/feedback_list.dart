@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../presentation/common/components/tags.dart';
 import '../common/components/bot_navigation_bar.dart';
 import '../common/components/stars.dart';
+import '../common/components/tags/tags.dart';
 
 class FeedbackList extends ConsumerStatefulWidget {
   const FeedbackList({Key? key}) : super(key: key);

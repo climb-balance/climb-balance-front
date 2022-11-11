@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../domain/model/story_tag.dart';
-import '../../common/components/tags.dart';
+import '../../common/components/tags/tags.dart';
 
 class StoryOverlayAppBar extends StatelessWidget {
   final StoryTags tags;
