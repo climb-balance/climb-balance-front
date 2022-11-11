@@ -121,9 +121,8 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       final confirm = await customShowConfirm(
           context: context, title: '경고', content: '정말로 삭제하시겠습니까?');
       if (!confirm) return;
+      await repository.deleteStory(storyId);
+      loadStories();
     });
-
-    await repository.deleteStory(storyId);
-    loadStories();
   }
 }
