@@ -23,6 +23,43 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
     _tapPosition = details.globalPosition;
   }
 
+  void _showStoryOptions(
+      {required RenderBox overlay, required BuildContext context}) {
+    showMenu(
+      context: context,
+      position: RelativeRect.fromRect(
+        _tapPosition & const Size(40, 40),
+        Offset.zero & overlay.size,
+      ),
+      items: [
+        PopupMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const <Widget>[
+              Icon(Icons.edit),
+              Text("수정하기"),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            ref.read(diaryViewModelProvider.notifier).deleteStory(
+                  storyId: widget.story.storyId,
+                  context: context,
+                );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const <Widget>[
+              Icon(Icons.delete),
+              Text("삭제하기"),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final image = ref
@@ -42,38 +79,9 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
       onLongPress: () {
         final RenderBox overlay =
             Overlay.of(context)?.context.findRenderObject() as RenderBox;
-        showMenu(
+        _showStoryOptions(
+          overlay: overlay,
           context: context,
-          position: RelativeRect.fromRect(
-            _tapPosition & Size(40, 40),
-            Offset.zero & overlay.size,
-          ),
-          items: [
-            PopupMenuItem(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(Icons.edit),
-                  Text("수정하기"),
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              onTap: () {
-                ref.read(diaryViewModelProvider.notifier).deleteStory(
-                      storyId: widget.story.storyId,
-                      context: context,
-                    );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const <Widget>[
-                  Icon(Icons.delete),
-                  Text("삭제하기"),
-                ],
-              ),
-            )
-          ],
         );
       },
       child: ClipRRect(
@@ -86,7 +94,6 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
                 image,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) {
-                  debugPrint(image);
                   if (image == "") {
                     return Container(
                       color: color.surface,

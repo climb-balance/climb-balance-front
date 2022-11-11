@@ -11,6 +11,7 @@ import '../../domain/common/tag_selector_provider.dart';
 import '../../domain/const/route_name.dart';
 import '../../domain/model/result.dart';
 import '../common/custom_dialog.dart';
+import '../common/custom_snackbar.dart';
 import 'components/modal_picker.dart';
 import 'story_upload_state.dart';
 
@@ -124,9 +125,8 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
     final Result<void> result =
         await repository.createStory(storyUpload: state);
     result.when(
-      success: (value) {
-        customShowDialog(
-            context: context, title: '업로드 성공', content: '스토리 업로드 완료');
+      success: (value) async {
+        showCustomSnackbar(context: context, message: '업로드 성공');
         context.pop();
       },
       error: (message) {
