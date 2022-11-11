@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/animation.dart';
@@ -99,31 +98,6 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     Future.delayed(const Duration(milliseconds: 300), () {
       state = state.copyWith(isStatusChanging: false);
     });
-  }
-
-  int longestGoodLength() {
-    int maxLength = 0;
-    int curLength = 0;
-    for (int i = 0; i < state.scores.length; i++) {
-      if (state.scores[i] == 1) {
-        curLength += 1;
-        maxLength = max(maxLength, curLength);
-      } else {
-        curLength = 0;
-      }
-    }
-
-    return maxLength;
-  }
-
-  int goodCount() {
-    int curLength = 0;
-    for (int i = 0; i < state.scores.length; i++) {
-      if (state.scores[i] == 1) {
-        curLength += 1;
-      }
-    }
-    return curLength;
   }
 
   void saveAndShare() async {

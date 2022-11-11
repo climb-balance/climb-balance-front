@@ -9,7 +9,7 @@ part 'home_state.g.dart';
 class HomeState with _$HomeState {
   const factory HomeState({
     AiStat? aiStat,
-    @Default([1, 2, 3, 4, 5]) List<int> storyCount,
+    @Default([0, 0, 0, 0, 0]) List<int> storyCount,
     @Default(0) int continuity,
     @Default(2) int unread,
   }) = _HomeState;

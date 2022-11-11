@@ -1,4 +1,6 @@
+import 'package:climb_balance/domain/util/ai_score_avg.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/models/ai_score_per_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -74,9 +76,10 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
           child: CustomPaint(
             painter: AiFeedbackOverlayPainter(
               animationValue: _animationController!.value,
-              scores: ref.watch(
-                aiFeedbackViewModelProvider(widget.storyId)
-                    .select((value) => value.scores),
+              perFrameScore: ref.watch(
+                aiFeedbackViewModelProvider(widget.storyId).select(
+                  (value) => value.perFrameScore,
+                ),
               ),
               joints: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
                   .select((value) => value.joints)),
@@ -97,7 +100,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
 
 class AiFeedbackOverlayPainter extends CustomPainter {
   final double animationValue;
-  final List<double?> scores;
+  final AiScorePerFrame perFrameScore;
   final List<double?> joints;
   final int frames;
   final bool lineOverlay;
@@ -112,7 +115,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
 
   AiFeedbackOverlayPainter({
     required this.animationValue,
-    required this.scores,
+    required this.perFrameScore,
     required this.joints,
     required this.frames,
     required this.lineOverlay,
@@ -289,7 +292,9 @@ class AiFeedbackOverlayPainter extends CustomPainter {
       }
     }
 
-    if (scores[currentFrame] == null || !squareOverlay) {
+    final score =
+        perFrameScoreAvg(aiScorePerFrame: perFrameScore, idx: currentFrame);
+    if (score == null || !squareOverlay) {
       return;
     }
     drawQuad(
@@ -297,7 +302,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
       canvas: canvas,
       values: currentJoints,
       lineIndexes: drawQuadIndexes,
-      currentScore: scores[currentFrame],
+      currentScore: score,
     );
   }
 

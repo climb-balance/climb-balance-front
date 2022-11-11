@@ -21,16 +21,19 @@ class HomeAppBar extends ConsumerWidget with PreferredSizeWidget {
       centerTitle: true,
       actions: [
         Padding(
-            padding: const EdgeInsets.only(
-              right: 4,
+          padding: const EdgeInsets.only(
+            right: 4,
+          ),
+          child: IconButton(
+            icon: NotificationIcon(
+              unread: ref
+                  .watch(homeViewModelProvider.select((value) => value.unread)),
             ),
-            child: IconButton(
-              icon: NotificationIcon(
-                unread: ref.watch(
-                    homeViewModelProvider.select((value) => value.unread)),
-              ),
-              onPressed: () {},
-            )),
+            onPressed: () {
+              // TODO
+            },
+          ),
+        ),
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:climb_balance/domain/util/ai_score_avg.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -45,6 +46,17 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
   Widget build(BuildContext context) {
     final AiFeedbackState detail =
         ref.watch(aiFeedbackViewModelProvider(widget.storyId));
+    final gradientColors = <Color>[];
+    for (int i = 0; i < detail.frames; i += 1) {
+      final score =
+          perFrameScoreAvg(aiScorePerFrame: detail.perFrameScore, idx: i);
+      if (score == null) {
+        gradientColors.add(Colors.transparent);
+      } else {
+        gradientColors.add(
+            HSVColor.fromAHSV(0.5, 125 * (score! * 0.5 + 0.5), 1, 1).toColor());
+      }
+    }
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
@@ -54,13 +66,7 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
             height: 5,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: detail.scores.map((score) {
-                  if (score == null) {
-                    return Colors.transparent;
-                  }
-                  return HSVColor.fromAHSV(0.5, 125 * (score * 0.5 + 0.5), 1, 1)
-                      .toColor();
-                }).toList(),
+                colors: gradientColors,
               ),
             ),
           ),

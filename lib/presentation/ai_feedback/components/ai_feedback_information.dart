@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../common/components/ai/ai_score.dart';
 import 'ai_feedback_overlay.dart';
+import 'ai_score.dart';
 
 class AiFeedbackInformation extends ConsumerWidget {
   final int storyId;
@@ -24,11 +24,6 @@ class AiFeedbackInformation extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
-    final precision = ref
-        .read(aiFeedbackViewModelProvider(storyId).notifier)
-        .longestGoodLength();
-    final balance =
-        ref.read(aiFeedbackViewModelProvider(storyId).notifier).goodCount();
     final value = videoPlayerController.value;
     return Container(
       height: size.height * 0.6,
@@ -78,9 +73,9 @@ class AiFeedbackInformation extends ConsumerWidget {
                                 animationValue:
                                     formatTimeTextToSecond('00:10') /
                                         value.duration.inSeconds,
-                                scores: ref.watch(
+                                perFrameScore: ref.watch(
                                   aiFeedbackViewModelProvider(storyId)
-                                      .select((value) => value.scores),
+                                      .select((value) => value.perFrameScore),
                                 ),
                                 joints: ref.watch(
                                     aiFeedbackViewModelProvider(storyId)
