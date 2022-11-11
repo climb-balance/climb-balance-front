@@ -2,15 +2,32 @@ import 'package:climb_balance/presentation/ai_feedback/components/pentagon_radar
 import 'package:climb_balance/presentation/ai_feedback/models/ai_score_state.dart';
 import 'package:flutter/material.dart';
 
-class AiScore extends StatelessWidget {
+class AiScoreTab extends StatelessWidget {
   final AiScoreState aiScoreState;
 
-  const AiScore({Key? key, required this.aiScoreState}) : super(key: key);
+  const AiScoreTab({Key? key, required this.aiScoreState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PentagonRadarChart(
-      aiScoreState: aiScoreState,
+    final color = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    return Column(
+      children: [
+        Text(
+          '${aiScoreState.getOverallScore()}점',
+          style: text.headline5?.copyWith(
+            color: color.primary,
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Expanded(
+          child: PentagonRadarChart(
+            aiScoreState: aiScoreState,
+          ),
+        ),
+      ],
     );
   }
 }

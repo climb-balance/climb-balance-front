@@ -1,6 +1,7 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
 import 'package:climb_balance/presentation/common/custom_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
@@ -37,6 +38,14 @@ class AiFeedbackActions extends ConsumerWidget {
         fit: StackFit.expand,
         children: [
           Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              leading: BackIconButton(
+                onPressed: () {
+                  context.pop();
+                },
+              ),
+            ),
             backgroundColor: Colors.transparent,
             floatingActionButtonAnimator: NoFabScalingAnimation(),
             floatingActionButtonLocation: CustomFabLoc(),

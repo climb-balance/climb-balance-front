@@ -20,7 +20,6 @@ class AiFeedbackInformation extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
     final totalScore = ref.watch(
@@ -44,28 +43,13 @@ class AiFeedbackInformation extends ConsumerWidget {
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          '${totalScore.getOverallScore()}점',
-                          style: text.headline5?.copyWith(
-                            color: color.primary,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Expanded(
-                          child: AiScore(
-                            aiScoreState: totalScore,
-                          ),
-                        ),
-                      ],
+                    AiScoreTab(
+                      aiScoreState: totalScore,
                     ),
                     AnalysisTab(
                       videoPlayerController: videoPlayerController,
                       storyId: storyId,
-                      timestamps: [10000, 15000],
+                      timestamps: [1230, 10000, 15000],
                     ),
                     Text('sd'),
                   ],

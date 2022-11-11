@@ -103,3 +103,17 @@ class BackIcon extends StatelessWidget {
     );
   }
 }
+
+class BackIconButton extends StatelessWidget {
+  final void Function() onPressed;
+
+  const BackIconButton({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(onPressed: onPressed, icon: BackIcon());
+  }
+}
