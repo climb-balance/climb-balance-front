@@ -23,7 +23,6 @@ class AiFeedbackInformation extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
-    final value = videoPlayerController.value;
     final totalScore = ref.watch(
       aiFeedbackViewModelProvider(storyId).select((value) => value.totalScore),
     );
@@ -45,15 +44,29 @@ class AiFeedbackInformation extends ConsumerWidget {
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(40),
-                      child: AiScore(
-                        aiScoreState: totalScore,
-                      ),
+                    Column(
+                      children: [
+                        Text(
+                          '${totalScore.getOverallScore()}점',
+                          style: text.headline5?.copyWith(
+                            color: color.primary,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Expanded(
+                          child: AiScore(
+                            aiScoreState: totalScore,
+                          ),
+                        ),
+                      ],
                     ),
                     AnalysisTab(
-                        videoPlayerController: videoPlayerController,
-                        storyId: storyId),
+                      videoPlayerController: videoPlayerController,
+                      storyId: storyId,
+                      timestamps: [10000, 15000],
+                    ),
                     Text('sd'),
                   ],
                 ),

@@ -9,12 +9,8 @@ class AiScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 50,
-      child: PentagonRadarChart(
-        aiScoreState: aiScoreState,
-      ),
+    return PentagonRadarChart(
+      aiScoreState: aiScoreState,
     );
   }
 }

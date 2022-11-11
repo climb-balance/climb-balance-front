@@ -27,4 +27,10 @@ class AiScoreState with _$AiScoreState {
 
   factory AiScoreState.fromJson(Map<String, dynamic> json) =>
       _$AiScoreStateFromJson(json);
+
+  const AiScoreState._();
+
+  int getOverallScore() {
+    return (angle + balance + accuracy + moment + inertia) ~/ 5 * 100;
+  }
 }
