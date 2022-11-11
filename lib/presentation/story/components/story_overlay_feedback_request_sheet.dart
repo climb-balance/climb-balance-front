@@ -30,18 +30,18 @@ class StoryOverlayFeedbackRequestSheet extends ConsumerWidget {
                   icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
             ),
           ),
-        if (story.expertStatus == FeedbackStatus.possible)
-          SizedBox(
-            height: 60,
-            child: TextButton(
-              onPressed: () {
-                // TODO expert
-                notifier.requestAiFeedback(context);
-              },
-              child: const RowIconDetail(
-                  icon: Icon(Icons.my_library_books), detail: '전문가 피드백 요청하기'),
-            ),
-          ),
+        // if (story.expertStatus == FeedbackStatus.possible)
+        //   SizedBox(
+        //     height: 60,
+        //     child: TextButton(
+        //       onPressed: () {
+        //         // TODO expert
+        //         notifier.requestAiFeedback(context);
+        //       },
+        //       child: const RowIconDetail(
+        //           icon: Icon(Icons.my_library_books), detail: '전문가 피드백 요청하기'),
+        //     ),
+        //   ),
       ],
     );
   }

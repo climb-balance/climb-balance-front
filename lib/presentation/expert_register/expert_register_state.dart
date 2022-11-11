@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'expert_register_state.freezed.dart';
@@ -13,7 +11,7 @@ class ExpertRegisterState with _$ExpertRegisterState {
     @Default('') String description,
     @Default(-1) int climbingCenterId,
     @Default('') String code,
-    @JsonKey(ignore: true) File? tmpImage,
+    @JsonKey(ignore: true) String? profileImagePath,
   }) = _ExpertRegisterState;
 
   factory ExpertRegisterState.fromJson(Map<String, dynamic> json) =>

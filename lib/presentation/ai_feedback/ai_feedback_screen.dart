@@ -1,14 +1,14 @@
-import 'dart:math';
-
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/components/ai_feedback_actions.dart';
+import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../domain/util/duration_time.dart';
-import '../common/components/stars.dart';
 import '../common/ui/theme/specific_theme.dart';
-import 'ai_feedback_state.dart';
+import 'components/ai_feedback_information.dart';
+import 'components/ai_feedback_overlay.dart';
+import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
   final int storyId;
@@ -19,248 +19,125 @@ class AiFeedbackScreen extends ConsumerStatefulWidget {
   ConsumerState<AiFeedbackScreen> createState() => _AiFeedbackScreenState();
 }
 
-class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen> {
-  late final VideoPlayerController _controller;
+class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
+    with TickerProviderStateMixin {
+  late final VideoPlayerController _videoPlayerController;
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
+  void togglePlaying() {
+    if (!_videoPlayerController.value.isInitialized) return;
+    _videoPlayerController.value.isPlaying
+        ? _videoPlayerController.pause()
+        : _videoPlayerController.play();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = ref.watch(aiFeedbackViewModelProvider(widget.storyId));
-    final notifier =
-        ref.read(aiFeedbackViewModelProvider(widget.storyId).notifier);
-    _controller = VideoPlayerController.network(
-      notifier.getStoryAiVideoPath(),
-      formatHint: VideoFormat.hls,
-    )..initialize().then((value) {
-        _controller.setLooping(true);
-        _controller.play();
-        setState(() {});
-      });
-    final size = MediaQuery.of(context).size;
-    return StoryViewTheme(
-      child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _controller.value.isInitialized
-                ? Expanded(
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(
-                          _controller,
-                        ),
-                      ),
-                    ),
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-            if (_controller.value.isInitialized)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AiFeedbackProgressBar(
-                  detail: provider,
-                  controller: _controller,
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AiFeedbackInformation extends StatelessWidget {
-  final AiFeedbackState detail;
-
-  const AiFeedbackInformation({Key? key, required this.detail})
-      : super(key: key);
-
-  int longestGoodLength() {
-    int maxLength = 0;
-    int curLength = 0;
-    for (int i = 0; i < detail.value.length; i++) {
-      if (detail.value[i] == 1) {
-        curLength += 1;
-        maxLength = max(maxLength, curLength);
-      } else {
-        curLength = 0;
-      }
-    }
-
-    return maxLength;
-  }
-
-  int goodCount() {
-    int curLength = 0;
-    for (int i = 0; i < detail.value.length; i++) {
-      if (detail.value[i] == 1) {
-        curLength += 1;
-      }
-    }
-    return curLength;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      color: theme.colorScheme.surface,
-      height: 150,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AiFeedbackScore(
-                precision: longestGoodLength(), balance: goodCount()),
-            const Text('00:43~00:58 구간에서 특히 자세가 나빴습니다.')
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AiFeedbackProgressBar extends StatefulWidget {
-  final AiFeedbackState detail;
-  final VideoPlayerController controller;
-
-  const AiFeedbackProgressBar(
-      {Key? key, required this.controller, required this.detail})
-      : super(key: key);
-
-  @override
-  State<AiFeedbackProgressBar> createState() => _AiFeedbackProgressBarState();
-}
-
-class _AiFeedbackProgressBarState extends State<AiFeedbackProgressBar> {
-  double progress = 0.0;
-  String progressText = "00:00";
-  late final List<Color> colors;
 
   @override
   void initState() {
     super.initState();
-    colors = widget.detail.value.map((val) {
-      if (val == 0) {
-        return Colors.grey;
-      } else if (val == 1) {
-        return Colors.green;
-      } else {
-        return Colors.red;
-      }
-    }).toList();
-    setState(() {});
-    widget.controller.addListener(() {
-      final value = widget.controller.value;
-      progress = value.position.inMilliseconds / value.duration.inMilliseconds;
-      progressText = formatDuration(value.position).substring(3);
+    _videoPlayerController = VideoPlayerController.network(
+      ref
+          .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+          .getStoryAiVideoPath(),
+      formatHint: VideoFormat.hls,
+    );
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+      _videoPlayerController.setLooping(true);
       setState(() {});
     });
   }
 
   @override
   void dispose() {
+    _videoPlayerController.removeListener(() {});
+    _videoPlayerController.dispose();
     super.dispose();
-    widget.controller.removeListener(() {});
+  }
+
+  void _onTap() {
+    final bool isInformOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isInformOpen));
+    if (!isInformOpen) {
+      ref
+          .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+          .toggleActionOpen(_videoPlayerController.value.isPlaying);
+      return;
+    }
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .toggleInformation();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Stack(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 10),
-          child: Container(
-            height: 5,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: colors),
-            ),
-          ),
-        ),
-        AnimatedPositioned(
-          left: size.width * progress,
-          duration: Duration(
-            seconds: 1,
-          ),
-          child: Column(
-            children: [
-              Text(
-                progressText,
+    final bool actionsOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.actionsOpen));
+    final bool isInformOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isInformOpen));
+    return StoryViewTheme(
+      child: SafeArea(
+        child: Stack(
+          children: [
+            _videoPlayerController.value.isInitialized
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: NoEffectInkWell(
+                          onTap: _onTap,
+                          child: Center(
+                            widthFactor: double.infinity,
+                            child: Stack(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio:
+                                      _videoPlayerController.value.aspectRatio,
+                                  child: VideoPlayer(
+                                    _videoPlayerController,
+                                  ),
+                                ),
+                                AiFeedbackOverlay(
+                                  videoPlayerController: _videoPlayerController,
+                                  ticker: this,
+                                  storyId: widget.storyId,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (isInformOpen)
+                        AiFeedbackInformation(
+                          storyId: widget.storyId,
+                          videoPlayerController: _videoPlayerController,
+                        ),
+                    ],
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+            if (actionsOpen && !isInformOpen)
+              AiFeedbackActions(
+                togglePlaying: togglePlaying,
+                storyId: widget.storyId,
+                videoPlayerController: _videoPlayerController,
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 12,
-                  width: 3,
-                  color: Colors.white,
+            if (!isInformOpen)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AiFeedbackProgressBar(
+                    storyId: widget.storyId,
+                    videoPlayerController: _videoPlayerController,
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class AiFeedbackScore extends StatelessWidget {
-  final int precision;
-  final int balance;
-
-  const AiFeedbackScore(
-      {Key? key, required this.precision, required this.balance})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              '밸런스',
-              style: theme.textTheme.headline6,
-            ),
-            Stars(
-              numOfStar: precision ~/ 5,
-            ),
           ],
         ),
-        Row(
-          children: [
-            Text(
-              '유연성',
-              style: theme.textTheme.headline6,
-            ),
-            const Stars(
-              numOfStar: 5,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              '정확도',
-              style: theme.textTheme.headline6,
-            ),
-            Stars(
-              numOfStar: balance ~/ 5,
-            ),
-          ],
-        ),
-      ],
+      ),
     );
   }
 }

@@ -7,8 +7,8 @@ class WaitingProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Theme.of(context).shadowColor.withOpacity(0.2),
-        child: Center(
+        color: Colors.black.withOpacity(0.5),
+        child: const Center(
           child: CircularProgressIndicator(),
         ),
       ),

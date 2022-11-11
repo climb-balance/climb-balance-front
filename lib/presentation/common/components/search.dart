@@ -35,8 +35,10 @@ class _SearchTextInputState extends State<SearchTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final color = Theme.of(context).colorScheme;
+    return Container(
       width: MediaQuery.of(context).size.width,
+      color: color.background,
       height: 60,
       child: TextField(
         key: _formKey,

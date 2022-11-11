@@ -1,15 +1,20 @@
+import 'package:climb_balance/presentation/diary/diary_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../domain/common/current_user_provider.dart';
 import '../../common/components/user_profile_info.dart';
+import 'edit_profile.dart';
 
 class SliverProfile extends ConsumerWidget {
   const SliverProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isEditMode = ref
+        .watch(diaryViewModelProvider.select((value) => value.isEditingMode));
     return SliverAppBar(
+      backgroundColor: Colors.transparent,
       actions: [
         Padding(
           padding: const EdgeInsets.all(10),
@@ -20,8 +25,13 @@ class SliverProfile extends ConsumerWidget {
           ),
         ),
       ],
-      toolbarHeight: 150,
-      flexibleSpace: TopProfileInfo(user: ref.watch(currentUserProvider)),
+      toolbarHeight: 120,
+      flexibleSpace: isEditMode
+          ? const EditProfile()
+          : TopProfileInfo(
+              user: ref.watch(currentUserProvider),
+              onEdit: ref.read(diaryViewModelProvider.notifier).onEditMode,
+            ),
     );
   }
 }
@@ -36,7 +46,7 @@ class ProfileOptions extends StatelessWidget {
       alignment: Alignment.topRight,
       child: PopupMenuButton<int>(
         icon: Icon(
-          Icons.more_vert,
+          Icons.filter_alt,
           color: theme.colorScheme.onBackground,
         ),
         itemBuilder: (context) => [
@@ -47,7 +57,7 @@ class ProfileOptions extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.edit,
+                  Icons.filter_alt,
                   color: theme.colorScheme.onBackground,
                 ),
                 const SizedBox(

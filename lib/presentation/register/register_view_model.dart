@@ -8,58 +8,100 @@ import '../../domain/repository/user_repository.dart';
 import 'register_state.dart';
 
 final registerViewModelProvider =
-    StateNotifierProvider<RegisterViewModel, RegisterState>((ref) {
+    StateNotifierProvider.autoDispose<RegisterViewModel, RegisterState>((ref) {
   RegisterViewModel notifier = RegisterViewModel(
       ref: ref, repository: ref.watch(userRepositoryImplProvider));
   return notifier;
 });
 
 class RegisterViewModel extends StateNotifier<RegisterState> {
-  StateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
+  AutoDisposeStateNotifierProviderRef<RegisterViewModel, RegisterState> ref;
   UserRepository repository;
+  KeepAliveLink? link;
 
   RegisterViewModel({required this.ref, required this.repository})
       : super(const RegisterState());
 
+  void goBack(BuildContext context) {
+    if (state.curPage == 0) {
+      context.pop();
+      return;
+    }
+
+    state = state.copyWith(curPage: state.curPage - 1);
+    validateWeightHeight();
+  }
+
+  void goNext(BuildContext context) {
+    if (state.curPage == 2) {
+      _register(context);
+      return;
+    }
+    state = state.copyWith(curPage: state.curPage + 1);
+    validateWeightHeight();
+  }
+
   void updateAccessToken(String accessToken) {
+    link ??= ref.keepAlive();
     state = state.copyWith(accessToken: accessToken);
   }
 
   void updateHeight(int height) {
     state = state.copyWith(height: height);
+    validateWeightHeight();
+  }
+
+  void updateWeight(int weight) {
+    state = state.copyWith(weight: weight);
+    validateWeightHeight();
   }
 
   void updateNickname(String nickname) {
     state = state.copyWith(nickname: nickname);
   }
 
-  void updateWeight(int weight) {
-    state = state.copyWith(weight: weight);
-  }
-
   void updateDescription(String value) {
     state = state.copyWith(description: value);
   }
 
-  void updateSex(bool isMale) {
-    String ch = 'F';
-    if (isMale) {
-      ch = 'M';
-    }
-    state = state.copyWith(sex: ch);
+  void updateSex(String sex) {
+    state = state.copyWith(sex: sex);
   }
 
   void updateProfileImage(String imagePath) {
-    state = state.copyWith(profileImage: imagePath);
+    state = state.copyWith(profileImagePath: imagePath);
   }
 
-  /// form을 검증하는 함수
-  /// 이후 _register를 호출해 업로드한다.
-  void validate(GlobalKey<FormState> formKey, BuildContext context) {
-    if (!formKey.currentState!.validate()) {
-      return;
+  void updatePromotionCheck(bool value) {
+    state = state.copyWith(promotionCheck: value);
+  }
+
+  void updatePersonalCheck(bool value) {
+    state = state.copyWith(personalCheck: value);
+  }
+
+  void updateRequiredCheck(bool value) {
+    state = state.copyWith(requiredCheck: value);
+    validateLast();
+  }
+
+  void validateWeightHeight() {
+    bool result = false;
+    if (state.curPage == 0) {
+      if (state.height >= 100 && state.height <= 200) result = true;
+    } else if (state.curPage == 1) {
+      if (state.weight >= 30 && state.weight <= 120) result = true;
     }
-    _register(context);
+    state = state.copyWith(isValid: result);
+  }
+
+  /// 마지막에 값이 갱신될때마다 업데이트하는 함수
+  void validateLast() {
+    bool result = false;
+    if (state.requiredCheck &&
+        state.nickname.length >= 2 &&
+        state.description.isNotEmpty) result = true;
+    state = state.copyWith(isValid: result);
   }
 
   /// 회원가입을 진행하는 함수
@@ -85,5 +127,6 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             },
           ),
         );
+    link?.close();
   }
 }

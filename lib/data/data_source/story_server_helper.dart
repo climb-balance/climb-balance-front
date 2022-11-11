@@ -32,7 +32,7 @@ class StoryServerHelper {
       );
       storyId = jsonDecode(result)['storyId'];
     } catch (e) {
-      return const Result.error('스토리 업로드 오류');
+      return Result.error('스토리 업로드 오류. 원인 : ${e.toString()}');
     }
 
     return await uploadVideo(storyId, storyUpload.videoPath);
@@ -40,12 +40,12 @@ class StoryServerHelper {
 
   Future<Result<void>> uploadVideo(int storyId, String? videoPath) async {
     try {
-      server.multiPartUpload(
+      await server.multiPartUpload(
           '$serverStoryPath/$storyId$serverVideoPath', videoPath!);
+      return const Result.success(null);
     } catch (e) {
-      return const Result.error('영상 업로드 오류');
+      return Result.error('영상 업로드 오류. 원인 : ${e.toString()}');
     }
-    return const Result.success(null);
   }
 
   Future<Result<Map<String, dynamic>>> getStoryById(int storyId) async {
@@ -85,10 +85,10 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<Iterable>> getStoryAiDetailById(int storyId) async {
+  Future<Result<dynamic>> getStoryAiDetailById(int storyId) async {
     try {
       final body = await server.get(
-          url: '$serverStoryPath/$storyId$serverVideoPath?type=json');
+          url: '$serverStoryPath/$storyId$serverVideoPath?type=overlay');
       return Result.success(jsonDecode(body));
     } catch (e) {
       return const Result.error('영상 불러오기 오류');
@@ -100,9 +100,13 @@ class StoryServerHelper {
     throw UnimplementedError();
   }
 
-  Future<void> deleteStory(int storyId) async {
-    // TODO: implement deleteStory
-    throw UnimplementedError();
+  Future<Result<void>> deleteStory(int storyId) async {
+    try {
+      final body = await server.delete(url: '$serverStoryPath/$storyId');
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('스토리 삭제 오류 ${e.toString()}');
+    }
   }
 
   Future<Result<List<String>>> getCommentById(int storyId) {

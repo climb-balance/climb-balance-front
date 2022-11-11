@@ -1,12 +1,13 @@
 import 'package:climb_balance/presentation/register/register_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
-import '../common/components/button.dart';
+import '../common/components/buttons.dart';
+import '../common/components/my_icons.dart';
 import 'components/height_tab.dart';
 import 'components/register_form_tab.dart';
+import 'components/register_status.dart';
 import 'components/weight_tab.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -18,18 +19,16 @@ class RegisterScreen extends ConsumerStatefulWidget {
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen>
     with SingleTickerProviderStateMixin {
-  int curPage = 0;
-  final formKey = GlobalKey<FormState>();
   late TabController _tabController;
-  late final List<Widget> registerTabs;
+  final List<Widget> registerTabs = [
+    const HeightTab(),
+    const WeightTab(),
+    RegisterFormTab(),
+  ];
+  bool valueCheck = false;
 
   @override
   void initState() {
-    registerTabs = [
-      const HeightTab(),
-      const WeightTab(),
-      RegisterFormTab(formKey: formKey),
-    ];
     _tabController = TabController(length: registerTabs.length, vsync: this);
     super.initState();
   }
@@ -42,54 +41,68 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    _tabController.animateTo(curPage);
+    final color = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    final curPage =
+        ref.watch(registerViewModelProvider.select((value) => value.curPage));
 
+    final isValid =
+        ref.watch(registerViewModelProvider.select((value) => value.isValid));
+    _tabController.animateTo(curPage);
     return Scaffold(
+      backgroundColor: color.background,
       appBar: AppBar(
         title: Text(
-          '${curPage + 1} / ${registerTabs.length}',
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
+          '회원가입',
+          style: text.subtitle1,
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_backspace,
-            color: Theme.of(context).primaryColorDark,
-          ),
+          icon: BackIcon(),
           onPressed: () {
-            if (curPage == 0) {
-              context.pop();
-              return;
-            }
-            curPage -= 1;
-            setState(() {});
+            ref.read(registerViewModelProvider.notifier).goBack(context);
           },
         ),
       ),
       body: MySafeArea(
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _tabController,
-          children: registerTabs,
+        child: Column(
+          children: [
+            RegisterStatus(
+              maxStep: registerTabs.length,
+              currentStep: curPage,
+            ),
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _tabController,
+                children: registerTabs,
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(10),
         child: FullSizeBtn(
           onPressed: () {
-            if (curPage == registerTabs.length - 1) {
-              ref
-                  .read(registerViewModelProvider.notifier)
-                  .validate(formKey, context);
-              return;
+            if (isValid) {
+              ref.read(registerViewModelProvider.notifier).goNext(context);
             }
-            curPage += 1;
-            setState(() {});
           },
-          text: curPage == registerTabs.length - 1 ? '완료' : '다음',
+          color: isValid ? color.primary : color.primaryContainer,
+          child: SizedBox(
+            height: 56,
+            child: Center(
+              child: Text(
+                curPage == registerTabs.length - 1 ? '완료' : '다음',
+                style: text.headline6!.copyWith(
+                  color: color.onPrimary,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

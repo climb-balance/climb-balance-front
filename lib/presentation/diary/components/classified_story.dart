@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../domain/model/story.dart';
-import '../../common/components/story_preview.dart';
-import '../../common/components/tags.dart';
+import '../../story/components/story_preview.dart';
+import 'classified_story_tags.dart';
 
 class ClassifiedStories extends StatelessWidget {
   final List<Story> stories;
@@ -12,57 +11,38 @@ class ClassifiedStories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: Card(
-        shape: RoundedRectangleBorder(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
           children: [
             ClassifiedStoryTags(story: stories[0]),
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children:
-                  stories.map((story) => StoryPreview(story: story)).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ClassifiedStoryTags extends ConsumerWidget {
-  final Story story;
-
-  const ClassifiedStoryTags({Key? key, required this.story}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 0.5,
-            color: theme.colorScheme.outline,
-          ),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            DateTag(
-              date: DateTime.fromMillisecondsSinceEpoch(
-                story.tags.videoTimestamp,
+            Container(
+              decoration: BoxDecoration(
+                color: color.surface,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+              child: GridView.count(
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 8,
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children:
+                    stories.map((story) => StoryPreview(story: story)).toList(),
               ),
             ),
-            LocationTag(location: story.tags.location),
           ],
         ),
       ),

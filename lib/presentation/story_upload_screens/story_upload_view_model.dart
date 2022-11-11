@@ -1,4 +1,5 @@
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
+import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +11,7 @@ import '../../domain/common/tag_selector_provider.dart';
 import '../../domain/const/route_name.dart';
 import '../../domain/model/result.dart';
 import '../common/custom_dialog.dart';
+import '../common/custom_snackbar.dart';
 import 'components/modal_picker.dart';
 import 'story_upload_state.dart';
 
@@ -45,17 +47,16 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
     picker
         .pickVideo(source: isFromCam ? ImageSource.camera : ImageSource.gallery)
         .then((image) async {
-      link.close();
       if (image == null) {
+        link.close();
         return;
       }
+
       state = state.copyWith(videoPath: image.path);
-      Future.microtask(
-        () {
-          // TODO check
-          context.pushNamed(storyUploadRouteName);
-        },
-      );
+      Navigator.pop(context);
+      context.pushNamed(storyUploadRouteName);
+
+      Future.microtask(() => link.close());
     });
   }
 
@@ -120,17 +121,23 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
   }
 
   void upload(BuildContext context) async {
+    ref.read(loadingProvider.notifier).openLoading();
     final Result<void> result =
         await repository.createStory(storyUpload: state);
     result.when(
-      success: (value) {
+      success: (value) async {
+        showCustomSnackbar(context: context, message: '업로드 성공');
         context.pop();
-        customShowDialog(
-            context: context, title: '업로드 성공', content: '스토리 업로드 완료');
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);
       },
     );
+    ref.read(loadingProvider.notifier).closeLoading();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

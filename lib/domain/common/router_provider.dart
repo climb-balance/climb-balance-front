@@ -1,6 +1,7 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account_screen.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_ads_screen.dart';
+import 'package:climb_balance/presentation/ai_feedback/ai_feedback_screen.dart';
 import 'package:climb_balance/presentation/auth/auth_screen.dart';
 import 'package:climb_balance/presentation/auth/components/web_view.dart';
 import 'package:climb_balance/presentation/community/community_screen.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../presentation/diary/diary_screen.dart';
+import '../../presentation/diary/screens/diary_screen.dart';
 import '../../presentation/expert_register/expert_register_screen.dart';
 import '../../presentation/feedback_list/feedback_list.dart';
 import '../../presentation/home/home_screen.dart';
@@ -23,6 +24,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ref.watch(currentUserProvider.select((value) => value.accessToken));
   return GoRouter(
     debugLogDiagnostics: true,
+    // TODO splash
     initialLocation: token == '' ? authPagePath : homePageRoute,
     routes: <GoRoute>[
       GoRoute(
@@ -77,11 +79,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: aiPageSubRoute,
+                name: aiFeedbackRouteName,
                 builder: (context, state) {
                   final storyId = int.parse(state.params['sid']!);
-                  // TODO connect
 
-                  return StoryScreen(
+                  return AiFeedbackScreen(
                     storyId: storyId,
                   );
                 },
