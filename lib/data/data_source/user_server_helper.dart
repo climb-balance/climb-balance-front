@@ -42,14 +42,29 @@ class UserServerHelper {
 
   Future<Result<void>> createUser(RegisterState registerState) async {
     try {
-      final result = await server.post(
-        url: serverAuthPath,
+      final result = await server.multiPartRegister(
+        serverRegisterPath,
+        fileField: 'profileImage',
+        filePath: registerState.profileImagePath,
         data: registerState,
-        accessToken: registerState.accessToken,
       );
       return Result.success(null);
     } catch (e) {
       return Result.error('회원가입 오류 ${e.toString()}');
+    }
+  }
+
+  Future<Result<Map<String, dynamic>>> getMainStatistics(
+      String accessToken) async {
+    try {
+      final result = await server.get(
+        url: '$serverMainPath',
+        accessToken: accessToken,
+      );
+
+      return Result.success(jsonDecode(result));
+    } catch (e) {
+      return Result.error('메인 정보 로드 오류 ${e.toString()}');
     }
   }
 }

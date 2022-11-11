@@ -40,12 +40,12 @@ class StoryServerHelper {
 
   Future<Result<void>> uploadVideo(int storyId, String? videoPath) async {
     try {
-      server.multiPartUpload(
+      await server.multiPartUpload(
           '$serverStoryPath/$storyId$serverVideoPath', videoPath!);
+      return const Result.success(null);
     } catch (e) {
       return Result.error('영상 업로드 오류. 원인 : ${e.toString()}');
     }
-    return const Result.success(null);
   }
 
   Future<Result<Map<String, dynamic>>> getStoryById(int storyId) async {
@@ -100,9 +100,13 @@ class StoryServerHelper {
     throw UnimplementedError();
   }
 
-  Future<void> deleteStory(int storyId) async {
-    // TODO: implement deleteStory
-    throw UnimplementedError();
+  Future<Result<void>> deleteStory(int storyId) async {
+    try {
+      final body = await server.delete(url: '$serverStoryPath/$storyId');
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('스토리 삭제 오류 ${e.toString()}');
+    }
   }
 
   Future<Result<List<String>>> getCommentById(int storyId) {

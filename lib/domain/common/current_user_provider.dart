@@ -68,6 +68,10 @@ class CurrentUserNotifier extends StateNotifier<User> {
     );
   }
 
+  void updateUserInfo(User user) {
+    state = user;
+  }
+
   void updateExpertInfo(ExpertProfile profile) {
     state = state.copyWith(expertProfile: profile, isExpert: true);
   }

@@ -14,6 +14,7 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar> {
   double progressDegree = 0;
   int progressDuration = 500;
+  late final void Function() _listener;
 
   void initProgress() {
     progressDuration = 0;
@@ -24,38 +25,49 @@ class _ProgressBarState extends State<ProgressBar> {
   @override
   void initState() {
     super.initState();
-    widget.videoPlayerController.addListener(() {
+    _listener = () {
       final value = widget.videoPlayerController.value;
       progressDegree =
           (value.position.inMilliseconds / value.duration.inMilliseconds);
 
       setState(() {});
-    });
+    };
+    widget.videoPlayerController.addListener(_listener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.videoPlayerController.removeListener(() {});
+    widget.videoPlayerController.removeListener(_listener);
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final color = Theme.of(context).colorScheme;
     return SizedBox(
       width: size.width,
       child: Padding(
         padding: const EdgeInsets.only(
           top: 10,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            AnimatedContainer(
-              height: 2,
-              width: progressDegree * size.width,
-              color: const ColorScheme.dark().onSurface,
-              duration: Duration(milliseconds: progressDuration),
+            Container(
+              height: 4,
+              width: size.width,
+              color: color.surface,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedContainer(
+                  height: 4,
+                  width: progressDegree * size.width,
+                  color: color.primary,
+                  duration: Duration(milliseconds: progressDuration),
+                ),
+              ],
             ),
           ],
         ),

@@ -41,6 +41,20 @@ class ServerService {
     return body;
   }
 
+  Future<dynamic> delete({required String url, String? accessToken}) async {
+    http.Response res = await http
+        .delete(Uri.parse(serverUrl + url), headers: makeHeaders(accessToken))
+        .timeout(_timeOutDuration)
+        .catchError((err) => throw err)
+        .whenComplete(() {});
+    final statusCode = res.statusCode;
+    final body = res.body;
+    if (statusCode < 200 || statusCode >= 400) {
+      throw HttpException(res.body);
+    }
+    return body;
+  }
+
   Future<dynamic> post(
       {required String url, required dynamic data, String? accessToken}) async {
     http.Response res = await http
@@ -90,6 +104,44 @@ class ServerService {
       final statusCode = res.statusCode;
       if (statusCode < 200 || statusCode >= 400) {
         throw const HttpException('요청 에러');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> multiPartRegister(
+    String url, {
+    String fileField = 'file',
+    required String? filePath,
+    required dynamic data,
+  }) async {
+    Uri uri = Uri.parse('$serverUrl$url');
+    final req = http.MultipartRequest('POST', uri);
+    req.headers['Authorization'] = 'Bearer ${data.accessToken}';
+    try {
+      if (filePath != null) {
+        final multiPartFile =
+            await http.MultipartFile.fromPath(fileField, filePath)
+                .timeout(const Duration(seconds: 2));
+        req.files.add(multiPartFile);
+      }
+      Map<String, dynamic> mapData = {
+        'nickname': data.nickname,
+        'height': data.height,
+        'weight': data.weight,
+        'sex': data.sex,
+        'description': data.description,
+        'promotionCheck': data.promotionCheck,
+        'requiredCheck': data.requiredCheck,
+        'personalCheck': data.personalCheck,
+      };
+      req.fields['data'] = jsonEncode(mapData);
+
+      final res = await req.send();
+      final statusCode = res.statusCode;
+      if (statusCode < 200 || statusCode >= 400) {
+        throw HttpException('요청 에러 ${res.reasonPhrase ?? ''}');
       }
     } catch (e) {
       rethrow;

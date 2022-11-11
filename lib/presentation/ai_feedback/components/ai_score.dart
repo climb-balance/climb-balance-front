@@ -1,53 +1,31 @@
+import 'package:climb_balance/presentation/ai_feedback/components/pentagon_radar_chart.dart';
+import 'package:climb_balance/presentation/ai_feedback/models/ai_score_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/components/stars.dart';
+class AiScoreTab extends StatelessWidget {
+  final AiScoreState aiScoreState;
 
-class AiScore extends StatelessWidget {
-  final int precision;
-  final int balance;
-
-  const AiScore({Key? key, required this.precision, required this.balance})
-      : super(key: key);
+  const AiScoreTab({Key? key, required this.aiScoreState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final color = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          children: [
-            Text(
-              '밸런스',
-              style: theme.textTheme.headline6,
-            ),
-            Stars(
-              numOfStar: precision ~/ 5,
-            ),
-          ],
+        Text(
+          '${aiScoreState.getOverallScore()}점',
+          style: text.headline5?.copyWith(
+            color: color.primary,
+          ),
         ),
-        Row(
-          children: [
-            Text(
-              '유연성',
-              style: theme.textTheme.headline6,
-            ),
-            const Stars(
-              numOfStar: 5,
-            ),
-          ],
+        const SizedBox(
+          height: 16,
         ),
-        Row(
-          children: [
-            Text(
-              '정확도',
-              style: theme.textTheme.headline6,
-            ),
-            Stars(
-              numOfStar: balance ~/ 5,
-            ),
-          ],
+        Expanded(
+          child: PentagonRadarChart(
+            aiScoreState: aiScoreState,
+          ),
         ),
       ],
     );

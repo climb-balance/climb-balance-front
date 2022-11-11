@@ -32,9 +32,26 @@ class PickItem extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(data.id);
           },
-          child: Text(
-            data.name,
-            style: theme.textTheme.subtitle2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 15,
+                width: 15,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: data.selectColors,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                data.name,
+                style: theme.textTheme.subtitle2,
+              ),
+            ],
           ),
         ),
       ),

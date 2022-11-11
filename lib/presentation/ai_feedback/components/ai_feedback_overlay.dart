@@ -1,4 +1,6 @@
+import 'package:climb_balance/domain/util/ai_score_avg.dart';
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/models/ai_score_per_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -21,6 +23,7 @@ class AiFeedbackOverlay extends ConsumerStatefulWidget {
 
 class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   late final AnimationController? _animationController;
+  late final void Function() _listener;
 
   @override
   void initState() {
@@ -32,7 +35,10 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
     )
       ..forward()
       ..repeat();
-    widget.videoPlayerController.addListener(() {
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .initAnimationController(_animationController!);
+    _listener = () {
       final value = widget.videoPlayerController.value;
       final videoValue = value.position.inMicroseconds.toDouble() /
           value.duration.inMicroseconds;
@@ -41,13 +47,17 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
       } else {
         _animationController?.stop();
       }
-    });
+    };
+    widget.videoPlayerController.addListener(_listener);
   }
 
   @override
   void dispose() {
     widget.videoPlayerController.removeListener(() {});
-    _animationController?.removeListener(() {});
+    _animationController?.removeListener(_listener);
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .initAnimationController(null);
     _animationController?.dispose();
     super.dispose();
   }
@@ -56,19 +66,20 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final value = widget.videoPlayerController.value;
+
     if (_animationController == null) return Container();
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
-        return SizedBox(
-          width: size.width,
-          height: size.width * (1 / value.aspectRatio),
+        return AspectRatio(
+          aspectRatio: value.aspectRatio,
           child: CustomPaint(
-            painter: _Painter(
+            painter: AiFeedbackOverlayPainter(
               animationValue: _animationController!.value,
-              scores: ref.watch(
-                aiFeedbackViewModelProvider(widget.storyId)
-                    .select((value) => value.scores),
+              perFrameScore: ref.watch(
+                aiFeedbackViewModelProvider(widget.storyId).select(
+                  (value) => value.perFrameScore,
+                ),
               ),
               joints: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
                   .select((value) => value.joints)),
@@ -87,32 +98,35 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   }
 }
 
-class _Painter extends CustomPainter {
+class AiFeedbackOverlayPainter extends CustomPainter {
   final double animationValue;
-  final List<double?> scores;
+  final AiScorePerFrame perFrameScore;
   final List<double?> joints;
   final int frames;
   final bool lineOverlay;
   final bool squareOverlay;
-  final List<int> rightIndexes = [20, 16, 12, 24, 28, 32];
-  final List<int> leftIndexes = [18, 14, 10, 22, 26, 30];
-  final List<int> rlPair1Indexes = [10, 12];
-  final List<int> rlPair2Indexes = [22, 24];
-  final List<int> drawQuadIndexes = [18, 20, 30, 32];
+  final List<int> rightIndexes = [14, 16, 18, 20, 22, 24];
+  final List<int> leftIndexes = [2, 4, 6, 8, 10, 12];
+  final List<int> rlPair1Indexes = [6, 18];
+  final List<int> rlPair2Indexes = [8, 20];
+  final List<int> drawQuadIndexes = [2, 12, 14, 24];
+  final double squareOpacity;
+  final int jointsLength = 26;
 
-  _Painter({
+  AiFeedbackOverlayPainter({
     required this.animationValue,
-    required this.scores,
+    required this.perFrameScore,
     required this.joints,
     required this.frames,
     required this.lineOverlay,
     required this.squareOverlay,
+    this.squareOpacity = 0.5,
   });
 
   final Paint linePaint = Paint()
     ..color = Colors.purple
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 1;
+    ..strokeWidth = 2;
   final Paint circlePaint = Paint()
     ..color = Colors.blue
     ..style = PaintingStyle.stroke
@@ -142,6 +156,56 @@ class _Painter extends CustomPainter {
     }
   }
 
+  Offset? makeOffset(List<double?> vals) {
+    if (vals[0] == null || vals[1] == null) return null;
+    return Offset(vals[0]!, vals[1]!);
+  }
+
+  bool triangleCCW(Offset a, Offset b, Offset c) {
+    double val = (a.dy - b.dy) * (c.dx - a.dx) + (b.dx - a.dx) * (c.dy - a.dy);
+    if (val.abs() < 1e-7) throw Error;
+    return val >= 0;
+  }
+
+  List<Offset>? hull(Offset a, Offset b, Offset c, Offset d) {
+    late bool abc, abd, bcd, cad;
+    try {
+      abc = triangleCCW(a, b, c);
+      abd = triangleCCW(a, b, d);
+      bcd = triangleCCW(b, c, d);
+      cad = triangleCCW(c, a, d);
+    } catch (_) {
+      return null;
+    }
+
+    int cntSamesign = 0;
+    if (abc == abd) cntSamesign += 1;
+    if (abc == bcd) cntSamesign += 1;
+    if (abc == cad) cntSamesign += 1;
+
+    if (cntSamesign == 3) {
+      return [a, b, c];
+    } else if (cntSamesign == 2) {
+      if (abc != abd) {
+        return [a, d, b, c];
+      } else if (abc != bcd) {
+        return [a, b, d, c];
+      } else {
+        return [a, b, c, d];
+      }
+    } else if (cntSamesign > 0) {
+      if (abc == abd) {
+        return [a, b, d];
+      } else if (abc == bcd) {
+        return [b, c, d];
+      } else if (abc == cad) {
+        return [c, a, d];
+      }
+    } else {
+      return null;
+    }
+  }
+
   void drawQuad({
     required Size size,
     required Canvas canvas,
@@ -150,33 +214,41 @@ class _Painter extends CustomPainter {
     required double? currentScore,
   }) {
     final Paint quadPaint = Paint()
-      ..color = HSVColor.fromAHSV(0.5, 125 * (currentScore! * 0.5 + 0.5), 1, 1)
+      ..color = HSVColor.fromAHSV(1, 125 * (currentScore! * 0.5 + 0.5), 1, 1)
           .toColor()
+          .withOpacity(squareOpacity)
       ..style = PaintingStyle.fill;
-    double x1 = values[lineIndexes[0]]! * size.width;
-    double y1 = values[lineIndexes[0] + 1]! * size.height;
-    double x2 = values[lineIndexes[1]]! * size.width;
-    double y2 = values[lineIndexes[1] + 1]! * size.height;
-    double x3 = values[lineIndexes[2]]! * size.width;
-    double y3 = values[lineIndexes[2] + 1]! * size.height;
-    double x4 = values[lineIndexes[3]]! * size.width;
-    double y4 = values[lineIndexes[3] + 1]! * size.height;
+    Offset a, b, c, d;
+    try {
+      a = makeOffset(values.sublist(lineIndexes[0], lineIndexes[0] + 2))!;
+      b = makeOffset(values.sublist(lineIndexes[1], lineIndexes[1] + 2))!;
+      c = makeOffset(values.sublist(lineIndexes[2], lineIndexes[2] + 2))!;
+      d = makeOffset(values.sublist(lineIndexes[3], lineIndexes[3] + 2))!;
+    } catch (_) {
+      return;
+    }
+    List<Offset>? drawValues = hull(a, b, c, d);
+    if (drawValues == null) return;
+    if (drawValues.length == 3) {
+      drawValues.add(drawValues[0]);
+    }
+    drawValues = drawValues
+        .map((e) => Offset(e.dx * size.width, e.dy * size.height))
+        .toList();
+
     canvas.drawPath(
-      Path()
-        ..addPolygon([
-          Offset(x1, y1),
-          Offset(x2, y2),
-          Offset(x4, y4),
-          Offset(x3, y3),
-        ], true),
+      Path()..addPolygon(drawValues, true),
       quadPaint,
     );
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    int currentIdx = (animationValue * frames).toInt() * 34;
-    List<double?> currentJoints = joints.sublist(currentIdx, currentIdx + 35);
+    int currentFrame = (animationValue * frames).toInt();
+    int currentIdx = currentFrame * jointsLength;
+    if (currentIdx + jointsLength >= joints.length) return;
+    List<double?> currentJoints =
+        joints.sublist(currentIdx, currentIdx + jointsLength + 1);
 
     if (lineOverlay) {
       /// draw lines
@@ -204,22 +276,25 @@ class _Painter extends CustomPainter {
         values: currentJoints,
         lineIndexes: rlPair2Indexes,
       );
+
+      /// draw circles
+      /// 0~9는 머리이므로 제외
+      for (int i = 0; i < currentJoints.length - 2; i += 2) {
+        if (currentJoints[i] == null || currentJoints[i + 1] == null) continue;
+        canvas.drawCircle(
+          Offset(
+            currentJoints[i]! * size.width,
+            currentJoints[i + 1]! * size.height,
+          ),
+          3,
+          circlePaint,
+        );
+      }
     }
 
-    /// draw circles
-    /// 0~9는 머리이므로 제외
-    for (int i = 10; i < currentJoints.length - 2; i += 2) {
-      if (currentJoints[i] == null) continue;
-      canvas.drawCircle(
-        Offset(
-          currentJoints[i]! * size.width,
-          currentJoints[i + 1]! * size.height,
-        ),
-        5,
-        circlePaint,
-      );
-    }
-    if (scores[currentIdx ~/ 34] == null || !squareOverlay) {
+    final score =
+        perFrameScoreAvg(aiScorePerFrame: perFrameScore, idx: currentFrame);
+    if (score == null || !squareOverlay) {
       return;
     }
     drawQuad(
@@ -227,7 +302,7 @@ class _Painter extends CustomPainter {
       canvas: canvas,
       values: currentJoints,
       lineIndexes: drawQuadIndexes,
-      currentScore: scores[currentIdx ~/ 34],
+      currentScore: score,
     );
   }
 

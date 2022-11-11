@@ -10,5 +10,7 @@ class StoryState with _$StoryState {
   const factory StoryState({
     @Default(User()) User uploader,
     @Default(Story()) Story story,
+    @Default(false) bool overlayOpen,
+    @Default(false) bool playStatusOpen,
   }) = _StoryState;
 }

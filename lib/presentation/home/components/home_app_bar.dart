@@ -1,50 +1,87 @@
+import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
+import '../../common/components/logo.dart';
+
+class HomeAppBar extends ConsumerWidget with PreferredSizeWidget {
   const HomeAppBar({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     return AppBar(
       backgroundColor: Colors.transparent,
+      toolbarHeight: 100,
       elevation: 0,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 5,
-          ),
-          Container(
-            height: 25,
-            width: 25,
-            child: SvgPicture.asset(
-              'assets/logo.svg',
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          Text(
-            '클라임밸런스',
-            style: TextStyle(
-              color: theme.colorScheme.onBackground,
-            ),
-          ),
-        ],
+      title: const SizedBox(
+        width: 24,
+        child: Logo(),
       ),
+      centerTitle: true,
       actions: [
-        Icon(
-          Icons.notifications,
-          color: theme.colorScheme.primary,
-        ),
-        const SizedBox(
-          width: 20,
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 4,
+          ),
+          child: IconButton(
+            icon: NotificationIcon(
+              unread: ref
+                  .watch(homeViewModelProvider.select((value) => value.unread)),
+            ),
+            onPressed: () {
+              // TODO
+            },
+          ),
         ),
       ],
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(100);
+}
+
+class NotificationIcon extends StatelessWidget {
+  final int unread;
+
+  const NotificationIcon({Key? key, required this.unread}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Container(
+      width: 30,
+      height: 30,
+      child: Stack(
+        children: [
+          const Icon(
+            Icons.notifications_outlined,
+            size: 24,
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.primary,
+              ),
+              child: Center(
+                child: Text(
+                  unread.toString(),
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: color.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

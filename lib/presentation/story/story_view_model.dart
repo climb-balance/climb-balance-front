@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/firebase_provider.dart';
@@ -25,6 +27,7 @@ class StoryViewModel extends StateNotifier<StoryState> {
   final AutoDisposeStateNotifierProviderRef<StoryViewModel, StoryState> ref;
   final StoryRepository storyRepository;
   final UserRepositoryImpl userRepository;
+  Timer? overlayCloseTimer;
 
   StoryViewModel({
     required this.ref,
@@ -58,6 +61,27 @@ class StoryViewModel extends StateNotifier<StoryState> {
   void likeStory() {
     // TODO implement
     storyRepository.likeStory();
+  }
+
+  void toggleOverlayOpen(bool isPlaying) {
+    if (state.overlayOpen) {
+      state = state.copyWith(overlayOpen: false);
+      overlayCloseTimer?.cancel();
+    } else {
+      state = state.copyWith(overlayOpen: true);
+      if (isPlaying) {
+        overlayCloseTimer = Timer(
+          Duration(seconds: 3),
+          () {
+            state = state.copyWith(overlayOpen: false);
+          },
+        );
+      }
+    }
+  }
+
+  void cancelOverlayCloseTimer() {
+    overlayCloseTimer?.cancel();
   }
 
   void requestAiFeedback(BuildContext context) async {

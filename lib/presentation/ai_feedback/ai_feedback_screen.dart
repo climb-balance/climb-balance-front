@@ -1,5 +1,6 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
 import 'package:climb_balance/presentation/ai_feedback/components/ai_feedback_actions.dart';
+import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -7,6 +8,7 @@ import 'package:video_player/video_player.dart';
 import '../common/ui/theme/specific_theme.dart';
 import 'components/ai_feedback_information.dart';
 import 'components/ai_feedback_overlay.dart';
+import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
   final int storyId;
@@ -46,17 +48,31 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  void _onTap() {
+    final bool isInformOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isInformOpen));
+    if (!isInformOpen) {
+      ref
+          .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+          .toggleActionOpen(_videoPlayerController.value.isPlaying);
+      return;
+    }
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .toggleInformation();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final bool isStatusChanging = ref.watch(
+    final bool actionsOpen = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
-            .select((value) => value.isStatusChanging));
+            .select((value) => value.actionsOpen));
     final bool isInformOpen = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
             .select((value) => value.isInformOpen));
@@ -66,62 +82,59 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
           children: [
             _videoPlayerController.value.isInitialized
                 ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      AspectRatio(
-                        aspectRatio: _videoPlayerController.value.aspectRatio,
-                        child: Stack(
-                          children: [
-                            VideoPlayer(
-                              _videoPlayerController,
+                      Expanded(
+                        child: NoEffectInkWell(
+                          onTap: _onTap,
+                          child: Center(
+                            widthFactor: double.infinity,
+                            child: Stack(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio:
+                                      _videoPlayerController.value.aspectRatio,
+                                  child: VideoPlayer(
+                                    _videoPlayerController,
+                                  ),
+                                ),
+                                AiFeedbackOverlay(
+                                  videoPlayerController: _videoPlayerController,
+                                  ticker: this,
+                                  storyId: widget.storyId,
+                                ),
+                              ],
                             ),
-                            AiFeedbackOverlay(
-                              videoPlayerController: _videoPlayerController,
-                              ticker: this,
-                              storyId: widget.storyId,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                      if (!isInformOpen)
-                        Expanded(
-                          child: AiFeedbackInformation(
-                            storyId: widget.storyId,
-                          ),
+                      if (isInformOpen)
+                        AiFeedbackInformation(
+                          storyId: widget.storyId,
+                          videoPlayerController: _videoPlayerController,
                         ),
                     ],
                   )
                 : const Center(
                     child: CircularProgressIndicator(),
                   ),
-            if (isInformOpen)
+            if (actionsOpen && !isInformOpen)
               AiFeedbackActions(
                 togglePlaying: togglePlaying,
                 storyId: widget.storyId,
                 videoPlayerController: _videoPlayerController,
               ),
-            GestureDetector(
-              onTap: () {
-                ref
-                    .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
-                    .togglePlayingStatus();
-              },
-              child: AnimatedOpacity(
-                opacity: isStatusChanging ? 0.5 : 0.0,
-                duration: const Duration(milliseconds: 250),
-                child: Center(
-                  child: _videoPlayerController.value.isPlaying
-                      ? Icon(
-                          Icons.play_arrow,
-                          size: 100,
-                        )
-                      : Icon(
-                          Icons.pause,
-                          size: 100,
-                        ),
+            if (!isInformOpen)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AiFeedbackProgressBar(
+                    storyId: widget.storyId,
+                    videoPlayerController: _videoPlayerController,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

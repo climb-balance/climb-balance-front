@@ -1,3 +1,4 @@
+import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -53,17 +54,17 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     _videoPlayerController = VideoPlayerController.network(
       ref
           .read(storyViewModelProvider(widget.storyId).notifier)
           .getStoryVideoPath(),
       formatHint: VideoFormat.hls,
-    );
-    _videoPlayerController.initialize().then((_) {
-      _videoPlayerController.play();
-      _videoPlayerController.setLooping(true);
-      setState(() {});
-    });
+    )..initialize().then((value) {
+        _videoPlayerController.play();
+        _videoPlayerController.setLooping(true);
+        setState(() {});
+      });
   }
 
   @override
@@ -81,7 +82,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
     _videoPlayerController.value.isPlaying
         ? _videoPlayerController.pause()
         : _videoPlayerController.play();
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         isStatusChanging = false;
       });
@@ -90,63 +91,51 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final overlayOpen = ref.watch(storyViewModelProvider(widget.storyId)
+        .select((value) => value.overlayOpen));
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (isCommentOpen) toggleCommentOpen();
-                    },
-                    // TODO 가운데만 클릭된다.
+            NoEffectInkWell(
+              onTap: () {
+                ref
+                    .read(storyViewModelProvider(widget.storyId).notifier)
+                    .toggleOverlayOpen(_videoPlayerController.value.isPlaying);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
                     child: _videoPlayerController.value.isInitialized
-                        ? AspectRatio(
-                            aspectRatio:
-                                _videoPlayerController.value.aspectRatio,
-                            child: VideoPlayer(_videoPlayerController),
+                        ? Center(
+                            child: AspectRatio(
+                              aspectRatio:
+                                  _videoPlayerController.value.aspectRatio,
+                              child: Center(
+                                child: VideoPlayer(_videoPlayerController),
+                              ),
+                            ),
                           )
                         : const Center(child: CircularProgressIndicator()),
                   ),
-                ),
-                if (isCommentOpen)
-                  StoryComments(toggleCommentOpen: toggleCommentOpen)
-              ],
+                  if (isCommentOpen)
+                    StoryComments(toggleCommentOpen: toggleCommentOpen)
+                ],
+              ),
             ),
-            if (!isCommentOpen) ...[
+            if (overlayOpen) ...[
               StoryOverlay(
                 storyId: widget.storyId,
                 toggleCommentOpen: toggleCommentOpen,
                 togglePlaying: togglePlaying,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ProgressBar(
-                  videoPlayerController: _videoPlayerController,
-                ),
+                videoPlayerController: _videoPlayerController,
               ),
             ],
-            GestureDetector(
-              onTap: () {
-                togglePlaying();
-              },
-              child: AnimatedOpacity(
-                opacity: isStatusChanging ? 0.5 : 0.0,
-                duration: const Duration(milliseconds: 250),
-                child: Center(
-                  child: _videoPlayerController.value.isPlaying
-                      ? Icon(
-                          Icons.play_arrow,
-                          size: 100,
-                        )
-                      : Icon(
-                          Icons.pause,
-                          size: 100,
-                        ),
-                ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ProgressBar(
+                videoPlayerController: _videoPlayerController,
               ),
             ),
           ],

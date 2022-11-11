@@ -20,7 +20,12 @@ ThemeData mainDarkTheme() {
   ).copyWith(
     colorScheme: darkColorScheme,
     extensions: <ThemeExtension<dynamic>>[],
-    textTheme: customTextTheme(ThemeData.dark().textTheme, darkColorScheme),
-    scaffoldBackgroundColor: darkColorScheme.surface,
+    textTheme: customTextTheme(
+      ThemeData(
+        fontFamily: 'text',
+      ).textTheme.copyWith(),
+      darkColorScheme,
+    ),
+    scaffoldBackgroundColor: darkColorScheme.background,
   );
 }
