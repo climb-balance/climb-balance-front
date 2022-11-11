@@ -1,3 +1,4 @@
+import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -81,7 +82,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
     _videoPlayerController.value.isPlaying
         ? _videoPlayerController.pause()
         : _videoPlayerController.play();
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         isStatusChanging = false;
       });
@@ -96,7 +97,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
       child: SafeArea(
         child: Stack(
           children: [
-            GestureDetector(
+            NoEffectInkWell(
               onTap: () {
                 ref
                     .read(storyViewModelProvider(widget.storyId).notifier)

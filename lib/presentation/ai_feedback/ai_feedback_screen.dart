@@ -1,5 +1,6 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
 import 'package:climb_balance/presentation/ai_feedback/components/ai_feedback_actions.dart';
+import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -52,14 +53,29 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _onTap() {
     final bool isInformOpen = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
             .select((value) => value.isInformOpen));
+    if (!isInformOpen) {
+      ref
+          .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+          .toggleActionOpen(_videoPlayerController.value.isPlaying);
+      return;
+    }
+    ref
+        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
+        .toggleInformation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bool actionsOpen = ref.watch(
         aiFeedbackViewModelProvider(widget.storyId)
             .select((value) => value.actionsOpen));
+    final bool isInformOpen = ref.watch(
+        aiFeedbackViewModelProvider(widget.storyId)
+            .select((value) => value.isInformOpen));
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
@@ -70,24 +86,10 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!isInformOpen) {
-                              ref
-                                  .read(aiFeedbackViewModelProvider(
-                                          widget.storyId)
-                                      .notifier)
-                                  .toggleActionOpen(
-                                      _videoPlayerController.value.isPlaying);
-                              return;
-                            }
-                            ref
-                                .read(
-                                    aiFeedbackViewModelProvider(widget.storyId)
-                                        .notifier)
-                                .toggleInformation();
-                          },
+                        child: NoEffectInkWell(
+                          onTap: _onTap,
                           child: Center(
+                            widthFactor: double.infinity,
                             child: Stack(
                               children: [
                                 AspectRatio(
