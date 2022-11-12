@@ -82,11 +82,6 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
     );
   }
 
-  // todo remove
-  String getThumbnailUrl(int storyId) {
-    return repository.getStoryThumbnailPath(storyId);
-  }
-
   String _makeStoryKey(Story story) {
     return (story.tags.videoTimestamp ~/ (86400 * 1000)).toString() +
         story.tags.location.toString();

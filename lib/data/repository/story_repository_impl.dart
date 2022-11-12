@@ -47,23 +47,6 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<String>> getStoryThumbnailPathById(int storyId) async {
-    final result = await server.getStoryThumbnailPathById(storyId);
-    return result.when(
-      success: (value) => Result.success(value),
-      error: (String message) => Result.error(message),
-    );
-  }
-
-  /// TODO this function must be removed
-  /// 임시 함수입니다.
-  /// 스토리 경로를 만들어서 가져옵니다.
-  @override
-  String getStoryThumbnailPath(int storyId) {
-    return '$serverUrl$serverStoryPath/$storyId$serverVideoPath?type=thumbnail';
-  }
-
-  @override
   String getStoryVideoPathById(int storyId, {bool isAi = false}) {
     return '$serverUrl$serverStoryPath/$storyId$serverVideoPath/?type=${isAi ? 'ai' : 'raw'}';
   }
