@@ -41,9 +41,9 @@ class FirebaseNotifier extends StateNotifier<String> {
   void _openBackGroundMessage(
       BuildContext context, RemoteMessage message) async {
     final data = message.data;
-    if (data['notification_id'] == 'AI_COMPLETE') {
-      final storyId = data['video_id'] ?? '1';
-      context.pushNamed(diaryStoryRouteName, params: {'sid': storyId});
+    if (data['notificationId'] == 'AI_COMPLETE') {
+      final storyId = data['videoId'] ?? '1';
+      context.pushNamed(aiFeedbackRouteName, params: {'sid': storyId});
     }
   }
 

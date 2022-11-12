@@ -62,14 +62,12 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final image = ref
-        .watch(diaryViewModelProvider.notifier)
-        .getThumbnailUrl(widget.story.storyId);
     final color = Theme.of(context).colorScheme;
+    final image = widget.story.thumbnailUrl;
     return InkWell(
       splashColor: color.surfaceVariant,
       onTap: () {
-        if (widget.story.thumbnailUrl == "") return;
+        if (image == "") return;
         // TODO named push not working
         context.push(
           '/diary/story/${widget.story.storyId}',
@@ -96,9 +94,9 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
                 errorBuilder: (_, __, ___) {
                   if (image == "") {
                     return Container(
-                      color: color.surface,
+                      color: color.background,
                       child: Transform.scale(
-                        scale: 0.5,
+                        scale: 0.25,
                         child: const CircularProgressIndicator(),
                       ),
                     );
@@ -116,9 +114,9 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
                   if (loadingProgress == null) return child;
 
                   return Container(
-                    color: color.surface,
+                    color: color.background,
                     child: Transform.scale(
-                      scale: 0.5,
+                      scale: 0.25,
                       child: const CircularProgressIndicator(),
                     ),
                   );

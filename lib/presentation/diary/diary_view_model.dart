@@ -77,12 +77,12 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
         classifiedStories[key] = [story];
       }
     }
-
     state = state.copyWith(
       classifiedStories: classifiedStories.values.toList(),
     );
   }
 
+  // todo remove
   String getThumbnailUrl(int storyId) {
     return repository.getStoryThumbnailPath(storyId);
   }

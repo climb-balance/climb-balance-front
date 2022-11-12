@@ -7,7 +7,7 @@ import 'package:video_player/video_player.dart';
 
 import '../ai_feedback_view_model.dart';
 import '../models/ai_score_state.dart';
-import 'ai_feedback_overlay.dart';
+import 'ai_feedback_painter.dart';
 
 class AnalysisTab extends StatefulWidget {
   const AnalysisTab({

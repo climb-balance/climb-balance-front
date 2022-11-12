@@ -53,8 +53,8 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
       if (score == null) {
         gradientColors.add(Colors.transparent);
       } else {
-        gradientColors.add(
-            HSVColor.fromAHSV(0.5, 125 * (score! * 0.5 + 0.5), 1, 1).toColor());
+        gradientColors
+            .add(HSVColor.fromAHSV(0.5, 255 * (score!), 1, 1).toColor());
       }
     }
     final size = MediaQuery.of(context).size;
