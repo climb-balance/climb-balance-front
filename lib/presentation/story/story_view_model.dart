@@ -4,8 +4,10 @@ import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/firebase_provider.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
+import 'package:climb_balance/presentation/common/custom_snackbar.dart';
 import 'package:climb_balance/presentation/story/story_state.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/repository/user_repository_impl.dart';
@@ -71,7 +73,7 @@ class StoryViewModel extends StateNotifier<StoryState> {
       state = state.copyWith(overlayOpen: true);
       if (isPlaying) {
         overlayCloseTimer = Timer(
-          Duration(seconds: 3),
+          const Duration(seconds: 3),
           () {
             state = state.copyWith(overlayOpen: false);
           },
@@ -102,11 +104,9 @@ class StoryViewModel extends StateNotifier<StoryState> {
             aiStatus: FeedbackStatus.waiting,
           ),
         );
-        Navigator.pop(context);
-        customShowDialog(
-            context: context,
-            title: 'AI 피드백 요청 성공',
-            content: 'AI 피드백 요청에 성공하셨습니다. 메인 화면에서 진행 상태를 확인하실 수 있습니다.');
+        context.pop();
+        showCustomSnackbar(
+            context: context, message: 'AI 피드백 요청! 4분 정도 소요됩니다.');
       },
       error: (message) {
         Navigator.pop(context);

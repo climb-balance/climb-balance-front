@@ -118,7 +118,7 @@ class AiFeedbackOverlayPainter extends CustomPainter {
     required double? currentScore,
   }) {
     final Paint quadPaint = Paint()
-      ..color = HSVColor.fromAHSV(1, 255 * (currentScore!), 1, 1)
+      ..color = HSVColor.fromAHSV(1, 125 * (currentScore!), 1, 1)
           .toColor()
           .withOpacity(squareOpacity)
       ..style = PaintingStyle.fill;
@@ -226,7 +226,11 @@ class AiFeedbackScorePainter extends CustomPainter {
   });
 
   final Paint linePaint = Paint()
-    ..color = Colors.green.withOpacity(0.5)
+    ..color = Colors.green.withOpacity(0.8)
+    ..style = PaintingStyle.fill
+    ..strokeWidth = 2;
+  final Paint boxPaint = Paint()
+    ..color = Colors.blueGrey
     ..style = PaintingStyle.fill
     ..strokeWidth = 2;
 
@@ -238,6 +242,13 @@ class AiFeedbackScorePainter extends CustomPainter {
     final balance = perFrameScore.balance[currentFrame];
     final inertia = perFrameScore.inertia[currentFrame];
     final moment = perFrameScore.moment[currentFrame];
+
+    for (int i = 0; i < 5; i += 1) {
+      canvas.drawRect(
+        Rect.fromPoints(Offset(0, i * 30), Offset(20, i * 30 + 20)),
+        boxPaint,
+      );
+    }
     if (accuracy != null) {
       canvas.drawRect(
         Rect.fromPoints(Offset(0, 0), Offset(accuracy * 20, 20)),
@@ -258,7 +269,7 @@ class AiFeedbackScorePainter extends CustomPainter {
     }
     if (inertia != null) {
       canvas.drawRect(
-        Rect.fromPoints(Offset(0, 90), Offset(inertia * 20, 110)),
+        Rect.fromPoints(Offset(0, 90), Offset((1 - inertia) * 20, 110)),
         linePaint,
       );
     }

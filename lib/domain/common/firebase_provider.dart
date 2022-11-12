@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/data_source/service/firebase_service.dart';
-import '../const/route_name.dart';
 
 final firebaseProvider = StateNotifierProvider<FirebaseNotifier, String>((ref) {
   FirebaseNotifier notifier = FirebaseNotifier(
@@ -43,7 +42,7 @@ class FirebaseNotifier extends StateNotifier<String> {
     final data = message.data;
     if (data['notificationId'] == 'AI_COMPLETE') {
       final storyId = data['videoId'] ?? '1';
-      context.pushNamed(aiFeedbackRouteName, params: {'sid': storyId});
+      context.push('/diary/story/$storyId/ai');
     }
   }
 

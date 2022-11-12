@@ -9,12 +9,26 @@ class AccountEmail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final email = ref.watch(currentUserProvider.select((value) => value.email));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('계정 이메일'),
-        Text(email),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('계정 이메일'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(email),
+              const Text(
+                '유용한 소식과 서비스 변화 정보를 드립니다.',
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -26,11 +40,14 @@ class AccountPromotion extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final promotionCheck =
         ref.watch(currentUserProvider.select((value) => value.promotionCheck));
+    final color = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('광고성 정보 수신 동의'),
         Checkbox(
+          activeColor: color.primary,
+          checkColor: color.onPrimary,
           value: promotionCheck,
           onChanged: (bool? value) async {
             if (value == null) return;
@@ -44,12 +61,12 @@ class AccountPromotion extends ConsumerWidget {
               }
               ref
                   .read(currentUserProvider.notifier)
-                  .updateUserInfo(promotionCheck: true);
+                  .updateUserInfo(promotionCheck: false);
               return;
             }
             ref
                 .read(currentUserProvider.notifier)
-                .updateUserInfo(personalCheck: false);
+                .updateUserInfo(promotionCheck: true);
           },
         ),
       ],
@@ -64,11 +81,14 @@ class AccountPersonal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final personalCheck =
         ref.watch(currentUserProvider.select((value) => value.personalCheck));
+    final color = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('개인정보 이용 동의'),
         Checkbox(
+          activeColor: color.primary,
+          checkColor: color.onPrimary,
           value: personalCheck,
           onChanged: (bool? value) async {
             if (value == null) return;
@@ -82,12 +102,12 @@ class AccountPersonal extends ConsumerWidget {
               }
               ref
                   .read(currentUserProvider.notifier)
-                  .updateUserInfo(personalCheck: true);
+                  .updateUserInfo(personalCheck: false);
               return;
             }
             ref
                 .read(currentUserProvider.notifier)
-                .updateUserInfo(personalCheck: false);
+                .updateUserInfo(personalCheck: true);
           },
         ),
       ],

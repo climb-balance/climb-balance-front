@@ -72,11 +72,15 @@ class FlexAvatar extends StatelessWidget {
         ? const NoAvatar()
         : CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage(imagePath!),
-            foregroundImage: FileImage(
-              File(imagePath!),
+            child: ClipOval(
+              child: Image.network(
+                imagePath!,
+                errorBuilder: (_, __, ___) => Image.file(
+                  File(imagePath!),
+                ),
+                fit: BoxFit.fill,
+              ),
             ),
-            foregroundColor: Colors.transparent,
           );
   }
 }

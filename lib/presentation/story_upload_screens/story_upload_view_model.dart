@@ -125,8 +125,8 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
         await repository.createStory(storyUpload: state);
     result.when(
       success: (value) async {
-        showCustomSnackbar(context: context, message: '업로드 성공');
         context.pop();
+        showCustomSnackbar(context: context, message: '업로드 성공');
       },
       error: (message) {
         customShowDialog(context: context, title: '에러', content: message);
