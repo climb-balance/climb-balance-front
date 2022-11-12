@@ -1,6 +1,7 @@
 import 'package:climb_balance/presentation/account/components/setting_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../presentation/common/components/bot_navigation_bar.dart';
 import 'components/account_infos.dart';
@@ -47,8 +48,33 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(onPressed: () {}, child: const Text("이용 약관")),
-                  TextButton(onPressed: () {}, child: const Text("개인정보 처리방침")),
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse(
+                            'https://www.climb-balance.com/policy/service'),
+                      );
+                    },
+                    child: const Text("이용 약관"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse(
+                            'https://www.climb-balance.com/policy/privacy'),
+                      );
+                    },
+                    child: const Text("개인정보 처리방침"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse(
+                            'mailto:admin@climb-balance.com?subject=News&body=New%20plugin'),
+                      );
+                    },
+                    child: const Text("문의하기"),
+                  ),
                 ],
               ),
             ],
