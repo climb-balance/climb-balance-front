@@ -1,1 +1,1 @@
-enum DiaryFilterType { location, success, date }
+enum DiaryFilterType { location, success, date, isAi }

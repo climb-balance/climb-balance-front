@@ -1,5 +1,8 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/domain/common/tag_selector_provider.dart';
 import 'package:climb_balance/presentation/common/custom_dialog.dart';
+import 'package:climb_balance/presentation/diary/enums/diary_filter_type.dart';
+import 'package:climb_balance/presentation/diary/models/diary_filter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -124,5 +127,27 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       await repository.deleteStory(storyId);
       loadStories();
     });
+  }
+
+  void updateCurrentAddingFilter(
+      {required String filterType, required String filterString}) {
+    final locations = ref.watch(locationSelectorProvider);
+    if (filterType == '장소') {
+      state = state.copyWith(
+        currentAddingFilter: DiaryFilter(
+          filter: DiaryFilterType.location,
+          validator: (Story story) =>
+              locations[story.tags.location].name == filterString,
+        ),
+      );
+    } else if (filterType == '시도') {
+      state = state.copyWith(
+        currentAddingFilter: DiaryFilter(
+          filter: DiaryFilterType.success,
+          validator: (Story story) =>
+              story.tags.success == (filterString == '성공'),
+        ),
+      );
+    }
   }
 }
