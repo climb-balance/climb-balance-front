@@ -16,7 +16,7 @@ final currentUserProvider =
     storageService: ref.watch(storageServiceProvider),
     repository: ref.watch(userRepositoryImplProvider),
   );
-  notifier.loadTokenFromStorage();
+
   return notifier;
 });
 
@@ -32,6 +32,17 @@ class CurrentUserNotifier extends StateNotifier<User> {
     required this.storageService,
     required this.repository,
   }) : super(const User());
+
+  Future<void> init() async {
+    await loadTokenFromStorage();
+  }
+
+  // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
+  Future<void> loadTokenFromStorage() async {
+    final token = await storageService.getStoredToken();
+    debugPrint(token);
+    await loadUserInfo(token);
+  }
 
   bool isEmpty() {
     return state.accessToken == '';
@@ -49,14 +60,7 @@ class CurrentUserNotifier extends StateNotifier<User> {
     context.goNamed(authPageRouteName);
   }
 
-  // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
-  void loadTokenFromStorage() {
-    storageService.getStoredToken().then((token) {
-      loadUserInfo(token);
-    });
-  }
-
-  void loadUserInfo(String token) async {
+  Future<void> loadUserInfo(String token) async {
     final result = await repository.getCurrentUserProfile(token);
     result.when(
       success: (value) {

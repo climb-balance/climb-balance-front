@@ -1,7 +1,10 @@
+import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/common/router_provider.dart';
 import 'package:climb_balance/presentation/common/components/waiting_progress.dart';
 import 'package:climb_balance/presentation/common/ui/theme/main_theme.dart';
+import 'package:climb_balance/presentation/splash_app/splash_screen.dart';
+import 'package:climb_balance/presentation/splash_app/splash_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +27,24 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await Firebase.initializeApp();
-  runApp(const ProviderScope(child: MyApp()));
+  final container = ProviderContainer();
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const SplashApp(),
+    ),
+  );
+
+  await container.read(splashViewModelProvider.notifier).init(jobs: [
+    Firebase.initializeApp,
+    container.read(currentUserProvider.notifier).init,
+  ]);
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {
