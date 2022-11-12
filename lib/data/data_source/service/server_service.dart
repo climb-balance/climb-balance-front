@@ -74,6 +74,25 @@ class ServerService {
     return body;
   }
 
+  Future<dynamic> patch(
+      {required String url, required dynamic data, String? accessToken}) async {
+    http.Response res = await http
+        .patch(
+          Uri.parse(serverUrl + url),
+          body: jsonEncode(data),
+          headers: makeHeaders(accessToken),
+        )
+        .timeout(_timeOutDuration)
+        .catchError((err) => throw err)
+        .whenComplete(() {});
+    final statusCode = res.statusCode;
+    final body = res.body;
+    if (statusCode < 200 || statusCode >= 400) {
+      throw HttpException(res.body);
+    }
+    return body;
+  }
+
   Future<dynamic> put(
       {required String url, required dynamic data, String? accessToken}) async {
     http.Response res = await http
@@ -150,7 +169,7 @@ class ServerService {
 
   Future<void> healthCheck() async {
     try {
-      await get(url: '$serverUrl/ping');
+      await get(url: '/ping');
     } catch (e) {
       rethrow;
     }

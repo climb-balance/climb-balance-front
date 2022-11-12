@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:climb_balance/domain/const/server_config.dart';
+import 'package:climb_balance/domain/model/update_user.dart';
 import 'package:climb_balance/presentation/register/register_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -78,6 +79,23 @@ class UserServerHelper {
       return const Result.success(null);
     } catch (e) {
       return Result.error('탈퇴 실패 : ${e.toString()}');
+    }
+  }
+
+  Future<Result<void>> updateUser({
+    required String accessToken,
+    required UpdateUser updateUser,
+  }) async {
+    try {
+      final result = await server.patch(
+        url: '$serverProfilePath',
+        accessToken: accessToken,
+        data: updateUser,
+      );
+
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('계정 수정 실패 : ${e.toString()}');
     }
   }
 }

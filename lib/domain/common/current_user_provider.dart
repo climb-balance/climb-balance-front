@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../const/route_name.dart';
 import '../model/expert_profile.dart';
+import '../model/update_user.dart';
 
 final currentUserProvider =
     StateNotifierProvider<CurrentUserNotifier, User>((ref) {
@@ -72,8 +73,24 @@ class CurrentUserNotifier extends StateNotifier<User> {
     );
   }
 
-  void updateUserInfo(User user) {
-    state = user;
+  void updateUserInfo({
+    String? description,
+    String? nickname,
+    String? profileImage,
+    bool? promotionCheck,
+    bool? personalCheck,
+  }) async {
+    UpdateUser updateUser = UpdateUser(
+      description: description,
+      nickname: nickname,
+      promotionCheck: promotionCheck,
+      personalCheck: personalCheck,
+    );
+    await repository.updateUser(
+      accessToken: state.accessToken,
+      updateUser: updateUser,
+    );
+    loadUserInfo(state.accessToken);
   }
 
   void updateExpertInfo(ExpertProfile profile) {

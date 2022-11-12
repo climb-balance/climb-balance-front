@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../presentation/common/components/bot_navigation_bar.dart';
+import 'components/account_infos.dart';
 import 'components/account_settings.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
@@ -23,6 +24,14 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
         child: Center(
           child: ListView(
             children: [
+              const SettingCard(
+                groupName: '현재 계정 정보',
+                children: [
+                  AccountEmail(),
+                  AccountPersonal(),
+                  AccountPromotion(),
+                ],
+              ),
               const SettingCard(
                 groupName: '기기 설정',
                 children: [],

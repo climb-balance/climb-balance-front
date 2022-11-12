@@ -6,6 +6,7 @@ import 'package:climb_balance/presentation/home/models/home_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/const/server_config.dart';
+import '../../domain/model/update_user.dart';
 import '../../presentation/register/register_state.dart';
 
 final userRepositoryImplProvider = Provider<UserRepositoryImpl>((ref) {
@@ -65,5 +66,16 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Result<void>> deleteUser(String accessToken) async {
     return await server.deleteUser(accessToken);
+  }
+
+  @override
+  Future<Result<void>> updateUser({
+    required String accessToken,
+    required UpdateUser updateUser,
+  }) async {
+    return await server.updateUser(
+      accessToken: accessToken,
+      updateUser: updateUser,
+    );
   }
 }

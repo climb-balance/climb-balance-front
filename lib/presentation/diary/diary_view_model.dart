@@ -126,8 +126,13 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
 
   void endEditMode() {
     if (state.editingProfile != null) {
-      final User user = state.editingProfile!.copyWith();
-      ref.read(currentUserProvider.notifier).updateUserInfo(user);
+      final description = state.editingProfile!.description;
+      final nickname = state.editingProfile!.nickname;
+      final profileImage = state.editingProfile!.profileImage;
+      ref.read(currentUserProvider.notifier).updateUserInfo(
+          description: description,
+          nickname: nickname,
+          profileImage: profileImage);
     }
 
     state = state.copyWith(
