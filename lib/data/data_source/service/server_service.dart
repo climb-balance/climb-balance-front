@@ -147,4 +147,12 @@ class ServerService {
       rethrow;
     }
   }
+
+  Future<void> healthCheck() async {
+    try {
+      await get(url: '$serverUrl/ping');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

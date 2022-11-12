@@ -10,23 +10,42 @@ class SplashApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progress = ref.watch(splashViewModelProvider);
-
+    final state = ref.watch(splashViewModelProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: mainDarkTheme(),
       home: Scaffold(
-        body: SplashInfo(),
+        body: const SplashInfo(),
         bottomNavigationBar: AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
           transitionBuilder: (Widget child, Animation<double> animation) {
             return FadeTransition(opacity: animation, child: child);
           },
-          child: LinearProgressIndicator(
-            value: progress,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: state.error == null
+                ? LinearProgressIndicator(
+                    value: state.progress,
+                  )
+                : ErrorProgress(error: state.error!),
           ),
         ),
       ),
+    );
+  }
+}
+
+class ErrorProgress extends StatelessWidget {
+  final String error;
+
+  const ErrorProgress({Key? key, required this.error}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+    return Text(
+      '에러 : ${error}',
+      style: TextStyle(color: color.error),
     );
   }
 }

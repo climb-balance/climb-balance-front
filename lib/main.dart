@@ -1,3 +1,4 @@
+import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/common/router_provider.dart';
@@ -38,6 +39,7 @@ void main() async {
   await container.read(splashViewModelProvider.notifier).init(jobs: [
     Firebase.initializeApp,
     container.read(currentUserProvider.notifier).init,
+    container.read(serverServiceProvider).healthCheck,
   ]);
   runApp(
     UncontrolledProviderScope(
