@@ -36,23 +36,41 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
     result.when(
       success: (getStories) {
         stories = getStories;
-        filterStories(const StoriesFilter.noFilter());
+        filterStories();
       },
       error: (message) {},
     );
   }
 
-  void filterStories(StoriesFilter storyFilter) {
+  void addAiFilter(StoriesFilter storyFilter) {
+    state = state.copyWith(
+      storyFilter: storyFilter,
+    );
+    filterStories();
+  }
+
+  bool _filterStory(Story story) {
+    if (state.storyFilter == const StoriesFilter.aiOnly() &&
+        story.aiStatus != FeedbackStatus.complete) {
+      return false;
+    } else if (state.storyFilter == const StoriesFilter.expertOnly() &&
+        story.expertStatus != FeedbackStatus.complete) {
+      return false;
+    }
+    for (final filter in state.diaryFilters) {
+      if (!filter.validator(story)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void filterStories() {
     Map<String, List<Story>> classifiedStories = {};
     for (final story in stories) {
+      if (!_filterStory(story)) continue;
       final String key = _makeStoryKey(story);
-      if (storyFilter == const StoriesFilter.aiOnly() &&
-          story.aiStatus != FeedbackStatus.complete) {
-        continue;
-      } else if (storyFilter == const StoriesFilter.expertOnly() &&
-          story.expertStatus != FeedbackStatus.complete) {
-        continue;
-      }
+
       if (classifiedStories.containsKey(key)) {
         classifiedStories[key]?.add(story);
       } else {
@@ -60,8 +78,8 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       }
     }
     state = state.copyWith(
-        classifiedStories: classifiedStories.values.toList(),
-        storyFilter: storyFilter);
+      classifiedStories: classifiedStories.values.toList(),
+    );
   }
 
   String getThumbnailUrl(int storyId) {
@@ -129,25 +147,50 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
     });
   }
 
+  void addCurrentAddingFilter() {
+    if (state.currentAddingFilter == null) {
+      return;
+    }
+    state = state.copyWith(
+      diaryFilters: [...state.diaryFilters, state.currentAddingFilter!],
+      currentAddingFilter: null,
+    );
+    filterStories();
+  }
+
   void updateCurrentAddingFilter(
       {required String filterType, required String filterString}) {
     final locations = ref.watch(locationSelectorProvider);
     if (filterType == '장소') {
       state = state.copyWith(
         currentAddingFilter: DiaryFilter(
-          filter: DiaryFilterType.location,
-          validator: (Story story) =>
-              locations[story.tags.location].name == filterString,
-        ),
+            filter: DiaryFilterType.location,
+            validator: (Story story) =>
+                locations[story.tags.location].name.contains(filterString),
+            name: '장소:$filterString'),
       );
+      return;
     } else if (filterType == '시도') {
       state = state.copyWith(
         currentAddingFilter: DiaryFilter(
           filter: DiaryFilterType.success,
           validator: (Story story) =>
               story.tags.success == (filterString == '성공'),
+          name: '성공 여부:${filterString == '성공' ? '성공' : '실패'}',
         ),
       );
+      return;
     }
+    state = state.copyWith(currentAddingFilter: null);
+  }
+
+  void deleteFilter(int idx) {
+    if (idx >= state.diaryFilters.length || idx < 0) {
+      return;
+    }
+    final newDiaryFilters = state.diaryFilters.sublist(0);
+    newDiaryFilters.removeAt(idx);
+    state = state.copyWith(diaryFilters: newDiaryFilters);
+    filterStories();
   }
 }

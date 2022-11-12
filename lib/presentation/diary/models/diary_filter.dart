@@ -10,5 +10,6 @@ class DiaryFilter with _$DiaryFilter {
   const factory DiaryFilter({
     required DiaryFilterType filter,
     required bool Function(Story story) validator,
+    required String name,
   }) = _DiaryFilter;
 }
