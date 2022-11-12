@@ -5,25 +5,30 @@ import 'package:climb_balance/presentation/ai_feedback/models/ai_feedback_state.
 import 'package:climb_balance/presentation/story_upload_screens/story_upload_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../domain/common/loading_provider.dart';
 import '../../domain/const/server_config.dart';
 import '../../domain/model/result.dart';
 
 // TODO move to di
 final storyRepositoryImplProvider = Provider<StoryRepositoryImpl>((ref) {
   final server = ref.watch(storyServerHelperProvider);
-  return StoryRepositoryImpl(server);
+  return StoryRepositoryImpl(server, ref);
 });
 
 class StoryRepositoryImpl implements StoryRepository {
   StoryServerHelper server;
+  ProviderRef ref;
 
-  StoryRepositoryImpl(this.server);
+  StoryRepositoryImpl(this.server, this.ref);
 
   @override
   Future<Result<void>> createStory({
     required StoryUploadState storyUpload,
   }) async {
-    return await server.createStory(storyUpload);
+    ref.read(loadingProvider.notifier).openLoading();
+    final result = await server.createStory(storyUpload);
+    ref.read(loadingProvider.notifier).closeLoading();
+    return result;
   }
 
   @override

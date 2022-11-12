@@ -121,7 +121,6 @@ class StoryUploadViewModel extends StateNotifier<StoryUploadState> {
   }
 
   void upload(BuildContext context) async {
-    ref.read(loadingProvider.notifier).openLoading();
     final Result<void> result =
         await repository.createStory(storyUpload: state);
     result.when(

@@ -1,4 +1,5 @@
 import 'package:climb_balance/data/data_source/user_server_helper.dart';
+import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/model/result.dart';
 import 'package:climb_balance/domain/model/user.dart';
 import 'package:climb_balance/domain/repository/user_repository.dart';
@@ -73,9 +74,12 @@ class UserRepositoryImpl implements UserRepository {
     required String accessToken,
     required UpdateUser updateUser,
   }) async {
-    return await server.updateUser(
+    ref.read(loadingProvider.notifier).openLoading();
+    final result = await server.updateUser(
       accessToken: accessToken,
       updateUser: updateUser,
     );
+    ref.read(loadingProvider.notifier).closeLoading();
+    return result;
   }
 }

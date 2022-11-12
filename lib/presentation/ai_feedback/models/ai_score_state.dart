@@ -31,6 +31,6 @@ class AiScoreState with _$AiScoreState {
   const AiScoreState._();
 
   int getOverallScore() {
-    return (angle + balance + accuracy + moment + inertia) ~/ 5 * 100;
+    return ((angle + balance + accuracy + moment + inertia) / 5 * 100).toInt();
   }
 }

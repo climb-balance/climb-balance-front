@@ -17,7 +17,6 @@ class PentagonRadarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(aiScoreState.toString());
     final color = Theme.of(context).colorScheme;
     return AspectRatio(
       aspectRatio: 1,
@@ -25,7 +24,10 @@ class PentagonRadarChart extends StatelessWidget {
         RadarChartData(
           titlePositionPercentageOffset: 0.15,
           tickCount: 10,
-          ticksTextStyle: const TextStyle(color: Colors.transparent),
+          ticksTextStyle: const TextStyle(
+            color: Colors.transparent,
+            shadows: [],
+          ),
           gridBorderData: BorderSide(
             color: color.onSurface,
           ),
@@ -41,7 +43,19 @@ class PentagonRadarChart extends StatelessWidget {
           radarShape: RadarShape.polygon,
           dataSets: [
             RadarDataSet(
-              entryRadius: 4,
+              entryRadius: 1,
+              fillColor: color.secondary.withOpacity(0.1),
+              borderColor: color.secondary,
+              dataEntries: [
+                RadarEntry(value: 1),
+                RadarEntry(value: 1),
+                RadarEntry(value: 1),
+                RadarEntry(value: 1),
+                RadarEntry(value: 1),
+              ],
+            ),
+            RadarDataSet(
+              entryRadius: showText ? 4 : 2.5,
               fillColor: color.primary.withOpacity(0.5),
               borderColor: color.primary,
               dataEntries: [
