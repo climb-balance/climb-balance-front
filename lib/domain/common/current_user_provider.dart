@@ -75,4 +75,9 @@ class CurrentUserNotifier extends StateNotifier<User> {
   void updateExpertInfo(ExpertProfile profile) {
     state = state.copyWith(expertProfile: profile, isExpert: true);
   }
+
+  void removeUserAccount(BuildContext context) {
+    repository.deleteUser(state.accessToken);
+    logout(context);
+  }
 }

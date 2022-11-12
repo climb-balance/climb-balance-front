@@ -61,4 +61,9 @@ class UserRepositoryImpl implements UserRepository {
       error: (message) => Result.error(message),
     );
   }
+
+  @override
+  Future<Result<void>> deleteUser(String accessToken) async {
+    return await server.deleteUser(accessToken);
+  }
 }

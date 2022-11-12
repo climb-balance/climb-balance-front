@@ -67,4 +67,17 @@ class UserServerHelper {
       return Result.error('메인 정보 로드 오류 ${e.toString()}');
     }
   }
+
+  Future<Result<void>> deleteUser(String accessToken) async {
+    try {
+      final result = await server.delete(
+        url: '$serverRegisterPath',
+        accessToken: accessToken,
+      );
+
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('탈퇴 실패 : ${e.toString()}');
+    }
+  }
 }

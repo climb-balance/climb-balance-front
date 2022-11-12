@@ -1,4 +1,3 @@
-import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/components/setting_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,8 +15,6 @@ class AccountScreen extends ConsumerStatefulWidget {
 class _AccountScreenState extends ConsumerState<AccountScreen> {
   @override
   Widget build(BuildContext context) {
-    final isExpert =
-        ref.watch(currentUserProvider.select((value) => value.isExpert));
     return Scaffold(
       appBar: AppBar(
         title: const Text('설정'),
@@ -28,16 +25,14 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             children: [
               const SettingCard(
                 groupName: '기기 설정',
-                children: [
-                  DarkModeSetting(),
-                ],
+                children: [],
               ),
               const SettingCard(
                 groupName: '계정 설정',
                 children: [
                   ExpertSetting(),
-                  EditAccountSetting(),
                   LogoutSetting(),
+                  RemoveAccountSetting(),
                 ],
               ),
               Row(

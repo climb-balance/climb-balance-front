@@ -14,4 +14,6 @@ abstract class UserRepository {
   Future<Result<void>> createUser(RegisterState registerState);
 
   Future<Result<HomeState>> getMainStatistics(String accessToken);
+
+  Future<Result<void>> deleteUser(String accessToken);
 }
