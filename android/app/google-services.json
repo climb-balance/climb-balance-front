@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:722569510491:android:fbb5692e75f122d8fdc97e",
         "android_client_info": {
-          "package_name": "com.climb_balance.climb_balance"
+          "package_name": "com.climb_balance.app"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "722569510491-pfo8bede8np171m7b0u78m7992959nu2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.climbbalance.climbBalance"
+                "bundle_id": "com.climbbalance.app"
               }
             }
           ]

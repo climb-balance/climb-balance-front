@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.climb_balance.climb_balance">
+          package="com.climb_balance.app">
 
     <application
             android:label="클라임밸런스"
