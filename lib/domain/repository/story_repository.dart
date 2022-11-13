@@ -23,4 +23,9 @@ abstract class StoryRepository {
   Future<Result<int>> likeStory();
 
   Future<Result<void>> putAiFeedback(int storyId, String pushToken);
+
+  String getStoryVideoUrl({
+    required int storyId,
+    bool isAi = false,
+  });
 }

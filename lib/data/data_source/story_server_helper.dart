@@ -74,17 +74,6 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<String>> getStoryThumbnailPathById(int storyId) async {
-    try {
-      final result = await server.get(
-          url: '$serverStoryPath/$storyId$serverVideoPath?type=thumbnail');
-
-      return Result.success(jsonDecode(result)["url"]);
-    } catch (e) {
-      return const Result.error('썸네일 불러오기 오류');
-    }
-  }
-
   Future<Result<dynamic>> getStoryAiDetailById(int storyId) async {
     try {
       final body = await server.get(

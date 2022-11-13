@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:climb_balance/domain/common/downloader_provider.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
@@ -17,6 +15,7 @@ import 'models/ai_feedback_state.dart';
 final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
     .family<AiFeedbackViewModel, AiFeedbackState, int>((ref, storyId) {
   AiFeedbackViewModel notifier = AiFeedbackViewModel(
+    ref: ref,
     ref.watch(storyRepositoryImplProvider),
     ref.watch(storyViewModelProvider(storyId).select((value) => value.story)),
   );
@@ -27,10 +26,11 @@ final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
 class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   final StoryRepository repository;
   final Story story;
+  final AutoDisposeStateNotifierProviderRef ref;
   Timer? actionsCloseTimer;
   AnimationController? _animationController;
 
-  AiFeedbackViewModel(this.repository, this.story)
+  AiFeedbackViewModel(this.repository, this.story, {required this.ref})
       : super(const AiFeedbackState());
 
   void _loadDatas() async {
@@ -101,17 +101,16 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   }
 
   void saveAndShare() async {
-    https: //medium.com/flutter-community/flutter-sharing-files-using-share-package-45103d7a21cb
-    const url =
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
-    final res = await get(Uri.parse(url));
+    final url = repository.getStoryVideoUrl(storyId: story.storyId, isAi: true);
     final documentDirectory = await getTemporaryDirectory();
-    File videoFile = new File('${documentDirectory.path}/tmp.mp4');
-    videoFile.writeAsBytesSync(res.bodyBytes);
+    final taskId = await ref.read(downloaderProvider.notifier).addDownload(
+          url: url,
+          dir: '${documentDirectory.path}/tmp.mp4',
+        );
 
-    Share.shareFiles(
-      [videoFile.path],
-      mimeTypes: ['video/mp4'],
-    );
+    // Share.shareFiles(
+    //   [videoFile.path],
+    //   mimeTypes: ['video/mp4'],
+    // );
   }
 }

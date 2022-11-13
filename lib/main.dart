@@ -1,5 +1,6 @@
 import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/domain/common/downloader_provider.dart';
 import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/common/router_provider.dart';
 import 'package:climb_balance/presentation/common/components/waiting_progress.dart';
@@ -40,6 +41,7 @@ void main() async {
     Firebase.initializeApp,
     container.read(currentUserProvider.notifier).init,
     container.read(serverServiceProvider).healthCheck,
+    container.read(downloaderProvider.notifier).init,
   ]);
   runApp(
     UncontrolledProviderScope(

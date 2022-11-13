@@ -108,4 +108,9 @@ class StoryRepositoryImpl implements StoryRepository {
       },
     );
   }
+
+  @override
+  String getStoryVideoUrl({required int storyId, bool isAi = false}) {
+    return '$serverUrl$serverStoryPath/$storyId$serverVideoPath?type=${isAi ? 'aimp4' : 'rawmp4'}';
+  }
 }
