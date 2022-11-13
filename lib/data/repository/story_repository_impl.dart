@@ -1,9 +1,16 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:climb_balance/data/data_source/story_server_helper.dart';
+import 'package:climb_balance/domain/common/downloader_provider.dart';
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:climb_balance/presentation/ai_feedback/models/ai_feedback_state.dart';
 import 'package:climb_balance/presentation/story_upload_screens/story_upload_state.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../domain/common/loading_provider.dart';
 import '../../domain/const/server_config.dart';
@@ -109,8 +116,45 @@ class StoryRepositoryImpl implements StoryRepository {
     );
   }
 
-  @override
-  String getStoryVideoUrl({required int storyId, bool isAi = false}) {
+  String _getStoryVidoUrl({required int storyId, required bool isAi}) {
     return '$serverUrl$serverStoryPath/$storyId$serverVideoPath?type=${isAi ? 'aimp4' : 'rawmp4'}';
+  }
+
+  @override
+  Future<String?> getStoryVideo(
+      {required int storyId, bool isAi = false}) async {
+    final url = _getStoryVidoUrl(storyId: storyId, isAi: isAi);
+    final documentDirectory = await getTemporaryDirectory();
+
+    final path = await ref.read(downloaderProvider.notifier).addDownload(
+          url: url,
+          dir: '${documentDirectory.path}',
+          fileName: isAi ? 'ai.mp4' : 'raw.mp4',
+        );
+
+    if (path == null) return null;
+
+    final ReceivePort port = ReceivePort();
+    IsolateNameServer.registerPortWithName(
+      port.sendPort,
+      'downloader_send_port',
+    );
+    port.listen((dynamic data) async {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      if (status == DownloadTaskStatus.complete ||
+          status == DownloadTaskStatus.failed) {
+        await Share.shareFiles(
+          [path],
+          mimeTypes: ['video/mp4'],
+        );
+        port.close();
+        IsolateNameServer.removePortNameMapping('downloader_send_port');
+        return;
+      }
+      ref.read(loadingProvider.notifier).updateProgress(progress);
+    });
+    return null;
   }
 }

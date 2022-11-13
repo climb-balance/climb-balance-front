@@ -9,10 +9,8 @@ import 'package:climb_balance/presentation/story/story_state.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../data/repository/user_repository_impl.dart';
-import '../../domain/common/downloader_provider.dart';
 import '../../domain/util/feedback_status.dart';
 import '../common/custom_dialog.dart';
 
@@ -125,11 +123,7 @@ class StoryViewModel extends StateNotifier<StoryState> {
   }
 
   void saveAndShare() async {
-    final url = storyRepository.getStoryVideoUrl(storyId: state.story.storyId);
-    final documentDirectory = await getTemporaryDirectory();
-    final taskId = await ref.read(downloaderProvider.notifier).addDownload(
-          url: url,
-          dir: '${documentDirectory.path}',
-        );
+    final String? path =
+        await storyRepository.getStoryVideo(storyId: state.story.storyId);
   }
 }

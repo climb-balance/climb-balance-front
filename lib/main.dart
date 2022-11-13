@@ -58,7 +58,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(firebaseProvider.notifier).initFirebase(context);
     ref.watch(localNotificationProvider);
-    final bool loading = ref.watch(loadingProvider);
+    final bool loading =
+        ref.watch(loadingProvider.select((value) => value.isLoading));
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,

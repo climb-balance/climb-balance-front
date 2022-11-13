@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:climb_balance/domain/common/downloader_provider.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
@@ -101,16 +99,9 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   }
 
   void saveAndShare() async {
-    final url = repository.getStoryVideoUrl(storyId: story.storyId, isAi: true);
-    final documentDirectory = await getTemporaryDirectory();
-    final taskId = await ref.read(downloaderProvider.notifier).addDownload(
-          url: url,
-          dir: '${documentDirectory.path}/tmp.mp4',
-        );
-
-    // Share.shareFiles(
-    //   [videoFile.path],
-    //   mimeTypes: ['video/mp4'],
-    // );
+    final String? path = await repository.getStoryVideo(
+      storyId: story.storyId,
+      isAi: true,
+    );
   }
 }

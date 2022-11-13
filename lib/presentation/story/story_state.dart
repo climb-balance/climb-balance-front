@@ -12,5 +12,6 @@ class StoryState with _$StoryState {
     @Default(Story()) Story story,
     @Default(false) bool overlayOpen,
     @Default(false) bool playStatusOpen,
+    @Default(0) double downloadProgress,
   }) = _StoryState;
 }

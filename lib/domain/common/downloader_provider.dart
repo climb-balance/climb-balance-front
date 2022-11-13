@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -14,22 +13,21 @@ final downloaderProvider =
   return notifier;
 });
 
-@pragma('vm:entry-point')
-void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-  debugPrint('${id} ${status.value} ${progress}');
-  final SendPort? send =
-      IsolateNameServer.lookupPortByName('downloader_send_port');
-  send?.send([id, status, progress]);
-}
-
 /// firebase 토큰을 state로 가진다.
 class DownloaderNotifier extends StateNotifier<String> {
   final StateNotifierProviderRef ref;
-  final ReceivePort _port = ReceivePort();
 
   DownloaderNotifier({
     required this.ref,
   }) : super('');
+
+  @pragma('vm:entry-point')
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send?.send([id, status, progress]);
+  }
 
   Future<void> init() async {
     await FlutterDownloader.initialize(
@@ -58,12 +56,14 @@ class DownloaderNotifier extends StateNotifier<String> {
   }) async {
     await deleteTmpFile(dir: dir, fileName: fileName);
     final taskId = await FlutterDownloader.enqueue(
+      showNotification: false,
       url: url,
       headers: {},
       // optional: header send with url (auth token etc)
       fileName: fileName,
       savedDir: dir,
     );
-    return taskId;
+    if (taskId == null) return null;
+    return '$dir/$fileName';
   }
 }
