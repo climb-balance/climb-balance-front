@@ -64,6 +64,10 @@ class _StoryUploadScreenState extends ConsumerState<StoryUploadScreen>
             UploadVideoPreview(
               trimmer: trimmer,
             ),
+            Divider(
+              height: 1,
+              thickness: 1,
+            ),
             Expanded(
               child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
