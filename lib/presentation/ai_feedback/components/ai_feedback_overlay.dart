@@ -49,71 +49,70 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
       }
     };
     widget.videoPlayerController.addListener(_listener);
+    setState(() {});
   }
 
   @override
   void dispose() {
-    widget.videoPlayerController.removeListener(() {});
-    _animationController?.removeListener(_listener);
-    ref
-        .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
-        .initAnimationController(null);
+    widget.videoPlayerController.removeListener(_listener);
     _animationController?.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final value = widget.videoPlayerController.value;
     final scoreOverlay = ref.watch(aiFeedbackViewModelProvider(widget.storyId)
         .select((value) => value.scoreOverlay));
     final color = Theme.of(context).colorScheme;
-    if (_animationController == null) return Container();
+    final perFrameScore = ref.watch(
+      aiFeedbackViewModelProvider(widget.storyId).select(
+        (value) => value.perFrameScore,
+      ),
+    );
+    final frames = ref.watch(
+      aiFeedbackViewModelProvider(widget.storyId).select(
+        (value) => value.frames,
+      ),
+    );
+    if (_animationController == null || frames == 0) return Container();
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
-        return AspectRatio(
-          aspectRatio: value.aspectRatio,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              CustomPaint(
-                painter: AiFeedbackOverlayPainter(
-                  animationValue: _animationController!.value,
-                  perFrameScore: ref.watch(
-                    aiFeedbackViewModelProvider(widget.storyId).select(
-                      (value) => value.perFrameScore,
-                    ),
-                  ),
-                  joints: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
-                      .select((value) => value.joints)),
-                  frames: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
-                      .select((value) => value.frames)),
-                  lineOverlay: ref.watch(
-                      aiFeedbackViewModelProvider(widget.storyId)
-                          .select((value) => value.lineOverlay)),
-                  squareOverlay: ref.watch(
-                      aiFeedbackViewModelProvider(widget.storyId)
-                          .select((value) => value.squareOverlay)),
-                ),
-              ),
-              if (scoreOverlay)
+        return ClipRect(
+          child: AspectRatio(
+            aspectRatio: value.aspectRatio,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
                 CustomPaint(
-                  painter: AiFeedbackScorePainter(
-                    color: color,
+                  painter: AiFeedbackOverlayPainter(
                     animationValue: _animationController!.value,
-                    perFrameScore: ref.watch(
-                      aiFeedbackViewModelProvider(widget.storyId).select(
-                        (value) => value.perFrameScore,
-                      ),
-                    ),
-                    frames: ref.watch(
+                    perFrameScore: perFrameScore,
+                    joints: ref.watch(
                         aiFeedbackViewModelProvider(widget.storyId)
-                            .select((value) => value.frames)),
+                            .select((value) => value.joints)),
+                    frames: frames,
+                    lineOverlay: ref.watch(
+                        aiFeedbackViewModelProvider(widget.storyId)
+                            .select((value) => value.lineOverlay)),
+                    squareOverlay: ref.watch(
+                        aiFeedbackViewModelProvider(widget.storyId)
+                            .select((value) => value.squareOverlay)),
                   ),
                 ),
-            ],
+                if (scoreOverlay)
+                  CustomPaint(
+                    painter: AiFeedbackScorePainter(
+                      color: color,
+                      animationValue: _animationController!.value,
+                      perFrameScore: perFrameScore,
+                      frames: frames,
+                    ),
+                  ),
+              ],
+            ),
           ),
         );
       },

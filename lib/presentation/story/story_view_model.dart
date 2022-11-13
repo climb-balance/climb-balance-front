@@ -36,6 +36,11 @@ class StoryViewModel extends StateNotifier<StoryState> {
     required this.storyRepository,
     required this.userRepository,
   }) : super(const StoryState());
+  @override
+  void dispose() {
+    overlayCloseTimer?.cancel();
+    super.dispose();
+  }
 
   void _init(int storyId) async {
     final result = await storyRepository.getStoryById(storyId);

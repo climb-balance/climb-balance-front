@@ -126,13 +126,11 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                 videoPlayerController: _videoPlayerController,
               ),
             if (!isInformOpen)
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: AiFeedbackProgressBar(
-                    storyId: widget.storyId,
-                    videoPlayerController: _videoPlayerController,
-                  ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AiFeedbackProgressBar(
+                  storyId: widget.storyId,
+                  videoPlayerController: _videoPlayerController,
                 ),
               ),
           ],

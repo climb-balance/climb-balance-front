@@ -31,6 +31,12 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   AiFeedbackViewModel(this.repository, this.story, {required this.ref})
       : super(const AiFeedbackState());
 
+  @override
+  void dispose() {
+    actionsCloseTimer?.cancel();
+    super.dispose();
+  }
+
   void _loadDatas() async {
     final result = await repository.getStoryAiDetailById(story.storyId);
     result.when(

@@ -9,22 +9,21 @@ class WaitingProgress extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final int? progress =
         ref.watch(loadingProvider.select((value) => value.progress));
-
-    return Expanded(
-      child: Container(
-        color: Colors.black.withOpacity(0.5),
-        padding: EdgeInsets.all(60),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircularProgressIndicator(),
-            SizedBox(
-              height: 64,
-            ),
-            if (progress != null)
-              LinearProgressIndicator(value: progress / 100),
-          ],
-        ),
+    final size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width,
+      height: size.height,
+      color: Colors.black.withOpacity(0.5),
+      padding: const EdgeInsets.all(60),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(),
+          const SizedBox(
+            height: 64,
+          ),
+          if (progress != null) LinearProgressIndicator(value: progress / 100),
+        ],
       ),
     );
   }
