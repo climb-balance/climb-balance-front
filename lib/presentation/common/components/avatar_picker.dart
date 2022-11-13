@@ -68,20 +68,19 @@ class FlexAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return imagePath == null
-        ? const NoAvatar()
-        : CircleAvatar(
-            radius: 50,
-            child: ClipOval(
-              child: Image.network(
-                imagePath!,
-                errorBuilder: (_, __, ___) => Image.file(
-                  File(imagePath!),
-                ),
-                fit: BoxFit.fill,
-              ),
-            ),
-          );
+    if (imagePath == null) return const NoAvatar();
+    final ImageProvider imageProvider;
+    if (imagePath!.contains('http')) {
+      imageProvider = NetworkImage(imagePath!);
+    } else {
+      imageProvider = FileImage(
+        File(imagePath!),
+      );
+    }
+    return CircleAvatar(
+      radius: 50,
+      backgroundImage: imageProvider,
+    );
   }
 }
 

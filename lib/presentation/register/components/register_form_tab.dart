@@ -18,14 +18,14 @@ class RegisterFormTab extends ConsumerWidget {
         SliverList(
           delegate: SliverChildListDelegate(
             [
-              SizedBox(
+              const SizedBox(
                 height: 36,
               ),
               Text(
                 '닉네임',
                 style: theme.textTheme.subtitle2,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               CustomTextInput(
@@ -44,14 +44,14 @@ class RegisterFormTab extends ConsumerWidget {
                   return null;
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 36,
               ),
               Text(
                 '프로필 사진',
                 style: theme.textTheme.subtitle2,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               AvatarPicker(
@@ -65,7 +65,7 @@ class RegisterFormTab extends ConsumerWidget {
                       .select((value) => value.profileImagePath),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 36,
               ),
               Text(
@@ -77,7 +77,7 @@ class RegisterFormTab extends ConsumerWidget {
                 '자기 소개',
                 style: theme.textTheme.subtitle2,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               CustomTextInput(
@@ -92,10 +92,10 @@ class RegisterFormTab extends ConsumerWidget {
                 },
                 maxLines: 3,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 36,
               ),
-              CheckBoxes(),
+              const CheckBoxes(),
             ],
           ),
         ),

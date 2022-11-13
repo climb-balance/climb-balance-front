@@ -30,52 +30,51 @@ class _CheckBoxesState extends ConsumerState<CheckBoxes> {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          LabelCheckBox(
-            value: allCheck,
-            onChanged: updateValue,
-            label: Text(
-              '모두 동의하기',
-              style: text.bodyText1,
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        LabelCheckBox(
+          value: allCheck,
+          onChanged: updateValue,
+          label: Text(
+            '모두 동의하기',
+            style: text.bodyText1,
           ),
-          LabelCheckBox(
-            value: ref.watch(registerViewModelProvider
-                .select((value) => value.requiredCheck)),
-            onChanged: ref
-                .read(registerViewModelProvider.notifier)
-                .updateRequiredCheck,
-            label: TermsDescription(
-              name: '필수 약관',
-              required: true,
-            ),
+        ),
+        LabelCheckBox(
+          value: ref.watch(
+              registerViewModelProvider.select((value) => value.requiredCheck)),
+          onChanged:
+              ref.read(registerViewModelProvider.notifier).updateRequiredCheck,
+          label: const TermsDescription(
+            name: '필수 약관',
             required: true,
+            url: 'https://www.climb-balance.com/policy/service',
           ),
-          LabelCheckBox(
-            value: ref.watch(registerViewModelProvider
-                .select((value) => value.promotionCheck)),
-            onChanged: ref
-                .watch(registerViewModelProvider.notifier)
-                .updatePromotionCheck,
-            label: const TermsDescription(
-              name: '광고 선택 약관',
-            ),
+          required: true,
+        ),
+        LabelCheckBox(
+          value: ref.watch(registerViewModelProvider
+              .select((value) => value.promotionCheck)),
+          onChanged: ref
+              .watch(registerViewModelProvider.notifier)
+              .updatePromotionCheck,
+          label: const TermsDescription(
+            name: '광고 선택 약관',
+            url: 'https://www.climb-balance.com/policy/promotion',
           ),
-          LabelCheckBox(
-            value: ref.watch(registerViewModelProvider
-                .select((value) => value.personalCheck)),
-            onChanged: ref
-                .watch(registerViewModelProvider.notifier)
-                .updatePersonalCheck,
-            label: const TermsDescription(
-              name: '개인정보 선택 약관',
-            ),
+        ),
+        LabelCheckBox(
+          value: ref.watch(
+              registerViewModelProvider.select((value) => value.personalCheck)),
+          onChanged:
+              ref.watch(registerViewModelProvider.notifier).updatePersonalCheck,
+          label: const TermsDescription(
+            name: '개인정보 선택 약관',
+            url: 'https://www.climb-balance.com/policy/privacy',
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

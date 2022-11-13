@@ -23,7 +23,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   final List<Widget> registerTabs = [
     const HeightTab(),
     const WeightTab(),
-    RegisterFormTab(),
+    const RegisterFormTab(),
   ];
   bool valueCheck = false;
 

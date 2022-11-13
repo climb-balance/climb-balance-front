@@ -25,14 +25,16 @@ class EditProfile extends ConsumerWidget {
                   .updateProfileImagePath,
               imagePath: user.profileImage,
             ),
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Center(
-                child: Icon(
-                  Icons.edit,
-                  size: 36,
-                  color: color.onSurface.withOpacity(0.8),
+            IgnorePointer(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Center(
+                  child: Icon(
+                    Icons.edit,
+                    size: 36,
+                    color: color.onSurface.withOpacity(0.8),
+                  ),
                 ),
               ),
             ),
