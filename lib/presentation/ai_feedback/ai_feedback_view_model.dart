@@ -66,6 +66,10 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     state = state.copyWith(lineOverlay: !state.lineOverlay);
   }
 
+  void toggleScoreOverlay() {
+    state = state.copyWith(scoreOverlay: !state.scoreOverlay);
+  }
+
   void toggleSquareOverlay() {
     state = state.copyWith(squareOverlay: !state.squareOverlay);
   }

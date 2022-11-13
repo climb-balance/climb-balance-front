@@ -28,6 +28,8 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.lineOverlay));
     final bool squareOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.squareOverlay));
+    final bool scoreOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
+        .select((value) => value.scoreOverlay));
     return GestureDetector(
       onTap: () {
         ref
@@ -57,10 +59,23 @@ class AiFeedbackActions extends ConsumerWidget {
                   onPressed: () {
                     ref
                         .read(aiFeedbackViewModelProvider(storyId).notifier)
+                        .toggleScoreOverlay();
+                  },
+                  child: ToggleIcon(
+                    icon: Icons.score,
+                    isEnable: scoreOverlay,
+                    detail: '점수',
+                    iconSize: iconSize,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ref
+                        .read(aiFeedbackViewModelProvider(storyId).notifier)
                         .toggleLineOverlay();
                   },
                   child: ToggleIcon(
-                    icon: Icons.edit_rounded,
+                    icon: Icons.linear_scale,
                     isEnable: lineOverlay,
                     detail: '직선',
                     iconSize: iconSize,
@@ -73,7 +88,7 @@ class AiFeedbackActions extends ConsumerWidget {
                         .toggleSquareOverlay();
                   },
                   child: ToggleIcon(
-                    icon: Icons.filter,
+                    icon: Icons.square_foot,
                     isEnable: squareOverlay,
                     detail: '사각형',
                     iconSize: iconSize,

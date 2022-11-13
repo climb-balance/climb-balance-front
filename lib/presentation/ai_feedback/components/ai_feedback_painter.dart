@@ -218,65 +218,85 @@ class AiFeedbackScorePainter extends CustomPainter {
   final double animationValue;
   final AiScorePerFrame perFrameScore;
   final int frames;
+  final ColorScheme color;
+  late final Paint linePaint;
+  late final Paint boxPaint;
+  late final TextStyle textStyle;
 
   AiFeedbackScorePainter({
     required this.animationValue,
     required this.perFrameScore,
     required this.frames,
-  });
+    required this.color,
+  }) {
+    linePaint = Paint()
+      ..color = color.primary.withOpacity(0.8)
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 2;
+    boxPaint = Paint()
+      ..color = color.primaryContainer
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 2;
+    textStyle = TextStyle(
+      color: color.onSurface,
+      backgroundColor: color.surface,
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+    );
+  }
 
-  final Paint linePaint = Paint()
-    ..color = Colors.green.withOpacity(0.8)
-    ..style = PaintingStyle.fill
-    ..strokeWidth = 2;
-  final Paint boxPaint = Paint()
-    ..color = Colors.blueGrey
-    ..style = PaintingStyle.fill
-    ..strokeWidth = 2;
+  void drawBarGraph({
+    required Canvas canvas,
+    double? value,
+    required String valueName,
+    required double startY,
+    required double height,
+    required double width,
+    double startX = 80,
+  }) {
+    final textSpan = TextSpan(
+      text: valueName,
+      style: textStyle,
+    );
+    final textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(10, startY));
+    canvas.drawRect(
+      Rect.fromPoints(
+          Offset(startX, startY), Offset(startX + width, startY + height)),
+      boxPaint,
+    );
+    if (value == null) {
+      return;
+    }
+    canvas.drawRect(
+      Rect.fromPoints(Offset(startX, startY),
+          Offset(startX + value * width, startY + height)),
+      linePaint,
+    );
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
     int currentFrame = (animationValue * frames).toInt();
-    final accuracy = perFrameScore.accuracy[currentFrame];
-    final angle = perFrameScore.angle[currentFrame];
-    final balance = perFrameScore.balance[currentFrame];
-    final inertia = perFrameScore.inertia[currentFrame];
-    final moment = perFrameScore.moment[currentFrame];
-
-    for (int i = 0; i < 5; i += 1) {
-      canvas.drawRect(
-        Rect.fromPoints(Offset(0, i * 30), Offset(20, i * 30 + 20)),
-        boxPaint,
-      );
-    }
-    if (accuracy != null) {
-      canvas.drawRect(
-        Rect.fromPoints(Offset(0, 0), Offset(accuracy * 20, 20)),
-        linePaint,
-      );
-    }
-    if (angle != null) {
-      canvas.drawRect(
-        Rect.fromPoints(Offset(0, 30), Offset(angle * 20, 50)),
-        linePaint,
-      );
-    }
-    if (balance != null) {
-      canvas.drawRect(
-        Rect.fromPoints(Offset(0, 60), Offset(balance * 20, 80)),
-        linePaint,
-      );
-    }
-    if (inertia != null) {
-      canvas.drawRect(
-        Rect.fromPoints(Offset(0, 90), Offset((1 - inertia) * 20, 110)),
-        linePaint,
-      );
-    }
-    if (moment != null) {
-      canvas.drawRect(
-        Rect.fromPoints(Offset(0, 120), Offset(moment * 20, 140)),
-        linePaint,
+    // final accuracy = perFrameScore.accuracy[currentFrame];
+    // final angle = perFrameScore.angle[currentFrame];
+    // final balance = perFrameScore.balance[currentFrame];
+    // final inertia = perFrameScore.inertia[currentFrame];
+    // final moment = perFrameScore.moment[currentFrame];
+    final valueList = perFrameScore.getValuesByIdx(currentFrame);
+    final valueNameList = perFrameScore.getValuesName;
+    for (int i = 0; i < valueList.length; i += 1) {
+      drawBarGraph(
+        canvas: canvas,
+        startY: (i) * 26 + 10,
+        height: 20,
+        width: 40,
+        value: valueList[i],
+        valueName: valueNameList[i],
       );
     }
   }

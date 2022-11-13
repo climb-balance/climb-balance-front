@@ -8,13 +8,22 @@ part 'ai_score_per_frame.g.dart';
 @freezed
 class AiScorePerFrame with _$AiScorePerFrame {
   const factory AiScorePerFrame({
-    @Default([]) List<double?> balance,
     @Default([]) List<double?> accuracy,
     @Default([]) List<double?> angle,
-    @Default([]) List<double?> moment,
+    @Default([]) List<double?> balance,
     @Default([]) List<double?> inertia,
+    @Default([]) List<double?> moment,
   }) = _AiScorePerFrame;
 
   factory AiScorePerFrame.fromJson(Map<String, dynamic> json) =>
       _$AiScorePerFrameFromJson(json);
+
+  const AiScorePerFrame._();
+
+  List<double?> getValuesByIdx(int idx) {
+    return [accuracy[idx], angle[idx], balance[idx], inertia[idx], moment[idx]];
+  }
+
+  List<String> get getValuesName =>
+      ['accuracy', 'angle', 'balance', 'inertia', 'moment'];
 }

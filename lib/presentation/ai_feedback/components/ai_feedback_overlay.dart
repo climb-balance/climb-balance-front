@@ -66,7 +66,9 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final value = widget.videoPlayerController.value;
-
+    final scoreOverlay = ref.watch(aiFeedbackViewModelProvider(widget.storyId)
+        .select((value) => value.scoreOverlay));
+    final color = Theme.of(context).colorScheme;
     if (_animationController == null) return Container();
     return AnimatedBuilder(
       animation: _animationController!,
@@ -96,18 +98,21 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
                           .select((value) => value.squareOverlay)),
                 ),
               ),
-              CustomPaint(
-                painter: AiFeedbackScorePainter(
-                  animationValue: _animationController!.value,
-                  perFrameScore: ref.watch(
-                    aiFeedbackViewModelProvider(widget.storyId).select(
-                      (value) => value.perFrameScore,
+              if (scoreOverlay)
+                CustomPaint(
+                  painter: AiFeedbackScorePainter(
+                    color: color,
+                    animationValue: _animationController!.value,
+                    perFrameScore: ref.watch(
+                      aiFeedbackViewModelProvider(widget.storyId).select(
+                        (value) => value.perFrameScore,
+                      ),
                     ),
+                    frames: ref.watch(
+                        aiFeedbackViewModelProvider(widget.storyId)
+                            .select((value) => value.frames)),
                   ),
-                  frames: ref.watch(aiFeedbackViewModelProvider(widget.storyId)
-                      .select((value) => value.frames)),
                 ),
-              ),
             ],
           ),
         );
