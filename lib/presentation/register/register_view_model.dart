@@ -1,5 +1,7 @@
 import 'package:climb_balance/data/repository/user_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/presentation/common/custom_dialog.dart';
+import 'package:climb_balance/presentation/common/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -116,13 +118,13 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
                   .updateToken(accessToken: state.accessToken);
               context.pop();
               context.pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('성공')),
-              );
+              showCustomSnackbar(context: context, message: '회원가입 성공! 어서오세요!');
             },
             error: (message) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('회원가입 실패 $message')),
+              customShowDialog(
+                context: context,
+                title: '회원가입 실패',
+                content: '실패 원인 $message',
               );
             },
           ),

@@ -5,6 +5,7 @@ import 'package:climb_balance/domain/repository/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../const/route_name.dart';
 import '../model/expert_profile.dart';
@@ -55,9 +56,10 @@ class CurrentUserNotifier extends StateNotifier<User> {
     loadUserInfo(accessToken);
   }
 
-  void logout(BuildContext context) {
+  void logout(BuildContext context) async {
     state = state.copyWith(accessToken: '');
     storageService.clearStoredToken();
+    CookieManager().clearCookies();
     context.goNamed(authPageRouteName);
   }
 
