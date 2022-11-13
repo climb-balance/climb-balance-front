@@ -13,10 +13,9 @@ class PentagonRadarChart extends StatelessWidget {
     this.showText = true,
   }) : super(key: key);
 
-  static const List<String> titles = ['정확도', '각도', '밸런스', '관성', '모멘트'];
-
   @override
   Widget build(BuildContext context) {
+    final List<String> titles = aiScoreState.getValuesName;
     final color = Theme.of(context).colorScheme;
     return AspectRatio(
       aspectRatio: 1,

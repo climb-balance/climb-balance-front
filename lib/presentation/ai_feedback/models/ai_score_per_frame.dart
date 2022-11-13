@@ -24,6 +24,5 @@ class AiScorePerFrame with _$AiScorePerFrame {
     return [accuracy[idx], angle[idx], balance[idx], inertia[idx], moment[idx]];
   }
 
-  List<String> get getValuesName =>
-      ['accuracy', 'angle', 'balance', 'inertia', 'moment'];
+  List<String> get getValuesName => ['정확도', '각도', '밸런스', '관성', '모멘트'];
 }
