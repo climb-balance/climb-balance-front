@@ -38,4 +38,7 @@ abstract class StoryRepository {
     int storyId,
     String content,
   );
+
+  Future<Result<void>> deleteComment(
+      {required int commentId, required int storyId});
 }

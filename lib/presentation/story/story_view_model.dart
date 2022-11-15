@@ -95,6 +95,23 @@ class StoryViewModel extends StateNotifier<StoryState> {
     );
   }
 
+  void deleteComment(
+      {required int commentId, required BuildContext context}) async {
+    final result = await storyRepository.deleteComment(
+      storyId: state.story.storyId,
+      commentId: commentId,
+    );
+    result.when(
+      success: (value) {
+        state = state.copyWith(currentComment: '');
+        loadComments();
+
+        showCustomSnackbar(context: context, message: '댓글 삭제 성공!');
+      },
+      error: (message) {},
+    );
+  }
+
   void updateCurrentComment(String content) async {
     state = state.copyWith(currentComment: content);
   }

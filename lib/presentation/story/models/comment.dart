@@ -13,6 +13,7 @@ class Comment with _$Comment {
     @Default('') String content,
     @Default('') String nickname,
     @Default(0) int likes,
+    @Default(0) int rank,
     @Default(0) int createdTimestamp,
   }) = _Comment;
 

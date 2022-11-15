@@ -176,4 +176,11 @@ class StoryRepositoryImpl implements StoryRepository {
   Future<Result<void>> addComment(int storyId, String content) async {
     return await server.addStoryComment(storyId, content);
   }
+
+  @override
+  Future<Result<void>> deleteComment(
+      {required int commentId, required int storyId}) async {
+    return await server.deleteStoryComment(
+        storyId: storyId, commentId: commentId);
+  }
 }
