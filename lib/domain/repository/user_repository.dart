@@ -22,4 +22,6 @@ abstract class UserRepository {
     required String accessToken,
     required UpdateUser updateUser,
   });
+
+  Future<Result<String>> getGuestUserToken(String code);
 }

@@ -1,3 +1,4 @@
+import 'package:climb_balance/presentation/auth/components/guest_login.dart';
 import 'package:climb_balance/presentation/auth/components/more_info.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,11 +22,15 @@ class AuthScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         body: const AuthLogos(),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 44),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
               NaverLogin(),
+              SizedBox(
+                height: 8,
+              ),
+              GuestLogin(),
               SizedBox(
                 height: 8,
               ),

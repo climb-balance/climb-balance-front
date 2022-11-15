@@ -98,4 +98,17 @@ class UserServerHelper {
       return Result.error('계정 수정 실패 : ${e.toString()}');
     }
   }
+
+  Future<Result<Map<String, dynamic>>> getGuestUser(String code) async {
+    try {
+      final result = await server.get(
+        url: '$serverGuestPath',
+        accessToken: code,
+      );
+
+      return Result.success(jsonDecode(result));
+    } catch (e) {
+      return Result.error('메인 정보 로드 오류 ${e.toString()}');
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:climb_balance/data/repository/user_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/presentation/common/custom_dialog.dart';
 import 'package:climb_balance/presentation/register/register_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +12,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../domain/const/route_name.dart';
 import '../../domain/repository/user_repository.dart';
 import 'auth_state.dart';
+import 'components/guest_code_modal.dart';
 
 final authViewModelProvider =
     StateNotifierProvider.autoDispose<AuthViewModel, AuthState>((ref) {
@@ -28,6 +30,26 @@ class AuthViewModel extends StateNotifier<AuthState> {
 
   void onNaverLogin(BuildContext context) async {
     context.pushNamed(authNaverRouteName);
+  }
+
+  void onGuestLogin(BuildContext context) async {
+    final code = await showDialog<String?>(
+      context: context,
+      builder: (context) => const GuestCodeModal(),
+    );
+    if (code == null) {
+      return;
+    }
+    final result = await repository.getGuestUserToken(code);
+    result.when(success: (token) {
+      ref.read(currentUserProvider.notifier).updateToken(accessToken: token);
+    }, error: (message) {
+      customShowDialog(
+        context: context,
+        title: '로그인 실패',
+        content: '게스트 로그인 실패 사유 : $message',
+      );
+    });
   }
 
   String getAuthUrl() {
