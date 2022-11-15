@@ -9,7 +9,7 @@ class UpdateUser with _$UpdateUser {
   const factory UpdateUser({
     String? nickname,
     String? description,
-    String? profileImage,
+    @JsonKey(ignore: true) String? profileImage,
     bool? promotionCheck,
     bool? personalCheck,
   }) = _UpdateUser;

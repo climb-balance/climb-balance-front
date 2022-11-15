@@ -33,15 +33,6 @@ class _StoryPreviewState extends ConsumerState<StoryPreview> {
       ),
       items: [
         PopupMenuItem(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const <Widget>[
-              Icon(Icons.edit),
-              Text("수정하기"),
-            ],
-          ),
-        ),
-        PopupMenuItem(
           onTap: () {
             ref.read(diaryViewModelProvider.notifier).deleteStory(
                   storyId: widget.story.storyId,

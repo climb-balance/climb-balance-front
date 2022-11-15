@@ -7,8 +7,7 @@ import '../../../domain/model/tag_selector.dart';
 import 'pick_item.dart';
 
 class ModalPicker extends ConsumerWidget {
-  final AutoDisposeStateNotifierProvider<SelectorNotifier, List<Selector>>
-      provider;
+  final StateNotifierProvider<SelectorNotifier, List<Selector>> provider;
   final String searchLabel;
 
   const ModalPicker({

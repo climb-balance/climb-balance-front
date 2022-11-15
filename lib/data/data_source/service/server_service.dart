@@ -112,12 +112,19 @@ class ServerService {
     return body;
   }
 
-  Future<dynamic> multiPartUpload(String url, String videoPath) async {
+  Future<dynamic> multiPartUpload(String url, String filePath,
+      {String fileName = 'file',
+      String methodType = 'POST',
+      String? accessToken}) async {
     Uri uri = Uri.parse('$serverUrl$url');
-    final req = http.MultipartRequest('POST', uri);
+    final req = http.MultipartRequest(methodType, uri);
+    if (accessToken != null) {
+      req.headers['Authorization'] = 'Bearer ${accessToken}';
+    }
     try {
-      final multiPartFile = await http.MultipartFile.fromPath('file', videoPath)
-          .timeout(const Duration(seconds: 2));
+      final multiPartFile =
+          await http.MultipartFile.fromPath(fileName, filePath)
+              .timeout(const Duration(seconds: 2));
       req.files.add(multiPartFile);
       final res = await req.send();
       final statusCode = res.statusCode;

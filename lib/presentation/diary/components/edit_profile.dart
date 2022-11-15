@@ -12,7 +12,10 @@ class EditProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref
-        .watch(diaryViewModelProvider.select((value) => value.editingProfile))!;
+        .watch(diaryViewModelProvider.select((value) => value.editingProfile));
+    if (user == null) {
+      return Container();
+    }
     final color = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     return Row(

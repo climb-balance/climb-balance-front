@@ -43,24 +43,25 @@ class StoryActions extends ConsumerWidget {
               size: iconSize,
             ),
           ),
-        TextButton(
-          onPressed: () {
-            ref.read(storyViewModelProvider(storyId).notifier).likeStory();
-          },
-          child: ColIconDetail(
-            iconSize: iconSize,
-            icon: Icons.thumb_up,
-            detail: '${story.likes}',
-          ),
-        ),
-        TextButton(
-          onPressed: toggleCommentOpen,
-          child: ColIconDetail(
-            iconSize: iconSize,
-            icon: Icons.comment,
-            detail: '${story.comments}',
-          ),
-        ),
+        // TODO 다시 살리기
+        // TextButton(
+        //   onPressed: () {
+        //     ref.read(storyViewModelProvider(storyId).notifier).likeStory();
+        //   },
+        //   child: ColIconDetail(
+        //     iconSize: iconSize,
+        //     icon: Icons.thumb_up,
+        //     detail: '${story.likes}',
+        //   ),
+        // ),
+        // TextButton(
+        //   onPressed: toggleCommentOpen,
+        //   child: ColIconDetail(
+        //     iconSize: iconSize,
+        //     icon: Icons.comment,
+        //     detail: '${story.comments}',
+        //   ),
+        // ),
         TextButton(
           onPressed: () {
             ref.read(storyViewModelProvider(storyId).notifier).saveAndShare();

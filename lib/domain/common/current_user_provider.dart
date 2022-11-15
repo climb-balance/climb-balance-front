@@ -87,11 +87,13 @@ class CurrentUserNotifier extends StateNotifier<User> {
       nickname: nickname,
       promotionCheck: promotionCheck,
       personalCheck: personalCheck,
+      profileImage: profileImage,
     );
     await repository.updateUser(
       accessToken: state.accessToken,
       updateUser: updateUser,
     );
+
     loadUserInfo(state.accessToken);
   }
 

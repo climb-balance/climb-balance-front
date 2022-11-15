@@ -49,7 +49,7 @@ class UserServerHelper {
         filePath: registerState.profileImagePath,
         data: registerState,
       );
-      return Result.success(null);
+      return const Result.success(null);
     } catch (e) {
       return Result.error('회원가입 오류 ${e.toString()}');
     }
@@ -59,7 +59,7 @@ class UserServerHelper {
       String accessToken) async {
     try {
       final result = await server.get(
-        url: '$serverMainPath',
+        url: serverMainPath,
         accessToken: accessToken,
       );
 
@@ -72,7 +72,7 @@ class UserServerHelper {
   Future<Result<void>> deleteUser(String accessToken) async {
     try {
       final result = await server.delete(
-        url: '$serverRegisterPath',
+        url: serverRegisterPath,
         accessToken: accessToken,
       );
 
@@ -88,11 +88,25 @@ class UserServerHelper {
   }) async {
     try {
       final result = await server.patch(
-        url: '$serverProfilePath',
+        url: serverProfilePath,
         accessToken: accessToken,
         data: updateUser,
       );
-
+    } catch (e) {
+      return Result.error('계정 수정 실패 : ${e.toString()}');
+    }
+    if (updateUser.profileImage == null ||
+        updateUser.profileImage!.startsWith('http')) {
+      return const Result.success(null);
+    }
+    try {
+      final result = await server.multiPartUpload(
+        serverProfileImagePath,
+        updateUser.profileImage!,
+        fileName: 'profileImage',
+        methodType: 'PATCH',
+        accessToken: accessToken,
+      );
       return const Result.success(null);
     } catch (e) {
       return Result.error('계정 수정 실패 : ${e.toString()}');
@@ -102,7 +116,7 @@ class UserServerHelper {
   Future<Result<Map<String, dynamic>>> getGuestUser(String code) async {
     try {
       final result = await server.get(
-        url: '$serverGuestPath',
+        url: serverGuestPath,
         accessToken: code,
       );
 

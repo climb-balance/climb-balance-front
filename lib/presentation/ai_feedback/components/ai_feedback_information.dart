@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 
 import 'ai_analysis.dart';
 import 'ai_information_tab_bar.dart';
+import 'ai_parameter_detail_tab.dart';
 import 'ai_score.dart';
 
 class AiFeedbackInformation extends ConsumerWidget {
@@ -51,7 +52,7 @@ class AiFeedbackInformation extends ConsumerWidget {
                       storyId: storyId,
                       timestamps: [1230, 10000, 15000],
                     ),
-                    Text('sd'),
+                    AiParameterDetailTab(),
                   ],
                 ),
               ),

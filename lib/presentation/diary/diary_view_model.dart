@@ -17,7 +17,7 @@ import '../../domain/util/stories_filter.dart';
 import 'models/diary_state.dart';
 
 final diaryViewModelProvider =
-    StateNotifierProvider.autoDispose<DiaryViewModel, DiaryState>((ref) {
+    StateNotifierProvider<DiaryViewModel, DiaryState>((ref) {
   DiaryViewModel notifier =
       DiaryViewModel(ref.watch(storyRepositoryImplProvider), ref);
   notifier.loadStories();
@@ -27,7 +27,7 @@ final diaryViewModelProvider =
 class DiaryViewModel extends StateNotifier<DiaryState> {
   List<Story> stories = [];
   final StoryRepository repository;
-  final AutoDisposeStateNotifierProviderRef<DiaryViewModel, DiaryState> ref;
+  final StateNotifierProviderRef ref;
 
   DiaryViewModel(this.repository, this.ref) : super(const DiaryState());
 
@@ -88,7 +88,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   }
 
   void onEditMode() {
-    final User user = ref.watch(currentUserProvider).copyWith();
+    final User user = ref.read(currentUserProvider).copyWith();
     state = state.copyWith(
       editingProfile: user,
       isEditingMode: true,
@@ -108,7 +108,6 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   }
 
   void updateProfileImagePath() async {
-    KeepAliveLink link = ref.keepAlive();
     final picker = ImagePicker();
     final image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -117,7 +116,6 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
             state.editingProfile?.copyWith(profileImage: image!.path),
       );
     }
-    link.close();
   }
 
   void endEditMode() {
@@ -126,14 +124,14 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       final nickname = state.editingProfile!.nickname;
       final profileImage = state.editingProfile!.profileImage;
       ref.read(currentUserProvider.notifier).updateUserInfo(
-          description: description,
-          nickname: nickname,
-          profileImage: profileImage);
+            description: description,
+            nickname: nickname,
+            profileImage: profileImage,
+          );
     }
-
     state = state.copyWith(
-      editingProfile: null,
       isEditingMode: false,
+      editingProfile: null,
     );
   }
 
@@ -161,7 +159,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
 
   void updateCurrentAddingFilter(
       {required String filterType, required String filterString}) {
-    final locations = ref.watch(locationSelectorProvider);
+    final locations = ref.read(locationSelectorProvider);
     if (filterType == '장소') {
       state = state.copyWith(
         currentAddingFilter: DiaryFilter(
