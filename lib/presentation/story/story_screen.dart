@@ -96,21 +96,22 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
       child: SafeArea(
         child: Stack(
           children: [
-            NoEffectInkWell(
-              onTap: () {
-                if (commentOpen) {
-                  toggleCommentOpen();
-                } else {
-                  ref
-                      .read(storyViewModelProvider(widget.storyId).notifier)
-                      .toggleOverlayOpen(
-                          _videoPlayerController.value.isPlaying);
-                }
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: NoEffectInkWell(
+                    onTap: () {
+                      if (commentOpen) {
+                        toggleCommentOpen();
+                      } else {
+                        ref
+                            .read(
+                                storyViewModelProvider(widget.storyId).notifier)
+                            .toggleOverlayOpen(
+                                _videoPlayerController.value.isPlaying);
+                      }
+                    },
                     child: _videoPlayerController.value.isInitialized
                         ? Center(
                             child: AspectRatio(
@@ -129,26 +130,27 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                             ),
                           ),
                   ),
-                  if (commentOpen)
-                    StoryComments(
-                      storyId: widget.storyId,
-                    )
-                ],
-              ),
+                ),
+                if (commentOpen)
+                  StoryComments(
+                    storyId: widget.storyId,
+                  )
+              ],
             ),
-            if (overlayOpen) ...[
+            if (overlayOpen && !commentOpen) ...[
               StoryOverlay(
                 storyId: widget.storyId,
                 togglePlaying: togglePlaying,
                 videoPlayerController: _videoPlayerController,
               ),
             ],
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ProgressBar(
-                videoPlayerController: _videoPlayerController,
+            if (!commentOpen)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ProgressBar(
+                  videoPlayerController: _videoPlayerController,
+                ),
               ),
-            ),
           ],
         ),
       ),

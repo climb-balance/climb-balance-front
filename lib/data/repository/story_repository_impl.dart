@@ -160,15 +160,20 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<List<Comment>>> getStoryComments(int storyId) async {
+  Future<Result<Comments>> getStoryComments(int storyId) async {
     final result = await server.getStoryComments(storyId);
     return result.when(
       success: (value) {
-        return Result.success(List<Comment>.from(value));
+        return Result.success(Comments.fromJson({'comments': value}));
       },
       error: (message) {
         return Result.error(message);
       },
     );
+  }
+
+  @override
+  Future<Result<void>> addComment(int storyId, String content) async {
+    return await server.addStoryComment(storyId, content);
   }
 }

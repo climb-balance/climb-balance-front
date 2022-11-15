@@ -108,6 +108,22 @@ class StoryServerHelper {
     }
   }
 
+  Future<Result<void>> addStoryComment(int storyId, String content) async {
+    try {
+      final body = await server.post(
+        url: '$serverStoryPath/$storyId$serverStoryCommentPath',
+        data: {
+          'content': content,
+        },
+        accessToken:
+            ref.watch(currentUserProvider.select((value) => value.accessToken)),
+      );
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('스토리 댓글 작성 오류 ${e.toString()}');
+    }
+  }
+
   Future<Result<int>> likeStory() {
     // TODO: implement likeStory
     throw UnimplementedError();

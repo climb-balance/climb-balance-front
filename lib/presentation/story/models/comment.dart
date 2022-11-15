@@ -19,3 +19,13 @@ class Comment with _$Comment {
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);
 }
+
+@freezed
+class Comments with _$Comments {
+  const factory Comments({
+    @Default([]) List<Comment> comments,
+  }) = _Comments;
+
+  factory Comments.fromJson(Map<String, dynamic> json) =>
+      _$CommentsFromJson(json);
+}

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'domain/common/firebase_provider.dart';
 import 'domain/common/local_notification_provider.dart';
@@ -43,6 +44,9 @@ void main() async {
     () async {
       await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform);
+    },
+    () async {
+      tz.initializeTimeZones();
     },
     container.read(currentUserProvider.notifier).init,
     container.read(serverServiceProvider).healthCheck,

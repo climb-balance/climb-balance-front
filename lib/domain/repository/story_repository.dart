@@ -30,7 +30,12 @@ abstract class StoryRepository {
     bool isAi = false,
   });
 
-  Future<Result<List<Comment>>> getStoryComments(
+  Future<Result<Comments>> getStoryComments(
     int storyId,
+  );
+
+  Future<Result<void>> addComment(
+    int storyId,
+    String content,
   );
 }

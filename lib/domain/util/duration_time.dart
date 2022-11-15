@@ -50,7 +50,7 @@ String formatTimestampToMMSS(int timestamp) {
 
 String formatTimestampToPassedString(int timestamp) {
   Duration timeDiffer =
-      DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(timestamp));
+      DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(timestamp));
 
   if (timeDiffer.inDays > 0) {
     return '${timeDiffer.inDays}일전';
@@ -59,7 +59,7 @@ String formatTimestampToPassedString(int timestamp) {
     return '${timeDiffer.inHours}시간전';
   }
   if (timeDiffer.inMinutes > 0) {
-    return '${timeDiffer.inDays}분전';
+    return '${timeDiffer.inMinutes}분전';
   }
-  return '${timeDiffer.inDays}초전';
+  return '${timeDiffer.inSeconds}초전';
 }
