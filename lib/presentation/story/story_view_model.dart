@@ -12,6 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/repository/user_repository_impl.dart';
 import '../../domain/util/feedback_status.dart';
+import '../../domain/util/platform_check.dart';
 import '../common/custom_dialog.dart';
 
 final storyViewModelProvider = StateNotifierProvider.family
@@ -127,8 +128,16 @@ class StoryViewModel extends StateNotifier<StoryState> {
     return storyRepository.getStoryVideoPathById(state.story.storyId);
   }
 
-  void saveAndShare() async {
-    final String? path =
-        await storyRepository.getStoryVideo(storyId: state.story.storyId);
+  void saveAndShare(BuildContext context) async {
+    if (isMobile()) {
+      final String? path =
+          await storyRepository.getStoryVideo(storyId: state.story.storyId);
+    } else {
+      customShowDialog(
+        context: context,
+        title: '웹에서는 공유가 지원되지 않습니다.',
+        content: '모바일을 이용해주세요',
+      );
+    }
   }
 }

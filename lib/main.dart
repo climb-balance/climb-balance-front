@@ -15,6 +15,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'domain/common/firebase_provider.dart';
 import 'domain/common/local_notification_provider.dart';
+import 'domain/util/platform_check.dart';
+import 'firebase_options.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -22,7 +24,7 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 /// 아래 문서에 따라 최상위에 선언됨.
 /// https://firebase.flutter.dev/docs/messaging/usage/#background-messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   debugPrint("Handling a background message: ${message.messageId}");
 }
 
@@ -36,13 +38,18 @@ void main() async {
       child: const SplashApp(),
     ),
   );
-
-  await container.read(splashViewModelProvider.notifier).init(jobs: [
-    Firebase.initializeApp,
+  final jobs = [
+    () async {
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
+    },
     container.read(currentUserProvider.notifier).init,
     container.read(serverServiceProvider).healthCheck,
-    container.read(downloaderProvider.notifier).init,
-  ]);
+  ];
+  if (isMobile()) {
+    jobs.add(container.read(downloaderProvider.notifier).mobileInit);
+  }
+  await container.read(splashViewModelProvider.notifier).init(jobs: jobs);
   runApp(
     UncontrolledProviderScope(
       container: container,

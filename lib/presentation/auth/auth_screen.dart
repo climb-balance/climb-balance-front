@@ -3,6 +3,7 @@ import 'package:climb_balance/presentation/auth/components/more_info.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../domain/util/platform_check.dart';
 import 'components/auth_logos.dart';
 import 'components/naver_login.dart';
 
@@ -25,16 +26,16 @@ class AuthScreen extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              NaverLogin(),
-              SizedBox(
+            children: [
+              if (isMobile()) const NaverLogin(),
+              const SizedBox(
                 height: 8,
               ),
-              GuestLogin(),
-              SizedBox(
+              const GuestLogin(),
+              const SizedBox(
                 height: 8,
               ),
-              MoreInfo(),
+              const MoreInfo(),
             ],
           ),
         ),

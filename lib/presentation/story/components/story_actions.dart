@@ -64,7 +64,9 @@ class StoryActions extends ConsumerWidget {
         // ),
         TextButton(
           onPressed: () {
-            ref.read(storyViewModelProvider(storyId).notifier).saveAndShare();
+            ref
+                .read(storyViewModelProvider(storyId).notifier)
+                .saveAndShare(context);
           },
           child: const ColIconDetail(
             iconSize: iconSize,

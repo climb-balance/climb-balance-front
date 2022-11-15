@@ -71,7 +71,9 @@ class FlexAvatar extends StatelessWidget {
     if (imagePath == null) return const NoAvatar();
     final ImageProvider imageProvider;
     if (imagePath!.contains('http')) {
-      imageProvider = NetworkImage(imagePath!);
+      // TODO 꼼수로 캐싱 막아둠
+      imageProvider = NetworkImage(
+          '${imagePath!}?${DateTime.now().millisecondsSinceEpoch.toString()}');
     } else {
       imageProvider = FileImage(
         File(imagePath!),

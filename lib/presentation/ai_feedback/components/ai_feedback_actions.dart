@@ -111,7 +111,7 @@ class AiFeedbackActions extends ConsumerWidget {
                   onPressed: () {
                     ref
                         .read(aiFeedbackViewModelProvider(storyId).notifier)
-                        .saveAndShare();
+                        .saveAndShare(context);
                   },
                   child: ColIconDetail(
                     icon: Icons.share,

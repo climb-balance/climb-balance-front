@@ -8,6 +8,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
+import '../../domain/util/platform_check.dart';
+import '../common/custom_dialog.dart';
 import 'models/ai_feedback_state.dart';
 
 final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
@@ -108,10 +110,16 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     });
   }
 
-  void saveAndShare() async {
-    final String? path = await repository.getStoryVideo(
-      storyId: story.storyId,
-      isAi: true,
-    );
+  void saveAndShare(BuildContext context) async {
+    if (isMobile()) {
+      final String? path =
+          await repository.getStoryVideo(storyId: story.storyId, isAi: true);
+    } else {
+      customShowDialog(
+        context: context,
+        title: '웹에서는 공유가 지원되지 않습니다.',
+        content: '모바일을 이용해주세요',
+      );
+    }
   }
 }

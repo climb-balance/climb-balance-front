@@ -29,7 +29,7 @@ class DownloaderNotifier extends StateNotifier<String> {
     send?.send([id, status, progress]);
   }
 
-  Future<void> init() async {
+  Future<void> mobileInit() async {
     await FlutterDownloader.initialize(
       debug: true,
       ignoreSsl: true,

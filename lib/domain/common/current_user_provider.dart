@@ -9,6 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../const/route_name.dart';
 import '../model/expert_profile.dart';
+import '../model/result.dart';
 import '../model/update_user.dart';
 
 final currentUserProvider =
@@ -63,11 +64,20 @@ class CurrentUserNotifier extends StateNotifier<User> {
     context.goNamed(authPageRouteName);
   }
 
-  Future<void> loadUserInfo(String token) async {
-    final result = await repository.getCurrentUserProfile(token);
+  Future<void> loadUserInfo(String token, {String? imagePath}) async {
+    final Result<User> result = await repository.getCurrentUserProfile(token);
     result.when(
       success: (value) {
-        state = value.copyWith(accessToken: token);
+        if (imagePath == null) {
+          state = value.copyWith(
+            accessToken: token,
+          );
+        } else {
+          state = value.copyWith(
+            accessToken: token,
+            profileImage: imagePath!,
+          );
+        }
       },
       error: (message) {
         // TODO logout -> page move
@@ -106,7 +116,7 @@ class CurrentUserNotifier extends StateNotifier<User> {
       updateUser: updateUser,
     );
 
-    loadUserInfo(state.accessToken);
+    loadUserInfo(state.accessToken, imagePath: profileImage);
   }
 
   void updateExpertInfo(ExpertProfile profile) {
