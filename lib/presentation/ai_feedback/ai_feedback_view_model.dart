@@ -14,7 +14,7 @@ final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
     .family<AiFeedbackViewModel, AiFeedbackState, int>((ref, storyId) {
   AiFeedbackViewModel notifier = AiFeedbackViewModel(
     ref: ref,
-    ref.watch(storyRepositoryImplProvider),
+    ref.read(storyRepositoryImplProvider),
     ref.watch(storyViewModelProvider(storyId).select((value) => value.story)),
   );
   notifier._loadDatas();

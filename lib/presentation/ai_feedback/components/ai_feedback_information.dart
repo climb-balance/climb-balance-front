@@ -52,7 +52,7 @@ class AiFeedbackInformation extends ConsumerWidget {
                       storyId: storyId,
                       timestamps: [1230, 10000, 15000],
                     ),
-                    AiParameterDetailTab(),
+                    const AiParameterDetailTab(),
                   ],
                 ),
               ),

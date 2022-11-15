@@ -32,6 +32,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   DiaryViewModel(this.repository, this.ref) : super(const DiaryState());
 
   Future<void> loadStories() async {
+    await ref.read(currentUserProvider.notifier).refreshUserInfo();
     final Result<List<Story>> result = await repository.getStories();
     result.when(
       success: (getStories) {

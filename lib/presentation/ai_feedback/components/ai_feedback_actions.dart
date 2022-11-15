@@ -47,6 +47,7 @@ class AiFeedbackActions extends ConsumerWidget {
                   context.pop();
                 },
               ),
+              elevation: 0,
             ),
             backgroundColor: Colors.transparent,
             floatingActionButtonAnimator: NoFabScalingAnimation(),

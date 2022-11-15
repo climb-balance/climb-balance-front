@@ -89,7 +89,7 @@ class UserRepositoryImpl implements UserRepository {
     final result = await server.getGuestUser(code);
     ref.read(loadingProvider.notifier).closeLoading();
     return result.when(
-        success: (value) => value['accessToken'],
+        success: (value) => Result.success(value),
         error: (message) => Result.error(message));
   }
 }

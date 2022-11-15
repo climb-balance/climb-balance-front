@@ -75,6 +75,18 @@ class CurrentUserNotifier extends StateNotifier<User> {
     );
   }
 
+  Future<void> refreshUserInfo() async {
+    final result = await repository.getCurrentUserProfile(state.accessToken);
+    result.when(
+      success: (value) {
+        state = value.copyWith(accessToken: state.accessToken);
+      },
+      error: (message) {
+        // TODO logout -> page move
+      },
+    );
+  }
+
   void updateUserInfo({
     String? description,
     String? nickname,

@@ -4,6 +4,7 @@ import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:climb_balance/domain/const/server_config.dart';
 import 'package:climb_balance/domain/model/update_user.dart';
 import 'package:climb_balance/presentation/register/register_state.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/model/result.dart';
@@ -113,14 +114,14 @@ class UserServerHelper {
     }
   }
 
-  Future<Result<Map<String, dynamic>>> getGuestUser(String code) async {
+  Future<Result<String>> getGuestUser(String code) async {
     try {
       final result = await server.get(
         url: serverGuestPath,
         accessToken: code,
       );
-
-      return Result.success(jsonDecode(result));
+      debugPrint(result);
+      return Result.success(result);
     } catch (e) {
       return Result.error('메인 정보 로드 오류 ${e.toString()}');
     }

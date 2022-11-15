@@ -76,7 +76,12 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
         (value) => value.frames,
       ),
     );
-    if (_animationController == null || frames == 0) return Container();
+    if (_animationController == null || frames == 0) {
+      return const SizedBox(
+        width: 1,
+        height: 1,
+      );
+    }
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {

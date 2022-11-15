@@ -89,7 +89,6 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                         child: NoEffectInkWell(
                           onTap: _onTap,
                           child: Center(
-                            widthFactor: double.infinity,
                             child: Stack(
                               children: [
                                 AspectRatio(
