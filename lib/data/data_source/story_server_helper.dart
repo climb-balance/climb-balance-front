@@ -154,4 +154,17 @@ class StoryServerHelper {
       return const Result.error('AI 피드백 요청 오류');
     }
   }
+
+  Future<Result<Iterable>> getOtherStories({required int page}) async {
+    try {
+      final body = await server.get(
+        url: '$serverStoryOtherPath?page=$page',
+        accessToken:
+            ref.watch(currentUserProvider.select((value) => value.accessToken)),
+      );
+      return Result.success(jsonDecode(body));
+    } catch (e) {
+      return Result.error('스토리 목록 로드 오류 ${e.toString()}');
+    }
+  }
 }

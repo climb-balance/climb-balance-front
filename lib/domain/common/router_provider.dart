@@ -50,6 +50,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: homePageRoute,
+        name: homePageRouteName,
         pageBuilder: (context, state) => const MaterialPage<void>(
           child: HomeScreen(),
         ),

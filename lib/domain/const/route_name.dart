@@ -6,3 +6,4 @@ const authPageRouteName = 'auth';
 const registerRouteName = 'register';
 const aiAdsRouteName = 'ai-ads';
 const aiFeedbackRouteName = 'ai';
+const homePageRouteName = 'main';

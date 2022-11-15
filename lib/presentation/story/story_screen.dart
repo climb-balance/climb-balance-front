@@ -92,6 +92,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
     final toggleCommentOpen = ref
         .read(storyViewModelProvider(widget.storyId).notifier)
         .toggleCommentOpen;
+    final initialized = _videoPlayerController.value.isInitialized;
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
@@ -112,7 +113,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                                 _videoPlayerController.value.isPlaying);
                       }
                     },
-                    child: _videoPlayerController.value.isInitialized
+                    child: initialized
                         ? Center(
                             child: AspectRatio(
                               aspectRatio:
@@ -137,14 +138,13 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                   )
               ],
             ),
-            if (overlayOpen && !commentOpen) ...[
+            if (overlayOpen && !commentOpen && initialized)
               StoryOverlay(
                 storyId: widget.storyId,
                 togglePlaying: togglePlaying,
                 videoPlayerController: _videoPlayerController,
               ),
-            ],
-            if (!commentOpen)
+            if (!commentOpen && initialized)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ProgressBar(

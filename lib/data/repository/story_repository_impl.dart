@@ -6,6 +6,7 @@ import 'package:climb_balance/domain/common/downloader_provider.dart';
 import 'package:climb_balance/domain/model/story.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:climb_balance/presentation/ai_feedback/models/ai_feedback_state.dart';
+import 'package:climb_balance/presentation/community/models/story_id.dart';
 import 'package:climb_balance/presentation/story/models/comment.dart';
 import 'package:climb_balance/presentation/story_upload_screens/story_upload_state.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -182,5 +183,22 @@ class StoryRepositoryImpl implements StoryRepository {
       {required int commentId, required int storyId}) async {
     return await server.deleteStoryComment(
         storyId: storyId, commentId: commentId);
+  }
+
+  @override
+  Future<Result<List<StoryId>>> getOtherStories({
+    required int page,
+  }) async {
+    final result = await server.getOtherStories(
+      page: page,
+    );
+    return result.when(
+      success: (value) {
+        return Result.success(StoryIds.fromJson({'storyIds': value}).storyIds);
+      },
+      error: (message) {
+        return Result.error(message);
+      },
+    );
   }
 }
