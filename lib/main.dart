@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'domain/common/firebase_provider.dart';
@@ -79,11 +80,23 @@ class MyApp extends ConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       builder: (context, widget) {
-        return Stack(
-          children: [
-            if (widget != null) widget,
-            if (loading) const WaitingProgress()
-          ],
+        if (isMobile()) {
+          return Stack(
+            children: [
+              if (widget != null) widget,
+              if (loading) const WaitingProgress()
+            ],
+          );
+        }
+        return FlutterWebFrame(
+          backgroundColor: Colors.black,
+          builder: (BuildContext context) => Stack(
+            children: [
+              if (widget != null) widget,
+              if (loading) const WaitingProgress()
+            ],
+          ),
+          maximumSize: const Size(475.0, 812.0),
         );
       },
     );

@@ -12,12 +12,14 @@ class AuthScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final color = Theme.of(context).colorScheme;
     return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
+      decoration: BoxDecoration(
+        image: const DecorationImage(
           image: AssetImage('assets/img/bg_img.png'),
           fit: BoxFit.fill,
         ),
+        color: color.background,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,

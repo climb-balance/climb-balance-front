@@ -5,7 +5,7 @@ import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/firebase_provider.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
 import 'package:climb_balance/presentation/common/custom_snackbar.dart';
-import 'package:climb_balance/presentation/story/story_state.dart';
+import 'package:climb_balance/presentation/story/models/story_state.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -37,6 +37,7 @@ class StoryViewModel extends StateNotifier<StoryState> {
     required this.storyRepository,
     required this.userRepository,
   }) : super(const StoryState());
+
   @override
   void dispose() {
     overlayCloseTimer?.cancel();
@@ -66,6 +67,16 @@ class StoryViewModel extends StateNotifier<StoryState> {
     );
   }
 
+  void loadComments() async {
+    final result = await storyRepository.getStoryComments(state.story.storyId);
+    result.when(
+      success: (value) {
+        state = state.copyWith(comments: value);
+      },
+      error: (message) {},
+    );
+  }
+
   void likeStory() {
     // TODO implement
     storyRepository.likeStory();
@@ -86,6 +97,10 @@ class StoryViewModel extends StateNotifier<StoryState> {
         );
       }
     }
+  }
+
+  void toggleCommentOpen() {
+    state = state.copyWith(commentOpen: !state.commentOpen, overlayOpen: false);
   }
 
   void cancelOverlayCloseTimer() {

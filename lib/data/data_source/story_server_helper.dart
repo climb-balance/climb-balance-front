@@ -98,9 +98,14 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<List<String>>> getCommentById(int storyId) {
-    // TODO: implement getCommentById
-    throw UnimplementedError();
+  Future<Result<Iterable>> getStoryComments(int storyId) async {
+    try {
+      final body = await server.get(
+          url: '$serverStoryPath/$storyId$serverStoryCommentPath');
+      return Result.success(jsonDecode(body));
+    } catch (e) {
+      return Result.error('스토리 댓글 오류 ${e.toString()}');
+    }
   }
 
   Future<Result<int>> likeStory() {

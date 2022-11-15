@@ -3,6 +3,7 @@ const String serverRegisterPath = '/user/register';
 const String serverProfilePath = '/user/profile';
 const String serverProfileImagePath = '/user/profileImage';
 const String serverStoryPath = '/story';
+const String serverStoryCommentPath = '/comment';
 const String serverVideoPath = '/video';
 const String serverAiFeedbackPath = '/feedback?type=ai';
 const String serverUrl = 'https://api.climb-balance.com';

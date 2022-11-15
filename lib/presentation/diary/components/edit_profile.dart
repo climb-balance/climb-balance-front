@@ -65,14 +65,17 @@ class EditProfile extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(
-              width: 200,
-              child: TextFieldWithDefaultValue(
-                initialValue: user.description,
-                onChanged:
-                    ref.read(diaryViewModelProvider.notifier).updateDescription,
-                style: text.bodyText2,
-              ),
+            // SizedBox(
+            //   width: 200,
+            //   child: TextFieldWithDefaultValue(
+            //     initialValue: user.description,
+            //     onChanged:
+            //         ref.read(diaryViewModelProvider.notifier).updateDescription,
+            //     style: text.bodyText2,
+            //   ),
+            // ),
+            const SizedBox(
+              height: 25,
             ),
             Text('${user.height}cm | ${user.weight}kg'),
           ],

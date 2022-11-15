@@ -42,14 +42,7 @@ class _Story extends ConsumerStatefulWidget {
 
 class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
-  bool isCommentOpen = false;
   bool isStatusChanging = false;
-
-  void toggleCommentOpen() {
-    setState(() {
-      isCommentOpen = !isCommentOpen;
-    });
-  }
 
   @override
   void initState() {
@@ -93,15 +86,26 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final overlayOpen = ref.watch(storyViewModelProvider(widget.storyId)
         .select((value) => value.overlayOpen));
+
+    final commentOpen = ref.watch(storyViewModelProvider(widget.storyId)
+        .select((value) => value.commentOpen));
+    final toggleCommentOpen = ref
+        .read(storyViewModelProvider(widget.storyId).notifier)
+        .toggleCommentOpen;
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
           children: [
             NoEffectInkWell(
               onTap: () {
-                ref
-                    .read(storyViewModelProvider(widget.storyId).notifier)
-                    .toggleOverlayOpen(_videoPlayerController.value.isPlaying);
+                if (commentOpen) {
+                  toggleCommentOpen();
+                } else {
+                  ref
+                      .read(storyViewModelProvider(widget.storyId).notifier)
+                      .toggleOverlayOpen(
+                          _videoPlayerController.value.isPlaying);
+                }
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -117,17 +121,24 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                               ),
                             ),
                           )
-                        : const Center(child: CircularProgressIndicator()),
+                        : const Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
                   ),
-                  if (isCommentOpen)
-                    StoryComments(toggleCommentOpen: toggleCommentOpen)
+                  if (commentOpen)
+                    StoryComments(
+                      storyId: widget.storyId,
+                    )
                 ],
               ),
             ),
             if (overlayOpen) ...[
               StoryOverlay(
                 storyId: widget.storyId,
-                toggleCommentOpen: toggleCommentOpen,
                 togglePlaying: togglePlaying,
                 videoPlayerController: _videoPlayerController,
               ),

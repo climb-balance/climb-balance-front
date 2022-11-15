@@ -1,4 +1,5 @@
 import '../../presentation/ai_feedback/models/ai_feedback_state.dart';
+import '../../presentation/story/models/comment.dart';
 import '../../presentation/story_upload_screens/story_upload_state.dart';
 import '../model/result.dart';
 import '../model/story.dart';
@@ -28,4 +29,8 @@ abstract class StoryRepository {
     required int storyId,
     bool isAi = false,
   });
+
+  Future<Result<List<Comment>>> getStoryComments(
+    int storyId,
+  );
 }

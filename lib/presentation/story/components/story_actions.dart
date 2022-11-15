@@ -10,13 +10,11 @@ import '../../common/components/my_icons.dart';
 import '../story_view_model.dart';
 
 class StoryActions extends ConsumerWidget {
-  final void Function() toggleCommentOpen;
   final int storyId;
   static const double iconSize = 28;
 
   const StoryActions({
     Key? key,
-    required this.toggleCommentOpen,
     required this.storyId,
   }) : super(key: key);
 
@@ -26,6 +24,8 @@ class StoryActions extends ConsumerWidget {
         ref.watch(currentUserProvider.select((value) => value.userId));
     final story = ref
         .watch(storyViewModelProvider(storyId).select((value) => value.story));
+    final toggleCommentOpen =
+        ref.read(storyViewModelProvider(storyId).notifier).toggleCommentOpen;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -54,14 +54,14 @@ class StoryActions extends ConsumerWidget {
         //     detail: '${story.likes}',
         //   ),
         // ),
-        // TextButton(
-        //   onPressed: toggleCommentOpen,
-        //   child: ColIconDetail(
-        //     iconSize: iconSize,
-        //     icon: Icons.comment,
-        //     detail: '${story.comments}',
-        //   ),
-        // ),
+        TextButton(
+          onPressed: toggleCommentOpen,
+          child: ColIconDetail(
+            iconSize: iconSize,
+            icon: Icons.comment,
+            detail: '${story.comments}',
+          ),
+        ),
         TextButton(
           onPressed: () {
             ref
