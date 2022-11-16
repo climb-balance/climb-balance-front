@@ -1,4 +1,6 @@
 import 'package:climb_balance/domain/const/route_config.dart';
+import 'package:climb_balance/presentation/common/custom_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,11 +38,20 @@ class BotNavigationBar extends ConsumerWidget {
               active: 1 == currentIdx,
               icon: Icon(Icons.people),
               onTap: () {
-                goRouter.go(communityPageRoute);
+                goRouter.push(communityPageRoute);
               },
             ),
             BotNavigationBarAddItem(
               onTap: () {
+                if (kIsWeb) {
+                  customShowDialog(
+                    context: context,
+                    title: '웹에서는 지원되지 않습니다.',
+                    content: '지원을 기다려주세요!',
+                  );
+                  return;
+                }
+
                 showModalBottomSheet(
                   context: context,
                   builder: (context) => const PickVideoScreen(),

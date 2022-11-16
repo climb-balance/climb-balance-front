@@ -3,6 +3,7 @@ import 'package:climb_balance/presentation/story/components/story_overlay_feedba
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../domain/common/current_user_provider.dart';
 import '../../../domain/util/feedback_status.dart';
@@ -12,10 +13,12 @@ import '../story_view_model.dart';
 class StoryActions extends ConsumerWidget {
   final int storyId;
   static const double iconSize = 28;
+  final VideoPlayerController videoPlayerController;
 
   const StoryActions({
     Key? key,
     required this.storyId,
+    required this.videoPlayerController,
   }) : super(key: key);
 
   @override
@@ -31,16 +34,19 @@ class StoryActions extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         // TODO fix
-        if (curUserId == curUserId && story.aiStatus == FeedbackStatus.complete)
+        if (curUserId == story.uploaderId &&
+            story.aiStatus == FeedbackStatus.complete)
           TextButton(
             onPressed: () {
               // TODO named로
+              videoPlayerController.pause();
               context
                   .pushNamed(aiFeedbackRouteName, params: {'sid': '$storyId'});
             },
-            child: const Icon(
-              Icons.android,
-              size: iconSize,
+            child: const ColIconDetail(
+              iconSize: iconSize,
+              detail: 'ai',
+              icon: Icons.animation,
             ),
           ),
         // TODO 다시 살리기
@@ -74,7 +80,7 @@ class StoryActions extends ConsumerWidget {
             detail: '공유',
           ),
         ),
-        if (curUserId == curUserId &&
+        if (curUserId == story.uploaderId &&
             (story.aiStatus ==
                 FeedbackStatus
                     .possible)) //  || story.expertStatus == FeedbackStatus.possible

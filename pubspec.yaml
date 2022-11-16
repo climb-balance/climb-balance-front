@@ -44,6 +44,7 @@ dependencies:
   webview_flutter: ^3.0.4
   image_picker: ^0.8.5+3
   video_player: ^2.4.5
+  video_player_web_hls: ^0.1.11+6
   video_thumbnail: ^0.5.2
   video_trimmer:
     git:

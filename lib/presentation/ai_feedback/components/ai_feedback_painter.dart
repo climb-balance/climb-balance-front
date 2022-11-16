@@ -282,6 +282,7 @@ class AiFeedbackScorePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     int currentFrame = (animationValue * frames).toInt();
+    if (currentFrame >= perFrameScore.moment.length) return;
     // final accuracy = perFrameScore.accuracy[currentFrame];
     // final angle = perFrameScore.angle[currentFrame];
     // final balance = perFrameScore.balance[currentFrame];

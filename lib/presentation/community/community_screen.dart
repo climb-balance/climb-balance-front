@@ -1,6 +1,8 @@
+import 'package:climb_balance/domain/util/platform_check.dart';
 import 'package:climb_balance/presentation/common/components/bot_navigation_bar.dart';
 import 'package:climb_balance/presentation/community/community_view_model.dart';
 import 'package:climb_balance/presentation/story/story_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -38,12 +40,12 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
   void handleBack() {
     if (currentPage == 0) return;
     _pageController.animateToPage(currentPage - 1,
-        curve: Curves.elasticOut, duration: const Duration(milliseconds: 500));
+        curve: Curves.elasticOut, duration: const Duration(milliseconds: 200));
   }
 
   void handleNext() {
     _pageController.animateToPage(currentPage + 1,
-        curve: Curves.elasticOut, duration: const Duration(milliseconds: 500));
+        curve: Curves.elasticOut, duration: const Duration(milliseconds: 200));
   }
 
   @override
@@ -58,52 +60,66 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
         ref.watch(communityViewModelProvider.select((value) => value.storyIds));
 
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () {
-          return Future(() => handlePop(context));
-        },
-        child: storyIds.isEmpty
-            ? Container()
-            : PageView.custom(
-                pageSnapping: true,
-                physics: (currentPage == storyIds.length)
-                    ? OnlyUpScrollPhysics()
-                    : null,
-                onPageChanged: (page) {
-                  setState(() {
-                    currentPage = page;
-                  });
+      body: Stack(
+        children: [
+          WillPopScope(
+            onWillPop: () {
+              return Future(() => handlePop(context));
+            },
+            child: storyIds.isEmpty
+                ? Container()
+                : PageView.custom(
+                    pageSnapping: true,
+                    physics: isMobile()
+                        ? (currentPage == storyIds.length)
+                            ? OnlyUpScrollPhysics()
+                            : null
+                        : const NeverScrollableScrollPhysics(),
+                    onPageChanged: (page) {
+                      setState(() {
+                        currentPage = page;
+                      });
 
-                  if (page % 10 == 9) {
-                    ref
-                        .read(communityViewModelProvider.notifier)
-                        .loadDatas(page: page + 1);
-                  }
-                },
-                controller: _pageController,
-                scrollDirection: Axis.vertical,
-                childrenDelegate:
-                    SliverChildBuilderDelegate((BuildContext context, int idx) {
-                  if (idx == storyIds.length) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        SizedBox(
-                          height: 50,
-                        ),
-                        Center(
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return StoryScreen(storyId: storyIds[idx].storyId);
-                }),
-              ),
+                      if (page % 10 == 9) {
+                        ref
+                            .read(communityViewModelProvider.notifier)
+                            .loadDatas(page: page + 1);
+                      }
+                    },
+                    controller: _pageController,
+                    scrollDirection: Axis.vertical,
+                    childrenDelegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int idx) {
+                        if (idx == storyIds.length) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              SizedBox(
+                                height: 50,
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                        return StoryScreen(storyId: storyIds[idx].storyId);
+                      },
+                    ),
+                  ),
+          ),
+          if (kIsWeb)
+            WebActionBar(
+              currentPage: currentPage,
+              handleNext: handleNext,
+              handleBack: handleBack,
+              lastPage: storyIds.length - 1,
+            ),
+        ],
       ),
       bottomNavigationBar: showBottomNavigation
           ? const BotNavigationBar(
@@ -113,6 +129,56 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
               width: 0,
               height: 0,
             ),
+    );
+  }
+}
+
+class WebActionBar extends StatelessWidget {
+  final int currentPage;
+  final int lastPage;
+  final void Function() handleNext;
+  final void Function() handleBack;
+
+  const WebActionBar({
+    Key? key,
+    required this.currentPage,
+    required this.handleNext,
+    required this.handleBack,
+    required this.lastPage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          if (currentPage != 0)
+            Align(
+              alignment: Alignment.topCenter,
+              child: IconButton(
+                iconSize: 35,
+                icon: const Icon(Icons.keyboard_arrow_up_rounded),
+                onPressed: () {
+                  handleBack();
+                },
+              ),
+            ),
+          Expanded(child: Container()),
+          if (currentPage != lastPage)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: IconButton(
+                iconSize: 35,
+                icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                onPressed: () {
+                  handleNext();
+                },
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

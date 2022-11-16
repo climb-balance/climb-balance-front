@@ -39,6 +39,7 @@ class StoryOverlay extends ConsumerWidget {
           child: Scaffold(
             floatingActionButton: StoryActions(
               storyId: storyId,
+              videoPlayerController: videoPlayerController,
             ),
             floatingActionButtonAnimator: NoFabScalingAnimation(),
             floatingActionButtonLocation: CustomFabLoc(),

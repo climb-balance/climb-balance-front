@@ -113,23 +113,25 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                                 _videoPlayerController.value.isPlaying);
                       }
                     },
-                    child: initialized
-                        ? Center(
-                            child: AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: Center(
-                                child: VideoPlayer(_videoPlayerController),
+                    child: AbsorbPointer(
+                      child: initialized
+                          ? Center(
+                              child: AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
+                                child: Center(
+                                  child: VideoPlayer(_videoPlayerController),
+                                ),
+                              ),
+                            )
+                          : const Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(),
                               ),
                             ),
-                          )
-                        : const Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
+                    ),
                   ),
                 ),
                 if (commentOpen)
