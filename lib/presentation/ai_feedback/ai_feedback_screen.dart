@@ -1,6 +1,7 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
 import 'package:climb_balance/presentation/ai_feedback/components/ai_feedback_actions.dart';
 import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -40,8 +41,9 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
       formatHint: VideoFormat.hls,
     );
     _videoPlayerController.initialize().then((_) {
-      _videoPlayerController.play();
       _videoPlayerController.setLooping(true);
+      _videoPlayerController.play();
+
       setState(() {});
     });
   }

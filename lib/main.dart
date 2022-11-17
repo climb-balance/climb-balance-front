@@ -30,7 +30,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint("Handling a background message: ${message.messageId}");
 }
 
+const bool isProduction = bool.fromEnvironment('dart.vm.product');
+
 void main() async {
+  if (isProduction) {
+    // analyser does not like empty function body
+    // debugPrint = (String message, {int wrapWidth}) {};
+    // so i changed it to this:
+    debugPrint = (String? message, {int? wrapWidth}) => null;
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   final container = ProviderContainer();
@@ -79,7 +88,7 @@ class MyApp extends ConsumerWidget {
       title: '클라임밸런스',
       theme: mainDarkTheme(),
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
-      supportedLocales: const [Locale('en'), Locale('ko')],
+      supportedLocales: const [Locale('en'), Locale('kr')],
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,

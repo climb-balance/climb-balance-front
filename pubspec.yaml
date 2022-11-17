@@ -80,7 +80,6 @@ dev_dependencies:
   build_runner: ^2.2.0
   freezed: ^2.1.0+1
   json_serializable: ^6.3.1
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -154,3 +153,6 @@ targets:
           create_to_json: true
           disallow_unrecognized_keys: false
           explicit_to_json: true
+scripts:
+  deploy_web: aws s3 sync ./build/web s3://prod-web-climb-balance --profile=front-deploy-s3
+  build_deploy_web: flutter build web --web-renderer canvaskit && aws s3 sync ./build/web s3://prod-web-climb-balance --profile=front-deploy-s3

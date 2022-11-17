@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:climb_balance/data/repository/user_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/common/custom_dialog.dart';
+import 'package:climb_balance/presentation/common/custom_snackbar.dart';
 import 'package:climb_balance/presentation/register/register_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -41,15 +42,19 @@ class AuthViewModel extends StateNotifier<AuthState> {
       return;
     }
     final result = await repository.getGuestUserToken(code);
-    result.when(success: (token) {
-      ref.read(currentUserProvider.notifier).updateToken(accessToken: token);
-    }, error: (message) {
-      customShowDialog(
-        context: context,
-        title: '로그인 실패',
-        content: '게스트 로그인 실패 사유 : $message',
-      );
-    });
+    result.when(
+      success: (token) {
+        ref.read(currentUserProvider.notifier).updateToken(accessToken: token);
+        showCustomSnackbar(context: context, message: '어서오세요');
+      },
+      error: (message) {
+        customShowDialog(
+          context: context,
+          title: '로그인 실패',
+          content: '게스트 로그인 실패 사유 : $message',
+        );
+      },
+    );
   }
 
   String getAuthUrl() {

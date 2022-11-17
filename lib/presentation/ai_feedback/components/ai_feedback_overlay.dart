@@ -82,6 +82,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
         height: 1,
       );
     }
+    if (frames == 0) return Container();
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
