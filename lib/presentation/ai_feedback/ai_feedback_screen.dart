@@ -100,10 +100,13 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                                     _videoPlayerController,
                                   ),
                                 ),
-                                AiFeedbackOverlay(
-                                  videoPlayerController: _videoPlayerController,
-                                  ticker: this,
-                                  storyId: widget.storyId,
+                                AbsorbPointer(
+                                  child: AiFeedbackOverlay(
+                                    videoPlayerController:
+                                        _videoPlayerController,
+                                    ticker: this,
+                                    storyId: widget.storyId,
+                                  ),
                                 ),
                               ],
                             ),

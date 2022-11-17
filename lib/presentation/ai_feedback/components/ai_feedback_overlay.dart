@@ -77,12 +77,11 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
       ),
     );
     if (_animationController == null || frames == 0) {
-      return const SizedBox(
-        width: 1,
-        height: 1,
+      return AspectRatio(
+        aspectRatio: value.aspectRatio,
+        child: const SizedBox(),
       );
     }
-    if (frames == 0) return Container();
     return AnimatedBuilder(
       animation: _animationController!,
       builder: (BuildContext context, Widget? child) {
