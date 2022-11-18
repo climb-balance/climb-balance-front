@@ -24,7 +24,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       ref.watch(currentUserProvider.select((value) => value.accessToken));
   return GoRouter(
     debugLogDiagnostics: true,
-    // TODO splash
     initialLocation: token == '' ? authPagePath : homePageRoute,
     routes: <GoRoute>[
       GoRoute(
@@ -50,6 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: homePageRoute,
+        name: homePageRouteName,
         pageBuilder: (context, state) => const MaterialPage<void>(
           child: HomeScreen(),
         ),
@@ -125,6 +125,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           return const AiFeedbackAdsScreen();
         },
         name: aiAdsRouteName,
+      ),
+      GoRoute(
+        path: licensePageRoute,
+        builder: (context, state) {
+          return const LicensePage();
+        },
+        name: licensePageRouteName,
       ),
     ],
   );

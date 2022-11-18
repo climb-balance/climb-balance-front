@@ -11,14 +11,12 @@ import 'overlay_bottom_gradient.dart';
 import 'story_overlay_appbar.dart';
 
 class StoryOverlay extends ConsumerWidget {
-  final void Function() toggleCommentOpen;
   final void Function() togglePlaying;
   final VideoPlayerController videoPlayerController;
   final int storyId;
 
   const StoryOverlay({
     Key? key,
-    required this.toggleCommentOpen,
     required this.storyId,
     required this.togglePlaying,
     required this.videoPlayerController,
@@ -41,7 +39,7 @@ class StoryOverlay extends ConsumerWidget {
           child: Scaffold(
             floatingActionButton: StoryActions(
               storyId: storyId,
-              toggleCommentOpen: toggleCommentOpen,
+              videoPlayerController: videoPlayerController,
             ),
             floatingActionButtonAnimator: NoFabScalingAnimation(),
             floatingActionButtonLocation: CustomFabLoc(),

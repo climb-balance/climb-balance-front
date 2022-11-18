@@ -74,17 +74,6 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<String>> getStoryThumbnailPathById(int storyId) async {
-    try {
-      final result = await server.get(
-          url: '$serverStoryPath/$storyId$serverVideoPath?type=thumbnail');
-
-      return Result.success(jsonDecode(result)["url"]);
-    } catch (e) {
-      return const Result.error('썸네일 불러오기 오류');
-    }
-  }
-
   Future<Result<dynamic>> getStoryAiDetailById(int storyId) async {
     try {
       final body = await server.get(
@@ -109,9 +98,42 @@ class StoryServerHelper {
     }
   }
 
-  Future<Result<List<String>>> getCommentById(int storyId) {
-    // TODO: implement getCommentById
-    throw UnimplementedError();
+  Future<Result<Iterable>> getStoryComments(int storyId) async {
+    try {
+      final body = await server.get(
+          url: '$serverStoryPath/$storyId$serverStoryCommentPath');
+      return Result.success(jsonDecode(body));
+    } catch (e) {
+      return Result.error('스토리 댓글 오류 ${e.toString()}');
+    }
+  }
+
+  Future<Result<void>> addStoryComment(int storyId, String content) async {
+    try {
+      final body = await server.post(
+        url: '$serverStoryPath/$storyId$serverStoryCommentPath',
+        data: {
+          'content': content,
+        },
+        accessToken:
+            ref.watch(currentUserProvider.select((value) => value.accessToken)),
+      );
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('스토리 댓글 작성 오류 ${e.toString()}');
+    }
+  }
+
+  Future<Result<void>> deleteStoryComment(
+      {required int storyId, required int commentId}) async {
+    try {
+      final body = await server.delete(
+        url: '$serverStoryPath/$storyId$serverStoryCommentPath/$commentId',
+      );
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('스토리 댓글 삭제 오류 ${e.toString()}');
+    }
   }
 
   Future<Result<int>> likeStory() {
@@ -130,6 +152,19 @@ class StoryServerHelper {
       return const Result.success(null);
     } catch (e) {
       return const Result.error('AI 피드백 요청 오류');
+    }
+  }
+
+  Future<Result<Iterable>> getOtherStories({required int page}) async {
+    try {
+      final body = await server.get(
+        url: '$serverStoryOtherPath?page=$page',
+        accessToken:
+            ref.watch(currentUserProvider.select((value) => value.accessToken)),
+      );
+      return Result.success(jsonDecode(body));
+    } catch (e) {
+      return Result.error('스토리 목록 로드 오류 ${e.toString()}');
     }
   }
 }

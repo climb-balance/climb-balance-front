@@ -1,5 +1,8 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/domain/common/tag_selector_provider.dart';
 import 'package:climb_balance/presentation/common/custom_dialog.dart';
+import 'package:climb_balance/presentation/diary/enums/diary_filter_type.dart';
+import 'package:climb_balance/presentation/diary/models/diary_filter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +17,7 @@ import '../../domain/util/stories_filter.dart';
 import 'models/diary_state.dart';
 
 final diaryViewModelProvider =
-    StateNotifierProvider.autoDispose<DiaryViewModel, DiaryState>((ref) {
+    StateNotifierProvider<DiaryViewModel, DiaryState>((ref) {
   DiaryViewModel notifier =
       DiaryViewModel(ref.watch(storyRepositoryImplProvider), ref);
   notifier.loadStories();
@@ -24,32 +27,51 @@ final diaryViewModelProvider =
 class DiaryViewModel extends StateNotifier<DiaryState> {
   List<Story> stories = [];
   final StoryRepository repository;
-  final AutoDisposeStateNotifierProviderRef<DiaryViewModel, DiaryState> ref;
+  final StateNotifierProviderRef ref;
 
   DiaryViewModel(this.repository, this.ref) : super(const DiaryState());
 
-  void loadStories() async {
+  Future<void> loadStories() async {
+    await ref.read(currentUserProvider.notifier).refreshUserInfo();
     final Result<List<Story>> result = await repository.getStories();
     result.when(
       success: (getStories) {
         stories = getStories;
-        filterStories(const StoriesFilter.noFilter());
+        filterStories();
       },
       error: (message) {},
     );
   }
 
-  void filterStories(StoriesFilter storyFilter) {
+  void addAiFilter(StoriesFilter storyFilter) {
+    state = state.copyWith(
+      storyFilter: storyFilter,
+    );
+    filterStories();
+  }
+
+  bool _filterStory(Story story) {
+    if (state.storyFilter == const StoriesFilter.aiOnly() &&
+        story.aiStatus != FeedbackStatus.complete) {
+      return false;
+    } else if (state.storyFilter == const StoriesFilter.expertOnly() &&
+        story.expertStatus != FeedbackStatus.complete) {
+      return false;
+    }
+    for (final filter in state.diaryFilters) {
+      if (!filter.validator(story)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void filterStories() {
     Map<String, List<Story>> classifiedStories = {};
     for (final story in stories) {
+      if (!_filterStory(story)) continue;
       final String key = _makeStoryKey(story);
-      if (storyFilter == const StoriesFilter.aiOnly() &&
-          story.aiStatus != FeedbackStatus.complete) {
-        continue;
-      } else if (storyFilter == const StoriesFilter.expertOnly() &&
-          story.expertStatus != FeedbackStatus.complete) {
-        continue;
-      }
+
       if (classifiedStories.containsKey(key)) {
         classifiedStories[key]?.add(story);
       } else {
@@ -57,12 +79,8 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       }
     }
     state = state.copyWith(
-        classifiedStories: classifiedStories.values.toList(),
-        storyFilter: storyFilter);
-  }
-
-  String getThumbnailUrl(int storyId) {
-    return repository.getStoryThumbnailPath(storyId);
+      classifiedStories: classifiedStories.values.toList(),
+    );
   }
 
   String _makeStoryKey(Story story) {
@@ -71,7 +89,7 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   }
 
   void onEditMode() {
-    final User user = ref.watch(currentUserProvider).copyWith();
+    final User user = ref.read(currentUserProvider).copyWith();
     state = state.copyWith(
       editingProfile: user,
       isEditingMode: true,
@@ -91,7 +109,6 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
   }
 
   void updateProfileImagePath() async {
-    KeepAliveLink link = ref.keepAlive();
     final picker = ImagePicker();
     final image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -100,18 +117,22 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
             state.editingProfile?.copyWith(profileImage: image!.path),
       );
     }
-    link.close();
   }
 
   void endEditMode() {
     if (state.editingProfile != null) {
-      final User user = state.editingProfile!.copyWith();
-      ref.read(currentUserProvider.notifier).updateUserInfo(user);
+      final description = state.editingProfile!.description;
+      final nickname = state.editingProfile!.nickname;
+      final profileImage = state.editingProfile!.profileImage;
+      ref.read(currentUserProvider.notifier).updateUserInfo(
+            description: description,
+            nickname: nickname,
+            profileImage: profileImage,
+          );
     }
-
     state = state.copyWith(
-      editingProfile: null,
       isEditingMode: false,
+      editingProfile: null,
     );
   }
 
@@ -124,5 +145,52 @@ class DiaryViewModel extends StateNotifier<DiaryState> {
       await repository.deleteStory(storyId);
       loadStories();
     });
+  }
+
+  void addCurrentAddingFilter() {
+    if (state.currentAddingFilter == null) {
+      return;
+    }
+    state = state.copyWith(
+      diaryFilters: [...state.diaryFilters, state.currentAddingFilter!],
+      currentAddingFilter: null,
+    );
+    filterStories();
+  }
+
+  void updateCurrentAddingFilter(
+      {required String filterType, required String filterString}) {
+    final locations = ref.read(locationSelectorProvider);
+    if (filterType == '장소') {
+      state = state.copyWith(
+        currentAddingFilter: DiaryFilter(
+            filter: DiaryFilterType.location,
+            validator: (Story story) =>
+                locations[story.tags.location].name.contains(filterString),
+            name: '장소:$filterString'),
+      );
+      return;
+    } else if (filterType == '시도') {
+      state = state.copyWith(
+        currentAddingFilter: DiaryFilter(
+          filter: DiaryFilterType.success,
+          validator: (Story story) =>
+              story.tags.success == (filterString == '성공'),
+          name: '성공 여부:${filterString == '성공' ? '성공' : '실패'}',
+        ),
+      );
+      return;
+    }
+    state = state.copyWith(currentAddingFilter: null);
+  }
+
+  void deleteFilter(int idx) {
+    if (idx >= state.diaryFilters.length || idx < 0) {
+      return;
+    }
+    final newDiaryFilters = state.diaryFilters.sublist(0);
+    newDiaryFilters.removeAt(idx);
+    state = state.copyWith(diaryFilters: newDiaryFilters);
+    filterStories();
   }
 }

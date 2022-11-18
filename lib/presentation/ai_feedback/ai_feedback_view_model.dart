@@ -1,23 +1,22 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
+import '../../domain/util/platform_check.dart';
+import '../common/custom_dialog.dart';
 import 'models/ai_feedback_state.dart';
 
 final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
     .family<AiFeedbackViewModel, AiFeedbackState, int>((ref, storyId) {
   AiFeedbackViewModel notifier = AiFeedbackViewModel(
-    ref.watch(storyRepositoryImplProvider),
+    ref: ref,
+    ref.read(storyRepositoryImplProvider),
     ref.watch(storyViewModelProvider(storyId).select((value) => value.story)),
   );
   notifier._loadDatas();
@@ -27,11 +26,18 @@ final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
 class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   final StoryRepository repository;
   final Story story;
+  final AutoDisposeStateNotifierProviderRef ref;
   Timer? actionsCloseTimer;
   AnimationController? _animationController;
 
-  AiFeedbackViewModel(this.repository, this.story)
+  AiFeedbackViewModel(this.repository, this.story, {required this.ref})
       : super(const AiFeedbackState());
+
+  @override
+  void dispose() {
+    actionsCloseTimer?.cancel();
+    super.dispose();
+  }
 
   void _loadDatas() async {
     final result = await repository.getStoryAiDetailById(story.storyId);
@@ -68,6 +74,10 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     state = state.copyWith(lineOverlay: !state.lineOverlay);
   }
 
+  void toggleScoreOverlay() {
+    state = state.copyWith(scoreOverlay: !state.scoreOverlay);
+  }
+
   void toggleSquareOverlay() {
     state = state.copyWith(squareOverlay: !state.squareOverlay);
   }
@@ -100,18 +110,16 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     });
   }
 
-  void saveAndShare() async {
-    https: //medium.com/flutter-community/flutter-sharing-files-using-share-package-45103d7a21cb
-    const url =
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
-    final res = await get(Uri.parse(url));
-    final documentDirectory = await getTemporaryDirectory();
-    File videoFile = new File('${documentDirectory.path}/tmp.mp4');
-    videoFile.writeAsBytesSync(res.bodyBytes);
-
-    Share.shareFiles(
-      [videoFile.path],
-      mimeTypes: ['video/mp4'],
-    );
+  void saveAndShare(BuildContext context) async {
+    if (isMobile()) {
+      final String? path =
+          await repository.getStoryVideo(storyId: story.storyId, isAi: true);
+    } else {
+      customShowDialog(
+        context: context,
+        title: '웹에서는 공유가 지원되지 않습니다.',
+        content: '모바일을 이용해주세요',
+      );
+    }
   }
 }

@@ -13,7 +13,7 @@ class AiInformationTabBar extends StatelessWidget {
       child: TabBar(
         indicatorColor: color.primary,
         labelPadding: const EdgeInsets.all(10),
-        tabs: const [Text('점수'), Text('분석'), Text('통계')],
+        tabs: const [Text('점수'), Text('분석'), Text('설명')],
       ),
     );
   }

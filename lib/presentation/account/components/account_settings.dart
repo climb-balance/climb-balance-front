@@ -1,5 +1,6 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/presentation/account/account_view_model.dart';
+import 'package:climb_balance/presentation/common/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -64,30 +65,30 @@ class ExpertSetting extends ConsumerWidget {
     return isExpert ? const ExpertSwap() : const RegisterExpert();
   }
 }
-
-class DarkModeSetting extends ConsumerWidget {
-  const DarkModeSetting({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    bool darkMode =
-        ref.watch(accountViewModelProvider.select((value) => value.darkMode));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('DarkMode'),
-        Switch(
-          value: darkMode,
-          onChanged: (bool value) {
-            ref
-                .read(accountViewModelProvider.notifier)
-                .updateSetting(darkMode: value);
-          },
-        ),
-      ],
-    );
-  }
-}
+//
+// class DarkModeSetting extends ConsumerWidget {
+//   const DarkModeSetting({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     bool darkMode =
+//         ref.watch(accountViewModelProvider.select((value) => value.darkMode));
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: [
+//         const Text('DarkMode'),
+//         Switch(
+//           value: darkMode,
+//           onChanged: (bool value) {
+//             ref
+//                 .read(accountViewModelProvider.notifier)
+//                 .updateSetting(darkMode: value);
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class LogoutSetting extends ConsumerWidget {
   const LogoutSetting({
@@ -121,8 +122,8 @@ class LogoutSetting extends ConsumerWidget {
   }
 }
 
-class EditAccountSetting extends ConsumerWidget {
-  const EditAccountSetting({
+class RemoveAccountSetting extends ConsumerWidget {
+  const RemoveAccountSetting({
     Key? key,
   }) : super(key: key);
 
@@ -132,12 +133,28 @@ class EditAccountSetting extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('계정 정보 수정'),
+        const Text('회원탈퇴'),
         OutlinedButton(
-          child: const Text(
-            '수정하기',
+          style: ButtonStyle(
+            backgroundColor:
+                MaterialStateProperty.all(theme.colorScheme.errorContainer),
           ),
-          onPressed: () {},
+          child: Text(
+            '회원탈퇴',
+            style: TextStyle(
+              color: theme.colorScheme.onErrorContainer,
+            ),
+          ),
+          onPressed: () async {
+            final result = await customShowConfirm(
+              context: context,
+              title: '정말로 탈퇴하시겠습니까?',
+              content: '모든 기록이 말소됩니다.',
+            );
+            if (!result) return;
+
+            ref.read(currentUserProvider.notifier).removeUserAccount(context);
+          },
         ),
       ],
     );

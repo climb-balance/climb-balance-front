@@ -21,6 +21,9 @@ class User with _$User {
     @Default(false) bool isExpert,
     @Default(0) int rank,
     @Default(-1) int userId,
+    @Default('') String email,
+    @Default(false) bool personalCheck,
+    @Default(false) bool promotionCheck,
     ExpertProfile? expertProfile,
   }) = _User;
 

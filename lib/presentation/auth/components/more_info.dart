@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MoreInfo extends StatelessWidget {
   const MoreInfo({Key? key}) : super(key: key);
@@ -11,11 +11,8 @@ class MoreInfo extends StatelessWidget {
     return InkWell(
       onTap: () {
         // TODO GO HOMEPAGE
-        Fluttertoast.showToast(
-          msg: "무언가 보여줘야함",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+        launchUrl(
+          Uri.parse('https://www.climb-balance.com'),
         );
       },
       child: Container(

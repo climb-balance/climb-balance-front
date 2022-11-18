@@ -19,7 +19,7 @@ class UploadVideoPreview extends ConsumerWidget {
         return Container(
           width: size,
           height: size,
-          color: theme.colorScheme.secondaryContainer,
+          color: theme.colorScheme.background,
           child: trimmer == null
               ? Container()
               : VideoViewer(

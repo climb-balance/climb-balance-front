@@ -17,6 +17,7 @@ class AiFeedbackState with _$AiFeedbackState {
     @Default(AiScorePerFrame()) AiScorePerFrame perFrameScore,
     @JsonKey(ignore: true) @Default(true) bool squareOverlay,
     @JsonKey(ignore: true) @Default(true) bool lineOverlay,
+    @JsonKey(ignore: true) @Default(true) bool scoreOverlay,
     @JsonKey(ignore: true) @Default(false) bool isInformOpen,
     @JsonKey(ignore: true) @Default(false) bool isStatusChanging,
     @JsonKey(ignore: true) @Default(false) bool actionsOpen,

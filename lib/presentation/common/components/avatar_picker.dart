@@ -68,16 +68,21 @@ class FlexAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return imagePath == null
-        ? const NoAvatar()
-        : CircleAvatar(
-            radius: 50,
-            backgroundImage: NetworkImage(imagePath!),
-            foregroundImage: FileImage(
-              File(imagePath!),
-            ),
-            foregroundColor: Colors.transparent,
-          );
+    if (imagePath == null) return const NoAvatar();
+    final ImageProvider imageProvider;
+    if (imagePath!.contains('http')) {
+      // TODO 꼼수로 캐싱 막아둠
+      imageProvider = NetworkImage(
+          '${imagePath!}?${DateTime.now().millisecondsSinceEpoch.toString()}');
+    } else {
+      imageProvider = FileImage(
+        File(imagePath!),
+      );
+    }
+    return CircleAvatar(
+      radius: 50,
+      backgroundImage: imageProvider,
+    );
   }
 }
 

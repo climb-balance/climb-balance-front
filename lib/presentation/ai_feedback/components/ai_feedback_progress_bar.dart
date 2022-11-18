@@ -53,9 +53,13 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
       if (score == null) {
         gradientColors.add(Colors.transparent);
       } else {
-        gradientColors.add(
-            HSVColor.fromAHSV(0.5, 125 * (score! * 0.5 + 0.5), 1, 1).toColor());
+        gradientColors
+            .add(HSVColor.fromAHSV(0.5, 125 * (score!), 1, 1).toColor());
       }
+    }
+    if (gradientColors.isEmpty) {
+      gradientColors.add(Colors.transparent);
+      gradientColors.add(Colors.transparent);
     }
     final size = MediaQuery.of(context).size;
     return Stack(
@@ -64,6 +68,7 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
           padding: const EdgeInsets.only(top: 20, bottom: 5),
           child: Container(
             height: 5,
+            width: size.width,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: gradientColors,
@@ -72,14 +77,14 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
           ),
         ),
         AnimatedPositioned(
-          left: size.width * progress,
+          left: size.width * (progress.isNaN ? 0 : progress),
           bottom: 3,
           duration: const Duration(
             milliseconds: 500,
           ),
+          height: 10,
+          width: 3,
           child: Container(
-            height: 10,
-            width: 3,
             decoration: BoxDecoration(
               boxShadow: kElevationToShadow[3],
               color: Colors.white,

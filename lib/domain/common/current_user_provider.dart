@@ -5,9 +5,12 @@ import 'package:climb_balance/domain/repository/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../const/route_name.dart';
 import '../model/expert_profile.dart';
+import '../model/result.dart';
+import '../model/update_user.dart';
 
 final currentUserProvider =
     StateNotifierProvider<CurrentUserNotifier, User>((ref) {
@@ -16,7 +19,7 @@ final currentUserProvider =
     storageService: ref.watch(storageServiceProvider),
     repository: ref.watch(userRepositoryImplProvider),
   );
-  notifier.loadTokenFromStorage();
+
   return notifier;
 });
 
@@ -33,6 +36,17 @@ class CurrentUserNotifier extends StateNotifier<User> {
     required this.repository,
   }) : super(const User());
 
+  Future<void> init() async {
+    await loadTokenFromStorage();
+  }
+
+  // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
+  Future<void> loadTokenFromStorage() async {
+    final token = await storageService.getStoredToken();
+    debugPrint(token);
+    await loadUserInfo(token);
+  }
+
   bool isEmpty() {
     return state.accessToken == '';
   }
@@ -43,24 +57,27 @@ class CurrentUserNotifier extends StateNotifier<User> {
     loadUserInfo(accessToken);
   }
 
-  void logout(BuildContext context) {
+  void logout(BuildContext context) async {
     state = state.copyWith(accessToken: '');
     storageService.clearStoredToken();
+    CookieManager().clearCookies();
     context.goNamed(authPageRouteName);
   }
 
-  // https://stackoverflow.com/questions/64285037/flutter-riverpod-initialize-with-async-values
-  void loadTokenFromStorage() {
-    storageService.getStoredToken().then((token) {
-      loadUserInfo(token);
-    });
-  }
-
-  void loadUserInfo(String token) async {
-    final result = await repository.getCurrentUserProfile(token);
+  Future<void> loadUserInfo(String token, {String? imagePath}) async {
+    final Result<User> result = await repository.getCurrentUserProfile(token);
     result.when(
       success: (value) {
-        state = value.copyWith(accessToken: token);
+        if (imagePath == null) {
+          state = value.copyWith(
+            accessToken: token,
+          );
+        } else {
+          state = value.copyWith(
+            accessToken: token,
+            profileImage: imagePath!,
+          );
+        }
       },
       error: (message) {
         // TODO logout -> page move
@@ -68,11 +85,46 @@ class CurrentUserNotifier extends StateNotifier<User> {
     );
   }
 
-  void updateUserInfo(User user) {
-    state = user;
+  Future<void> refreshUserInfo() async {
+    final result = await repository.getCurrentUserProfile(state.accessToken);
+    result.when(
+      success: (value) {
+        state = value.copyWith(accessToken: state.accessToken);
+      },
+      error: (message) {
+        // TODO logout -> page move
+      },
+    );
+  }
+
+  void updateUserInfo({
+    String? description,
+    String? nickname,
+    String? profileImage,
+    bool? promotionCheck,
+    bool? personalCheck,
+  }) async {
+    UpdateUser updateUser = UpdateUser(
+      description: description,
+      nickname: nickname,
+      promotionCheck: promotionCheck,
+      personalCheck: personalCheck,
+      profileImage: profileImage,
+    );
+    await repository.updateUser(
+      accessToken: state.accessToken,
+      updateUser: updateUser,
+    );
+
+    loadUserInfo(state.accessToken, imagePath: profileImage);
   }
 
   void updateExpertInfo(ExpertProfile profile) {
     state = state.copyWith(expertProfile: profile, isExpert: true);
+  }
+
+  void removeUserAccount(BuildContext context) {
+    repository.deleteUser(state.accessToken);
+    logout(context);
   }
 }

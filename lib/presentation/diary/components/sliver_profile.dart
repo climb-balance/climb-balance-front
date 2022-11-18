@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../domain/common/current_user_provider.dart';
 import '../../common/components/user_profile_info.dart';
+import 'diary_filter_mdoal.dart';
 import 'edit_profile.dart';
 
 class SliverProfile extends ConsumerWidget {
@@ -30,72 +31,41 @@ class SliverProfile extends ConsumerWidget {
           ? const EditProfile()
           : TopProfileInfo(
               user: ref.watch(currentUserProvider),
-              onEdit: ref.read(diaryViewModelProvider.notifier).onEditMode,
             ),
     );
   }
 }
 
-class ProfileOptions extends StatelessWidget {
+class ProfileOptions extends ConsumerWidget {
   const ProfileOptions({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final onEdit = ref.read(diaryViewModelProvider.notifier).onEditMode;
+    final endEdit = ref.read(diaryViewModelProvider.notifier).endEditMode;
+    final isEditMode = ref
+        .watch(diaryViewModelProvider.select((value) => value.isEditingMode));
     return Align(
       alignment: Alignment.topRight,
-      child: PopupMenuButton<int>(
-        icon: Icon(
-          Icons.filter_alt,
-          color: theme.colorScheme.onBackground,
-        ),
-        itemBuilder: (context) => [
-          // popupmenu item 1
-          PopupMenuItem(
-            value: 1,
-            // row has two child icon and text.
-            child: Row(
-              children: [
-                Icon(
-                  Icons.filter_alt,
-                  color: theme.colorScheme.onBackground,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text("수정하기")
-              ],
+      child: Row(
+        children: [
+          isEditMode
+              ? IconButton(onPressed: endEdit, icon: const Icon(Icons.check))
+              : IconButton(onPressed: onEdit, icon: const Icon(Icons.edit)),
+          IconButton(
+            icon: Icon(
+              Icons.filter_alt,
+              color: theme.colorScheme.onBackground,
             ),
-          ),
-          // popupmenu item 2
-          PopupMenuItem(
-            value: 2,
-            // row has two child icon and text
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Icon(
-                  Icons.notifications,
-                  color: theme.colorScheme.onBackground,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text("알림"),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  "2",
-                  style: TextStyle(
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => const DiaryFilterModal(),
+              );
+            },
           ),
         ],
-        elevation: 2,
       ),
     );
   }

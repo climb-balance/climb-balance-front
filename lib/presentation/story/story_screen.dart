@@ -1,5 +1,6 @@
 import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -42,14 +43,7 @@ class _Story extends ConsumerStatefulWidget {
 
 class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
-  bool isCommentOpen = false;
   bool isStatusChanging = false;
-
-  void toggleCommentOpen() {
-    setState(() {
-      isCommentOpen = !isCommentOpen;
-    });
-  }
 
   @override
   void initState() {
@@ -93,51 +87,71 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final overlayOpen = ref.watch(storyViewModelProvider(widget.storyId)
         .select((value) => value.overlayOpen));
+    final size = MediaQuery.of(context).size;
+    final commentOpen = ref.watch(storyViewModelProvider(widget.storyId)
+        .select((value) => value.commentOpen));
+    final toggleCommentOpen = ref
+        .read(storyViewModelProvider(widget.storyId).notifier)
+        .toggleCommentOpen;
+    final initialized = _videoPlayerController.value.isInitialized;
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
           children: [
-            NoEffectInkWell(
-              onTap: () {
-                ref
-                    .read(storyViewModelProvider(widget.storyId).notifier)
-                    .toggleOverlayOpen(_videoPlayerController.value.isPlaying);
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: _videoPlayerController.value.isInitialized
-                        ? Center(
-                            child: AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: Center(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: NoEffectInkWell(
+                    onTap: () {
+                      if (commentOpen) {
+                        toggleCommentOpen();
+                      } else {
+                        ref
+                            .read(
+                                storyViewModelProvider(widget.storyId).notifier)
+                            .toggleOverlayOpen(
+                                _videoPlayerController.value.isPlaying);
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: initialized
+                          ? Center(
+                              child: AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
                                 child: VideoPlayer(_videoPlayerController),
                               ),
+                            )
+                          : const Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
-                          )
-                        : const Center(child: CircularProgressIndicator()),
+                    ),
                   ),
-                  if (isCommentOpen)
-                    StoryComments(toggleCommentOpen: toggleCommentOpen)
-                ],
-              ),
+                ),
+                if (commentOpen)
+                  StoryComments(
+                    storyId: widget.storyId,
+                  )
+              ],
             ),
-            if (overlayOpen) ...[
+            if (overlayOpen && !commentOpen && initialized)
               StoryOverlay(
                 storyId: widget.storyId,
-                toggleCommentOpen: toggleCommentOpen,
                 togglePlaying: togglePlaying,
                 videoPlayerController: _videoPlayerController,
               ),
-            ],
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ProgressBar(
-                videoPlayerController: _videoPlayerController,
+            if (!commentOpen && initialized)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ProgressBar(
+                  videoPlayerController: _videoPlayerController,
+                ),
               ),
-            ),
           ],
         ),
       ),

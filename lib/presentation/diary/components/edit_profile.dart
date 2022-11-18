@@ -12,7 +12,10 @@ class EditProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref
-        .watch(diaryViewModelProvider.select((value) => value.editingProfile))!;
+        .watch(diaryViewModelProvider.select((value) => value.editingProfile));
+    if (user == null) {
+      return Container();
+    }
     final color = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     return Row(
@@ -25,14 +28,16 @@ class EditProfile extends ConsumerWidget {
                   .updateProfileImagePath,
               imagePath: user.profileImage,
             ),
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Center(
-                child: Icon(
-                  Icons.edit,
-                  size: 36,
-                  color: color.onSurface.withOpacity(0.8),
+            IgnorePointer(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Center(
+                  child: Icon(
+                    Icons.edit,
+                    size: 36,
+                    color: color.onSurface.withOpacity(0.8),
+                  ),
                 ),
               ),
             ),
@@ -58,20 +63,19 @@ class EditProfile extends ConsumerWidget {
                         .updateNickname,
                   ),
                 ),
-                IconButton(
-                    onPressed:
-                        ref.read(diaryViewModelProvider.notifier).endEditMode,
-                    icon: const Icon(Icons.check)),
               ],
             ),
-            SizedBox(
-              width: 200,
-              child: TextFieldWithDefaultValue(
-                initialValue: user.description,
-                onChanged:
-                    ref.read(diaryViewModelProvider.notifier).updateDescription,
-                style: text.bodyText2,
-              ),
+            // SizedBox(
+            //   width: 200,
+            //   child: TextFieldWithDefaultValue(
+            //     initialValue: user.description,
+            //     onChanged:
+            //         ref.read(diaryViewModelProvider.notifier).updateDescription,
+            //     style: text.bodyText2,
+            //   ),
+            // ),
+            const SizedBox(
+              height: 25,
             ),
             Text('${user.height}cm | ${user.weight}kg'),
           ],

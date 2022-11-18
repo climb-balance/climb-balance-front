@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../presentation/common/components/safe_area.dart';
-import '../../../presentation/common/components/tags.dart';
+import '../common/components/tags/tags.dart';
 
 class TagStoryTab extends ConsumerWidget {
   const TagStoryTab({Key? key}) : super(key: key);

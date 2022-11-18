@@ -74,6 +74,25 @@ class ServerService {
     return body;
   }
 
+  Future<dynamic> patch(
+      {required String url, required dynamic data, String? accessToken}) async {
+    http.Response res = await http
+        .patch(
+          Uri.parse(serverUrl + url),
+          body: jsonEncode(data),
+          headers: makeHeaders(accessToken),
+        )
+        .timeout(_timeOutDuration)
+        .catchError((err) => throw err)
+        .whenComplete(() {});
+    final statusCode = res.statusCode;
+    final body = res.body;
+    if (statusCode < 200 || statusCode >= 400) {
+      throw HttpException(res.body);
+    }
+    return body;
+  }
+
   Future<dynamic> put(
       {required String url, required dynamic data, String? accessToken}) async {
     http.Response res = await http
@@ -93,12 +112,19 @@ class ServerService {
     return body;
   }
 
-  Future<dynamic> multiPartUpload(String url, String videoPath) async {
+  Future<dynamic> multiPartUpload(String url, String filePath,
+      {String fileName = 'file',
+      String methodType = 'POST',
+      String? accessToken}) async {
     Uri uri = Uri.parse('$serverUrl$url');
-    final req = http.MultipartRequest('POST', uri);
+    final req = http.MultipartRequest(methodType, uri);
+    if (accessToken != null) {
+      req.headers['Authorization'] = 'Bearer ${accessToken}';
+    }
     try {
-      final multiPartFile = await http.MultipartFile.fromPath('file', videoPath)
-          .timeout(const Duration(seconds: 2));
+      final multiPartFile =
+          await http.MultipartFile.fromPath(fileName, filePath)
+              .timeout(const Duration(seconds: 2));
       req.files.add(multiPartFile);
       final res = await req.send();
       final statusCode = res.statusCode;
@@ -143,6 +169,14 @@ class ServerService {
       if (statusCode < 200 || statusCode >= 400) {
         throw HttpException('요청 에러 ${res.reasonPhrase ?? ''}');
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> healthCheck() async {
+    try {
+      await get(url: '/ping');
     } catch (e) {
       rethrow;
     }

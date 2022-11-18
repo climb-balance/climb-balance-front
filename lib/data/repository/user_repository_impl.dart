@@ -1,4 +1,5 @@
 import 'package:climb_balance/data/data_source/user_server_helper.dart';
+import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/model/result.dart';
 import 'package:climb_balance/domain/model/user.dart';
 import 'package:climb_balance/domain/repository/user_repository.dart';
@@ -6,6 +7,7 @@ import 'package:climb_balance/presentation/home/models/home_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/const/server_config.dart';
+import '../../domain/model/update_user.dart';
 import '../../presentation/register/register_state.dart';
 
 final userRepositoryImplProvider = Provider<UserRepositoryImpl>((ref) {
@@ -60,5 +62,34 @@ class UserRepositoryImpl implements UserRepository {
       success: (value) => Result.success(HomeState.fromJson(value)),
       error: (message) => Result.error(message),
     );
+  }
+
+  @override
+  Future<Result<void>> deleteUser(String accessToken) async {
+    return await server.deleteUser(accessToken);
+  }
+
+  @override
+  Future<Result<void>> updateUser({
+    required String accessToken,
+    required UpdateUser updateUser,
+  }) async {
+    ref.read(loadingProvider.notifier).openLoading();
+    final result = await server.updateUser(
+      accessToken: accessToken,
+      updateUser: updateUser,
+    );
+    ref.read(loadingProvider.notifier).closeLoading();
+    return result;
+  }
+
+  @override
+  Future<Result<String>> getGuestUserToken(String code) async {
+    ref.read(loadingProvider.notifier).openLoading();
+    final result = await server.getGuestUser(code);
+    ref.read(loadingProvider.notifier).closeLoading();
+    return result.when(
+        success: (value) => Result.success(value),
+        error: (message) => Result.error(message));
   }
 }

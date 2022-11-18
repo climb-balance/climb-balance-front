@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../domain/common/tag_selector_provider.dart';
-import '../../../domain/model/story_tag.dart';
-import '../../../domain/util/duration_time.dart';
+import '../../../../domain/common/tag_selector_provider.dart';
+import '../../../../domain/model/story_tag.dart';
+import '../../../../domain/util/duration_time.dart';
 
 class StoryTagInfo extends StatelessWidget {
   final StoryTags tags;

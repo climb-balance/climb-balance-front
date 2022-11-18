@@ -1,7 +1,8 @@
 import 'package:climb_balance/domain/model/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/model/story.dart';
+import '../../../domain/model/story.dart';
+import 'comment.dart';
 
 part 'story_state.freezed.dart';
 
@@ -12,5 +13,8 @@ class StoryState with _$StoryState {
     @Default(Story()) Story story,
     @Default(false) bool overlayOpen,
     @Default(false) bool playStatusOpen,
+    @Default(false) bool commentOpen,
+    @Default('') String currentComment,
+    @Default([]) List<Comment> comments,
   }) = _StoryState;
 }

@@ -47,3 +47,19 @@ String formatTimestampToMMSS(int timestamp) {
   String twoDigitSecond = twoDigits(duration.inSeconds % 60);
   return "$twoDigitMinute:$twoDigitSecond";
 }
+
+String formatTimestampToPassedString(int timestamp) {
+  Duration timeDiffer =
+      DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(timestamp));
+
+  if (timeDiffer.inDays > 0) {
+    return '${timeDiffer.inDays}일전';
+  }
+  if (timeDiffer.inHours > 0) {
+    return '${timeDiffer.inHours}시간전';
+  }
+  if (timeDiffer.inMinutes > 0) {
+    return '${timeDiffer.inMinutes}분전';
+  }
+  return '${timeDiffer.inSeconds}초전';
+}

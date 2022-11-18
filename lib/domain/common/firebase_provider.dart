@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/data_source/service/firebase_service.dart';
-import '../const/route_name.dart';
 
 final firebaseProvider = StateNotifierProvider<FirebaseNotifier, String>((ref) {
   FirebaseNotifier notifier = FirebaseNotifier(
@@ -41,9 +40,9 @@ class FirebaseNotifier extends StateNotifier<String> {
   void _openBackGroundMessage(
       BuildContext context, RemoteMessage message) async {
     final data = message.data;
-    if (data['notification_id'] == 'AI_COMPLETE') {
-      final storyId = data['video_id'] ?? '1';
-      context.pushNamed(diaryStoryRouteName, params: {'sid': storyId});
+    if (data['notificationId'] == 'AI_COMPLETE') {
+      final storyId = data['videoId'] ?? '1';
+      context.push('/diary/story/$storyId/ai');
     }
   }
 

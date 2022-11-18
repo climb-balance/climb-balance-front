@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../domain/util/platform_check.dart';
+
 class NaverWebView extends ConsumerStatefulWidget {
   const NaverWebView({Key? key}) : super(key: key);
 
@@ -18,7 +20,9 @@ class NaverWebViewState extends ConsumerState<NaverWebView> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    if (isMobile() && Platform.isAndroid) {
+      WebView.platform = AndroidWebView();
+    }
   }
 
   @override

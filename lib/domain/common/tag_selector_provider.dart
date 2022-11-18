@@ -780,14 +780,14 @@ class SelectorNotifier extends StateNotifier<List<Selector>> {
 }
 
 final locationSelectorProvider =
-    StateNotifierProvider.autoDispose<SelectorNotifier, List<Selector>>((ref) {
+    StateNotifierProvider<SelectorNotifier, List<Selector>>((ref) {
   SelectorNotifier notifier = SelectorNotifier(ref);
   notifier.initDatas(locationData);
   return notifier;
 });
 
 final difficultySelectorProvider =
-    StateNotifierProvider.autoDispose<SelectorNotifier, List<Selector>>((ref) {
+    StateNotifierProvider<SelectorNotifier, List<Selector>>((ref) {
   SelectorNotifier notifier = SelectorNotifier(ref);
   notifier.initDatas(difficultyData);
   return notifier;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../domain/model/story.dart';
-import '../../common/components/tags.dart';
+import '../../common/components/tags/tags.dart';
 
 class ClassifiedStoryTags extends ConsumerWidget {
   final Story story;

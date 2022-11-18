@@ -9,6 +9,7 @@ class AuthState with _$AuthState {
   const factory AuthState({
     @Default(false) needsRegister,
     @Default('') accessToken,
+    @Default('') guestCode,
   }) = _AuthState;
 
   factory AuthState.fromJson(Map<String, dynamic> json) =>

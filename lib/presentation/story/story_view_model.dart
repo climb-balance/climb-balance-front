@@ -4,13 +4,18 @@ import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/firebase_provider.dart';
 import 'package:climb_balance/domain/repository/story_repository.dart';
-import 'package:climb_balance/presentation/story/story_state.dart';
+import 'package:climb_balance/presentation/common/custom_snackbar.dart';
+import 'package:climb_balance/presentation/story/models/story_state.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/repository/user_repository_impl.dart';
+import '../../domain/model/result.dart';
 import '../../domain/util/feedback_status.dart';
+import '../../domain/util/platform_check.dart';
 import '../common/custom_dialog.dart';
+import 'models/comment.dart';
 
 final storyViewModelProvider = StateNotifierProvider.family
     .autoDispose<StoryViewModel, StoryState, int>((ref, storyId) {
@@ -35,6 +40,12 @@ class StoryViewModel extends StateNotifier<StoryState> {
     required this.userRepository,
   }) : super(const StoryState());
 
+  @override
+  void dispose() {
+    overlayCloseTimer?.cancel();
+    super.dispose();
+  }
+
   void _init(int storyId) async {
     final result = await storyRepository.getStoryById(storyId);
     result.when(
@@ -58,6 +69,53 @@ class StoryViewModel extends StateNotifier<StoryState> {
     );
   }
 
+  void loadComments() async {
+    final Result<Comments> result =
+        await storyRepository.getStoryComments(state.story.storyId);
+    result.when(
+      success: (value) {
+        state = state.copyWith(comments: value.comments);
+      },
+      error: (message) {},
+    );
+  }
+
+  void addComment(BuildContext context) async {
+    final result = await storyRepository.addComment(
+        state.story.storyId, state.currentComment);
+    result.when(
+      success: (value) {
+        state = state.copyWith(currentComment: '');
+        loadComments();
+
+        Navigator.pop(context);
+        showCustomSnackbar(context: context, message: '댓글 작성 성공!');
+      },
+      error: (message) {},
+    );
+  }
+
+  void deleteComment(
+      {required int commentId, required BuildContext context}) async {
+    final result = await storyRepository.deleteComment(
+      storyId: state.story.storyId,
+      commentId: commentId,
+    );
+    result.when(
+      success: (value) {
+        state = state.copyWith(currentComment: '');
+        loadComments();
+
+        showCustomSnackbar(context: context, message: '댓글 삭제 성공!');
+      },
+      error: (message) {},
+    );
+  }
+
+  void updateCurrentComment(String content) async {
+    state = state.copyWith(currentComment: content);
+  }
+
   void likeStory() {
     // TODO implement
     storyRepository.likeStory();
@@ -71,13 +129,17 @@ class StoryViewModel extends StateNotifier<StoryState> {
       state = state.copyWith(overlayOpen: true);
       if (isPlaying) {
         overlayCloseTimer = Timer(
-          Duration(seconds: 3),
+          const Duration(seconds: 3),
           () {
             state = state.copyWith(overlayOpen: false);
           },
         );
       }
     }
+  }
+
+  void toggleCommentOpen() {
+    state = state.copyWith(commentOpen: !state.commentOpen, overlayOpen: false);
   }
 
   void cancelOverlayCloseTimer() {
@@ -102,11 +164,9 @@ class StoryViewModel extends StateNotifier<StoryState> {
             aiStatus: FeedbackStatus.waiting,
           ),
         );
-        Navigator.pop(context);
-        customShowDialog(
-            context: context,
-            title: 'AI 피드백 요청 성공',
-            content: 'AI 피드백 요청에 성공하셨습니다. 메인 화면에서 진행 상태를 확인하실 수 있습니다.');
+        context.pop();
+        showCustomSnackbar(
+            context: context, message: 'AI 피드백 요청! 4분 정도 소요됩니다.');
       },
       error: (message) {
         Navigator.pop(context);
@@ -120,5 +180,18 @@ class StoryViewModel extends StateNotifier<StoryState> {
 
   String getStoryVideoPath() {
     return storyRepository.getStoryVideoPathById(state.story.storyId);
+  }
+
+  void saveAndShare(BuildContext context) async {
+    if (isMobile()) {
+      final String? path =
+          await storyRepository.getStoryVideo(storyId: state.story.storyId);
+    } else {
+      customShowDialog(
+        context: context,
+        title: '웹에서는 공유가 지원되지 않습니다.',
+        content: '모바일을 이용해주세요',
+      );
+    }
   }
 }
