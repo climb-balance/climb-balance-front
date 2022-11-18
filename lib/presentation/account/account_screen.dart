@@ -1,6 +1,8 @@
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:climb_balance/domain/const/route_name.dart';
 import 'package:climb_balance/presentation/account/components/setting_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -43,8 +45,9 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                   if (rank != -1) const RemoveAccountSetting(),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: () {
@@ -72,6 +75,12 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                       );
                     },
                     child: const Text("문의하기"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.pushNamed(licensePageRouteName);
+                    },
+                    child: const Text("오픈소스 라이선스"),
                   ),
                 ],
               ),

@@ -126,6 +126,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
         name: aiAdsRouteName,
       ),
+      GoRoute(
+        path: licensePageRoute,
+        builder: (context, state) {
+          return const LicensePage();
+        },
+        name: licensePageRouteName,
+      ),
     ],
   );
 });

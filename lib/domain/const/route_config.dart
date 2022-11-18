@@ -12,3 +12,4 @@ const authPagePath = '/auth';
 const authNaverPageSubRoute = 'naver';
 
 const storyUploadRoute = '/upload';
+const licensePageRoute = '/license';

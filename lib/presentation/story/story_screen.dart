@@ -87,7 +87,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final overlayOpen = ref.watch(storyViewModelProvider(widget.storyId)
         .select((value) => value.overlayOpen));
-
+    final size = MediaQuery.of(context).size;
     final commentOpen = ref.watch(storyViewModelProvider(widget.storyId)
         .select((value) => value.commentOpen));
     final toggleCommentOpen = ref

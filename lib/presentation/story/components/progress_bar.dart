@@ -16,17 +16,14 @@ class _ProgressBarState extends State<ProgressBar> {
   int progressDuration = 500;
   late final void Function() _listener;
 
-  void initProgress() {
-    progressDuration = 0;
-    progressDegree = 0;
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     _listener = () {
       final value = widget.videoPlayerController.value;
+      if (value.duration.inMilliseconds == 0) {
+        return;
+      }
       progressDegree =
           (value.position.inMilliseconds / value.duration.inMilliseconds);
 
@@ -47,6 +44,7 @@ class _ProgressBarState extends State<ProgressBar> {
     final color = Theme.of(context).colorScheme;
     return SizedBox(
       width: size.width,
+      height: 14,
       child: Padding(
         padding: const EdgeInsets.only(
           top: 10,
