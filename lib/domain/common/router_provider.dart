@@ -24,7 +24,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       ref.watch(currentUserProvider.select((value) => value.accessToken));
   return GoRouter(
     debugLogDiagnostics: true,
-    // TODO splash
     initialLocation: token == '' ? authPagePath : homePageRoute,
     routes: <GoRoute>[
       GoRoute(
