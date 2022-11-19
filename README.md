@@ -7,6 +7,7 @@
 웹 버전에서는 많은 기능이 빠져 있습니다.  
 모바일에서는 잘 작동 하지 않습니다.   
 가급적 PC로 접속해 주세요.
+Guest 접속 코드는 `somauser`입니다.
 
 ## [플레이스토어](https://play.google.com/store/apps/details?id=com.climb_balance.app)
 
