@@ -10,8 +10,7 @@
 Guest 접속 코드는 `somauser`입니다.
 
 ## [플레이스토어](https://play.google.com/store/apps/details?id=com.climb_balance.app)
-
-아직 검토 중 이여서 연결 되지 않을 수 있습니다.
+이 버전으로 사용해보시는 것을 권장드립니다!!
 
 # 소개
 
