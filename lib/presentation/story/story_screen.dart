@@ -28,7 +28,7 @@ class StoryScreen extends ConsumerWidget {
   }
 }
 
-class _Story extends ConsumerStatefulWidget {
+class _Story extends ConsumerWidget {
   final int storyId;
 
   const _Story({
@@ -37,25 +37,17 @@ class _Story extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<_Story> createState() => _StoryState();
-}
-
-class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
-  bool isStatusChanging = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final commentOpen = ref.watch(storyViewModelProvider(widget.storyId)
-        .select((value) => value.commentOpen));
-    final toggleCommentOpen = ref
-        .read(storyViewModelProvider(widget.storyId).notifier)
-        .toggleCommentOpen;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final commentOpen = ref.watch(
+        storyViewModelProvider(storyId).select((value) => value.commentOpen));
+    final toggleCommentOpen =
+        ref.read(storyViewModelProvider(storyId).notifier).toggleCommentOpen;
 
     final betterPlayerController = ref
-        .watch(storyViewModelProvider(widget.storyId).notifier)
+        .watch(storyViewModelProvider(storyId).notifier)
         .betterPlayerController;
-    final initialized = ref.watch(storyViewModelProvider(widget.storyId)
-        .select((value) => value.isInitialized));
+    final initialized = ref.watch(
+        storyViewModelProvider(storyId).select((value) => value.isInitialized));
     if (betterPlayerController == null || !initialized) return Container();
     return StoryViewTheme(
       child: SafeArea(
@@ -71,8 +63,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                         toggleCommentOpen();
                       } else {
                         ref
-                            .read(
-                                storyViewModelProvider(widget.storyId).notifier)
+                            .read(storyViewModelProvider(storyId).notifier)
                             .toggleOverlayOpen();
                       }
                     },
@@ -91,7 +82,7 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                 ),
                 if (commentOpen)
                   StoryComments(
-                    storyId: widget.storyId,
+                    storyId: storyId,
                   )
               ],
             ),
