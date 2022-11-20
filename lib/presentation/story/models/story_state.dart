@@ -14,6 +14,8 @@ class StoryState with _$StoryState {
     @Default(false) bool overlayOpen,
     @Default(false) bool playStatusOpen,
     @Default(false) bool commentOpen,
+    @Default(true) bool isPlaying,
+    @Default(false) bool isInitialized,
     @Default('') String currentComment,
     @Default([]) List<Comment> comments,
   }) = _StoryState;

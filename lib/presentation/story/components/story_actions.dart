@@ -1,9 +1,6 @@
-import 'package:climb_balance/domain/const/route_name.dart';
 import 'package:climb_balance/presentation/story/components/story_overlay_feedback_request_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../../domain/common/current_user_provider.dart';
 import '../../../domain/util/feedback_status.dart';
@@ -13,12 +10,10 @@ import '../story_view_model.dart';
 class StoryActions extends ConsumerWidget {
   final int storyId;
   static const double iconSize = 28;
-  final VideoPlayerController videoPlayerController;
 
   const StoryActions({
     Key? key,
     required this.storyId,
-    required this.videoPlayerController,
   }) : super(key: key);
 
   @override
@@ -29,6 +24,8 @@ class StoryActions extends ConsumerWidget {
         .watch(storyViewModelProvider(storyId).select((value) => value.story));
     final toggleCommentOpen =
         ref.read(storyViewModelProvider(storyId).notifier).toggleCommentOpen;
+    final openAiFeedback =
+        ref.read(storyViewModelProvider(storyId).notifier).openAiFeedback;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -39,9 +36,7 @@ class StoryActions extends ConsumerWidget {
           TextButton(
             onPressed: () {
               // TODO named로
-              videoPlayerController.pause();
-              context
-                  .pushNamed(aiFeedbackRouteName, params: {'sid': '$storyId'});
+              openAiFeedback(context);
             },
             child: const ColIconDetail(
               iconSize: iconSize,

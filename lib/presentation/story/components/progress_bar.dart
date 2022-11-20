@@ -1,10 +1,10 @@
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 class ProgressBar extends StatefulWidget {
-  final VideoPlayerController videoPlayerController;
+  final BetterPlayerController betterPlayerController;
 
-  const ProgressBar({Key? key, required this.videoPlayerController})
+  const ProgressBar({Key? key, required this.betterPlayerController})
       : super(key: key);
 
   @override
@@ -20,22 +20,24 @@ class _ProgressBarState extends State<ProgressBar> {
   void initState() {
     super.initState();
     _listener = () {
-      final value = widget.videoPlayerController.value;
-      if (value.duration.inMilliseconds == 0) {
+      if (widget.betterPlayerController.videoPlayerController == null) return;
+      final value = widget.betterPlayerController.videoPlayerController!.value;
+      if (value.duration!.inMilliseconds == 0) {
         return;
       }
       progressDegree =
-          (value.position.inMilliseconds / value.duration.inMilliseconds);
+          (value.position.inMilliseconds / value.duration!.inMilliseconds);
 
       setState(() {});
     };
-    widget.videoPlayerController.addListener(_listener);
+    widget.betterPlayerController.videoPlayerController!.addListener(_listener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.videoPlayerController.removeListener(_listener);
+    widget.betterPlayerController.videoPlayerController!
+        .removeListener(_listener);
   }
 
   @override

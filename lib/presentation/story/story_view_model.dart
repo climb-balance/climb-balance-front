@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:better_player/better_player.dart';
 import 'package:climb_balance/data/repository/story_repository_impl.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/firebase_provider.dart';
@@ -11,10 +12,12 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/repository/user_repository_impl.dart';
+import '../../domain/const/route_name.dart';
 import '../../domain/model/result.dart';
 import '../../domain/util/feedback_status.dart';
 import '../../domain/util/platform_check.dart';
 import '../common/custom_dialog.dart';
+import 'components/story_overlay.dart';
 import 'models/comment.dart';
 
 final storyViewModelProvider = StateNotifierProvider.family
@@ -29,10 +32,13 @@ final storyViewModelProvider = StateNotifierProvider.family
 });
 
 class StoryViewModel extends StateNotifier<StoryState> {
-  final AutoDisposeStateNotifierProviderRef<StoryViewModel, StoryState> ref;
+  final StateNotifierProviderRef<StoryViewModel, StoryState> ref;
   final StoryRepository storyRepository;
   final UserRepositoryImpl userRepository;
+
+  BetterPlayerController? _betterPlayerController;
   Timer? overlayCloseTimer;
+  KeepAliveLink? link;
 
   StoryViewModel({
     required this.ref,
@@ -40,9 +46,12 @@ class StoryViewModel extends StateNotifier<StoryState> {
     required this.userRepository,
   }) : super(const StoryState());
 
+  BetterPlayerController? get betterPlayerController => _betterPlayerController;
+
   @override
   void dispose() {
     overlayCloseTimer?.cancel();
+    _betterPlayerController?.dispose();
     super.dispose();
   }
 
@@ -52,9 +61,40 @@ class StoryViewModel extends StateNotifier<StoryState> {
       success: (value) async {
         state = state.copyWith(story: value);
         _updateUploader(state.story.uploaderId);
+        _initVideoController(state.story.storyId);
       },
       error: (message) => {},
     );
+  }
+
+  void _initVideoController(int storyId) {
+    BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      storyRepository.getStoryVideoPathById(storyId),
+      videoFormat: BetterPlayerVideoFormat.hls,
+    );
+    double screenAspectRatio =
+        WidgetsBinding.instance.window.physicalSize.aspectRatio;
+    _betterPlayerController = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: true,
+        looping: true,
+        aspectRatio: screenAspectRatio,
+        fit: BoxFit.contain,
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          playerTheme: BetterPlayerTheme.custom,
+          customControlsBuilder: (_, __) => StoryOverlay(
+            storyId: state.story.storyId,
+          ),
+        ),
+      ),
+      betterPlayerDataSource: betterPlayerDataSource,
+    );
+    _betterPlayerController?.addEventsListener((p) {
+      if (p.betterPlayerEventType == BetterPlayerEventType.initialized) {
+        state = state.copyWith(isInitialized: true);
+      }
+    });
   }
 
   void _updateUploader(int uploaderId) async {
@@ -67,6 +107,15 @@ class StoryViewModel extends StateNotifier<StoryState> {
       },
       error: (message) {},
     );
+  }
+
+  void togglePlaying() {
+    if (_betterPlayerController == null) return;
+    if (state.isInitialized == false) return;
+    state.isPlaying
+        ? _betterPlayerController!.pause()
+        : _betterPlayerController!.play();
+    state = state.copyWith(isPlaying: !state.isPlaying);
   }
 
   void loadComments() async {
@@ -121,13 +170,13 @@ class StoryViewModel extends StateNotifier<StoryState> {
     storyRepository.likeStory();
   }
 
-  void toggleOverlayOpen(bool isPlaying) {
+  void toggleOverlayOpen() {
     if (state.overlayOpen) {
       state = state.copyWith(overlayOpen: false);
       overlayCloseTimer?.cancel();
     } else {
       state = state.copyWith(overlayOpen: true);
-      if (isPlaying) {
+      if (betterPlayerController?.isPlaying() == true) {
         overlayCloseTimer = Timer(
           const Duration(seconds: 3),
           () {
@@ -136,6 +185,13 @@ class StoryViewModel extends StateNotifier<StoryState> {
         );
       }
     }
+  }
+
+  void openAiFeedback(BuildContext context) {
+    betterPlayerController?.pause();
+    state = state.copyWith(isPlaying: false);
+    context.pushNamed(aiFeedbackRouteName,
+        params: {'sid': '${state.story.storyId}'});
   }
 
   void toggleCommentOpen() {

@@ -1,14 +1,13 @@
+import 'package:better_player/better_player.dart';
 import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../common/ui/theme/specific_theme.dart';
 import 'components/progress_bar.dart';
 import 'components/story_comments.dart';
-import 'components/story_overlay.dart';
 
 class StoryScreen extends ConsumerWidget {
   final int storyId;
@@ -42,58 +41,22 @@ class _Story extends ConsumerStatefulWidget {
 }
 
 class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
-  late final VideoPlayerController _videoPlayerController;
   bool isStatusChanging = false;
 
   @override
-  void initState() {
-    super.initState();
-
-    _videoPlayerController = VideoPlayerController.network(
-      ref
-          .read(storyViewModelProvider(widget.storyId).notifier)
-          .getStoryVideoPath(),
-      formatHint: VideoFormat.hls,
-    )..initialize().then((value) {
-        _videoPlayerController.play();
-        _videoPlayerController.setLooping(true);
-        setState(() {});
-      });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoPlayerController.removeListener(() {});
-    _videoPlayerController.dispose();
-  }
-
-  void togglePlaying() {
-    if (!_videoPlayerController.value.isInitialized) return;
-    setState(() {
-      isStatusChanging = true;
-    });
-    _videoPlayerController.value.isPlaying
-        ? _videoPlayerController.pause()
-        : _videoPlayerController.play();
-    Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        isStatusChanging = false;
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final overlayOpen = ref.watch(storyViewModelProvider(widget.storyId)
-        .select((value) => value.overlayOpen));
-    final size = MediaQuery.of(context).size;
     final commentOpen = ref.watch(storyViewModelProvider(widget.storyId)
         .select((value) => value.commentOpen));
     final toggleCommentOpen = ref
         .read(storyViewModelProvider(widget.storyId).notifier)
         .toggleCommentOpen;
-    final initialized = _videoPlayerController.value.isInitialized;
+
+    final betterPlayerController = ref
+        .watch(storyViewModelProvider(widget.storyId).notifier)
+        .betterPlayerController;
+    final initialized = ref.watch(storyViewModelProvider(widget.storyId)
+        .select((value) => value.isInitialized));
+    if (betterPlayerController == null || !initialized) return Container();
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
@@ -110,27 +73,20 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                         ref
                             .read(
                                 storyViewModelProvider(widget.storyId).notifier)
-                            .toggleOverlayOpen(
-                                _videoPlayerController.value.isPlaying);
+                            .toggleOverlayOpen();
                       }
                     },
-                    child: AbsorbPointer(
-                      child: initialized
-                          ? Center(
-                              child: AspectRatio(
-                                aspectRatio:
-                                    _videoPlayerController.value.aspectRatio,
-                                child: VideoPlayer(_videoPlayerController),
-                              ),
-                            )
-                          : const Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(),
-                              ),
+                    child: initialized
+                        ? BetterPlayer(
+                            controller: betterPlayerController,
+                          )
+                        : const Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator(),
                             ),
-                    ),
+                          ),
                   ),
                 ),
                 if (commentOpen)
@@ -139,17 +95,11 @@ class _StoryState extends ConsumerState<_Story> with TickerProviderStateMixin {
                   )
               ],
             ),
-            if (overlayOpen && !commentOpen && initialized)
-              StoryOverlay(
-                storyId: widget.storyId,
-                togglePlaying: togglePlaying,
-                videoPlayerController: _videoPlayerController,
-              ),
             if (!commentOpen && initialized)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ProgressBar(
-                  videoPlayerController: _videoPlayerController,
+                  betterPlayerController: betterPlayerController,
                 ),
               ),
           ],

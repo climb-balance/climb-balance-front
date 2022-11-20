@@ -1,7 +1,6 @@
 import 'package:climb_balance/presentation/story/components/story_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../common/components/user_profile_info.dart';
 import '../../common/components/videos/playing_status.dart';
@@ -11,22 +10,26 @@ import 'overlay_bottom_gradient.dart';
 import 'story_overlay_appbar.dart';
 
 class StoryOverlay extends ConsumerWidget {
-  final void Function() togglePlaying;
-  final VideoPlayerController videoPlayerController;
   final int storyId;
 
   const StoryOverlay({
     Key? key,
     required this.storyId,
-    required this.togglePlaying,
-    required this.videoPlayerController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isPlaying = ref.watch(
+        storyViewModelProvider(storyId).select((value) => value.isPlaying));
+    final togglePlaying =
+        ref.read(storyViewModelProvider(storyId).notifier).togglePlaying;
     final story = ref
         .watch(storyViewModelProvider(storyId).select((value) => value.story));
-
+    final isInitialized = ref.watch(
+        storyViewModelProvider(storyId).select((value) => value.isInitialized));
+    final overlayOpen = ref.watch(
+        storyViewModelProvider(storyId).select((value) => value.overlayOpen));
+    if (!isInitialized || !overlayOpen) return Container();
     return Stack(
       children: [
         const OverlayBottomGradient(),
@@ -34,12 +37,11 @@ class StoryOverlay extends ConsumerWidget {
           onTap: () {
             ref
                 .read(storyViewModelProvider(storyId).notifier)
-                .toggleOverlayOpen(videoPlayerController.value.isPlaying);
+                .toggleOverlayOpen();
           },
           child: Scaffold(
             floatingActionButton: StoryActions(
               storyId: storyId,
-              videoPlayerController: videoPlayerController,
             ),
             floatingActionButtonAnimator: NoFabScalingAnimation(),
             floatingActionButtonLocation: CustomFabLoc(),
@@ -67,9 +69,13 @@ class StoryOverlay extends ConsumerWidget {
             ),
           ),
         ),
-        PlayingStatus(
-          togglePlaying: togglePlaying,
-          videoPlayerController: videoPlayerController,
+        GestureDetector(
+          onTap: () {
+            togglePlaying();
+          },
+          child: PlayingStatus(
+            isPlaying: isPlaying,
+          ),
         ),
       ],
     );

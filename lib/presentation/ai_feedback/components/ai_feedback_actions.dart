@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../common/components/my_icons.dart';
-import '../../common/components/videos/playing_status.dart';
 
 class AiFeedbackActions extends ConsumerWidget {
   final void Function() togglePlaying;
@@ -123,10 +122,10 @@ class AiFeedbackActions extends ConsumerWidget {
               ],
             ),
           ),
-          PlayingStatus(
-            togglePlaying: togglePlaying,
-            videoPlayerController: videoPlayerController,
-          ),
+          // PlayingStatus(
+          //   togglePlaying: togglePlaying,
+          //   videoPlayerController: videoPlayerController,
+          // ),
         ],
       ),
     );
