@@ -67,17 +67,9 @@ class _Story extends ConsumerWidget {
                             .toggleOverlayOpen();
                       }
                     },
-                    child: initialized
-                        ? BetterPlayer(
-                            controller: betterPlayerController,
-                          )
-                        : const Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
+                    child: BetterPlayer(
+                      controller: betterPlayerController,
+                    ),
                   ),
                 ),
                 if (commentOpen)

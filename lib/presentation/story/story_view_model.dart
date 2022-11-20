@@ -16,6 +16,8 @@ import '../../domain/const/route_name.dart';
 import '../../domain/model/result.dart';
 import '../../domain/util/feedback_status.dart';
 import '../../domain/util/platform_check.dart';
+import '../common/components/videos/video_error.dart';
+import '../common/components/videos/video_loading.dart';
 import '../common/custom_dialog.dart';
 import 'components/story_overlay.dart';
 import 'models/comment.dart';
@@ -72,6 +74,9 @@ class StoryViewModel extends StateNotifier<StoryState> {
       BetterPlayerDataSourceType.network,
       storyRepository.getStoryVideoPathById(storyId),
       videoFormat: BetterPlayerVideoFormat.hls,
+      cacheConfiguration: const BetterPlayerCacheConfiguration(
+        useCache: true,
+      ),
     );
     double screenAspectRatio =
         WidgetsBinding.instance.window.physicalSize.aspectRatio;
@@ -86,7 +91,9 @@ class StoryViewModel extends StateNotifier<StoryState> {
           customControlsBuilder: (_, __) => StoryOverlay(
             storyId: state.story.storyId,
           ),
+          loadingWidget: const VideoLoading(),
         ),
+        errorBuilder: (_, __) => const VideoError(),
       ),
       betterPlayerDataSource: betterPlayerDataSource,
     );
