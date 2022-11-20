@@ -27,7 +27,7 @@ class StoryOverlayFeedbackRequestSheet extends ConsumerWidget {
                 notifier.requestAiFeedback(context);
               },
               child: const RowIconDetail(
-                  icon: Icon(Icons.android), detail: 'AI 피드백 요청하기'),
+                  icon: Icon(Icons.animation), detail: 'AI 피드백 요청하기'),
             ),
           ),
         // if (story.expertStatus == FeedbackStatus.possible)

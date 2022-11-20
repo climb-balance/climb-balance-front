@@ -62,7 +62,7 @@ class AiPromotion extends ConsumerWidget {
                         color: color.primary,
                       ),
                     ),
-                    const Icon(Icons.android),
+                    const Icon(Icons.animation),
                     Text(
                       '자동 확대\n자세 정보\n자세 점수\n자세 교정',
                       style: text.bodyText2?.copyWith(
