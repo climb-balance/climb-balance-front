@@ -48,11 +48,14 @@ class BadAnalysis extends ConsumerWidget {
               color: color.surface,
               borderRadius: BorderRadius.circular(8),
             ),
+            clipBehavior: Clip.hardEdge,
             child: AspectRatio(
               aspectRatio: videoPlayerController!.value!.aspectRatio!,
               child: CustomPaint(
                 painter: AiFeedbackOverlayPainter(
-                  animationValue: badPoint,
+                  animationValue: (badPoint *
+                      1000 /
+                      videoPlayerController.value.duration!.inMilliseconds),
                   perFrameScore: ref.watch(
                     aiFeedbackViewModelProvider(storyId)
                         .select((value) => value.perFrameScore),
@@ -99,9 +102,7 @@ class BadAnalysisTitle extends ConsumerWidget {
         .read(aiFeedbackViewModelProvider(storyId).notifier)
         .betterPlayerController
         ?.videoPlayerController;
-    int timestamp =
-        (badPoint * videoPlayerController!.value!.duration!.inMilliseconds)
-            .toInt();
+    int timestamp = (badPoint * 1000).toInt();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -121,7 +122,7 @@ class BadAnalysisTitle extends ConsumerWidget {
         PentagonRadarChart(
           aiScoreState: AiScoreState.fromPerFrame(
             perFrameScore,
-            timestamp,
+            (badPoint * 30).toInt(),
           ),
           showText: false,
         ),

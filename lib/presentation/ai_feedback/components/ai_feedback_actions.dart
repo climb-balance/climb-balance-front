@@ -64,19 +64,6 @@ class AiFeedbackActions extends ConsumerWidget {
                   onPressed: () {
                     ref
                         .read(aiFeedbackViewModelProvider(storyId).notifier)
-                        .toggleScoreOverlay();
-                  },
-                  child: ToggleIcon(
-                    icon: Icons.score,
-                    isEnable: scoreOverlay,
-                    detail: '점수',
-                    iconSize: iconSize,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    ref
-                        .read(aiFeedbackViewModelProvider(storyId).notifier)
                         .toggleLineOverlay();
                   },
                   child: ToggleIcon(
