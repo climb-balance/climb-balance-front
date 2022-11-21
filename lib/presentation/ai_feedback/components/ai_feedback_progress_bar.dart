@@ -26,9 +26,9 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
   @override
   void initState() {
     super.initState();
-    final value = widget.betterPlayerController.videoPlayerController!.value;
-    progress = value.position.inMilliseconds / value.duration!.inMilliseconds;
+
     _listener = () {
+      final value = widget.betterPlayerController.videoPlayerController!.value;
       progress = value.position.inMilliseconds / value.duration!.inMilliseconds;
       setState(() {});
     };

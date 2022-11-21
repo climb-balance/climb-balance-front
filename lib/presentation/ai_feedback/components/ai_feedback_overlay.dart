@@ -7,13 +7,11 @@ import 'ai_feedback_painter.dart';
 
 class AiFeedbackOverlay extends ConsumerStatefulWidget {
   final BetterPlayerController betterPlayerController;
-  final TickerProviderStateMixin ticker;
   final int storyId;
 
   const AiFeedbackOverlay({
     Key? key,
     required this.betterPlayerController,
-    required this.ticker,
     required this.storyId,
   }) : super(key: key);
 
@@ -21,7 +19,8 @@ class AiFeedbackOverlay extends ConsumerStatefulWidget {
   ConsumerState<AiFeedbackOverlay> createState() => _AiFeedbackOverlayState();
 }
 
-class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
+class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay>
+    with SingleTickerProviderStateMixin {
   late final AnimationController? _animationController;
   late final void Function() _listener;
 
@@ -30,7 +29,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
     super.initState();
     final value = widget.betterPlayerController.videoPlayerController!.value;
     _animationController = AnimationController(
-      vsync: widget.ticker,
+      vsync: this,
       duration: value.duration,
     )
       ..forward()
@@ -39,6 +38,7 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay> {
         .read(aiFeedbackViewModelProvider(widget.storyId).notifier)
         .initAnimationController(_animationController!);
     _listener = () {
+      final value = widget.betterPlayerController.videoPlayerController!.value;
       final videoValue = value.position.inMicroseconds.toDouble() /
           value.duration!.inMicroseconds;
       if (value.isPlaying) {

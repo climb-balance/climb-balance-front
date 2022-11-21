@@ -9,6 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../common/ui/theme/specific_theme.dart';
 import 'components/ai_feedback_information.dart';
+import 'components/ai_feedback_overlay.dart';
+import 'components/ai_feedback_progress_bar.dart';
 
 class AiFeedbackScreen extends ConsumerStatefulWidget {
   final int storyId;
@@ -67,19 +69,22 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
                   child: NoEffectInkWell(
                     onTap: _onTap,
                     child: Center(
-                      child: Stack(
-                        children: [
-                          BetterPlayer(
-                            controller: betterPlayerController,
-                          ),
-                          // AbsorbPointer(
-                          //   child: AiFeedbackOverlay(
-                          //     ticker: this,
-                          //     storyId: widget.storyId,
-                          //     betterPlayerController: betterPlayerController,
-                          //   ),
-                          // ),
-                        ],
+                      child: AspectRatio(
+                        aspectRatio: betterPlayerController
+                            .videoPlayerController!.value.aspectRatio,
+                        child: Stack(
+                          children: [
+                            BetterPlayer(
+                              controller: betterPlayerController,
+                            ),
+                            AbsorbPointer(
+                              child: AiFeedbackOverlay(
+                                storyId: widget.storyId,
+                                betterPlayerController: betterPlayerController,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -94,14 +99,14 @@ class _AiFeedbackScreenState extends ConsumerState<AiFeedbackScreen>
               AiFeedbackActions(
                 storyId: widget.storyId,
               ),
-            // if (!isInformOpen)
-            //   Align(
-            //     alignment: Alignment.bottomCenter,
-            //     child: AiFeedbackProgressBar(
-            //       storyId: widget.storyId,
-            //       betterPlayerController: betterPlayerController,
-            //     ),
-            //   ),
+            if (!isInformOpen)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AiFeedbackProgressBar(
+                  storyId: widget.storyId,
+                  betterPlayerController: betterPlayerController,
+                ),
+              ),
           ],
         ),
       ),
