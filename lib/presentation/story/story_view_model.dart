@@ -40,7 +40,6 @@ class StoryViewModel extends StateNotifier<StoryState> {
 
   BetterPlayerController? _betterPlayerController;
   Timer? overlayCloseTimer;
-  KeepAliveLink? link;
 
   StoryViewModel({
     required this.ref,
@@ -76,6 +75,12 @@ class StoryViewModel extends StateNotifier<StoryState> {
       videoFormat: BetterPlayerVideoFormat.hls,
       cacheConfiguration: const BetterPlayerCacheConfiguration(
         useCache: true,
+      ),
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: 2000,
+        maxBufferMs: 10000,
+        bufferForPlaybackMs: 1000,
+        bufferForPlaybackAfterRebufferMs: 2000,
       ),
     );
     double screenAspectRatio =

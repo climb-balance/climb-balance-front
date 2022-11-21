@@ -21,6 +21,8 @@ class AiFeedbackState with _$AiFeedbackState {
     @JsonKey(ignore: true) @Default(false) bool isInformOpen,
     @JsonKey(ignore: true) @Default(false) bool isStatusChanging,
     @JsonKey(ignore: true) @Default(false) bool actionsOpen,
+    @JsonKey(ignore: true) @Default(false) bool isInitialized,
+    @JsonKey(ignore: true) @Default(true) bool isPlaying,
   }) = _AiFeedbackState;
 
   factory AiFeedbackState.fromJson(Map<String, dynamic> json) =>

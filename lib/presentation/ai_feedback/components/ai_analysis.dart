@@ -3,7 +3,6 @@ import 'package:climb_balance/presentation/ai_feedback/components/pentagon_radar
 import 'package:climb_balance/presentation/ai_feedback/components/video_time_text_with_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../ai_feedback_view_model.dart';
 import '../models/ai_score_state.dart';
@@ -12,12 +11,10 @@ import 'ai_feedback_painter.dart';
 class AnalysisTab extends StatefulWidget {
   const AnalysisTab({
     Key? key,
-    required this.videoPlayerController,
     required this.storyId,
     required this.timestamps,
   }) : super(key: key);
 
-  final VideoPlayerController videoPlayerController;
   final int storyId;
   final List<int> timestamps;
 
@@ -62,7 +59,6 @@ class _AnalysisTabState extends State<AnalysisTab> {
             items: [
               for (int i = 0; i < widget.timestamps.length; i++)
                 BadAnalysis(
-                  videoPlayerController: widget.videoPlayerController,
                   storyId: widget.storyId,
                   timestamp: widget.timestamps[i],
                   num: i + 1,
@@ -91,13 +87,11 @@ class _AnalysisTabState extends State<AnalysisTab> {
 class BadAnalysis extends ConsumerWidget {
   const BadAnalysis({
     Key? key,
-    required this.videoPlayerController,
     required this.storyId,
     required this.timestamp,
     required this.num,
   }) : super(key: key);
   final int timestamp;
-  final VideoPlayerController videoPlayerController;
   final int storyId;
   final int num;
 
@@ -105,8 +99,10 @@ class BadAnalysis extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final color = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
-
-    final value = videoPlayerController.value;
+    final videoPlayerController = ref
+        .read(aiFeedbackViewModelProvider(storyId).notifier)
+        .betterPlayerController
+        ?.videoPlayerController;
     final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.perFrameScore));
     return Column(
@@ -118,7 +114,6 @@ class BadAnalysis extends ConsumerWidget {
           child: BadAnalysisTitle(
             num: num,
             text: text,
-            videoPlayerController: videoPlayerController,
             storyId: storyId,
             timestamp: timestamp,
           ),
@@ -131,10 +126,11 @@ class BadAnalysis extends ConsumerWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: AspectRatio(
-              aspectRatio: value.aspectRatio,
+              aspectRatio: videoPlayerController!.value!.aspectRatio!,
               child: CustomPaint(
                 painter: AiFeedbackOverlayPainter(
-                  animationValue: timestamp / value.duration.inMilliseconds,
+                  animationValue: timestamp /
+                      videoPlayerController!.value!.duration!.inMilliseconds,
                   perFrameScore: ref.watch(
                     aiFeedbackViewModelProvider(storyId)
                         .select((value) => value.perFrameScore),
@@ -161,14 +157,12 @@ class BadAnalysisTitle extends ConsumerWidget {
     Key? key,
     required this.num,
     required this.text,
-    required this.videoPlayerController,
     required this.storyId,
     required this.timestamp,
   }) : super(key: key);
 
   final int num;
   final TextTheme text;
-  final VideoPlayerController videoPlayerController;
   final int storyId;
   final int timestamp;
 
@@ -177,9 +171,12 @@ class BadAnalysisTitle extends ConsumerWidget {
     final color = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
 
-    final value = videoPlayerController.value;
     final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.perFrameScore));
+    final videoPlayerController = ref
+        .read(aiFeedbackViewModelProvider(storyId).notifier)
+        .betterPlayerController
+        ?.videoPlayerController;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -191,7 +188,6 @@ class BadAnalysisTitle extends ConsumerWidget {
               style: text.headline4,
             ),
             VideoTimeTextWithAnimation(
-              videoPlayerController: videoPlayerController,
               storyId: storyId,
               timestamp: timestamp,
             ),
@@ -200,7 +196,7 @@ class BadAnalysisTitle extends ConsumerWidget {
         PentagonRadarChart(
           aiScoreState: AiScoreState.fromPerFrame(
             perFrameScore,
-            timestamp ~/ value.duration.inMilliseconds,
+            timestamp ~/ videoPlayerController!.value!.duration!.inMilliseconds,
           ),
           showText: false,
         ),

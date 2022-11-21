@@ -1,17 +1,17 @@
+import 'package:better_player/better_player.dart';
 import 'package:climb_balance/domain/util/ai_score_avg.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../ai_feedback_view_model.dart';
 import '../models/ai_feedback_state.dart';
 
 class AiFeedbackProgressBar extends ConsumerStatefulWidget {
   final int storyId;
-  final VideoPlayerController videoPlayerController;
+  final BetterPlayerController betterPlayerController;
 
   const AiFeedbackProgressBar(
-      {Key? key, required this.videoPlayerController, required this.storyId})
+      {Key? key, required this.betterPlayerController, required this.storyId})
       : super(key: key);
 
   @override
@@ -26,19 +26,19 @@ class _AiFeedbackProgressBarState extends ConsumerState<AiFeedbackProgressBar> {
   @override
   void initState() {
     super.initState();
-    final value = widget.videoPlayerController.value;
-    progress = value.position.inMilliseconds / value.duration.inMilliseconds;
+    final value = widget.betterPlayerController.videoPlayerController!.value;
+    progress = value.position.inMilliseconds / value.duration!.inMilliseconds;
     _listener = () {
-      final value = widget.videoPlayerController.value;
-      progress = value.position.inMilliseconds / value.duration.inMilliseconds;
+      progress = value.position.inMilliseconds / value.duration!.inMilliseconds;
       setState(() {});
     };
-    widget.videoPlayerController.addListener(_listener);
+    widget.betterPlayerController.videoPlayerController!.addListener(_listener);
   }
 
   @override
   void dispose() {
-    widget.videoPlayerController.removeListener(_listener);
+    widget.betterPlayerController.videoPlayerController!
+        .removeListener(_listener);
     super.dispose();
   }
 

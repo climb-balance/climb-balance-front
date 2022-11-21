@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:better_player/better_player.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import '../../data/repository/story_repository_impl.dart';
 import '../../domain/model/story.dart';
 import '../../domain/repository/story_repository.dart';
 import '../../domain/util/platform_check.dart';
+import '../common/components/videos/video_error.dart';
+import '../common/components/videos/video_loading.dart';
 import '../common/custom_dialog.dart';
 import 'models/ai_feedback_state.dart';
 
@@ -19,7 +22,7 @@ final aiFeedbackViewModelProvider = StateNotifierProvider.autoDispose
     ref.read(storyRepositoryImplProvider),
     ref.watch(storyViewModelProvider(storyId).select((value) => value.story)),
   );
-  notifier._loadDatas();
+  notifier._init();
   return notifier;
 });
 
@@ -29,28 +32,79 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
   final AutoDisposeStateNotifierProviderRef ref;
   Timer? actionsCloseTimer;
   AnimationController? _animationController;
+  BetterPlayerController? _betterPlayerController;
 
   AiFeedbackViewModel(this.repository, this.story, {required this.ref})
       : super(const AiFeedbackState());
 
+  BetterPlayerController? get betterPlayerController => _betterPlayerController;
+
   @override
   void dispose() {
+    _betterPlayerController?.dispose();
     actionsCloseTimer?.cancel();
     super.dispose();
   }
 
-  void _loadDatas() async {
+  void _init() async {
     final result = await repository.getStoryAiDetailById(story.storyId);
     result.when(
       success: (value) {
         state = value;
+        _initVideoController();
       },
       error: (message) {},
     );
   }
 
+  void _initVideoController() {
+    BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      getStoryAiVideoPath(),
+      videoFormat: BetterPlayerVideoFormat.hls,
+      cacheConfiguration: const BetterPlayerCacheConfiguration(
+        useCache: true,
+      ),
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: 2000,
+        maxBufferMs: 10000,
+        bufferForPlaybackMs: 1000,
+        bufferForPlaybackAfterRebufferMs: 2000,
+      ),
+    );
+    double screenAspectRatio =
+        WidgetsBinding.instance.window.physicalSize.aspectRatio;
+    _betterPlayerController = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: true,
+        looping: true,
+        aspectRatio: screenAspectRatio,
+        fit: BoxFit.contain,
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
+          playerTheme: BetterPlayerTheme.custom,
+          loadingWidget: VideoLoading(),
+        ),
+        errorBuilder: (_, __) => const VideoError(),
+      ),
+      betterPlayerDataSource: betterPlayerDataSource,
+    );
+    _betterPlayerController?.addEventsListener((p) {
+      if (p.betterPlayerEventType == BetterPlayerEventType.initialized) {
+        state = state.copyWith(isInitialized: true);
+      }
+    });
+  }
+
   void initAnimationController(AnimationController? animationController) {
     _animationController = animationController;
+  }
+
+  void togglePlaying() {
+    if (_betterPlayerController == null || !state.isInitialized) return;
+    state.isPlaying
+        ? _betterPlayerController!.pause()
+        : _betterPlayerController!.play();
+    state = state.copyWith(isPlaying: !state.isPlaying);
   }
 
   void seekAnimation(Duration seekTime) {
@@ -82,13 +136,13 @@ class AiFeedbackViewModel extends StateNotifier<AiFeedbackState> {
     state = state.copyWith(squareOverlay: !state.squareOverlay);
   }
 
-  void toggleActionOpen(bool isPlaying) {
+  void toggleActionOpen() {
     if (state.actionsOpen) {
       state = state.copyWith(actionsOpen: false);
       actionsCloseTimer?.cancel();
     } else {
       state = state.copyWith(actionsOpen: true);
-      if (isPlaying) {
+      if (state.isPlaying) {
         actionsCloseTimer = Timer(
           Duration(seconds: 3),
           () {

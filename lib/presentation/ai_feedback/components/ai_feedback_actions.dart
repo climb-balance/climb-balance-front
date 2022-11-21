@@ -3,21 +3,16 @@ import 'package:climb_balance/presentation/common/custom_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../common/components/my_icons.dart';
 
 class AiFeedbackActions extends ConsumerWidget {
-  final void Function() togglePlaying;
   final int storyId;
-  final VideoPlayerController videoPlayerController;
   final double iconSize;
 
   const AiFeedbackActions({
     Key? key,
     required this.storyId,
-    required this.togglePlaying,
-    required this.videoPlayerController,
     this.iconSize = 28,
   }) : super(key: key);
 
@@ -29,11 +24,17 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.squareOverlay));
     final bool scoreOverlay = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.scoreOverlay));
+    final bool actionsOpen = ref.watch(aiFeedbackViewModelProvider(storyId)
+        .select((value) => value.actionsOpen));
+    final bool isInformOpen = ref.watch(aiFeedbackViewModelProvider(storyId)
+        .select((value) => value.isInformOpen));
+
+    if (!actionsOpen || isInformOpen) return Container();
     return GestureDetector(
       onTap: () {
         ref
             .read(aiFeedbackViewModelProvider(storyId).notifier)
-            .toggleActionOpen(videoPlayerController.value.isPlaying);
+            .toggleActionOpen();
       },
       child: Stack(
         fit: StackFit.expand,
