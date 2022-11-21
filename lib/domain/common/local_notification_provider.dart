@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final localNotificationProvider =
     StateNotifierProvider<LocalNotificationNotifier, String>((ref) {
   LocalNotificationNotifier notifier = LocalNotificationNotifier(ref: ref);
-  notifier.initNotification();
+  notifier.init();
   return notifier;
 });
 
@@ -19,7 +19,7 @@ class LocalNotificationNotifier extends StateNotifier<String> {
     required this.ref,
   }) : super('');
 
-  void initNotification() async {
+  Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/ic_notification');
     const InitializationSettings initializationSettings =
@@ -48,5 +48,41 @@ class LocalNotificationNotifier extends StateNotifier<String> {
     final details = NotificationDetails(android: androidNotiDetails);
 
     await flutterLocalNotificationsPlugin.show(0, title, body, details);
+  }
+
+  static void showProgress(int currentProgress) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    AndroidNotificationDetails androidNotiDetails = AndroidNotificationDetails(
+      'dexterous.com.flutter.local_notifications',
+      '',
+      importance: Importance.max,
+      priority: Priority.max,
+      ongoing: true,
+      showProgress: true,
+      progress: currentProgress,
+      maxProgress: 100,
+    );
+
+    final details = NotificationDetails(android: androidNotiDetails);
+
+    await flutterLocalNotificationsPlugin.show(1, '업로드 중입니다.', '', details);
+  }
+
+  static void showProgressResult(String message) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    AndroidNotificationDetails androidNotiDetails =
+        const AndroidNotificationDetails(
+      'dexterous.com.flutter.local_notifications',
+      '',
+      importance: Importance.max,
+      priority: Priority.max,
+      ongoing: false,
+    );
+
+    final details = NotificationDetails(android: androidNotiDetails);
+
+    await flutterLocalNotificationsPlugin.show(1, message, '', details);
   }
 }

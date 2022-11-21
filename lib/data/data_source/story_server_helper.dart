@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:climb_balance/data/data_source/service/server_service.dart';
 import 'package:climb_balance/domain/common/current_user_provider.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/const/server_config.dart';
@@ -40,8 +41,14 @@ class StoryServerHelper {
 
   Future<Result<void>> uploadVideo(int storyId, String? videoPath) async {
     try {
-      await server.multiPartUpload(
-          '$serverStoryPath/$storyId$serverVideoPath', videoPath!);
+      final uploader = FlutterUploader();
+      final taskId = await uploader.enqueue(
+        MultipartFormDataUpload(
+          url: '$serverUrl$serverStoryPath/$storyId$serverVideoPath',
+          files: [FileItem(path: videoPath!)],
+          method: UploadMethod.POST,
+        ),
+      );
       return const Result.success(null);
     } catch (e) {
       return Result.error('영상 업로드 오류. 원인 : ${e.toString()}');

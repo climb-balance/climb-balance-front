@@ -3,6 +3,7 @@ import 'package:climb_balance/domain/common/current_user_provider.dart';
 import 'package:climb_balance/domain/common/downloader_provider.dart';
 import 'package:climb_balance/domain/common/loading_provider.dart';
 import 'package:climb_balance/domain/common/router_provider.dart';
+import 'package:climb_balance/domain/common/uploader_provider.dart';
 import 'package:climb_balance/presentation/common/components/waiting_progress.dart';
 import 'package:climb_balance/presentation/common/ui/theme/main_theme.dart';
 import 'package:climb_balance/presentation/splash_app/splash_screen.dart';
@@ -34,9 +35,6 @@ const bool isProduction = bool.fromEnvironment('dart.vm.product');
 
 void main() async {
   if (isProduction) {
-    // analyser does not like empty function body
-    // debugPrint = (String message, {int wrapWidth}) {};
-    // so i changed it to this:
     debugPrint = (String? message, {int? wrapWidth}) => null;
   }
 
@@ -62,6 +60,8 @@ void main() async {
   ];
   if (isMobile()) {
     jobs.add(container.read(downloaderProvider.notifier).mobileInit);
+    jobs.add(container.read(uploaderProvider.notifier).mobileInit);
+    jobs.add(container.read(localNotificationProvider.notifier).init);
   }
   await container.read(splashViewModelProvider.notifier).init(jobs: jobs);
   runApp(

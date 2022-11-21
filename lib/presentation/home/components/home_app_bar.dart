@@ -30,7 +30,7 @@ class HomeAppBar extends ConsumerWidget with PreferredSizeWidget {
                   .watch(homeViewModelProvider.select((value) => value.unread)),
             ),
             onPressed: () {
-              // TODO
+              // LocalNotificationNotifier.showProgress(10);
             },
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:better_player/better_player.dart';
 import 'package:climb_balance/presentation/common/components/no_effect_inkwell.dart';
+import 'package:climb_balance/presentation/common/components/videos/video_loading.dart';
 import 'package:climb_balance/presentation/story/story_view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,9 @@ class _Story extends ConsumerWidget {
         .betterPlayerController;
     final initialized = ref.watch(
         storyViewModelProvider(storyId).select((value) => value.isInitialized));
-    if (betterPlayerController == null || !initialized) return Container();
+    if (betterPlayerController == null || !initialized) {
+      return const VideoLoading();
+    }
     return StoryViewTheme(
       child: SafeArea(
         child: Stack(
