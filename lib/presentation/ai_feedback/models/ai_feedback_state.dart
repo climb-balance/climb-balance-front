@@ -13,6 +13,7 @@ class AiFeedbackState with _$AiFeedbackState {
     @Default(30) int fps,
     @Default(0) int frames,
     @Default([]) List<double?> joints,
+    @Default([]) List<double> badPoints,
     @Default(AiScoreState()) AiScoreState totalScore,
     @Default(AiScorePerFrame()) AiScorePerFrame perFrameScore,
     @JsonKey(ignore: true) @Default(true) bool squareOverlay,

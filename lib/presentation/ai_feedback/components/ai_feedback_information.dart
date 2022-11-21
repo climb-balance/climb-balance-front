@@ -23,6 +23,9 @@ class AiFeedbackInformation extends ConsumerWidget {
     final totalScore = ref.watch(
       aiFeedbackViewModelProvider(storyId).select((value) => value.totalScore),
     );
+    final badPoints = ref.watch(
+      aiFeedbackViewModelProvider(storyId).select((value) => value.badPoints),
+    );
     return Container(
       height: size.height * 0.6,
       width: size.width,
@@ -46,7 +49,7 @@ class AiFeedbackInformation extends ConsumerWidget {
                     ),
                     AnalysisTab(
                       storyId: storyId,
-                      timestamps: [1230, 10000, 15000],
+                      badPoints: badPoints,
                     ),
                     const AiParameterDetailTab(),
                   ],

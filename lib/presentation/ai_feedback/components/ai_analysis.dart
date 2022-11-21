@@ -1,22 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:climb_balance/presentation/ai_feedback/components/pentagon_radar_chart.dart';
-import 'package:climb_balance/presentation/ai_feedback/components/video_time_text_with_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../ai_feedback_view_model.dart';
-import '../models/ai_score_state.dart';
-import 'ai_feedback_painter.dart';
+import 'bad_analysis.dart';
 
 class AnalysisTab extends StatefulWidget {
   const AnalysisTab({
     Key? key,
     required this.storyId,
-    required this.timestamps,
+    required this.badPoints,
   }) : super(key: key);
 
   final int storyId;
-  final List<int> timestamps;
+  final List<double> badPoints;
 
   @override
   State<AnalysisTab> createState() => _AnalysisTabState();
@@ -27,7 +22,7 @@ class _AnalysisTabState extends State<AnalysisTab> {
   int curPage = 0;
 
   void _nextPage() {
-    if (curPage < widget.timestamps.length - 1) {
+    if (curPage < widget.badPoints.length - 1) {
       curPage += 1;
       carouselController.nextPage();
       setState(() {});
@@ -44,7 +39,7 @@ class _AnalysisTabState extends State<AnalysisTab> {
 
   @override
   Widget build(BuildContext context) {
-    final bool canNext = curPage < widget.timestamps.length - 1;
+    final bool canNext = curPage < widget.badPoints.length - 1;
     final bool canPrev = curPage > 0;
     final color = Theme.of(context).colorScheme;
     return Row(
@@ -57,10 +52,10 @@ class _AnalysisTabState extends State<AnalysisTab> {
         Expanded(
           child: CarouselSlider(
             items: [
-              for (int i = 0; i < widget.timestamps.length; i++)
+              for (int i = 0; i < widget.badPoints.length; i++)
                 BadAnalysis(
                   storyId: widget.storyId,
-                  timestamp: widget.timestamps[i],
+                  badPoint: widget.badPoints[i],
                   num: i + 1,
                 ),
             ],
@@ -78,127 +73,6 @@ class _AnalysisTabState extends State<AnalysisTab> {
           color: canNext ? color.onSurface : Colors.transparent,
           onPressed: _nextPage,
           icon: const Icon(Icons.navigate_next_rounded),
-        ),
-      ],
-    );
-  }
-}
-
-class BadAnalysis extends ConsumerWidget {
-  const BadAnalysis({
-    Key? key,
-    required this.storyId,
-    required this.timestamp,
-    required this.num,
-  }) : super(key: key);
-  final int timestamp;
-  final int storyId;
-  final int num;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
-    final videoPlayerController = ref
-        .read(aiFeedbackViewModelProvider(storyId).notifier)
-        .betterPlayerController
-        ?.videoPlayerController;
-    final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
-        .select((value) => value.perFrameScore));
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          flex: 1,
-          child: BadAnalysisTitle(
-            num: num,
-            text: text,
-            storyId: storyId,
-            timestamp: timestamp,
-          ),
-        ),
-        Flexible(
-          flex: 3,
-          child: Container(
-            decoration: BoxDecoration(
-              color: color.surface,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: AspectRatio(
-              aspectRatio: videoPlayerController!.value!.aspectRatio!,
-              child: CustomPaint(
-                painter: AiFeedbackOverlayPainter(
-                  animationValue: timestamp /
-                      videoPlayerController!.value!.duration!.inMilliseconds,
-                  perFrameScore: ref.watch(
-                    aiFeedbackViewModelProvider(storyId)
-                        .select((value) => value.perFrameScore),
-                  ),
-                  joints: ref.watch(aiFeedbackViewModelProvider(storyId)
-                      .select((value) => value.joints)),
-                  frames: ref.watch(aiFeedbackViewModelProvider(storyId)
-                      .select((value) => value.frames)),
-                  lineOverlay: true,
-                  squareOverlay: true,
-                  squareOpacity: 0.2,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class BadAnalysisTitle extends ConsumerWidget {
-  const BadAnalysisTitle({
-    Key? key,
-    required this.num,
-    required this.text,
-    required this.storyId,
-    required this.timestamp,
-  }) : super(key: key);
-
-  final int num;
-  final TextTheme text;
-  final int storyId;
-  final int timestamp;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
-
-    final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
-        .select((value) => value.perFrameScore));
-    final videoPlayerController = ref
-        .read(aiFeedbackViewModelProvider(storyId).notifier)
-        .betterPlayerController
-        ?.videoPlayerController;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              num.toString(),
-              style: text.headline4,
-            ),
-            VideoTimeTextWithAnimation(
-              storyId: storyId,
-              timestamp: timestamp,
-            ),
-          ],
-        ),
-        PentagonRadarChart(
-          aiScoreState: AiScoreState.fromPerFrame(
-            perFrameScore,
-            timestamp ~/ videoPlayerController!.value!.duration!.inMilliseconds,
-          ),
-          showText: false,
         ),
       ],
     );
