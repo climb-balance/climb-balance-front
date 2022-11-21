@@ -84,6 +84,7 @@ class _CommentViewState extends ConsumerState<CommentView> {
     final theme = Theme.of(context);
     final color = Theme.of(context).colorScheme;
     return InkWell(
+      splashColor: color.background,
       onTapDown: (details) {
         _storePosition(details);
       },
@@ -108,7 +109,7 @@ class _CommentViewState extends ConsumerState<CommentView> {
                     CircleAvatar(
                       radius: 25,
                       backgroundImage:
-                          NetworkImage(widget.comment.userProfileImage),
+                          NetworkImage(widget.comment.profileImage),
                     ),
                     if (widget.comment.rank == 1)
                       SizedBox(

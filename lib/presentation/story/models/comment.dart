@@ -9,7 +9,7 @@ class Comment with _$Comment {
   const factory Comment({
     @Default(-1) int userId,
     @Default(-1) int commentId,
-    @Default('') String userProfileImage,
+    @Default('') String profileImage,
     @Default('') String content,
     @Default('') String nickname,
     @Default(0) int likes,
