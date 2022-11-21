@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../models/ai_score_state.dart';
+import '../../../ai_feedback/models/ai_score_state.dart';
 
 class PentagonRadarChart extends StatelessWidget {
   final AiScoreState aiScoreState;

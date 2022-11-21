@@ -33,7 +33,7 @@ class WriteDescription extends ConsumerWidget {
     final updateDetail =
         ref.read(storyUploadViewModelProvider.notifier).updateDescription;
     return TextField(
-      maxLines: 4,
+      maxLines: 1,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
         labelText: '내용을 적어주세요',

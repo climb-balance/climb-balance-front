@@ -42,6 +42,18 @@ class _AnalysisTabState extends State<AnalysisTab> {
     final bool canNext = curPage < widget.badPoints.length - 1;
     final bool canPrev = curPage > 0;
     final color = Theme.of(context).colorScheme;
+
+    if (widget.badPoints.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('잘못된 구간이 없습니다.'),
+            Text('완벽하시네요!!'),
+          ],
+        ),
+      );
+    }
     return Row(
       children: [
         IconButton(

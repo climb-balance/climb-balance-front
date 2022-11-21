@@ -1,48 +1,52 @@
-import 'package:climb_balance/presentation/home/components/skill_info.dart';
+import 'package:climb_balance/presentation/common/components/ai/pentagon_radar_chart.dart';
+import 'package:climb_balance/presentation/home/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../ai_feedback/models/ai_score_state.dart';
 import 'ai_background.dart';
-import 'avg_compare.dart';
 
-class RecentAiStat extends StatelessWidget {
+class RecentAiStat extends ConsumerWidget {
   const RecentAiStat({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stat =
+        ref.watch(homeViewModelProvider.select((value) => value.aiStat))!;
+    final text = Theme.of(context).textTheme;
+    final color = Theme.of(context).colorScheme;
+    final currentAiState = AiScoreState(
+      accuracy: stat.accuracy,
+      angle: stat.angle,
+      balance: stat.balance,
+      moment: stat.moment,
+      inertia: stat.inertia,
+    );
     return AspectRatio(
       aspectRatio: 2,
       child: Stack(
         children: [
           const AiBackground(),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(left: 20, top: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                AvgCompare(),
-                SizedBox(
-                  height: 20,
-                ),
-                SkillInfo(
-                  title: '기술',
-                  skilDegree: 0.9,
-                ),
-                SizedBox(
-                  height: 7,
-                ),
-                SkillInfo(
-                  title: '유연성',
-                  skilDegree: 0.4,
+              children: [
+                Text(
+                  '${currentAiState.getOverallScore()}점',
+                  style: text.subtitle1?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: color.primary,
+                  ),
                 ),
                 SizedBox(
-                  height: 7,
-                ),
-                SkillInfo(
-                  title: '자세',
-                  skilDegree: 0.7,
-                ),
-                SizedBox(
-                  height: 7,
+                  width: 125,
+                  height: 125,
+                  child: PentagonRadarChart(
+                    showText: false,
+                    aiScoreState: currentAiState,
+                  ),
                 ),
               ],
             ),

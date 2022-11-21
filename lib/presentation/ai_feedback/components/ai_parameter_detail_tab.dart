@@ -15,7 +15,7 @@ class AiParameterDetailTab extends StatelessWidget {
           AiParameterDetail(title: '밸런스', detail: '삼지점의 원리'),
           AiParameterDetail(title: '관성', detail: '이동 속도의 일정함'),
           AiParameterDetail(title: '모멘텀', detail: '받침점 발과 몸의 가까움 정도'),
-          const Divider(
+          Divider(
             height: 16,
             thickness: 2,
           ),

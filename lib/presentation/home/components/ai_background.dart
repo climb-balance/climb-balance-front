@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AiBackground extends StatelessWidget {
+import '../home_view_model.dart';
+
+class AiBackground extends ConsumerWidget {
   const AiBackground({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final thumbnail = ref.watch(
+        homeViewModelProvider.select((value) => value.aiStat!.thumbnail))!;
     final color = Theme.of(context).colorScheme;
     return Stack(
       children: [
@@ -12,14 +17,14 @@ class AiBackground extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             AspectRatio(
-              aspectRatio: 8 / 10,
+              aspectRatio: 9 / 10,
               child: Container(
                 decoration: BoxDecoration(
                   color: color.surface,
                   borderRadius: BorderRadius.circular(8),
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage('https://picsum.photos/250?image=9'),
+                    image: NetworkImage(thumbnail),
                   ),
                 ),
               ),
@@ -31,7 +36,7 @@ class AiBackground extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             gradient: LinearGradient(
               begin: FractionalOffset.centerRight,
-              end: FractionalOffset.center + const FractionalOffset(0.1, 0),
+              end: FractionalOffset.center + const FractionalOffset(0.05, 0),
               colors: [
                 Colors.transparent,
                 color.surface,

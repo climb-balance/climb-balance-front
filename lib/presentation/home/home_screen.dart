@@ -23,55 +23,61 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: color.background,
       appBar: const HomeAppBar(),
       body: MySafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              aiStat == null ? const AiPromotion() : const RecentAiInfo(),
-              const SizedBox(
-                height: 36,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '최근 5주',
-                          style: text.bodyText1,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const RecentStat(),
-                      ],
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await ref.read(homeViewModelProvider.notifier).loadDatas();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                aiStat == null ? const AiPromotion() : const RecentAiInfo(),
+                const SizedBox(
+                  height: 36,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '최근 5주',
+                            style: text.bodyText1,
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          const RecentStat(),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '현재 상태',
-                          style: text.bodyText1,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const ContinuousStatistics(),
-                      ],
+                    const SizedBox(
+                      width: 10,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '현재 상태',
+                            style: text.bodyText1,
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          const ContinuousStatistics(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

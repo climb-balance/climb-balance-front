@@ -107,15 +107,6 @@ class _AiFeedbackOverlayState extends ConsumerState<AiFeedbackOverlay>
                             .select((value) => value.squareOverlay)),
                   ),
                 ),
-                if (scoreOverlay)
-                  CustomPaint(
-                    painter: AiFeedbackScorePainter(
-                      color: color,
-                      animationValue: _animationController!.value,
-                      perFrameScore: perFrameScore,
-                      frames: frames,
-                    ),
-                  ),
               ],
             ),
           ),

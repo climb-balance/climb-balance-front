@@ -8,10 +8,11 @@ part 'ai_stat.g.dart';
 class AiStat with _$AiStat {
   const factory AiStat({
     required String thumbnail,
-    required double tech,
-    required double flex,
-    required double pose,
-    required int rank,
+    required double balance,
+    required double accuracy,
+    required double angle,
+    required double moment,
+    required double inertia,
   }) = _AiStat;
 
   factory AiStat.fromJson(Map<String, dynamic> json) => _$AiStatFromJson(json);
