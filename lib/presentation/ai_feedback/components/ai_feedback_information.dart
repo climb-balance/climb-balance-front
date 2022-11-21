@@ -6,6 +6,7 @@ import 'ai_analysis.dart';
 import 'ai_information_tab_bar.dart';
 import 'ai_parameter_detail_tab.dart';
 import 'ai_score.dart';
+import 'ai_score_graph_tab.dart';
 
 class AiFeedbackInformation extends ConsumerWidget {
   final int storyId;
@@ -31,7 +32,7 @@ class AiFeedbackInformation extends ConsumerWidget {
       width: size.width,
       color: color.background,
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
@@ -46,6 +47,9 @@ class AiFeedbackInformation extends ConsumerWidget {
                   children: [
                     AiScoreTab(
                       aiScoreState: totalScore,
+                    ),
+                    AiScoreGraphTab(
+                      storyId: storyId,
                     ),
                     AnalysisTab(
                       storyId: storyId,
@@ -85,7 +89,7 @@ class AiInformationActionBar extends ConsumerWidget {
                   .read(aiFeedbackViewModelProvider(storyId).notifier)
                   .toggleInformation();
             },
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
           ),
         ],
       ),

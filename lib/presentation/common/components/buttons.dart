@@ -95,3 +95,36 @@ class CustomBtn extends StatelessWidget {
     );
   }
 }
+
+class CustomBtnNoPadding extends StatelessWidget {
+  final void Function() onPressed;
+  final Widget child;
+  final BtnType type;
+  final double height;
+
+  const CustomBtnNoPadding(
+      {Key? key,
+      required this.onPressed,
+      required this.child,
+      this.height = 25,
+      this.type = BtnType.primary})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SizedBox(
+      height: height,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor: type == BtnType.primary
+              ? MaterialStateProperty.all(theme.colorScheme.primary)
+              : MaterialStateProperty.all(theme.colorScheme.secondaryContainer),
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
