@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../common/components/my_icons.dart';
+import '../../common/components/videos/playing_status.dart';
 
 class AiFeedbackActions extends ConsumerWidget {
   final int storyId;
@@ -28,7 +29,10 @@ class AiFeedbackActions extends ConsumerWidget {
         .select((value) => value.actionsOpen));
     final bool isInformOpen = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.isInformOpen));
-
+    final bool isPlaying = ref.watch(aiFeedbackViewModelProvider(storyId)
+        .select((value) => value.isPlaying));
+    final togglePlaying =
+        ref.read(aiFeedbackViewModelProvider(storyId).notifier).togglePlaying;
     if (!actionsOpen || isInformOpen) return Container();
     return GestureDetector(
       onTap: () {
@@ -123,10 +127,12 @@ class AiFeedbackActions extends ConsumerWidget {
               ],
             ),
           ),
-          // PlayingStatus(
-          //   togglePlaying: togglePlaying,
-          //   videoPlayerController: videoPlayerController,
-          // ),
+          GestureDetector(
+            onTap: togglePlaying,
+            child: PlayingStatus(
+              isPlaying: isPlaying,
+            ),
+          ),
         ],
       ),
     );
