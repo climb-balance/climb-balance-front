@@ -1,10 +1,9 @@
 import 'package:climb_balance/presentation/ai_feedback/components/video_time_text_with_animation.dart';
-import 'package:climb_balance/presentation/common/components/ai/pentagon_radar_chart.dart';
+import 'package:climb_balance/presentation/ai_feedback/components/worst_score.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../ai_feedback_view_model.dart';
-import '../models/ai_score_state.dart';
 import 'ai_feedback_painter.dart';
 
 class BadAnalysis extends ConsumerWidget {
@@ -28,51 +27,53 @@ class BadAnalysis extends ConsumerWidget {
         ?.videoPlayerController;
     final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.perFrameScore));
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          flex: 1,
-          child: BadAnalysisTitle(
-            num: num,
-            text: text,
-            storyId: storyId,
-            badPoint: badPoint,
-          ),
-        ),
-        Flexible(
-          flex: 3,
-          child: Container(
-            decoration: BoxDecoration(
-              color: color.surface,
-              borderRadius: BorderRadius.circular(8),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 1,
+            child: BadAnalysisTitle(
+              num: num,
+              text: text,
+              storyId: storyId,
+              badPoint: badPoint,
             ),
-            clipBehavior: Clip.hardEdge,
-            child: AspectRatio(
-              aspectRatio: videoPlayerController!.value!.aspectRatio!,
-              child: CustomPaint(
-                painter: AiFeedbackOverlayPainter(
-                  animationValue: (badPoint *
-                      1000 /
-                      videoPlayerController.value.duration!.inMilliseconds),
-                  perFrameScore: ref.watch(
-                    aiFeedbackViewModelProvider(storyId)
-                        .select((value) => value.perFrameScore),
+          ),
+          Flexible(
+            flex: 3,
+            child: Container(
+              decoration: BoxDecoration(
+                color: color.surface,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: AspectRatio(
+                aspectRatio: videoPlayerController!.value!.aspectRatio!,
+                child: CustomPaint(
+                  painter: AiFeedbackOverlayPainter(
+                    animationValue: (badPoint *
+                        1000 /
+                        videoPlayerController.value.duration!.inMilliseconds),
+                    perFrameScore: ref.watch(
+                      aiFeedbackViewModelProvider(storyId)
+                          .select((value) => value.perFrameScore),
+                    ),
+                    joints: ref.watch(aiFeedbackViewModelProvider(storyId)
+                        .select((value) => value.joints)),
+                    frames: ref.watch(aiFeedbackViewModelProvider(storyId)
+                        .select((value) => value.frames)),
+                    lineOverlay: true,
+                    squareOverlay: true,
+                    squareOpacity: 0.2,
                   ),
-                  joints: ref.watch(aiFeedbackViewModelProvider(storyId)
-                      .select((value) => value.joints)),
-                  frames: ref.watch(aiFeedbackViewModelProvider(storyId)
-                      .select((value) => value.frames)),
-                  lineOverlay: true,
-                  squareOverlay: true,
-                  squareOpacity: 0.2,
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -98,34 +99,21 @@ class BadAnalysisTitle extends ConsumerWidget {
 
     final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.perFrameScore));
-    final videoPlayerController = ref
-        .read(aiFeedbackViewModelProvider(storyId).notifier)
-        .betterPlayerController
-        ?.videoPlayerController;
     int timestamp = (badPoint * 1000).toInt();
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Column(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              num.toString(),
-              style: text.headline4,
-            ),
             VideoTimeTextWithAnimation(
               storyId: storyId,
               timestamp: timestamp,
+              primary: true,
             ),
           ],
         ),
-        PentagonRadarChart(
-          aiScoreState: AiScoreState.fromPerFrame(
-            perFrameScore,
-            (badPoint * 30).toInt(),
-          ),
-          showText: false,
-        ),
+        WorstScore(storyId: storyId, badPoint: badPoint),
       ],
     );
   }

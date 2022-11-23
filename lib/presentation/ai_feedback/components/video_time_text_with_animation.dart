@@ -10,10 +10,12 @@ class VideoTimeTextWithAnimation extends ConsumerWidget {
     Key? key,
     required this.storyId,
     required this.timestamp,
+    required this.primary,
   }) : super(key: key);
 
   final int timestamp;
   final int storyId;
+  final bool primary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,6 +30,7 @@ class VideoTimeTextWithAnimation extends ConsumerWidget {
             .read(aiFeedbackViewModelProvider(storyId).notifier)
             .seekAnimation(Duration(seconds: timestamp! ~/ 1000));
       },
+      primary: true,
     );
   }
 }

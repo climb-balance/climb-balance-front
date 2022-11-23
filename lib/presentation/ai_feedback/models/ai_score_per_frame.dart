@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -21,6 +23,42 @@ class AiScorePerFrame with _$AiScorePerFrame {
       _$AiScorePerFrameFromJson(json);
 
   const AiScorePerFrame._();
+
+  MinAiScore getMinAiScoreByFrame(int frame) {
+    List<double> values = [0, 0, 0, 0, 0];
+    List<int> lengths = [0, 0, 0, 0, 0];
+
+    for (int i = frame; i < min(frame + 30, accuracy.length); i += 1) {
+      final tmp = getValuesByIdx(i);
+
+      for (int j = 0; j < 5; j += 1) {
+        if (tmp[j] == null) continue;
+        values[j] += tmp[j]!;
+        lengths[j] += 1;
+      }
+    }
+
+    int min_idx = -1;
+    double min_val = 1;
+
+    for (int i = 0; i < 5; i += 1) {
+      double val = 0;
+      if (lengths[i] != 0) {
+        val = values[i] / lengths[i];
+      }
+
+      if (min_val > val) {
+        min_idx = i;
+        min_val = val;
+      }
+    }
+
+    return MinAiScore(
+      name: getValuesName[min_idx],
+      score: min_val,
+      type: getTypes[min_idx],
+    );
+  }
 
   List<double?> getValuesByIdx(int idx) {
     return [accuracy[idx], angle[idx], balance[idx], inertia[idx], moment[idx]];
@@ -78,4 +116,21 @@ class AiScorePerFrame with _$AiScorePerFrame {
   }
 
   List<String> get getValuesName => ['정확도', '각도', '밸런스', '관성', '모멘트'];
+
+  List<AiScoreType> get getTypes => [
+        AiScoreType.accuracy,
+        AiScoreType.angle,
+        AiScoreType.balance,
+        AiScoreType.inertia,
+        AiScoreType.moment,
+      ];
+}
+
+@freezed
+class MinAiScore with _$MinAiScore {
+  const factory MinAiScore({
+    required String name,
+    required double score,
+    required AiScoreType type,
+  }) = _MinAiScore;
 }

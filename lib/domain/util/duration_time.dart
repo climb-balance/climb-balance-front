@@ -48,6 +48,12 @@ String formatTimestampToMMSS(int timestamp) {
   return "$twoDigitMinute:$twoDigitSecond";
 }
 
+String formatTimestampToSS(int timestamp) {
+  Duration duration = Duration(milliseconds: timestamp);
+  String twoDigitSecond = twoDigits(duration.inSeconds);
+  return "${twoDigitSecond}s";
+}
+
 String formatTimestampToPassedString(int timestamp) {
   Duration timeDiffer =
       DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(timestamp));
