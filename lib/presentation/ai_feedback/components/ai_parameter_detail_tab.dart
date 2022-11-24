@@ -10,11 +10,11 @@ class AiParameterDetailTab extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const [
           AiParameterTitle(title: 'AI 점수 항목에 대한 설명'),
-          AiParameterDetail(title: '정확도', detail: '팔, 다리를 고친 정도'),
-          AiParameterDetail(title: '자세', detail: '팔과 몸의 각도'),
-          AiParameterDetail(title: '밸런스', detail: '삼지점의 원리'),
-          AiParameterDetail(title: '관성', detail: '이동 속도의 일정함'),
-          AiParameterDetail(title: '모멘텀', detail: '받침점 발과 몸의 가까움 정도'),
+          AiParameterDetail(title: '정확도', detail: '홀드를 여러 번 고쳐 	잡지 않는지 확인'),
+          AiParameterDetail(title: '각도', detail: '팔의 각도를 무리하게 굽히지 않는지 확인'),
+          AiParameterDetail(title: '밸런스', detail: '클라이밍 이론의 “삼지점”을 확인'),
+          AiParameterDetail(title: '관성', detail: '일정한 속도로 움직이는지 확인'),
+          AiParameterDetail(title: '모멘텀', detail: '손발의 힘점, 받침점, 작용점을 확인'),
           Divider(
             height: 16,
             thickness: 2,

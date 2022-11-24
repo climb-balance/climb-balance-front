@@ -27,53 +27,48 @@ class BadAnalysis extends ConsumerWidget {
         ?.videoPlayerController;
     final perFrameScore = ref.watch(aiFeedbackViewModelProvider(storyId)
         .select((value) => value.perFrameScore));
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            flex: 1,
-            child: BadAnalysisTitle(
-              num: num,
-              text: text,
-              storyId: storyId,
-              badPoint: badPoint,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        BadAnalysisTitle(
+          num: num,
+          text: text,
+          storyId: storyId,
+          badPoint: badPoint,
+        ),
+        Flexible(
+          flex: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              color: color.surface,
+              borderRadius: BorderRadius.circular(8),
             ),
-          ),
-          Flexible(
-            flex: 3,
-            child: Container(
-              decoration: BoxDecoration(
-                color: color.surface,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: AspectRatio(
-                aspectRatio: videoPlayerController!.value!.aspectRatio!,
-                child: CustomPaint(
-                  painter: AiFeedbackOverlayPainter(
-                    animationValue: (badPoint *
-                        1000 /
-                        videoPlayerController.value.duration!.inMilliseconds),
-                    perFrameScore: ref.watch(
-                      aiFeedbackViewModelProvider(storyId)
-                          .select((value) => value.perFrameScore),
-                    ),
-                    joints: ref.watch(aiFeedbackViewModelProvider(storyId)
-                        .select((value) => value.joints)),
-                    frames: ref.watch(aiFeedbackViewModelProvider(storyId)
-                        .select((value) => value.frames)),
-                    lineOverlay: true,
-                    squareOverlay: true,
-                    squareOpacity: 0.2,
+            clipBehavior: Clip.hardEdge,
+            child: AspectRatio(
+              aspectRatio: videoPlayerController!.value!.aspectRatio!,
+              child: CustomPaint(
+                painter: AiFeedbackOverlayPainter(
+                  animationValue: (badPoint *
+                      1000 /
+                      videoPlayerController.value.duration!.inMilliseconds),
+                  perFrameScore: ref.watch(
+                    aiFeedbackViewModelProvider(storyId)
+                        .select((value) => value.perFrameScore),
                   ),
+                  joints: ref.watch(aiFeedbackViewModelProvider(storyId)
+                      .select((value) => value.joints)),
+                  frames: ref.watch(aiFeedbackViewModelProvider(storyId)
+                      .select((value) => value.frames)),
+                  lineOverlay: true,
+                  squareOverlay: true,
+                  squareOpacity: 0.2,
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

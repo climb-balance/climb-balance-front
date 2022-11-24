@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/util/duration_time.dart';
-
 class VideoTimeText extends StatelessWidget {
   final void Function() onTap;
   final String timeText;
@@ -16,7 +14,6 @@ class VideoTimeText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int timeSecond = formatTimeTextToSecond(timeText);
     final color = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     return GestureDetector(

@@ -23,14 +23,16 @@ class VideoTimeTextWithAnimation extends ConsumerWidget {
         .read(aiFeedbackViewModelProvider(storyId).notifier)
         .betterPlayerController;
     return VideoTimeText(
-      timeText: formatTimestampToMMSS(timestamp),
+      timeText: primary
+          ? formatTimestampToMMSS(timestamp)
+          : formatTimestampToSS(timestamp),
       onTap: () {
         betterPlayerController?.seekTo(Duration(seconds: timestamp! ~/ 1000));
         ref
             .read(aiFeedbackViewModelProvider(storyId).notifier)
             .seekAnimation(Duration(seconds: timestamp! ~/ 1000));
       },
-      primary: true,
+      primary: primary,
     );
   }
 }

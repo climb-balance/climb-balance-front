@@ -1,4 +1,5 @@
 import 'package:climb_balance/presentation/ai_feedback/ai_feedback_view_model.dart';
+import 'package:climb_balance/presentation/ai_feedback/components/video_time_text_with_animation.dart';
 import 'package:climb_balance/presentation/ai_feedback/enums/ai_score_type.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class _AiScoreGraphTabState extends ConsumerState<AiScoreGraphTab> {
     }
     final color = Theme.of(context).colorScheme;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -129,7 +131,12 @@ class _AiScoreGraphTabState extends ConsumerState<AiScoreGraphTab> {
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (double value, TitleMeta meta) =>
-                            Text('${value ~/ 30}s'),
+                            VideoTimeTextWithAnimation(
+                          storyId: widget.storyId,
+                          timestamp: (value ~/ 30 * 1000),
+                          primary: false,
+                        ),
+                        interval: 90,
                       ),
                     ),
                   ),
